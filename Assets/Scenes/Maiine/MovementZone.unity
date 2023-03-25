@@ -291,6 +291,7 @@ GameObject:
   - component: {fileID: 867942153}
   - component: {fileID: 867942152}
   - component: {fileID: 867942151}
+  - component: {fileID: 867942155}
   - component: {fileID: 867942154}
   m_Layer: 0
   m_Name: Player
@@ -326,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 400
-  _jumpForce: 400
+  _jumpForce: 300
   _floorMask:
     serializedVersion: 2
     m_Bits: 64
@@ -362,6 +363,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!65 &867942155
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 867942150}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Center: {x: 0, y: -1, z: 0}
 --- !u!1 &1510757119
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,7 +642,7 @@ GameObject:
   - component: {fileID: 1799110355}
   m_Layer: 6
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -665,7 +679,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7310a994bd4e2484ba0c031060e4bef3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

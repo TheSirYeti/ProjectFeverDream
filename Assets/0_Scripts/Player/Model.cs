@@ -11,6 +11,8 @@ public class Model : MonoBehaviour
     [SerializeField] float _speed;
     [SerializeField] float _jumpForce;
 
+    bool canJump = false;
+
     [SerializeField] LayerMask _floorMask;
 
     Vector3 _dir = Vector3.zero;
@@ -47,16 +49,23 @@ public class Model : MonoBehaviour
     {
         if (CheckFloor())
         {
-            Debug.Log("a");
             _rb.AddForce(transform.up * _jumpForce);
+            canJump = false;
         }
     }
 
     bool CheckFloor()
     {
-        if (Physics.Raycast(transform.position, transform.up * -1, 1, _floorMask))
-            return true;
-        else
-            return false;
+        return canJump;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Floor")
+        {
+            Debug.Log("b");
+            canJump = true;
+
+        }
     }
 }
