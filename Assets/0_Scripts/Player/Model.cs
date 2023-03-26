@@ -9,10 +9,16 @@ public class Model : MonoBehaviour
 
     Rigidbody _rb;
 
-    [SerializeField] float _speed;
+    float _actualSpeed;
+    [SerializeField] float _walkingSpeed;
+    [SerializeField] float _runningSpeed;
+    [SerializeField] float _crunchSpeed;
+
     [SerializeField] float _jumpForce;
 
-    bool canJump = false;
+    bool _isCrunch = false;
+
+    bool _canJump = false;
 
     Vector3 _dir = Vector3.zero;
 
@@ -36,8 +42,10 @@ public class Model : MonoBehaviour
         _actualCollider = _posibleColliders[0];
         _actualCollider.SetActive(true);
 
+        _actualSpeed = _walkingSpeed;
+
         Vector3 newGravity = Physics.gravity;
-        newGravity.y *= 2;
+        newGravity.y = -20;
         Physics.gravity = newGravity;
     }
 
@@ -58,14 +66,14 @@ public class Model : MonoBehaviour
         if (_dir.magnitude > 1)
             _dir.Normalize();
 
-        _dir *= _speed * Time.fixedDeltaTime;
+        _dir *= +_actualSpeed * Time.fixedDeltaTime;
 
         _dir.y = _rb.velocity.y;
     }
 
     public void Jump()
     {
-        if (canJump)
+        if (_canJump)
         {
             _rb.AddForce(transform.up * _jumpForce);
         }
@@ -78,24 +86,35 @@ public class Model : MonoBehaviour
         _actualCollider.SetActive(true);
 
         if (state == 1)
-            _speed *= 0.5f;
+        {
+            _actualSpeed = _crunchSpeed;
+
+            Run(0);
+
+            _isCrunch = true;
+        }
         else
-            _speed *= 2;
+        {
+            _actualSpeed = _walkingSpeed;
+            _isCrunch = false;
+        }
     }
 
     public void Run(int state)
     {
+        if (_isCrunch) return;
+
         if (state == 1)
-            _speed *= 2;
+            _actualSpeed = _runningSpeed;
         else
-            _speed *= 0.5f;
+            _actualSpeed = _walkingSpeed;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Floor")
         {
-            canJump = true;
+            _canJump = true;
         }
     }
 
@@ -103,7 +122,7 @@ public class Model : MonoBehaviour
     {
         if (other.gameObject.tag == "Floor")
         {
-            canJump = false;
+            _canJump = false;
         }
     }
 }
