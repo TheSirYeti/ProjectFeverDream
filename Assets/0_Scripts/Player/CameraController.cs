@@ -9,7 +9,8 @@ public class CameraController : MonoBehaviour
     private Transform _actualCameraPos;
     private List<Transform> _cameraPositions = new List<Transform>();
 
-    private float _cameraSpeed = 500;
+    private float _cameraSens = 500;
+    private float _cameraSpeeed = 10;
 
     [SerializeField] private float _maxYRot = 50, _minYRot = -50;
 
@@ -40,11 +41,16 @@ public class CameraController : MonoBehaviour
         _mainCamera.transform.parent = _actualCameraPos;
     }
 
+    private void Update()
+    {
+        cameraMovement();
+    }
+
     // Void for move the camera with an input
     public void MoveCamera(float xAxie, float yAxie)
     {
-        _xRotation += xAxie * _cameraSpeed * Time.fixedDeltaTime;
-        _yRotation += yAxie * -1 * _cameraSpeed * Time.fixedDeltaTime;
+        _xRotation += xAxie * _cameraSens * Time.fixedDeltaTime;
+        _yRotation += yAxie * -1 * _cameraSens * Time.fixedDeltaTime;
 
         _yRotation = Mathf.Clamp(_yRotation, _minYRot, _maxYRot);
 
@@ -53,8 +59,25 @@ public class CameraController : MonoBehaviour
     }
 
     // Translate camera from point to point
+    public void StartTranslate(int state)
+    {
+        _cameraPositions[state].rotation = _actualCameraPos.rotation;
+        _actualCameraPos = _cameraPositions[state];
+        _mainCamera.transform.parent = _actualCameraPos;
+
+        cameraMovement = TranslateCamera;
+    }
+
     void TranslateCamera()
     {
+        Vector3 dir = _actualCameraPos.position - _mainCamera.transform.position;
+        dir.Normalize();
+        _mainCamera.transform.position += dir * _cameraSpeeed * Time.deltaTime;
 
+        if (Vector3.Distance(_mainCamera.transform.position, _actualCameraPos.position) < 0.1f)
+        {
+            _mainCamera.transform.position = _actualCameraPos.position;
+            cameraMovement = delegate { };
+        }
     }
 }

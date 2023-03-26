@@ -18,6 +18,7 @@ public class Controller
         onUpdate += GetMouse;
         onUpdate += GetMovementInput;
         onUpdate += GetJumpInput;
+        onUpdate += GetCrunchInput;
     }
 
     void GetMouse()
@@ -32,7 +33,6 @@ public class Controller
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
 
-            Debug.Log(h);
 
             if (h > 0)
                 h = 1;
@@ -54,5 +54,19 @@ public class Controller
     {
         if (Input.GetButtonDown("Jump"))
             _model.Jump();
+    }
+
+    void GetCrunchInput()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            _model.Crunch(1);
+            _cameraController.StartTranslate(1);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            _model.Crunch(0);
+            _cameraController.StartTranslate(0);
+        }
     }
 }

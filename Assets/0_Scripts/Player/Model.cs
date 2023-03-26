@@ -17,6 +17,7 @@ public class Model : MonoBehaviour
     Vector3 _dir = Vector3.zero;
 
     List<GameObject> _posibleColliders = new List<GameObject>();
+    GameObject _actualCollider;
 
     private void Awake()
     {
@@ -32,7 +33,8 @@ public class Model : MonoBehaviour
             child.gameObject.SetActive(false);
         }
 
-        _posibleColliders[0].SetActive(true);
+        _actualCollider = _posibleColliders[0];
+        _actualCollider.SetActive(true);
 
         Vector3 newGravity = Physics.gravity;
         newGravity.y *= 2;
@@ -67,6 +69,18 @@ public class Model : MonoBehaviour
         {
             _rb.AddForce(transform.up * _jumpForce);
         }
+    }
+
+    public void Crunch(int state)
+    {
+        _actualCollider.SetActive(false);
+        _actualCollider = _posibleColliders[state];
+        _actualCollider.SetActive(true);
+
+        if (state == 1)
+            _speed *= 0.5f;
+        else
+            _speed *= 2;
     }
 
     bool CheckFloor()
