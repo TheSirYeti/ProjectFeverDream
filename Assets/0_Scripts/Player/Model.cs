@@ -33,6 +33,10 @@ public class Model : MonoBehaviour
         }
 
         _posibleColliders[0].SetActive(true);
+
+        Vector3 newGravity = Physics.gravity;
+        newGravity.y *= 2;
+        Physics.gravity = newGravity;
     }
 
     void Update()
