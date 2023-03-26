@@ -29,7 +29,22 @@ public class Controller
     {
         if (Input.GetButton("Movement"))
         {
-            _model.Move(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+
+            Debug.Log(h);
+
+            if (h > 0)
+                h = 1;
+            else if(h < 0)
+                h = -1;
+
+            if (v > 0)
+                v = 1;
+            else if (v < 0)
+                v = -1;
+
+            _model.Move(h, v);
         }
         else
             _model.Move(0, 0);

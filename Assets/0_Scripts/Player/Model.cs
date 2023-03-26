@@ -5,6 +5,7 @@ using UnityEngine;
 public class Model : MonoBehaviour
 {
     Controller _controller;
+    CameraController _cameraController;
 
     Rigidbody _rb;
 
@@ -13,14 +14,25 @@ public class Model : MonoBehaviour
 
     bool canJump = false;
 
-    [SerializeField] LayerMask _floorMask;
-
     Vector3 _dir = Vector3.zero;
 
-    void Start()
+    List<GameObject> _posibleColliders = new List<GameObject>();
+
+    private void Awake()
     {
-        _controller = new Controller(this, GetComponent<CameraController>());
+        _cameraController = GetComponent<CameraController>();
+        _controller = new Controller(this, _cameraController);
         _rb = GetComponent<Rigidbody>();
+
+        Transform povParent = transform.Find("Colliders");
+
+        foreach (Transform child in povParent)
+        {
+            _posibleColliders.Add(child.gameObject);
+            child.gameObject.SetActive(false);
+        }
+
+        _posibleColliders[0].SetActive(true);
     }
 
     void Update()
@@ -50,7 +62,6 @@ public class Model : MonoBehaviour
         if (CheckFloor())
         {
             _rb.AddForce(transform.up * _jumpForce);
-            canJump = false;
         }
     }
 
@@ -63,9 +74,15 @@ public class Model : MonoBehaviour
     {
         if (other.gameObject.tag == "Floor")
         {
-            Debug.Log("b");
             canJump = true;
+        }
+    }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Floor")
+        {
+            canJump = false;
         }
     }
 }

@@ -327,10 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 400
-  _jumpForce: 300
-  _floorMask:
-    serializedVersion: 2
-    m_Bits: 64
+  _jumpForce: 400
 --- !u!4 &867942153
 Transform:
   m_ObjectHideFlags: 0
@@ -355,7 +352,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867942150}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 1.5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -527,7 +524,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657249363}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: fa09ad1aba45bc7458250bcb960e8267, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
