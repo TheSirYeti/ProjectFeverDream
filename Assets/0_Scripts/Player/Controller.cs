@@ -19,6 +19,7 @@ public class Controller
         onUpdate += GetMovementInput;
         onUpdate += GetJumpInput;
         onUpdate += GetCrunchInput;
+        onUpdate += GetRunInput;
     }
 
     void GetMouse()
@@ -67,6 +68,20 @@ public class Controller
         {
             _model.Crunch(0);
             _cameraController.StartTranslate(0);
+        }
+    }
+
+    void GetRunInput()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _model.Run(1);
+            _cameraController.ChangeFOV(1);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _model.Run(0);
+            _cameraController.ChangeFOV(0);
         }
     }
 }

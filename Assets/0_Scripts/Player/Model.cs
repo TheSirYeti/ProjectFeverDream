@@ -65,7 +65,7 @@ public class Model : MonoBehaviour
 
     public void Jump()
     {
-        if (CheckFloor())
+        if (canJump)
         {
             _rb.AddForce(transform.up * _jumpForce);
         }
@@ -83,9 +83,12 @@ public class Model : MonoBehaviour
             _speed *= 2;
     }
 
-    bool CheckFloor()
+    public void Run(int state)
     {
-        return canJump;
+        if (state == 1)
+            _speed *= 2;
+        else
+            _speed *= 0.5f;
     }
 
     private void OnTriggerEnter(Collider other)

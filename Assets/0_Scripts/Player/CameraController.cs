@@ -12,12 +12,17 @@ public class CameraController : MonoBehaviour
     private float _cameraSens = 500;
     private float _cameraSpeeed = 10;
 
+    [SerializeField] float _walkingFOV;
+    [SerializeField] float _runningFOV;
+    float _actualFOV;
+
     [SerializeField] private float _maxYRot = 50, _minYRot = -50;
 
     private float _xRotation;
     private float _yRotation;
 
     Action cameraMovement = delegate { };
+    Action fovChanger = delegate { };
 
     void Awake()
     {
@@ -39,11 +44,14 @@ public class CameraController : MonoBehaviour
         _mainCamera.transform.rotation = _actualCameraPos.rotation;
 
         _mainCamera.transform.parent = _actualCameraPos;
+
+        _actualFOV = _walkingFOV;
     }
 
     private void Update()
     {
         cameraMovement();
+        fovChanger();
     }
 
     // Void for move the camera with an input
@@ -79,5 +87,20 @@ public class CameraController : MonoBehaviour
             _mainCamera.transform.position = _actualCameraPos.position;
             cameraMovement = delegate { };
         }
+    }
+
+    public void ChangeFOV(int state)
+    {
+        if (state == 0)
+            _mainCamera.fieldOfView = _walkingFOV;
+        else if(state == 1)
+            _mainCamera.fieldOfView = _runningFOV;
+
+        fovChanger = TranslateFOV;
+    }
+
+    void TranslateFOV()
+    {
+        
     }
 }
