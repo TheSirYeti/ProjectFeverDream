@@ -162,6 +162,9 @@ public class Model : MonoBehaviour
     {
         if (other.gameObject.tag == "Floor")
         {
+            if (_coyoteTimeCoroutine != null)
+                StopCoroutine(_coyoteTimeCoroutine);
+
             _canJump = true;
         }
     }
