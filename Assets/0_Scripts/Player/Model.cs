@@ -94,6 +94,7 @@ public class Model : MonoBehaviour
 
     public void Slide()
     {
+        isCrunch = true;
         _actualSpeed = _slideSpeed;
         StartCoroutine(SlideTime());
     }
