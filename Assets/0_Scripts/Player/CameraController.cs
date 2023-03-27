@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     private Transform _actualCameraPos;
     private List<Transform> _cameraPositions = new List<Transform>();
 
-    private float _cameraSens = 500;
+    [SerializeField] private float _cameraSens = 500;
     private float _cameraSpeeed = 10;
 
     [SerializeField] float _walkingFOV;
