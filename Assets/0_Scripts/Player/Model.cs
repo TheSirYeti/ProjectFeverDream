@@ -15,6 +15,9 @@ public class Model : MonoBehaviour
     [SerializeField] float _crunchSpeed;
 
     [SerializeField] float _jumpForce;
+    [SerializeField] float _coyoteTime;
+
+    Coroutine _coyoteTimeCoroutine;
 
     public bool isCrunch { get; private set; } = false;
 
@@ -110,6 +113,12 @@ public class Model : MonoBehaviour
             _actualSpeed = _walkingSpeed;
     }
 
+    IEnumerator CoyoteTime()
+    {
+        yield return new WaitForSeconds(_coyoteTime);
+        _canJump = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Floor")
@@ -122,7 +131,10 @@ public class Model : MonoBehaviour
     {
         if (other.gameObject.tag == "Floor")
         {
-            _canJump = false;
+            if (_coyoteTimeCoroutine != null)
+                StopCoroutine(_coyoteTimeCoroutine);
+
+            _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
         }
     }
 }
