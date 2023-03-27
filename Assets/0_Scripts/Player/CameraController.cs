@@ -60,8 +60,8 @@ public class CameraController : MonoBehaviour
     // Void for move the camera with an input
     public void MoveCamera(float xAxie, float yAxie)
     {
-        _xRotation += xAxie * _cameraSens * Time.fixedDeltaTime;
-        _yRotation += yAxie * -1 * _cameraSens * Time.fixedDeltaTime;
+        _xRotation += xAxie * _cameraSens * Time.deltaTime;
+        _yRotation += yAxie * -1 * _cameraSens * Time.deltaTime;
 
         _yRotation = Mathf.Clamp(_yRotation, _minYRot, _maxYRot);
 
