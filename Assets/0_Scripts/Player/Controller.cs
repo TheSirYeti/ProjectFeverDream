@@ -76,12 +76,12 @@ public class Controller
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _model.Run(1);
-            _cameraController.ChangeFOV(1);
+            _cameraController.ChangeRunningFOV(1);
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             _model.Run(0);
-            _cameraController.ChangeFOV(0);
+            _cameraController.ChangeRunningFOV(0);
         }
     }
 }

@@ -16,7 +16,7 @@ public class Model : MonoBehaviour
 
     [SerializeField] float _jumpForce;
 
-    bool _isCrunch = false;
+    public bool isCrunch { get; private set; } = false;
 
     bool _canJump = false;
 
@@ -91,18 +91,18 @@ public class Model : MonoBehaviour
 
             Run(0);
 
-            _isCrunch = true;
+            isCrunch = true;
         }
         else
         {
             _actualSpeed = _walkingSpeed;
-            _isCrunch = false;
+            isCrunch = false;
         }
     }
 
     public void Run(int state)
     {
-        if (_isCrunch) return;
+        if (isCrunch) return;
 
         if (state == 1)
             _actualSpeed = _runningSpeed;

@@ -5,6 +5,8 @@ using System;
 
 public class CameraController : MonoBehaviour
 {
+    Model _model;
+
     private Camera _mainCamera;
     private Transform _actualCameraPos;
     private List<Transform> _cameraPositions = new List<Transform>();
@@ -16,16 +18,18 @@ public class CameraController : MonoBehaviour
     [SerializeField] float _runningFOV;
     float _actualFOV;
 
+
     [SerializeField] private float _maxYRot = 50, _minYRot = -50;
 
     private float _xRotation;
     private float _yRotation;
 
     Action cameraMovement = delegate { };
-    Action fovChanger = delegate { };
 
     void Awake()
     {
+        _model = GetComponent<Model>();
+
         Cursor.lockState = CursorLockMode.Locked;
 
         // Get Main Camera
@@ -51,7 +55,6 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         cameraMovement();
-        fovChanger();
     }
 
     // Void for move the camera with an input
@@ -89,18 +92,18 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public void ChangeFOV(int state)
+    public void ChangeRunningFOV(int state)
     {
+        if (_model.isCrunch) return;
+
         if (state == 0)
-            _mainCamera.fieldOfView = _walkingFOV;
-        else if(state == 1)
-            _mainCamera.fieldOfView = _runningFOV;
+            _actualFOV = _walkingFOV;
+        else if (state == 1)
+            _actualFOV = _runningFOV;
 
-        fovChanger = TranslateFOV;
-    }
-
-    void TranslateFOV()
-    {
-        
+        LeanTween.value(_mainCamera.fieldOfView, _actualFOV, 0.15f).setOnUpdate((float value) =>
+        {
+            _mainCamera.fieldOfView = value;
+        });
     }
 }
