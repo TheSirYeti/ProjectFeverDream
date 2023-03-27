@@ -78,6 +78,10 @@ public class Model : MonoBehaviour
     {
         if (_canJump)
         {
+            Vector3 velocity = _rb.velocity;
+            velocity.y = 0;
+            _rb.velocity = velocity;
+
             _rb.AddForce(transform.up * _jumpForce);
         }
     }
