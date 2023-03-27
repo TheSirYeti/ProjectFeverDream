@@ -37,7 +37,7 @@ public class Controller
 
             if (h > 0)
                 h = 1;
-            else if(h < 0)
+            else if (h < 0)
                 h = -1;
 
             if (v > 0)
@@ -61,7 +61,16 @@ public class Controller
     {
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            _model.Crouch(1);
+            if (_model.isRunning)
+            {
+                _model.Slide();
+            }
+            else
+            {
+                _cameraController.ChangeRunningFOV(0);
+                _model.Crouch(1);
+            }
+
             _cameraController.StartTranslate(1);
         }
         else if (Input.GetKeyUp(KeyCode.LeftControl))

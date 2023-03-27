@@ -12,6 +12,7 @@ public class Model : MonoBehaviour
     float _actualSpeed;
     [SerializeField] float _walkingSpeed;
     [SerializeField] float _runningSpeed;
+    [SerializeField] float _slideSpeed;
     [SerializeField] float _crunchSpeed;
 
     [SerializeField] float _jumpForce;
@@ -20,6 +21,7 @@ public class Model : MonoBehaviour
     Coroutine _coyoteTimeCoroutine;
 
     public bool isCrunch { get; private set; } = false;
+    public bool isRunning { get; private set; } = false;
 
     bool _canJump = false;
 
@@ -88,6 +90,12 @@ public class Model : MonoBehaviour
         }
     }
 
+    public void Slide()
+    {
+        _actualSpeed = _slideSpeed;
+        StartCoroutine(SlideTime());
+    }
+
     public void Crouch(int state)
     {
         _actualCollider.SetActive(false);
@@ -114,9 +122,32 @@ public class Model : MonoBehaviour
         if (isCrunch) return;
 
         if (state == 1)
+        {
             _actualSpeed = _runningSpeed;
+            isRunning = true;
+        }
         else
+        {
             _actualSpeed = _walkingSpeed;
+            isRunning = false;
+        }
+    }
+
+    IEnumerator SlideTime()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        LeanTween.value(_actualSpeed, _runningSpeed, 0.5f).setOnUpdate((float value) =>
+        {
+            _actualSpeed = value;
+        });
+
+        yield return new WaitForSeconds(0.5f);
+
+        _cameraController.ChangeRunningFOV(0);
+
+        if (isCrunch) _actualSpeed = _crunchSpeed;
+        else if (!isRunning) _actualSpeed = _walkingSpeed;
     }
 
     IEnumerator CoyoteTime()
