@@ -61,12 +61,12 @@ public class Controller
     {
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
-            _model.Crunch(1);
+            _model.Crouch(1);
             _cameraController.StartTranslate(1);
         }
         else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
-            _model.Crunch(0);
+            _model.Crouch(0);
             _cameraController.StartTranslate(0);
         }
     }

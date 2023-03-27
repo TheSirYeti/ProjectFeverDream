@@ -69,7 +69,7 @@ public class Model : MonoBehaviour
         if (_dir.magnitude > 1)
             _dir.Normalize();
 
-        _dir *= +_actualSpeed * Time.fixedDeltaTime;
+        _dir *= _actualSpeed * Time.fixedDeltaTime;
 
         _dir.y = _rb.velocity.y;
     }
@@ -83,10 +83,12 @@ public class Model : MonoBehaviour
             _rb.velocity = velocity;
 
             _rb.AddForce(transform.up * _jumpForce);
+
+            _canJump = false;
         }
     }
 
-    public void Crunch(int state)
+    public void Crouch(int state)
     {
         _actualCollider.SetActive(false);
         _actualCollider = _posibleColliders[state];
