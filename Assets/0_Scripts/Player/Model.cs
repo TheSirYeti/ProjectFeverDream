@@ -15,6 +15,8 @@ public class Model : MonoBehaviour
     [SerializeField] float _slideSpeed;
     [SerializeField] float _crunchSpeed;
 
+    [SerializeField] float _slideDuration;
+
     [SerializeField] float _jumpForce;
     [SerializeField] float _coyoteTime;
 
@@ -135,14 +137,14 @@ public class Model : MonoBehaviour
 
     IEnumerator SlideTime()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(_slideDuration / 2);
 
-        LeanTween.value(_actualSpeed, _runningSpeed, 0.5f).setOnUpdate((float value) =>
+        LeanTween.value(_actualSpeed, _runningSpeed, _slideDuration / 2).setOnUpdate((float value) =>
         {
             _actualSpeed = value;
         });
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(_slideDuration / 2);
 
         _cameraController.ChangeRunningFOV(0);
 
