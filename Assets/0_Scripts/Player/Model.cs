@@ -106,9 +106,10 @@ public class Model : MonoBehaviour
 
         if (state == 1)
         {
+            Run(0);
+
             _actualSpeed = _crunchSpeed;
 
-            Run(0);
 
             isCrunch = true;
         }
