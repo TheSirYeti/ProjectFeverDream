@@ -13,7 +13,7 @@ public class BaseMeleeEnemy : Enemy
 
     public override void TakeDamage()
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public override void Attack()
@@ -21,6 +21,7 @@ public class BaseMeleeEnemy : Enemy
         if (currentAttackCooldown <= 0)
         {
             currentAttackCooldown = attackCooldown;
+            Debug.Log("HIT!");
             animator.SetTrigger("punch");
         }
         
@@ -30,7 +31,7 @@ public class BaseMeleeEnemy : Enemy
     public override void Move()
     {
         SetSpeedValue(Time.deltaTime);
-        currentAttackCooldown--;
+        currentAttackCooldown -= Time.deltaTime;
 
         if (!IsInDistance())
         {
@@ -42,7 +43,6 @@ public class BaseMeleeEnemy : Enemy
     private void Update()
     {
         animator.SetFloat("movementSpeed", speed);
-        Debug.Log(speed);
         
         if (IsInDistance())
         {
