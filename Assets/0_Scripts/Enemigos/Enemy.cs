@@ -23,6 +23,11 @@ public abstract class Enemy : MonoBehaviour
     protected float maxSpeed;
     [SerializeField] private float accelerationValue;
 
+    [Header("Pathfinding Properties")] 
+    [SerializeField] protected List<Node> nodePath;
+    protected int currentNode = 0;
+    [SerializeField] protected bool isPathfinding;
+
     [Header("Ragdoll Properties")] 
     [SerializeField] private Rigidbody rb;
     [SerializeField] private bool hasRagdoll;
@@ -102,9 +107,123 @@ public abstract class Enemy : MonoBehaviour
         transform.position += transform.forward * speed * Time.deltaTime;
     }
 
+    public void DoPathfinding()
+    {
+        Vector3 direction;
+        if (isPathfinding && nodePath != null)
+        {
+            direction = nodePath[currentNode].transform.position - transform.position;
+            transform.forward = direction;
+            transform.position += transform.forward * speed * Time.fixedDeltaTime;
+            
+            if (direction.magnitude <= 0.1f)
+            {
+                currentNode++;
+                if (currentNode >= nodePath.Count)
+                {
+                    currentNode = 0;
+                    isPathfinding = false;
+                }
+            }
+        }
+    }
+    
     protected bool IsInDistance()
     {
         return Vector3.Distance(target.transform.position, transform.position) <= minChaseDistance;
+    }
+
+    #endregion
+
+    #region PATHFINDING
+
+    public List<Node> ConstructPathThetaStar(Node startingNode, Node goalNode)
+    {
+        var path = ConstructPathAStar(startingNode, goalNode);
+        if (path != null)
+        {
+            path.Reverse();
+            int index = 0;
+
+            while (index <= path.Count - 1)
+            {
+                int indexNextNext = index + 2;
+                if (indexNextNext > path.Count - 1) break;
+                if (InSight(path[index].transform.position, path[indexNextNext].transform.position))
+                    path.Remove(path[index + 1]);
+                else index++;
+
+            }
+        }
+        return path;
+    }
+    bool InSight(Vector3 start, Vector3 end)
+    {
+        Vector3 dir = end - start;
+        if (!Physics.Raycast(start, dir, dir.magnitude, NodeManager.instance.wallMask)) return true;
+        else return false;
+    }
+
+    public List<Node> ConstructPathAStar(Node startingNode, Node goalNode)
+    {
+        if (startingNode == null || goalNode == null)
+            return default;
+
+        PriorityQueue frontier = new PriorityQueue();
+        frontier.Put(startingNode, 0);
+
+        Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
+        Dictionary<Node, int> costSoFar = new Dictionary<Node, int>();
+
+        cameFrom.Add(startingNode, null);
+        costSoFar.Add(startingNode, 0);
+
+        while (frontier.Count() > 0)
+        {
+            Node current = frontier.Get();
+
+            if (current == goalNode)
+            {
+                List<Node> path = new List<Node>();
+                Node nodeToAdd = current;
+
+                while (nodeToAdd != null)
+                {
+                    path.Add(nodeToAdd);
+                    nodeToAdd = cameFrom[nodeToAdd];
+                }
+
+                return path;
+            }
+
+            foreach (var next in current.GetNeighbors())
+            {
+                int newCost = costSoFar[current] + next.cost;
+
+                if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
+                {
+                    if (costSoFar.ContainsKey(next))
+                    {
+                        costSoFar[next] = newCost;
+                        cameFrom[next] = current;
+                    }
+                    else
+                    {
+                        cameFrom.Add(next, current);
+                        costSoFar.Add(next, newCost);
+                    }
+
+                    float priority = newCost + Heuristic(next.transform.position, goalNode.transform.position);
+                    frontier.Put(next, priority);
+                }
+            }
+        }
+        return default;
+    }
+    
+    float Heuristic(Vector3 a, Vector3 b)
+    {
+        return Vector3.Distance(a, b);
     }
 
     #endregion
