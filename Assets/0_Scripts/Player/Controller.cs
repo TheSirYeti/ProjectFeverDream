@@ -67,8 +67,8 @@ public class Controller
             }
             else
             {
-                _cameraController.ChangeRunningFOV(0);
                 _model.Crouch(1);
+                _cameraController.ChangeRunningFOV(0);
             }
 
             _cameraController.StartTranslate(1);
@@ -85,12 +85,10 @@ public class Controller
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             _model.Run(1);
-            _cameraController.ChangeRunningFOV(1);
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             _model.Run(0);
-            _cameraController.ChangeRunningFOV(0);
         }
     }
 }

@@ -24,8 +24,12 @@ public class Model : MonoBehaviour
 
     public bool isCrunch { get; private set; } = false;
     public bool isRunning { get; private set; } = false;
+    public bool isSlide { get; private set; } = false;
 
     bool _canJump = false;
+    bool _isOnFloor = false;
+
+    Coroutine _slideCoroutine;
 
     Vector3 _dir = Vector3.zero;
 
@@ -76,6 +80,11 @@ public class Model : MonoBehaviour
         _dir *= _actualSpeed * Time.fixedDeltaTime;
 
         _dir.y = _rb.velocity.y;
+
+        if ((hAxie != 0 || vAxie != 0) && isRunning)
+            _cameraController.ChangeRunningFOV(1);
+        else
+            _cameraController.ChangeRunningFOV(0);
     }
 
     public void Jump()
@@ -96,7 +105,10 @@ public class Model : MonoBehaviour
     {
         isCrunch = true;
         _actualSpeed = _slideSpeed;
-        StartCoroutine(SlideTime());
+        isSlide = true;
+
+        if (_isOnFloor)
+            _slideCoroutine = StartCoroutine(SlideTime());
     }
 
     public void Crouch(int state)
@@ -123,23 +135,35 @@ public class Model : MonoBehaviour
 
     public void Run(int state)
     {
-        if (isCrunch) return;
+        if (isCrunch && state == 1) return;
 
         if (state == 1)
         {
-            _actualSpeed = _runningSpeed;
             isRunning = true;
         }
         else
         {
-            _actualSpeed = _walkingSpeed;
             isRunning = false;
+        }
+
+        if (!isCrunch)
+        {
+            if (state == 1)
+            {
+                _actualSpeed = _runningSpeed;
+            }
+            else
+            {
+                _actualSpeed = _walkingSpeed;
+            }
         }
     }
 
     IEnumerator SlideTime()
     {
         yield return new WaitForSeconds(_slideDuration / 2);
+
+        LeanTween.cancel(gameObject);
 
         LeanTween.value(_actualSpeed, _runningSpeed, _slideDuration / 2).setOnUpdate((float value) =>
         {
@@ -168,6 +192,11 @@ public class Model : MonoBehaviour
                 StopCoroutine(_coyoteTimeCoroutine);
 
             _canJump = true;
+
+            _isOnFloor = true;
+
+            if (isSlide)
+                _slideCoroutine = StartCoroutine(SlideTime());
         }
     }
 
@@ -177,6 +206,11 @@ public class Model : MonoBehaviour
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
+
+            if (_slideCoroutine != null)
+                StopCoroutine(_slideCoroutine);
+
+            _isOnFloor = false;
 
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
         }

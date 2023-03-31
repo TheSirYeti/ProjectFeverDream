@@ -18,6 +18,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] float _runningFOV;
     float _actualFOV;
 
+    bool _isLargeFOV = false;
+
 
     [SerializeField] private float _maxYRot = 50, _minYRot = -50;
 
@@ -94,12 +96,22 @@ public class CameraController : MonoBehaviour
 
     public void ChangeRunningFOV(int state)
     {
-        if (_model.isCrunch) return;
+        if (_model.isCrunch && state == 1) return;
+
+        if ((state == 0 && !_isLargeFOV) || (state == 1 && _isLargeFOV)) return;
+
+        LeanTween.cancel(gameObject);
 
         if (state == 0)
+        {
             _actualFOV = _walkingFOV;
+            _isLargeFOV = false;
+        }
         else if (state == 1)
+        {
             _actualFOV = _runningFOV;
+            _isLargeFOV = true;
+        }
 
         LeanTween.value(_mainCamera.fieldOfView, _actualFOV, 0.15f).setOnUpdate((float value) =>
         {
