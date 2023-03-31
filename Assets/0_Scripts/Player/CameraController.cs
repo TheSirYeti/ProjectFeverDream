@@ -54,6 +54,14 @@ public class CameraController : MonoBehaviour
         _actualFOV = _walkingFOV;
     }
 
+    private void Start()
+    {
+        EventManager.Subscribe("ChangeSens", ChangeSens);
+
+        if (PlayerPrefs.HasKey("Sensibilidad"))
+            _cameraSens = PlayerPrefs.GetFloat("Sensibilidad");
+    }
+
     private void Update()
     {
         cameraMovement();
@@ -117,5 +125,12 @@ public class CameraController : MonoBehaviour
         {
             _mainCamera.fieldOfView = value;
         });
+    }
+
+    // Change Sens
+    void ChangeSens(params object[] parameters)
+    {
+        _cameraSens = (float)parameters[0];
+        PlayerPrefs.SetFloat("Sensibilidad", (float)parameters[0]);
     }
 }

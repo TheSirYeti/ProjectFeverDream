@@ -20,6 +20,7 @@ public class Controller
         onUpdate += GetJumpInput;
         onUpdate += GetCrunchInput;
         onUpdate += GetRunInput;
+        onUpdate += GetEscape;
     }
 
     void GetMouse()
@@ -89,6 +90,14 @@ public class Controller
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             _model.Run(0);
+        }
+    }
+
+    void GetEscape()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            EventManager.Trigger("TempMenu");
         }
     }
 }
