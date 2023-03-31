@@ -27,6 +27,7 @@ public abstract class Enemy : MonoBehaviour
     [Header("Pathfinding Properties")] 
     [SerializeField] protected List<Node> nodePath;
     protected int currentNode = 0;
+    [SerializeField] private float minDistanceToNode;
     [SerializeField] protected bool isPathfinding;
     [SerializeField] protected float pathfindingCooldown, pathfindingRate;
 
@@ -115,11 +116,11 @@ public abstract class Enemy : MonoBehaviour
         if (isPathfinding && nodePath != null)
         {
             direction = nodePath[currentNode].transform.position - transform.position;
-            direction = new Vector3(direction.x, transform.position.y, direction.z);
+            //direction = new Vector3(direction.x, transform.position.y, direction.z).normalized;
             transform.forward = direction;
-            transform.position += transform.forward * speed * Time.fixedDeltaTime;
+            transform.position += transform.forward * speed * Time.deltaTime;
             
-            if (direction.magnitude <= 0.1f)
+            if (direction.magnitude <= minDistanceToNode)
             {
                 currentNode++;
                 if (currentNode >= nodePath.Count)
