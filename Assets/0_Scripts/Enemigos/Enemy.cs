@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected List<Node> nodePath;
     protected int currentNode = 0;
     [SerializeField] protected bool isPathfinding;
+    [SerializeField] protected float pathfindingCooldown, pathfindingRate;
 
     [Header("Ragdoll Properties")] 
     [SerializeField] private Rigidbody rb;
@@ -113,6 +115,7 @@ public abstract class Enemy : MonoBehaviour
         if (isPathfinding && nodePath != null)
         {
             direction = nodePath[currentNode].transform.position - transform.position;
+            direction = new Vector3(direction.x, transform.position.y, direction.z);
             transform.forward = direction;
             transform.position += transform.forward * speed * Time.fixedDeltaTime;
             
@@ -137,6 +140,46 @@ public abstract class Enemy : MonoBehaviour
 
     #region PATHFINDING
 
+    protected void CalculatePathPreview()
+    {
+        if ((!isPathfinding
+             || nodePath == null
+             || nodePath.Count < 1
+             || NodeManager.instance.nodes[NodeManager.instance.GetClosestNode(target.transform)] !=
+             nodePath[nodePath.Count - 1]) && pathfindingCooldown <= 0)
+        {
+            nodePath = new List<Node>();
+            int closeNode = NodeManager.instance.GetClosestNode(transform);
+            int endNode = NodeManager.instance.GetClosestNode(target.transform);
+
+            string myNodes = closeNode + "," + endNode;
+
+            List<Node> newPath = PathfindingTable.instance.ConstructPathThetaStar(myNodes);
+            Debug.Log(newPath.Count);
+            
+            Debug.Log("Loop?");
+            if (!newPath.Any())
+                return;
+
+            if (!nodePath.Any() || newPath[currentNode] != nodePath[currentNode] || currentNode > nodePath.Count - 1)
+                currentNode = 0;
+
+            int nodeCounter = 0;
+            foreach (var node in newPath)
+            {
+                if (InSight(transform.position, node.transform.position))
+                {
+                    currentNode = nodeCounter;
+                }
+                nodeCounter++;
+            }
+
+            Debug.Log("????????");
+            nodePath = newPath;
+            isPathfinding = true;
+        }
+    }
+    
     public List<Node> ConstructPathThetaStar(Node startingNode, Node goalNode)
     {
         var path = ConstructPathAStar(startingNode, goalNode);
@@ -157,7 +200,7 @@ public abstract class Enemy : MonoBehaviour
         }
         return path;
     }
-    bool InSight(Vector3 start, Vector3 end)
+    protected bool InSight(Vector3 start, Vector3 end)
     {
         Vector3 dir = end - start;
         if (!Physics.Raycast(start, dir, dir.magnitude, NodeManager.instance.wallMask)) return true;

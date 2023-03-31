@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEditor;
@@ -8,7 +9,9 @@ using UnityEditor;
 public class Node : MonoBehaviour
 {
     public float viewRadius;
+    public float gizmoViewRadius;
     public List<Node> neighbors = new List<Node>();
+    
 
     public int cost = 1;
 
@@ -34,7 +37,15 @@ public class Node : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, 0.25f);
+        Gizmos.DrawSphere(transform.position, gizmoViewRadius);
+
+        if (neighbors.Any())
+        {
+            foreach (var node in neighbors)
+            {
+                Gizmos.DrawLine(transform.position, node.transform.position);
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()

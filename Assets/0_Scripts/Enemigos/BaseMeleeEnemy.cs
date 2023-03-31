@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class BaseMeleeEnemy : Enemy
 {
@@ -18,6 +20,8 @@ public class BaseMeleeEnemy : Enemy
 
     public override void Attack()
     {
+        transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+
         if (currentAttackCooldown <= 0)
         {
             currentAttackCooldown = attackCooldown;
@@ -32,18 +36,37 @@ public class BaseMeleeEnemy : Enemy
     {
         SetSpeedValue(Time.deltaTime);
         currentAttackCooldown -= Time.deltaTime;
+        pathfindingCooldown -= Time.deltaTime;
 
-        if (!IsInDistance())
+        if (IsInDistance())
         {
-            DoGenericChase();
+            StopSpeed();
+            return;
         }
-        else StopSpeed();
+        
+        if (!InSight(transform.position, target.transform.position))
+        {
+            if (isPathfinding && nodePath.Any())
+            {
+                DoPathfinding();
+            }
+            else
+            {
+                CalculatePathPreview();
+            }
+            return;
+        }
+        
+        isPathfinding = false;
+        nodePath.Clear();
+        
+        DoGenericChase();
     }
 
     private void Update()
     {
         animator.SetFloat("movementSpeed", speed);
-        
+
         if (IsInDistance())
         {
             Attack();
