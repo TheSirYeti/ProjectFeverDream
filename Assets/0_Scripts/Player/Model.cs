@@ -178,9 +178,12 @@ public class Model : MonoBehaviour
     public void CheckInteract()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, _interactDistance, _interactMask))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _interactDistance, _interactMask))
         {
             IAttendance iAttendance = hit.collider.gameObject.GetComponent<IAttendance>();
+
+            if (iAttendance == null || !iAttendance.CanInteract()) return;
+
             _assistant.SetObjective(iAttendance);
         }
     }

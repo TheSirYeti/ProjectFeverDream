@@ -27,7 +27,7 @@ public class Assistant : MonoBehaviour
     {
         _dir = _actualObjective.position - transform.position;
         transform.forward = _dir;
-        if (Vector3.Distance(transform.position, _player.position) > _followingDistance)
+        if (Vector3.Distance(transform.position, _actualObjective.position) > _followingDistance)
         {
             transform.position += _dir * _speed * Time.deltaTime;
         }
