@@ -122,5 +122,10 @@ public class BaseMeleeEnemy : Enemy
         }
     }
 
+    public override void DoKnockback()
+    {
+        animator.Play("BasicRobot_Knockback");
+    }
+
     #endregion
 }

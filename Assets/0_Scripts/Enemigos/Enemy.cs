@@ -6,49 +6,58 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour, ITakeDamage
 {
-    [Header("Base Properties")]
-    [SerializeField] protected float hp, maxHP;
-    [Space(10)]
+    [Header("-== Base Properties ==-")]
+    [SerializeField] protected float hp;
+    [SerializeField] protected float maxHP;
+    [Space(20)]
 
-    [Header("Target Properties")]
+    [Header("-== Target Properties ==-")]
     [SerializeField] protected GameObject target;
     [SerializeField] private float minChaseDistance;
 
-    [Header("Attack Properties")] 
+    [Space(20)]
+    [Header("-== Attack Properties ==-")] 
     [SerializeField] protected float attackCooldown;
     [SerializeField] protected float currentAttackCooldown;
     [SerializeField] protected bool isAttacking;
     
-    [Header("Movement Properties")] 
+    [Space(20)]
+    [Header("-== Movement Properties ==-")] 
     [SerializeField] protected float speed;
     protected float maxSpeed;
     [SerializeField] private float accelerationValue;
 
-    [Header("Pathfinding Properties")] 
+    [Space(20)]
+    [Header("-== Pathfinding Properties ==-")] 
     [SerializeField] protected List<Node> nodePath;
     protected int currentNode = 0;
     [SerializeField] private float minDistanceToNode;
     [SerializeField] protected bool isPathfinding;
     [SerializeField] protected float pathfindingCooldown, pathfindingRate;
 
-    [Header("Ragdoll Properties")] 
+    [Space(20)]
+    [Header("-== Ragdoll Properties ==-")] 
     [SerializeField] private Rigidbody rb;
     [SerializeField] private bool hasRagdoll;
     protected bool isInRagdollMode = false;
     protected Rigidbody[] ragdollRigidbodies;
 
-    [Header("View Properties")]
+    [Space(20)]
+    [Header("-== View Properties ==-")]
     [SerializeField] protected Animator animator;
-    [Space(10)] 
+    [Space(20)] 
     [SerializeField] protected List<Renderer> renderers;
     
-    [Header("Hitpoints Properties")]
     protected Dictionary<string, float> _damageRecive = new Dictionary<string, float>();
-    [SerializeField] protected float weakDmg, bodyDmg, headDmg, generalDmg;
-    [Space(10)] 
+    [Space(20)] 
+    [Header("-== Hitpoints Properties ==-")]
     [SerializeField] protected float dmg;
+    [Space(10)] 
+    [SerializeField] protected float weakDmg, bodyDmg, headDmg, generalDmg;
     protected bool isDead = false;
 
+    public abstract void Attack();
+    
     #region RAGDOLLS
 
     public void DoRagdoll()
@@ -86,12 +95,10 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
     }
 
     #endregion
-    
-    public abstract void Attack();
-    public abstract void Death();
-    public abstract void Move();
 
     #region MOVEMENT
+    
+    public abstract void Move();
 
     public void SetSpeedValue(float value)
     {
@@ -281,6 +288,8 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
     
     #region DAMAGE / HEALTH
     
+    public abstract void Death();
+    
     private void OnTriggerEnter(Collider other)
     {
         IReciveDamage damagable = other.GetComponent<IReciveDamage>();
@@ -291,9 +300,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
         }
     }
     
-    #endregion
-
-    public void TakeDamage(string partDamaged, float dmg)
+    public void TakeDamage(string partDamaged, float dmg, bool hasKnockback = false)
     {
         if (!_damageRecive.ContainsKey(partDamaged) || isInRagdollMode || isDead)
             return;
@@ -304,29 +311,36 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
         if (hp <= 0)
         {
             Death();
+            return;
+        }
+
+        if (hasKnockback)
+        {
+            DoKnockback();
+        }
+        
+        if (partDamaged == "Body")
+        {
+            EventManager.Trigger("AddCoin", 10);
+            EventManager.Trigger("OnDamageableHit", 0);
+        }
+        else if (partDamaged == "Head")
+        {
+            EventManager.Trigger("AddCoin", 20);
+            EventManager.Trigger("OnDamageableHit", 1);
+        }
+        else if (partDamaged == "WeakPart")
+        {
+            EventManager.Trigger("AddCoin", 5);
+            EventManager.Trigger("OnDamageableHit", 2);
         }
         else
         {
-            //temp
-            if (partDamaged == "Body")
-            {
-                EventManager.Trigger("AddCoin", 10);
-                EventManager.Trigger("OnDamageableHit", 0);
-            }
-            else if (partDamaged == "Head")
-            {
-                EventManager.Trigger("AddCoin", 20);
-                EventManager.Trigger("OnDamageableHit", 1);
-            }
-            else if (partDamaged == "WeakPart")
-            {
-                EventManager.Trigger("AddCoin", 5);
-                EventManager.Trigger("OnDamageableHit", 2);
-            }
-            else
-            {
-                EventManager.Trigger("OnDamageableHit", 0);
-            }
+            EventManager.Trigger("OnDamageableHit", 0);
         }
     }
+
+    public abstract void DoKnockback();
+
+    #endregion
 }
