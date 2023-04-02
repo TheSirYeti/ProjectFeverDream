@@ -9,7 +9,7 @@ public class Model : MonoBehaviour
 
     Rigidbody _rb;
 
-    const float _gravity = -10f;
+    [SerializeField] float _gravity = -10f;
     float _actualYVelocity = 0;
 
     float _actualSpeed;
