@@ -74,7 +74,7 @@ public class Model : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _dir.y = _actualYVelocity;
+        _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Acceleration);
         _rb.velocity = _dir;
     }
 
