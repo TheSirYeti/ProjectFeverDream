@@ -83,7 +83,8 @@ MonoBehaviour:
   _slideSpeed: 1200
   _crunchSpeed: 250
   _slideDuration: 0.85
-  _jumpForce: 625
+  _jumpDuration: 0.2
+  _jumpForce: 15
   _coyoteTime: 0.4
 --- !u!114 &2050201400054601314
 MonoBehaviour:
@@ -169,7 +170,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2050201400333242714}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f2a7143461d69d84da907012fc3717c5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -275,7 +276,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2050201401256933100}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f2a7143461d69d84da907012fc3717c5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5

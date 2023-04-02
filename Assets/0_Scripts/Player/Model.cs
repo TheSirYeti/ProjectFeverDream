@@ -9,6 +9,9 @@ public class Model : MonoBehaviour
 
     Rigidbody _rb;
 
+    const float _gravity = -10f;
+    float _actualYVelocity = 0;
+
     float _actualSpeed;
     [SerializeField] float _walkingSpeed;
     [SerializeField] float _runningSpeed;
@@ -17,6 +20,7 @@ public class Model : MonoBehaviour
 
     [SerializeField] float _slideDuration;
 
+    [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
     [SerializeField] float _coyoteTime;
 
@@ -30,6 +34,7 @@ public class Model : MonoBehaviour
     bool _isOnFloor = false;
 
     Coroutine _slideCoroutine;
+    Coroutine _jumpCoroutine;
 
     Vector3 _dir = Vector3.zero;
 
@@ -55,9 +60,11 @@ public class Model : MonoBehaviour
 
         _actualSpeed = _walkingSpeed;
 
-        Vector3 newGravity = Physics.gravity;
-        newGravity.y = -20;
-        Physics.gravity = newGravity;
+        //Vector3 newGravity = Physics.gravity;
+        //newGravity.y = -20;
+        //Physics.gravity = newGravity;
+
+        ApplyVerticalVelocity(_gravity);
     }
 
     void Update()
@@ -67,6 +74,7 @@ public class Model : MonoBehaviour
 
     private void FixedUpdate()
     {
+        _dir.y = _actualYVelocity;
         _rb.velocity = _dir;
     }
 
@@ -91,11 +99,12 @@ public class Model : MonoBehaviour
     {
         if (_canJump)
         {
-            Vector3 velocity = _rb.velocity;
-            velocity.y = 0;
-            _rb.velocity = velocity;
+            if (_jumpCoroutine != null)
+                StopCoroutine(_jumpCoroutine);
 
-            _rb.AddForce(transform.up * _jumpForce);
+            _jumpCoroutine = StartCoroutine(JumpDuration());
+
+            ApplyVerticalVelocity(_jumpForce);
 
             _canJump = false;
         }
@@ -159,6 +168,11 @@ public class Model : MonoBehaviour
         }
     }
 
+    void ApplyVerticalVelocity(float newVelocity)
+    {
+        _actualYVelocity = newVelocity;
+    }
+
     IEnumerator SlideTime()
     {
         yield return new WaitForSeconds(_slideDuration / 2);
@@ -184,6 +198,13 @@ public class Model : MonoBehaviour
         _canJump = false;
     }
 
+    IEnumerator JumpDuration()
+    {
+        yield return new WaitForSeconds(_jumpDuration);
+        ApplyVerticalVelocity(_gravity);
+        _jumpCoroutine = null;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Floor")
@@ -194,6 +215,8 @@ public class Model : MonoBehaviour
             _canJump = true;
 
             _isOnFloor = true;
+
+            ApplyVerticalVelocity(0);
 
             if (isSlide)
                 _slideCoroutine = StartCoroutine(SlideTime());
@@ -211,6 +234,9 @@ public class Model : MonoBehaviour
                 StopCoroutine(_slideCoroutine);
 
             _isOnFloor = false;
+
+            if (_jumpCoroutine == null)
+                ApplyVerticalVelocity(_gravity);
 
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
         }
