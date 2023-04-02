@@ -4,10 +4,10 @@ using System.Linq;
 using System.Security;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, ITakeDamage
 {
     [Header("Base Properties")]
-    [SerializeField] protected float hp;
+    [SerializeField] protected float hp, maxHP;
     [Space(10)]
 
     [Header("Target Properties")]
@@ -34,13 +34,20 @@ public abstract class Enemy : MonoBehaviour
     [Header("Ragdoll Properties")] 
     [SerializeField] private Rigidbody rb;
     [SerializeField] private bool hasRagdoll;
-    private bool isInRagdollMode = false;
-    Rigidbody[] ragdollRigidbodies;
+    protected bool isInRagdollMode = false;
+    protected Rigidbody[] ragdollRigidbodies;
 
     [Header("View Properties")]
     [SerializeField] protected Animator animator;
     [Space(10)] 
     [SerializeField] protected List<Renderer> renderers;
+    
+    [Header("Hitpoints Properties")]
+    protected Dictionary<string, float> _damageRecive = new Dictionary<string, float>();
+    [SerializeField] protected float weakDmg, bodyDmg, headDmg, generalDmg;
+    [Space(10)] 
+    [SerializeField] protected float dmg;
+    protected bool isDead = false;
 
     #region RAGDOLLS
 
@@ -80,8 +87,8 @@ public abstract class Enemy : MonoBehaviour
 
     #endregion
     
-    public abstract void TakeDamage();
     public abstract void Attack();
+    public abstract void Death();
     public abstract void Move();
 
     #region MOVEMENT
@@ -271,4 +278,55 @@ public abstract class Enemy : MonoBehaviour
     }
 
     #endregion
+    
+    #region DAMAGE / HEALTH
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        IReciveDamage damagable = other.GetComponent<IReciveDamage>();
+
+        if (damagable != null)
+        {
+            damagable.DoDamage(dmg, transform.position);
+        }
+    }
+    
+    #endregion
+
+    public void TakeDamage(string partDamaged, float dmg)
+    {
+        if (!_damageRecive.ContainsKey(partDamaged) || isInRagdollMode || isDead)
+            return;
+
+        float totalDmg = dmg * _damageRecive[partDamaged];
+        hp -= totalDmg;
+
+        if (hp <= 0)
+        {
+            Death();
+        }
+        else
+        {
+            //temp
+            if (partDamaged == "Body")
+            {
+                EventManager.Trigger("AddCoin", 10);
+                EventManager.Trigger("OnDamageableHit", 0);
+            }
+            else if (partDamaged == "Head")
+            {
+                EventManager.Trigger("AddCoin", 20);
+                EventManager.Trigger("OnDamageableHit", 1);
+            }
+            else if (partDamaged == "WeakPart")
+            {
+                EventManager.Trigger("AddCoin", 5);
+                EventManager.Trigger("OnDamageableHit", 2);
+            }
+            else
+            {
+                EventManager.Trigger("OnDamageableHit", 0);
+            }
+        }
+    }
 }

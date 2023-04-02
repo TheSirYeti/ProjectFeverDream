@@ -9,13 +9,21 @@ public class BaseMeleeEnemy : Enemy
 {
     private void Start()
     {
+        if (!_damageRecive.ContainsKey("WeakPart"))
+            _damageRecive.Add("WeakPart", weakDmg);
+
+        if (!_damageRecive.ContainsKey("Head"))
+            _damageRecive.Add("Head", headDmg);
+
+        if (!_damageRecive.ContainsKey("Body"))
+            _damageRecive.Add("Body", bodyDmg);
+
+        if (!_damageRecive.ContainsKey("Generic"))
+            _damageRecive.Add("Generic", generalDmg);
+
+        maxHP = hp;
         maxSpeed = speed;
         speed = 0;
-    }
-
-    public override void TakeDamage()
-    {
-        //throw new System.NotImplementedException();
     }
 
     public override void Attack()
@@ -30,6 +38,17 @@ public class BaseMeleeEnemy : Enemy
         }
         
         StopSpeed();
+    }
+
+    public override void Death()
+    {
+        if (isDead) return;
+
+        EventManager.Trigger("OnEnemyDeath");
+        EventManager.Trigger("OnDamageableHit", 3);
+
+        DoRagdoll();
+        isDead = true;
     }
 
     public override void Move()
