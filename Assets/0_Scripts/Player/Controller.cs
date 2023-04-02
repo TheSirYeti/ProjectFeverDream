@@ -7,15 +7,19 @@ public class Controller
 {
     Model _model;
     CameraController _cameraController;
+    WeaponManager _weaponManager;
 
     public Action onUpdate = delegate { };
 
-    public Controller(Model model, CameraController cameraController)
+    public Controller(Model model, CameraController cameraController, WeaponManager weaponManager)
     {
         _model = model;
         _cameraController = cameraController;
+        _weaponManager = weaponManager;
 
         onUpdate += GetMouse;
+        onUpdate += GetShootInput;
+        onUpdate += GetADSInput;
         onUpdate += GetMovementInput;
         onUpdate += GetJumpInput;
         onUpdate += GetCrunchInput;
@@ -27,6 +31,30 @@ public class Controller
     void GetMouse()
     {
         _cameraController.MoveCamera(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+    }
+
+    void GetShootInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            _weaponManager.ChangeAttackState(true);
+        }
+        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            _weaponManager.ChangeAttackState(false);
+        }
+    }
+
+    void GetADSInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            _weaponManager.ChangeADSState(true);
+        }
+        else if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            _weaponManager.ChangeADSState(false);
+        }
     }
 
     void GetMovementInput()

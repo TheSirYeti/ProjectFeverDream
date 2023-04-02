@@ -90,7 +90,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3767482627404791416}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -261,7 +261,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3767482628149530821}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -2095,14 +2095,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d21ec67fcfcc96645a3a079f1eabe6fa, type: 3}
---- !u!1 &4073964001090030967 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d21ec67fcfcc96645a3a079f1eabe6fa, type: 3}
-  m_PrefabInstance: {fileID: 3767482629096370214}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3729666586752260045 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d21ec67fcfcc96645a3a079f1eabe6fa, type: 3}
+  m_PrefabInstance: {fileID: 3767482629096370214}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4073964001090030967 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d21ec67fcfcc96645a3a079f1eabe6fa, type: 3}
   m_PrefabInstance: {fileID: 3767482629096370214}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1324718384827776058 stripped
@@ -2115,6 +2115,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5441163784388262848, guid: d21ec67fcfcc96645a3a079f1eabe6fa, type: 3}
   m_PrefabInstance: {fileID: 3767482629096370214}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &7669676301242298809
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4073964001090030967}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 2, y: 4, z: 2}
+  m_Center: {x: 0, y: 0, z: 1}
 --- !u!95 &3767482629096370211
 Animator:
   serializedVersion: 3
@@ -2134,3 +2147,59 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1736561720953691338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4073964001090030967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82d1ab1fa3556e47aa7b0b8ce5f3c93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3613720293340032743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4073964001090030967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444b8c8c8d9d5da4a86a58c76aa72715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dmg: 50
+  _magazineBullets: 0
+  _initialReserveBullets: 0
+  _maxReserveBullets: 0
+  _shootPoint: {fileID: 0}
+  _targetToShootMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _particleShoot: {fileID: 0}
+  lightMuzzle: {fileID: 0}
+  _canADS: 0
+  _isMelee: 1
+  _idWeapon: 0
+  _meleeCollider: {fileID: 7669676301242298809}
+  _colliderDuration: 0.2
+--- !u!114 &4890697814233849983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4073964001090030967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d3da4d9c641b2e4bbdafa77111a5dbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actualWeapon: {fileID: 3613720293340032743}
+  _equipedWeapons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

@@ -5,12 +5,7 @@ using UnityEngine;
 public class DoorPanel : MonoBehaviour, IAttendance
 {
     bool _isClose = true;
-    Animator _door;
-
-    void Start()
-    {
-        _door = GetComponentInChildren<Animator>();
-    }
+    [SerializeField] Animator _door;
 
     public Transform GetTransform()
     {

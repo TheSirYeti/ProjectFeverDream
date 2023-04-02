@@ -4,32 +4,41 @@ using UnityEngine;
 
 public class Model : MonoBehaviour
 {
+    [Header("-== Class Reference ==-")]
     Controller _controller;
+    [SerializeField] View _view;
+    [SerializeField] WeaponManager _weaponManager;
     CameraController _cameraController;
     Assistant _assistant;
 
+    //Component Reference
     Rigidbody _rb;
+    Camera _camera;
 
+    [Space(20)] [Header("-== Physics Properties ==-")]
     [SerializeField] float _gravity = -10f;
     float _actualYVelocity = 0;
 
+    [Space(20)] [Header("-== Movement Properties ==-")]
     float _actualSpeed;
     [SerializeField] float _walkingSpeed;
     [SerializeField] float _runningSpeed;
     [SerializeField] float _slideSpeed;
     [SerializeField] float _crunchSpeed;
-
     [SerializeField] float _slideDuration;
 
+    [Space(20)] [Header("-== Interact Properties ==-")]
     [SerializeField] float _interactDistance;
     [SerializeField] LayerMask _interactMask;
 
+    [Space(20)] [Header("-== Jump Properties ==-")]
     [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
     [SerializeField] float _coyoteTime;
 
     Coroutine _coyoteTimeCoroutine;
 
+    // Movement Bools
     public bool isCrunch { get; private set; } = false;
     public bool isRunning { get; private set; } = false;
     public bool isSlide { get; private set; } = false;
@@ -37,18 +46,24 @@ public class Model : MonoBehaviour
     bool _canJump = false;
     bool _isOnFloor = false;
 
+    // Coroutines
     Coroutine _slideCoroutine;
     Coroutine _jumpCoroutine;
 
+    // Dir Vector
     Vector3 _dir = Vector3.zero;
 
+    // Colliders
     List<GameObject> _posibleColliders = new List<GameObject>();
     GameObject _actualCollider;
 
     private void Awake()
     {
+        _camera = Camera.main;
+
+        _weaponManager.OnStart(this, _camera.transform, _view);
         _cameraController = GetComponent<CameraController>();
-        _controller = new Controller(this, _cameraController);
+        _controller = new Controller(this, _cameraController, _weaponManager);
         _rb = GetComponent<Rigidbody>();
 
         Transform povParent = transform.Find("Colliders");
@@ -72,6 +87,7 @@ public class Model : MonoBehaviour
     void Start()
     {
         EventManager.Trigger("OnAssistantStart", transform);
+        EventManager.Trigger("OnViewStart", this, _weaponManager);
     }
 
     void Update()
