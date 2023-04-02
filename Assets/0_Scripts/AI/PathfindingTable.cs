@@ -37,8 +37,12 @@ public class PathfindingTable : MonoBehaviour
         Node startingNode = NodeManager.instance.nodes[Int32.Parse(splitStringArray[0])];
         Node goalNode = NodeManager.instance.nodes[Int32.Parse(splitStringArray[1])];
 
-        var path = ConstructPathAStar(startingNode, goalNode);
-        if (path != null || !path.Any())
+        Debug.Log(startingNode + " | " + goalNode);
+        
+        var path = new List<Node>();
+        path = ConstructPathAStar(startingNode, goalNode);
+        
+        if (path != null && path.Any())
         {
             path.Reverse();
             int index = 0;

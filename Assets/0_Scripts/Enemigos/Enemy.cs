@@ -133,6 +133,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
             //direction = new Vector3(direction.x, transform.position.y, direction.z).normalized;
             transform.forward = direction;
             transform.position += transform.forward * speed * Time.deltaTime;
+            transform.LookAt(new Vector3(transform.forward.x, transform.position.y, transform.forward.z));
             
             if (direction.magnitude <= minDistanceToNode)
             {
@@ -170,9 +171,6 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
             string myNodes = closeNode + "," + endNode;
 
             List<Node> newPath = PathfindingTable.instance.ConstructPathThetaStar(myNodes);
-            Debug.Log(newPath.Count);
-            
-            Debug.Log("Loop?");
             if (!newPath.Any())
                 return;
 
@@ -188,8 +186,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
                 }
                 nodeCounter++;
             }
-
-            Debug.Log("????????");
+            
             nodePath = newPath;
             isPathfinding = true;
         }

@@ -21,6 +21,11 @@ public class BaseMeleeEnemy : Enemy
         if (!_damageRecive.ContainsKey("Generic"))
             _damageRecive.Add("Generic", generalDmg);
 
+        if (target == null)
+        {
+            target = GameObject.FindWithTag("Player");
+        }
+
         maxHP = hp;
         maxSpeed = speed;
         speed = 0;
@@ -33,7 +38,6 @@ public class BaseMeleeEnemy : Enemy
         if (currentAttackCooldown <= 0)
         {
             currentAttackCooldown = attackCooldown;
-            Debug.Log("HIT!");
             animator.SetTrigger("punch");
         }
         
