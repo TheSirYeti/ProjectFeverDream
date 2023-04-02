@@ -25,6 +25,7 @@ public class Assistant : MonoBehaviour
 
     void Update()
     {
+        transform.forward = _dir;
         if (Vector3.Distance(transform.position, _player.position) > _followingDistance)
         {
             _dir = _actualObjective.position - transform.position;
