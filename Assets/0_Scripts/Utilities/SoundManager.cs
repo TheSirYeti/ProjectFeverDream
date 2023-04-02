@@ -330,112 +330,21 @@ public class SoundManager : MonoBehaviour
 
 public enum SoundID
 {
-    HITMARKER,              //0
-    ZAP_SHOT,               //1
-    PISTOL_SHOT,            //2
-    GUN_RELOAD,             //3
-    ENEMY_HIT_1,            //4
-    BLASTER_RELOAD,         //5
-    ENEMY_DEATH,            //6
-    ZAP_RELOAD_PLUG,        //7
-    ZAP_RELOAD_CHARGE,      //8
-    CD_SHOT,                //9
-    CD_RELOAD_HOT,          //10
-    CD_RELOAD_TWIST,        //11
-    PLAYER_STEP_1,          //12
-    PLAYER_STEP_2,          //13
-    SABER_SLICE,            //14
-    ENEMY_HIT_2,            //15
-    PLAYER_LOWHEALTH,       //16
-    PLAYER_HURT,            //17
-    VINYL_RELOAD_1,         //18
-    ENEMY_HIT_HEADSHOT,     //19
-    ENEMY_HIT_WEAK,         //20
-    ROBOT_AWARE_1,          //21
-    ROBOT_AWARE_2,          //22
-    ROBOT_AWARE_3,          //23
-    ROBOT_AWARE_4,          //24
-    ROBOT_DEATH_1,          //25
-    ROBOT_DEATH_2,          //26
-    ROBOT_DEATH_3,          //27
-    ROBOT_DEATH_4,          //28
-    TANK_SPAWN,             //29
-    TANK_HOOK,              //30
-    TANK_SHOT_BUILDUP,      //31
-    TANK_SHOT_LASER,        //32
-    TANK_SHOT_LINE_1,       //33    
-    TANK_SHOT_LINE_2,       //34
-    TANK_SHOT_LINE_3,       //35
-    TANK_HOOK_LINE_1,       //36
-    TANK_HOOK_LINE_2,       //37
-    TANK_HOOK_LINE_3,       //38
-    WAVE_START_1,           //39
-    LEVER_FLICK,            //40
-    BATTERY_ZONE_COLLECT,   //41
-    BATTERY_ZONE_DONE,      //42
-    SHOP_ACCEPT,            //43
-    SHOP_DENIED,            //44
-    TASK_DONE,              //45
-    NO_AMMO,                //46
-    WAVE_START_2,           //47
-    WAVE_START_3,           //48
-    SMOG_EXPLOSION,         //49
-    SMOG_BUILDUP,           //50
-    SMOG_CHASE,             //51
-    SMOG_WAVE,              //52
-    BUTTON_SIMONSAYS,       //53
-    TOGGLE_SIMONSAYS,       //54
-    RADIO_ON,               //55
-    BASIC_PUNCH,            //56
-    BLASTER_OPENHATCH,      //57
-    BLASTER_CLOSEHATCH,     //58
-    BLASTER_INSERTMAG,      //59
-    BLASTER_DROPMAG,        //60
-    SCREW_LIGHTBULB,        //61
-    PLUG_IN,                //62
-    COMPUTER_START,         //63
-    WEE,                    //64
+    #region MOVEMENT
+
+    FOOTSTEP_1,
+    FOOTSTEP_2,
+    SLIDE
+
+    #endregion
 }
 
 public enum MusicID
 {
-    USA,
-    MAIN_MENU,
-    VIVA_MEXICO_CABRONES,
-    USA_NAVIDAD,
-    BOSS,
-    MAINGAME
+
 }
 
 public enum VoiceLineID
 {
-    RADIOMAN_1,
-    RADIOMAN_2,
-    RADIOMAN_3,
-    RADIOMAN_4,
-    RADIOMAN_5,
-    RADIOMAN_6,
-    RADIOMAN_7,
-    RADIOMAN_8,
-    RADIOMAN_9,
-    RADIOMAN_10,
-    RADIOMAN_11,
-    RADIOMAN_12,    
-    RADIOMAN_13,
-    RADIOMAN_14,
-    RADIOMAN_15,
-    RADIOMAN_16,
-    RADIOMAN_17,
-    RADIOMAN_18,
-    RADIOMAN_19,
-    RADIOMAN_20,
-    RADIOMAN_21,
-    RADIOMAN_22,
-    RADIOMAN_23,
-    RADIOMAN_24,
-    RADIOMAN_25,
-    RADIOMAN_26,
-    RADIOMAN_27,
-    RADIOMAN_28,
-    RADIOMAN_29,
+
 }

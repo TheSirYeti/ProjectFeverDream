@@ -43,8 +43,7 @@ public class BaseMeleeEnemy : Enemy
     public override void Death()
     {
         if (isDead) return;
-
-        EventManager.Trigger("OnEnemyDeath");
+        
         EventManager.Trigger("OnDamageableHit", 3);
 
         DoRagdoll();

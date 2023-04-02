@@ -335,6 +335,7 @@ GameObject:
   - component: {fileID: 1134129636836537964}
   - component: {fileID: 1134129636836537967}
   - component: {fileID: 1134129636836537965}
+  - component: {fileID: 8407523180311172919}
   m_Layer: 0
   m_Name: BasicEnemy
   m_TagString: Untagged
@@ -473,8 +474,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 5
+  maxHP: 0
   target: {fileID: 0}
-  minChaseDistance: 3
+  minChaseDistance: 2
+  attackCollider: {fileID: 8407523180311172919}
   attackCooldown: 1
   currentAttackCooldown: 0
   isAttacking: 0
@@ -543,6 +546,24 @@ MonoBehaviour:
   - {fileID: 4023468820678020970}
   - {fileID: 5096661175315378614}
   - {fileID: 2844910549457522955}
+  dmg: 0
+  weakDmg: 0
+  bodyDmg: 0
+  headDmg: 0
+  generalDmg: 0
+--- !u!65 &8407523180311172919
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251169364516992836}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 2.3200002, y: 2.550087, z: 3.19374}
+  m_Center: {x: 0, y: 3.6185336, z: 1.9536376}
 --- !u!1 &442987857385303549
 GameObject:
   m_ObjectHideFlags: 0

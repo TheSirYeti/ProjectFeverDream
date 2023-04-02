@@ -15,8 +15,8 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
     [SerializeField] protected GameObject target;
     [SerializeField] private float minChaseDistance;
 
-    [Space(20)]
-    [Header("-== Attack Properties ==-")] 
+    [Space(20)] [Header("-== Attack Properties ==-")] 
+    [SerializeField] protected Collider attackCollider;
     [SerializeField] protected float attackCooldown;
     [SerializeField] protected float currentAttackCooldown;
     [SerializeField] protected bool isAttacking;
