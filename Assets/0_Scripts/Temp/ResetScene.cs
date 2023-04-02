@@ -17,19 +17,9 @@ namespace TEMP_GROUP
 
             if (Input.GetKey(KeyCode.Escape))
             {
-                Application.Quit();
-            }
-
-            if (Input.GetKey(KeyCode.Alpha1))
-            {
                 SceneManager.LoadScene(0);
             }
-            
-            if (Input.GetKey(KeyCode.Alpha2))
-            {
-                SceneManager.LoadScene(1);
-            }
-            
+
         }
 
         private void OnTriggerEnter(Collider other)
