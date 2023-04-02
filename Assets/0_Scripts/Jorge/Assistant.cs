@@ -25,10 +25,10 @@ public class Assistant : MonoBehaviour
 
     void Update()
     {
+        _dir = _actualObjective.position - transform.position;
         transform.forward = _dir;
         if (Vector3.Distance(transform.position, _player.position) > _followingDistance)
         {
-            _dir = _actualObjective.position - transform.position;
             transform.position += _dir * _speed * Time.deltaTime;
         }
         else if (_interactuable != null)
