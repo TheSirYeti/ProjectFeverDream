@@ -20,6 +20,7 @@ public class Controller
         onUpdate += GetJumpInput;
         onUpdate += GetCrunchInput;
         onUpdate += GetRunInput;
+        onUpdate += GetInteractInput;
         onUpdate += GetEscape;
     }
 
@@ -90,6 +91,14 @@ public class Controller
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             _model.Run(0);
+        }
+    }
+
+    void GetInteractInput()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            _model.CheckInteract();
         }
     }
 

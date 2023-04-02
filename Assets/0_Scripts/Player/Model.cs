@@ -6,6 +6,7 @@ public class Model : MonoBehaviour
 {
     Controller _controller;
     CameraController _cameraController;
+    Assistant _assistant;
 
     Rigidbody _rb;
 
@@ -19,6 +20,9 @@ public class Model : MonoBehaviour
     [SerializeField] float _crunchSpeed;
 
     [SerializeField] float _slideDuration;
+
+    [SerializeField] float _interactDistance;
+    [SerializeField] LayerMask _interactMask;
 
     [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
@@ -60,11 +64,14 @@ public class Model : MonoBehaviour
 
         _actualSpeed = _walkingSpeed;
 
-        //Vector3 newGravity = Physics.gravity;
-        //newGravity.y = -20;
-        //Physics.gravity = newGravity;
-
         ApplyVerticalVelocity(_gravity);
+
+        EventManager.Subscribe("SetAssistant", SetAssistant);
+    }
+
+    void Start()
+    {
+        EventManager.Trigger("OnAssistantStart", transform);
     }
 
     void Update()
@@ -72,7 +79,7 @@ public class Model : MonoBehaviour
         _controller.onUpdate();
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Acceleration);
         _rb.velocity = _dir;
@@ -168,9 +175,24 @@ public class Model : MonoBehaviour
         }
     }
 
+    public void CheckInteract()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, _interactDistance, _interactMask))
+        {
+            IAttendance iAttendance = hit.collider.gameObject.GetComponent<IAttendance>();
+            _assistant.SetObjective(iAttendance);
+        }
+    }
+
     void ApplyVerticalVelocity(float newVelocity)
     {
         _actualYVelocity = newVelocity;
+    }
+
+    void SetAssistant(params object[] parameters)
+    {
+        _assistant = (Assistant)parameters[0];
     }
 
     IEnumerator SlideTime()
