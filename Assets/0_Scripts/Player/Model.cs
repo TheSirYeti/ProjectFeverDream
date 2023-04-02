@@ -104,7 +104,7 @@ public class Model : MonoBehaviour
 
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
-            ApplyVerticalVelocity(_jumpForce);
+            _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
 
             _canJump = false;
         }
