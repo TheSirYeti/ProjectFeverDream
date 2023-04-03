@@ -7,6 +7,8 @@ public class MeleeWeapon : GenericWeapon
     [SerializeField] Collider _meleeCollider;
     [SerializeField] float _colliderDuration;
 
+    List<ITakeDamage> _actualEnemiesHit = new List<ITakeDamage>();
+
     Coroutine _colliderCoroutine;
 
     public override void Shoot(Transform pointOfShoot, bool isADS)
@@ -42,6 +44,7 @@ public class MeleeWeapon : GenericWeapon
     IEnumerator HitCoroutine()
     {
         yield return new WaitForSeconds(_colliderDuration);
+        _actualEnemiesHit = new List<ITakeDamage>();
         _meleeCollider.enabled = false;
     }
 
@@ -49,7 +52,10 @@ public class MeleeWeapon : GenericWeapon
     {
         ITakeDamage damagableInterface = other.GetComponentInParent<ITakeDamage>();
 
-        if (damagableInterface != null)
+        if (damagableInterface != null && !_actualEnemiesHit.Contains(damagableInterface))
+        {
+            _actualEnemiesHit.Add(damagableInterface);
             damagableInterface.TakeDamage("Body", _dmg, true);
+        }
     }
 }
