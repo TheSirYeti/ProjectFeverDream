@@ -146,6 +146,9 @@ public class Model : MonoBehaviour
         _actualSpeed = _slideSpeed;
         isSlide = true;
 
+        if (_slideCoroutine != null)
+            StopCoroutine(_slideCoroutine);
+
         if (_isOnFloor)
             _slideCoroutine = StartCoroutine(SlideTime());
     }
