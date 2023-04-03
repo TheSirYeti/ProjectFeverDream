@@ -128,6 +128,12 @@ public class Model : MonoBehaviour
 
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
+            ApplyVerticalVelocity(0);
+
+            Vector3 velocity = _rb.velocity;
+            velocity.y = 0;
+            _rb.velocity = velocity;
+
             _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
 
             _canJump = false;
