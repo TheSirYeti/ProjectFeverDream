@@ -21,6 +21,7 @@ public class Assistant : MonoBehaviour
     void Start()
     {
         EventManager.Trigger("SetAssistant", this);
+        _actualObjective = _player;
     }
 
     void Update()
