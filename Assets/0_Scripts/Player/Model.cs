@@ -154,14 +154,16 @@ public class Model : MonoBehaviour
         {
             Run(0);
 
-            _actualSpeed = _crunchSpeed;
+            if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+                _actualSpeed = _crunchSpeed;
 
 
             isCrunch = true;
         }
         else
         {
-            _actualSpeed = _walkingSpeed;
+            if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+                _actualSpeed = _walkingSpeed;
             isCrunch = false;
         }
     }
@@ -183,11 +185,13 @@ public class Model : MonoBehaviour
         {
             if (state == 1)
             {
-                _actualSpeed = _runningSpeed;
+                if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+                    _actualSpeed = _runningSpeed;
             }
             else
             {
-                _actualSpeed = _walkingSpeed;
+                if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+                    _actualSpeed = _walkingSpeed;
             }
         }
     }
