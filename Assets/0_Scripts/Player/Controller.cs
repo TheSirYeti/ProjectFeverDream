@@ -62,7 +62,6 @@ public class Controller
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-
         if (h > 0)
             h = 1;
         else if (h < 0)

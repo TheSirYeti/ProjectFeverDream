@@ -106,8 +106,8 @@ public class Model : MonoBehaviour
     {
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
-        if (_dir.magnitude > 1)
-            _dir.Normalize();
+        //if (_dir.magnitude > 1)
+        //    _dir.Normalize();
 
         _dir *= _actualSpeed * Time.fixedDeltaTime;
 
