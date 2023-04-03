@@ -18,7 +18,7 @@ namespace TEMP_GROUP
         {
             if (Input.GetKey(KeyCode.R))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                ReloadCurrentScene();
             }
         }
 
@@ -26,9 +26,14 @@ namespace TEMP_GROUP
         {
             if (other.gameObject.tag == "Player")
             {
-                EventManager.ResetEventDictionary();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                ReloadCurrentScene();
             }
+        }
+
+        void ReloadCurrentScene()
+        {
+            EventManager.ResetEventDictionary();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         private void ReturnToMenu(object[] parameters)
