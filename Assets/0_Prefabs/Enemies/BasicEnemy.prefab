@@ -473,8 +473,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f203af968cb5c46ad19156f6b62c69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 5
-  maxHP: 0
+  hp: 175
+  maxHP: 175
   target: {fileID: 0}
   minChaseDistance: 2
   attackCollider: {fileID: 8407523180311172919}
@@ -546,11 +546,11 @@ MonoBehaviour:
   - {fileID: 4023468820678020970}
   - {fileID: 5096661175315378614}
   - {fileID: 2844910549457522955}
-  dmg: 0
-  weakDmg: 0
-  bodyDmg: 0
-  headDmg: 0
-  generalDmg: 0
+  dmg: 3
+  weakDmg: 0.5
+  bodyDmg: 1
+  headDmg: 2
+  generalDmg: 1
 --- !u!65 &8407523180311172919
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -72,6 +72,11 @@ public class MenuController : MonoBehaviour
         pauseMenu.SetActive(false);
     }
 
+    public void ReturnToMainMenu()
+    {
+        EventManager.Trigger("OnReturnToMainMenu");
+    }
+
     public void BTN_ResumeGame()
     {
         EventManager.Trigger("ResumeGame");

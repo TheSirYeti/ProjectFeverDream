@@ -26,6 +26,8 @@ public class BaseMeleeEnemy : Enemy
             target = GameObject.FindWithTag("Player");
         }
 
+        ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
+        
         maxHP = hp;
         maxSpeed = speed;
         speed = 0;
@@ -47,6 +49,8 @@ public class BaseMeleeEnemy : Enemy
     public override void Death()
     {
         if (isDead) return;
+        
+        DoWarningFadeOut();
         
         EventManager.Trigger("OnDamageableHit", 3);
 
@@ -87,6 +91,8 @@ public class BaseMeleeEnemy : Enemy
 
     private void Update()
     {
+        if (isDead) return;
+        
         animator.SetFloat("movementSpeed", speed);
 
         if (IsInDistance())
