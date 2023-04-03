@@ -59,26 +59,21 @@ public class Controller
 
     void GetMovementInput()
     {
-        if (Input.GetButton("Movement"))
-        {
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
 
 
-            if (h > 0)
-                h = 1;
-            else if (h < 0)
-                h = -1;
+        if (h > 0)
+            h = 1;
+        else if (h < 0)
+            h = -1;
 
-            if (v > 0)
-                v = 1;
-            else if (v < 0)
-                v = -1;
+        if (v > 0)
+            v = 1;
+        else if (v < 0)
+            v = -1;
 
-            _model.Move(h, v);
-        }
-        else
-            _model.Move(0, 0);
+        _model.Move(h, v);
     }
 
     void GetJumpInput()
