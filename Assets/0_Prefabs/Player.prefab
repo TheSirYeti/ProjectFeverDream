@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _view: {fileID: 0}
+  _weaponManager: {fileID: 0}
   _gravity: -10
   _walkingSpeed: 600
   _runningSpeed: 800
@@ -92,6 +93,9 @@ MonoBehaviour:
   _jumpDuration: 0.2
   _jumpForce: 15
   _coyoteTime: 0.4
+  _floorMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &2050201400054601314
 MonoBehaviour:
   m_ObjectHideFlags: 0

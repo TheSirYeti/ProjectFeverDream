@@ -35,6 +35,7 @@ public class Model : MonoBehaviour
     [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
     [SerializeField] float _coyoteTime;
+    [SerializeField] LayerMask _floorMask;
 
     Coroutine _coyoteTimeCoroutine;
 
@@ -120,7 +121,7 @@ public class Model : MonoBehaviour
 
     public void Jump()
     {
-        if (_canJump)
+        if (_canJump || Physics.Raycast(transform.position, transform.up * - 1, 1f, _floorMask))
         {
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
