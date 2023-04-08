@@ -334,7 +334,13 @@ public enum SoundID
 
     FOOTSTEP_1,
     FOOTSTEP_2,
-    SLIDE
+    SLIDE,
+
+    #endregion
+
+    #region MEME
+
+    BAGUETTE
 
     #endregion
 }
