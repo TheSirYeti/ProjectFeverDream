@@ -4,9 +4,29 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
+using Random = UnityEngine.Random;
 
 public class BaseMeleeEnemy : Enemy
 {
+    [Space(50)]
+    [Header("-== EXTRA MELEE ENEMY PROPERTIES ==-")] 
+    [Space(20)]
+    [Header("-== DETECT PROPERTIES ==-")]
+    [SerializeField] private GameObject exclamationSign;
+    [SerializeField] private float exclamationSignTimer;
+    
+    public enum MeleeEnemyStates
+    {
+        IDLE,
+        DETECT,
+        CHASING,
+        PATHFIND,
+        ATTACK,
+        DIE
+    }
+
+    private EventFSM<MeleeEnemyStates> fsm;
+
     private void Start()
     {
         if (!_damageRecive.ContainsKey("WeakPart"))
@@ -31,18 +51,226 @@ public class BaseMeleeEnemy : Enemy
         maxHP = hp;
         maxSpeed = speed;
         speed = 0;
+        
+        DoFsmSetup();
     }
+
+    #region FSM SETUP
+
+    void DoFsmSetup()
+    {
+        #region SETUP
+
+        var idle = new State<MeleeEnemyStates>("IDLE");
+        var detect = new State<MeleeEnemyStates>("DETECT");
+        var chasing = new State<MeleeEnemyStates>("CHASING");
+        var pathfind = new State<MeleeEnemyStates>("PATHFIND");
+        var attack = new State<MeleeEnemyStates>("ATTACK");
+        var die = new State<MeleeEnemyStates>("DIE");
+
+        StateConfigurer.Create(idle)
+            .SetTransition(MeleeEnemyStates.DETECT, detect)
+            .SetTransition(MeleeEnemyStates.CHASING, chasing)
+            .SetTransition(MeleeEnemyStates.PATHFIND, pathfind)
+            .SetTransition(MeleeEnemyStates.ATTACK, attack)
+            .SetTransition(MeleeEnemyStates.DIE, die)
+            .Done();
+
+        StateConfigurer.Create(detect)
+            .SetTransition(MeleeEnemyStates.ATTACK, attack)
+            .SetTransition(MeleeEnemyStates.CHASING, chasing)
+            .SetTransition(MeleeEnemyStates.PATHFIND, pathfind)
+            .SetTransition(MeleeEnemyStates.DIE, die)
+            .Done();
+
+        StateConfigurer.Create(chasing)
+            .SetTransition(MeleeEnemyStates.IDLE, idle)
+            .SetTransition(MeleeEnemyStates.PATHFIND, pathfind)
+            .SetTransition(MeleeEnemyStates.ATTACK, attack)
+            .SetTransition(MeleeEnemyStates.DIE, die)
+            .Done();
+
+        StateConfigurer.Create(pathfind)
+            .SetTransition(MeleeEnemyStates.IDLE, idle)
+            .SetTransition(MeleeEnemyStates.CHASING, chasing)
+            .SetTransition(MeleeEnemyStates.ATTACK, attack)
+            .SetTransition(MeleeEnemyStates.DIE, die)
+            .Done();
+
+        StateConfigurer.Create(attack)
+            .SetTransition(MeleeEnemyStates.IDLE, idle)
+            .SetTransition(MeleeEnemyStates.CHASING, chasing)
+            .SetTransition(MeleeEnemyStates.PATHFIND, pathfind)
+            .SetTransition(MeleeEnemyStates.DIE, die)
+            .Done();
+
+        StateConfigurer.Create(die).Done();
+
+        #endregion
+
+        #region IDLE
+
+        idle.OnUpdate += () =>
+        {
+            Debug.Log("IDLE");
+            if (isDead)
+            {
+                SendInputToFSM(MeleeEnemyStates.DIE);
+                return;
+            }
+
+            if (!InSight(transform.position, target.transform.position)) return;
+
+            if (!wasDetected)
+            {
+                SendInputToFSM(MeleeEnemyStates.DETECT);
+                wasDetected = true;
+                return;
+            }
+
+            if (IsInDistance())
+            {
+                isAttacking = true;
+                SendInputToFSM(MeleeEnemyStates.ATTACK);
+                return;
+            }
+
+            SendInputToFSM(MeleeEnemyStates.CHASING);
+        };
+
+        #endregion
+
+        #region DETECT
+
+        detect.OnEnter += x =>
+        {
+            animator.Play("BasicRobot_Detect");
+            StopCoroutine(DoDetectSign());
+            StartCoroutine(DoDetectSign());
+        };
+        
+        detect.OnUpdate += () =>
+        {
+            transform.LookAt(
+                new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+        };
+
+        #endregion
+
+        #region CHASING
+
+        chasing.OnUpdate += () =>
+        {
+            Debug.Log("CHASING");
+            if (isDead)
+            {
+                SendInputToFSM(MeleeEnemyStates.DIE);
+                return;
+            }
+
+            if (IsInDistance())
+            {
+                SendInputToFSM(MeleeEnemyStates.ATTACK);
+                return;
+            }
+
+            if (!InSight(transform.position, target.transform.position))
+            {
+                SendInputToFSM(MeleeEnemyStates.PATHFIND);
+                return;
+            }
+
+            SetSpeedValue(Time.deltaTime);
+            DoGenericChase();
+        };
+
+        #endregion
+
+        #region PATHFIND
+
+        pathfind.OnEnter += x =>
+        {
+            CalculatePathPreview();
+        };
+
+        pathfind.OnUpdate += () =>
+        {
+            Debug.Log("PATHFIND");
+            if (isDead)
+            {
+                SendInputToFSM(MeleeEnemyStates.DIE);
+                return;
+            }
+
+            if (IsInDistance())
+            {
+                SendInputToFSM(MeleeEnemyStates.ATTACK);
+                return;
+            }
+
+            if (InSight(transform.position, target.transform.position))
+            {
+                SendInputToFSM(MeleeEnemyStates.CHASING);
+                return;
+            }
+            
+            SetSpeedValue(Time.deltaTime);
+            DoPathfinding();
+        };
+
+        #endregion
+
+        #region ATTACK
+
+        attack.OnUpdate += () =>
+        {
+            if (isDead)
+            {
+                SendInputToFSM(MeleeEnemyStates.DIE);
+                return;
+            }
+
+            if (!IsInDistance() && !isAttacking)
+            {
+                SendInputToFSM(MeleeEnemyStates.CHASING);
+                return;
+            }
+
+            Debug.Log("ATTACK");
+            Attack();
+        };
+
+        #endregion
+
+        fsm = new EventFSM<MeleeEnemyStates>(idle);
+    }
+
+    private void SendInputToFSM(MeleeEnemyStates state)
+    {
+        fsm.SendInput(state);
+    }
+
+    IEnumerator DoDetectSign()
+    {
+        exclamationSign.SetActive(true);
+        yield return new WaitForSeconds(exclamationSignTimer);
+        exclamationSign.SetActive(false);
+        
+        SendInputToFSM(MeleeEnemyStates.CHASING);
+        yield return null;
+    }
+    
+    #endregion
+    
 
     public override void Attack()
     {
         transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
 
-        if (currentAttackCooldown <= 0)
-        {
-            currentAttackCooldown = attackCooldown;
-            animator.SetTrigger("punch");
-        }
+        if (currentAttackCooldown > 0) return;
         
+        currentAttackCooldown = attackCooldown;
+        animator.SetTrigger("punch");
         StopSpeed();
     }
 
@@ -61,8 +289,6 @@ public class BaseMeleeEnemy : Enemy
     public override void Move()
     {
         SetSpeedValue(Time.deltaTime);
-        currentAttackCooldown -= Time.deltaTime;
-        pathfindingCooldown -= Time.deltaTime;
 
         if (IsInDistance())
         {
@@ -91,10 +317,14 @@ public class BaseMeleeEnemy : Enemy
 
     private void Update()
     {
-        if (isDead) return;
-        
         animator.SetFloat("movementSpeed", speed);
-
+        currentAttackCooldown -= Time.deltaTime;
+        pathfindingCooldown -= Time.deltaTime;
+        
+        fsm.Update();
+        
+        /*if (isDead) return;
+        
         if (IsInDistance())
         {
             Attack();
@@ -102,7 +332,7 @@ public class BaseMeleeEnemy : Enemy
         }
         
         if(!isAttacking)
-            Move();
+            Move();*/
     }
 
     #region EXTRA VIEW METHODS

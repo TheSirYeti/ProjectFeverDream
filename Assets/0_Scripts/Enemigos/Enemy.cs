@@ -13,6 +13,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
 
     [Header("-== Target Properties ==-")]
     [SerializeField] protected GameObject target;
+    protected bool wasDetected = false;
     [SerializeField] private float minChaseDistance;
 
     [Space(20)] [Header("-== Attack Properties ==-")] 
@@ -303,8 +304,6 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
             return;
 
         float totalDmg = dmg * _damageRecive[partDamaged];
-        
-        Debug.Log("idol me la chupa " + totalDmg + " veces");
 
         hp -= totalDmg;
 

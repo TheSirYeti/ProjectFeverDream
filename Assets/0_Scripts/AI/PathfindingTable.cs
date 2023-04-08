@@ -37,8 +37,6 @@ public class PathfindingTable : MonoBehaviour
         Node startingNode = NodeManager.instance.nodes[Int32.Parse(splitStringArray[0])];
         Node goalNode = NodeManager.instance.nodes[Int32.Parse(splitStringArray[1])];
 
-        Debug.Log(startingNode + " | " + goalNode);
-        
         var path = new List<Node>();
         path = ConstructPathAStar(startingNode, goalNode);
         
@@ -57,7 +55,6 @@ public class PathfindingTable : MonoBehaviour
 
             }
         }
-        else{Debug.Log("NO HAY CAMINO?");}
         return path;
     }
 
