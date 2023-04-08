@@ -112,7 +112,6 @@ public class BaseMeleeEnemy : Enemy
 
         idle.OnUpdate += () =>
         {
-            Debug.Log("IDLE");
             if (isDead)
             {
                 SendInputToFSM(MeleeEnemyStates.DIE);
@@ -161,7 +160,6 @@ public class BaseMeleeEnemy : Enemy
 
         chasing.OnUpdate += () =>
         {
-            Debug.Log("CHASING");
             if (isDead)
             {
                 SendInputToFSM(MeleeEnemyStates.DIE);
@@ -195,9 +193,9 @@ public class BaseMeleeEnemy : Enemy
 
         pathfind.OnUpdate += () =>
         {
-            Debug.Log("PATHFIND");
             if (isDead)
             {
+                Debug.Log("Case 1");
                 SendInputToFSM(MeleeEnemyStates.DIE);
                 return;
             }
@@ -235,8 +233,7 @@ public class BaseMeleeEnemy : Enemy
                 SendInputToFSM(MeleeEnemyStates.CHASING);
                 return;
             }
-
-            Debug.Log("ATTACK");
+            
             Attack();
         };
 
