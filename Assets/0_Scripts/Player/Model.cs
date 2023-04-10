@@ -274,8 +274,6 @@ public class Model : MonoBehaviour
 
             _isOnFloor = true;
 
-            ApplyVerticalVelocity(0);
-
             if (isSlide)
                 _slideCoroutine = StartCoroutine(SlideTime());
         }
@@ -292,9 +290,6 @@ public class Model : MonoBehaviour
                 StopCoroutine(_slideCoroutine);
 
             _isOnFloor = false;
-
-            if (_jumpCoroutine == null)
-                ApplyVerticalVelocity(_gravity);
 
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
         }
