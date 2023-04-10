@@ -6,6 +6,9 @@ public class Assistant : MonoBehaviour
 {
     [SerializeField] float _speed;
     [SerializeField] float _followingDistance;
+    [SerializeField] float _interactDistance;
+
+    [SerializeField] float _rotationSpeed;
 
     Transform _actualObjective;
     Vector3 _dir;
@@ -26,12 +29,25 @@ public class Assistant : MonoBehaviour
     void Update()
     {
         _dir = _actualObjective.position - transform.position;
-        transform.forward = _dir;
-        if (Vector3.Distance(transform.position, _actualObjective.position) > _followingDistance)
+
+        Quaternion targetRotation = Quaternion.LookRotation(_dir);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+        Vector3 targetMovement;
+        if (_interactuable != null)
         {
-            transform.position += _dir * _speed * Time.deltaTime;
+            targetMovement = _actualObjective.position + (_dir.normalized * -1 * (_interactDistance * 0.5f));
         }
-        else if (_interactuable != null)
+        else
+        {
+            targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
+        }
+
+        Vector3 newDir = targetMovement - transform.position;
+
+        transform.position += newDir * _speed * Time.deltaTime;
+
+        if (_interactuable != null && Vector3.Distance(transform.position, _actualObjective.position) < _interactDistance)
         {
             //animacion
             _interactuable.Interact();

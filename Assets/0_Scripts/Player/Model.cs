@@ -90,7 +90,7 @@ public class Model : MonoBehaviour
 
     void Start()
     {
-        EventManager.Trigger("OnAssistantStart", transform);
+        EventManager.Trigger("OnAssistantStart", _camera.transform);
         EventManager.Trigger("OnViewStart", this, _weaponManager);
     }
 
