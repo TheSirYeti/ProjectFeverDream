@@ -982,7 +982,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18982
+  m_Name: pb_Mesh300730
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2978,6 +2978,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1718799711183877778, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1910279427}
+    - target: {fileID: 1718799711183877778, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: animController
+      value: 
+      objectReference: {fileID: 9100000, guid: f0925e7d33ba5654ab7e856c5b14d7e4, type: 2}
+    - target: {fileID: 2051672190009415051, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1910279427}
+    - target: {fileID: 2051672190009415051, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: animController
+      value: 
+      objectReference: {fileID: 9100000, guid: 148f642240b146f4d919825fa3a259e2, type: 2}
     - target: {fileID: 2263138825338908203, guid: d615f79419ce91444b957e2577939418, type: 3}
       propertyPath: _shootPoint
       value: 
@@ -3686,7 +3702,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1959203551, guid: d615f79419ce91444b957e2577939418, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d615f79419ce91444b957e2577939418, type: 3}
 --- !u!1 &1302135999
 GameObject:
@@ -4793,6 +4810,11 @@ MonoBehaviour:
   gizmoViewRadius: 1
   neighbors: []
   cost: 1
+--- !u!95 &1910279427 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3267724005522825034, guid: d615f79419ce91444b957e2577939418, type: 3}
+  m_PrefabInstance: {fileID: 1284820337}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1934900868
 GameObject:
   m_ObjectHideFlags: 0
