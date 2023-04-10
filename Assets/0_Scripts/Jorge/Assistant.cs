@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Assistant : MonoBehaviour
 {
+    Animator _animator;
+
     [SerializeField] float _speed;
     [SerializeField] float _followingDistance;
     [SerializeField] float _interactDistance;
@@ -19,6 +21,8 @@ public class Assistant : MonoBehaviour
     void Awake()
     {
         EventManager.Subscribe("OnAssistantStart", OnAssistantStart);
+
+        _animator = GetComponent<Animator>();
     }
 
     void Start()
@@ -37,22 +41,30 @@ public class Assistant : MonoBehaviour
         if (_interactuable != null)
         {
             targetMovement = _actualObjective.position + (_dir.normalized * -1 * (_interactDistance * 0.5f));
+            Vector3 newDir = targetMovement - transform.position;
+            newDir.Normalize();
+            transform.position += newDir * _speed * Time.deltaTime;
         }
         else
         {
             targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
+
+            Vector3 newDir = targetMovement - transform.position;
+
+            transform.position += newDir * Time.deltaTime;
         }
 
-        Vector3 newDir = targetMovement - transform.position;
-
-        transform.position += newDir * _speed * Time.deltaTime;
 
         if (_interactuable != null && Vector3.Distance(transform.position, _actualObjective.position) < _interactDistance)
         {
-            //animacion
-            _interactuable.Interact();
-            FinishAction();
+            _animator.SetTrigger("interact");
         }
+    }
+
+    public void Interact()
+    {
+        _interactuable.Interact();
+        FinishAction();
     }
 
     public void OnAssistantStart(params object[] parameter)
@@ -71,5 +83,6 @@ public class Assistant : MonoBehaviour
     {
         _interactuable = null;
         _actualObjective = _player;
+        _animator.ResetTrigger("interact");
     }
 }
