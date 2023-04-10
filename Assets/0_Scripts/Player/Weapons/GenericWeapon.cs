@@ -4,29 +4,16 @@ using UnityEngine;
 
 public abstract class GenericWeapon : MonoBehaviour
 {
-    protected float _fireRate;
-    [SerializeField] protected float _dmg;
+    [SerializeField] protected SO_Weapon _weaponSO;
+    protected WeaponManager _weaponManager;
+
     protected int _actualMagazineBullets;
     protected int _actualReserveBullets;
-    [SerializeField] protected int _magazineBullets;
-    [SerializeField] protected int _initialReserveBullets;
-    [SerializeField] protected int _maxReserveBullets;
+    
     [SerializeField] protected Transform _shootPoint;
 
     //public RecoilSytem _recoilSystem;
-    public LayerMask _targetToShootMask;
-
-    //[SerializeField] protected ObjectPool _bulletsPool;
-    //[SerializeField] protected ObjectPool _wallDecalPool;
-    //[SerializeField] protected ObjectPool _enemyDecalPool;
-    //[SerializeField] protected ObjectPool _particleCollisionPool;
-    [SerializeField] protected ParticleSystem _particleShoot;
-    [SerializeField] protected GameObject lightMuzzle;
-
-    [SerializeField] bool _canADS;
-    [SerializeField] bool _isMelee;
-    [SerializeField] int _idWeapon;
-
+    protected LayerMask _targetToShootMask;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
     public abstract void Reload();
@@ -34,9 +21,14 @@ public abstract class GenericWeapon : MonoBehaviour
     public abstract void SetGameObject(Vector3 objective);
     public abstract void ReturnGameObject(GameObject item);
 
+    public void SetWeaponManager(WeaponManager weaponManager)
+    {
+        _weaponManager = weaponManager;
+    }
+
     public bool CanShoot()
     {
-        if (_isMelee) return true;
+        if (_weaponSO.isMelee) return true;
         else if (_actualMagazineBullets > 0) return true;
         else
         {
@@ -47,12 +39,12 @@ public abstract class GenericWeapon : MonoBehaviour
 
     public bool CanADS()
     {
-        return _canADS;
+        return _weaponSO.canADS;
     }
 
     public bool CanReload()
     {
-        if (_actualReserveBullets <= 0 || _actualMagazineBullets >= _magazineBullets)
+        if (_actualReserveBullets <= 0 || _actualMagazineBullets >= _weaponSO.maxBulletsInMagazine)
             return false;
         else
             return true;
@@ -60,7 +52,7 @@ public abstract class GenericWeapon : MonoBehaviour
 
     public bool CanBuyAmmo()
     {
-        if (_actualReserveBullets < _maxReserveBullets && !_isMelee)
+        if (_actualReserveBullets < _weaponSO.maxBulletsInInventory && !_weaponSO.isMelee)
             return true;
         else
             return false;
@@ -70,7 +62,7 @@ public abstract class GenericWeapon : MonoBehaviour
     {
         EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
-        EventManager.Trigger("ChangeEquipedWeapontUI", _idWeapon);
+        EventManager.Trigger("ChangeEquipedWeapontUI", _weaponSO.weaponID);
     }
 
     public void OnWeaponUnequip()
@@ -83,12 +75,12 @@ public abstract class GenericWeapon : MonoBehaviour
 
     public bool GetTypeOfWeapons()
     {
-        return _isMelee;
+        return _weaponSO.isMelee;
     }
 
     public int GetID()
     {
-        return _idWeapon;
+        return _weaponSO.weaponID;
     }
 
     public void PickUp()
@@ -96,7 +88,7 @@ public abstract class GenericWeapon : MonoBehaviour
         gameObject.SetActive(true);
         EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
-        EventManager.Trigger("ChangeEquipedWeapontUI", _idWeapon);
+        EventManager.Trigger("ChangeEquipedWeapontUI", _weaponSO.weaponID);
     }
 
     public void DropIt()
@@ -107,11 +99,11 @@ public abstract class GenericWeapon : MonoBehaviour
 
     public void AddBullets(int ammountToAddBullets)
     {
-        int missingBullets = _maxReserveBullets - _actualReserveBullets;
+        int missingBullets = _weaponSO.maxBulletsInInventory - _actualReserveBullets;
 
         if (missingBullets < ammountToAddBullets)
         {
-            _actualReserveBullets = _maxReserveBullets;
+            _actualReserveBullets = _weaponSO.maxBulletsInInventory;
         }
         else
         {

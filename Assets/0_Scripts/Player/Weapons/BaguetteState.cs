@@ -6,17 +6,20 @@ using UnityEngine;
 public class BaguetteState : MonoBehaviour
 {
     public List<GameObject> allBaguetteStates;
-    public Animator animator;
-    private int lastState;
+    private int endState;
+
+    private int lastState = 0;
 
     private void Start()
     {
-        lastState = allBaguetteStates.Count - 1;
+        endState = allBaguetteStates.Count - 1;
         EventManager.Subscribe("OnBaguetteChangeState", SetCurrentState);
     }
 
     void SetCurrentState(object[] parameters)
     {
+        if (lastState == (int)parameters[0]) return;
+
         foreach (var baguette in allBaguetteStates)
         {
             baguette.SetActive(false);
@@ -24,9 +27,9 @@ public class BaguetteState : MonoBehaviour
         
         allBaguetteStates[(int)parameters[0]].SetActive(true);
         
-        if ((int)parameters[0] == lastState)
+        if ((int)parameters[0] == endState)
         {
-            animator.Play("BigBaguetteToDualBaguette");
+            EventManager.Trigger("PlayAnimation", "BigBaguetteToDualBaguette");
         }
     }
 }

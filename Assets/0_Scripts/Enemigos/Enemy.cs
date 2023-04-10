@@ -303,6 +303,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
         if (!_damageRecive.ContainsKey(partDamaged) || isInRagdollMode || isDead)
             return;
 
+        Debug.Log("dmg?");
         float totalDmg = dmg * _damageRecive[partDamaged];
 
         hp -= totalDmg;

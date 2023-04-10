@@ -11,6 +11,7 @@ public class View : MonoBehaviour
     private void Awake()
     {
         EventManager.Subscribe("OnViewStart", OnViewStart);
+        EventManager.Subscribe("PlayAnimation", PlayAnimation);
         _animator = GetComponent<Animator>();
     }
 
@@ -18,6 +19,16 @@ public class View : MonoBehaviour
     {
         _model = (Model)parameters[0];
         _weaponManager = (WeaponManager)parameters[1];
+    }
+
+    void PlayAnimation(params object[] parameters)
+    {
+        _animator.Play((string)parameters[0]);
+    }
+
+    void ChangeAnimationSpeed(params object[] parameters)
+    {
+        //_animator.GetCurrentAnimatorClipInfo(0).
     }
 
     public void SetTrigger(string triggerName)

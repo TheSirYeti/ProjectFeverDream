@@ -23,6 +23,6 @@ public class HumanoidDummy : Enemy
 
     public override void DoKnockback()
     {
-        //throw new System.NotImplementedException();
+        Debug.Log("a");
     }
 }

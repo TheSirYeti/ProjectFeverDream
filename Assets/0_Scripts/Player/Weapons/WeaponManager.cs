@@ -17,7 +17,23 @@ public class WeaponManager : MonoBehaviour
 
     public Action onUpdate = delegate { };
 
-    public void OnStart(Model model, Transform pointOfShoot, View view)
+    private void Start()
+    {
+        GenericWeapon[] equipedWeapons = transform.GetComponentsInChildren<GenericWeapon>();
+
+        int actualIndex = 0;
+
+        foreach (GenericWeapon weapon in equipedWeapons)
+        {
+            if (weapon.enabled) _actualWeapon = weapon;
+
+            _equipedWeapons[actualIndex] = weapon;
+            weapon.SetWeaponManager(this);
+            actualIndex++;
+        }
+    }
+
+    public void SetRef(Model model, Transform pointOfShoot, View view)
     {
         _model = model;
         _view = view;
@@ -71,5 +87,32 @@ public class WeaponManager : MonoBehaviour
         _actualWeapon.OnWeaponUnequip();
         _actualWeapon = _equipedWeapons[newWeapon];
         _actualWeapon.OnWeaponEquip();
+    }
+
+    public void SetWeapon(GenericWeapon newWeapon)
+    {
+        _actualWeapon.OnWeaponUnequip();
+        _actualWeapon = newWeapon;
+        _actualWeapon.OnWeaponEquip();
+    }
+
+    public void DestroyWeapon()
+    {
+        Destroy(_actualWeapon.gameObject);
+    }
+
+    public void GoToNextWeapon(GenericWeapon brokenWeapon)
+    {
+        foreach (GenericWeapon weapon in _equipedWeapons)
+        {
+            if(weapon != brokenWeapon)
+            {
+                _actualWeapon = weapon;
+                _actualWeapon.OnWeaponEquip();
+                break;
+            }
+        }
+
+        // Go to hands weapon
     }
 }

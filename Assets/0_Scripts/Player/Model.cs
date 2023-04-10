@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Model : MonoBehaviour
 {
-    [Header("-== Class Reference ==-")]
+    //Class Reference
     Controller _controller;
-    [SerializeField] View _view;
-    [SerializeField] WeaponManager _weaponManager;
+    View _view;
+    WeaponManager _weaponManager;
     CameraController _cameraController;
     Assistant _assistant;
 
@@ -60,9 +60,12 @@ public class Model : MonoBehaviour
 
     private void Awake()
     {
+        _view = FindObjectOfType<View>();
+        _weaponManager = FindObjectOfType<WeaponManager>();
+
         _camera = Camera.main;
 
-        _weaponManager.OnStart(this, _camera.transform, _view);
+        _weaponManager.SetRef(this, _camera.transform, _view);
         _cameraController = GetComponent<CameraController>();
         _controller = new Controller(this, _cameraController, _weaponManager);
         _rb = GetComponent<Rigidbody>();

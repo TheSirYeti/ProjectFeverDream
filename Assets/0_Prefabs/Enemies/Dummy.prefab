@@ -2611,7 +2611,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 122
   m_CollisionDetection: 1
 --- !u!65 &4427363236987167811
 BoxCollider:
@@ -2651,8 +2651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c13b8ac70c101b4cabb56adc8193418, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1e+9
-  maxHP: 1e+9
+  hp: 1000
+  maxHP: 1000
   target: {fileID: 0}
   minChaseDistance: 0
   attackCollider: {fileID: 0}
@@ -2670,11 +2670,11 @@ MonoBehaviour:
   hasRagdoll: 0
   animator: {fileID: 0}
   renderers: []
-  dmg: 0
-  weakDmg: 0
-  bodyDmg: 0
-  headDmg: 0
-  generalDmg: 0
+  dmg: 1
+  weakDmg: 1
+  bodyDmg: 1
+  headDmg: 1
+  generalDmg: 1
 --- !u!1 &3635574732126094899
 GameObject:
   m_ObjectHideFlags: 0
