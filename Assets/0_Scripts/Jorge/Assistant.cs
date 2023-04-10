@@ -12,6 +12,9 @@ public class Assistant : MonoBehaviour
 
     [SerializeField] float _rotationSpeed;
 
+    [SerializeField] float _enemiesDetectionDistance;
+    [SerializeField] LayerMask _enemiesMask;
+
     Transform _actualObjective;
     Vector3 _dir;
 
@@ -38,6 +41,7 @@ public class Assistant : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
         Vector3 targetMovement;
+
         if (_interactuable != null)
         {
             targetMovement = _actualObjective.position + (_dir.normalized * -1 * (_interactDistance * 0.5f));
@@ -47,11 +51,22 @@ public class Assistant : MonoBehaviour
         }
         else
         {
-            targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
+            if (!CheckNearEnemies())
+            {
+                targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
+                Vector3 newDir = targetMovement - transform.position;
+                transform.position += newDir * Time.deltaTime;
+            }
+            else
+            {
+                targetMovement = _actualObjective.position + _actualObjective.forward * -1 * 2;
+                Vector3 newDir = targetMovement - transform.position;
 
-            Vector3 newDir = targetMovement - transform.position;
-
-            transform.position += newDir * Time.deltaTime;
+                if (Vector3.Distance(transform.position, targetMovement) < 2)
+                    transform.position += newDir * Time.deltaTime * _speed * 2;
+                else
+                    transform.position += newDir * Time.deltaTime * _speed;
+            }
         }
 
 
@@ -84,5 +99,13 @@ public class Assistant : MonoBehaviour
         _interactuable = null;
         _actualObjective = _player;
         _animator.ResetTrigger("interact");
+    }
+
+    bool CheckNearEnemies()
+    {
+        Collider[] enemies = Physics.OverlapSphere(_player.position, _enemiesDetectionDistance, _enemiesMask);
+
+        if (enemies.Length == 0) return false;
+        else return true;
     }
 }
