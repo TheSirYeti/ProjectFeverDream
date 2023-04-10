@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class MeleeWeapon : GenericWeapon
@@ -11,7 +10,7 @@ public class MeleeWeapon : GenericWeapon
     [SerializeField] int _usageAmmount = 0;
     [SerializeField] bool _isBroken = false;
     public Animator animator;
-    [SerializeField] private AnimatorController animController;
+    [SerializeField] private RuntimeAnimatorController animController;
     
     [SerializeField] GenericWeapon brokenBagguete;
 
