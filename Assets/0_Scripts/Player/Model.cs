@@ -15,11 +15,13 @@ public class Model : MonoBehaviour
     Rigidbody _rb;
     Camera _camera;
 
-    [Space(20)] [Header("-== Physics Properties ==-")]
+    [Space(20)]
+    [Header("-== Physics Properties ==-")]
     [SerializeField] float _gravity = -10f;
     float _actualYVelocity = 0;
 
-    [Space(20)] [Header("-== Movement Properties ==-")]
+    [Space(20)]
+    [Header("-== Movement Properties ==-")]
     float _actualSpeed;
     [SerializeField] float _walkingSpeed;
     [SerializeField] float _runningSpeed;
@@ -27,11 +29,13 @@ public class Model : MonoBehaviour
     [SerializeField] float _crunchSpeed;
     [SerializeField] float _slideDuration;
 
-    [Space(20)] [Header("-== Interact Properties ==-")]
+    [Space(20)]
+    [Header("-== Interact Properties ==-")]
     [SerializeField] float _interactDistance;
     [SerializeField] LayerMask _interactMask;
 
-    [Space(20)] [Header("-== Jump Properties ==-")]
+    [Space(20)]
+    [Header("-== Jump Properties ==-")]
     [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
     [SerializeField] float _coyoteTime;
@@ -101,7 +105,9 @@ public class Model : MonoBehaviour
 
     void FixedUpdate()
     {
-        _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Acceleration);
+        if (!Physics.Raycast(transform.position, transform.up * -1, 1.2f, _floorMask))
+            _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Acceleration);
+
         _rb.velocity = _dir;
     }
 
@@ -109,12 +115,16 @@ public class Model : MonoBehaviour
     {
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
+        _dir = AlignDir();
+
+
         if (_dir.magnitude > 1)
             _dir.Normalize();
 
         _dir *= _actualSpeed * Time.fixedDeltaTime;
 
-        _dir.y = _rb.velocity.y;
+        if (_jumpCoroutine != null || !_isOnFloor && !Physics.Raycast(transform.position, transform.up * -1, 1.2f, _floorMask))
+            _dir.y = _rb.velocity.y;
 
         if ((hAxie != 0 || vAxie != 0) && isRunning)
             _cameraController.ChangeRunningFOV(1);
@@ -122,9 +132,24 @@ public class Model : MonoBehaviour
             _cameraController.ChangeRunningFOV(0);
     }
 
+    Vector3 AlignDir()
+    {
+        RaycastHit hit;
+        Vector3 planeNormal;
+
+        if (Physics.Raycast(transform.position, transform.up * -1, out hit, 1.5f, _floorMask))
+            planeNormal = hit.collider.transform.up;
+        else
+            return _dir;
+
+        // Use Vector3.ProjectOnPlane to align the direction with the plane
+        Vector3 alignedDirection = Vector3.ProjectOnPlane(_dir, planeNormal);
+        return alignedDirection;
+    }
+
     public void Jump()
     {
-        if (_canJump || Physics.Raycast(transform.position, transform.up * - 1, 1.5f, _floorMask))
+        if (_canJump || Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
         {
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
@@ -293,5 +318,11 @@ public class Model : MonoBehaviour
 
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + _dir.normalized * 10);
     }
 }
