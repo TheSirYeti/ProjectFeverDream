@@ -105,10 +105,9 @@ public class Model : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!Physics.Raycast(transform.position, transform.up * -1, 1.2f, _floorMask))
-            _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Acceleration);
-
         _rb.velocity = _dir;
+
+        _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Force);
     }
 
     public void Move(float hAxie, float vAxie)
@@ -123,8 +122,9 @@ public class Model : MonoBehaviour
 
         _dir *= _actualSpeed * Time.fixedDeltaTime;
 
-        if (_jumpCoroutine != null || !_isOnFloor && !Physics.Raycast(transform.position, transform.up * -1, 1.2f, _floorMask))
-            _dir.y = _rb.velocity.y;
+        _dir.y = _rb.velocity.y;
+
+        //if (_actualYVelocity != 0 && _dir.y > 0 && hAxie == 0 && vAxie == 0) _dir.y = 0;
 
         if ((hAxie != 0 || vAxie != 0) && isRunning)
             _cameraController.ChangeRunningFOV(1);
