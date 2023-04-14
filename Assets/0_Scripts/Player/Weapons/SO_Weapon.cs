@@ -17,6 +17,7 @@ public class SO_Weapon : ScriptableObject
     public float fireRate;
 
     [Header("-== BULLETS STATS ==-")]
+    public GameObject _bulletPrefab;
     public int maxBulletsInMagazine;
     public int maxBulletsInInventory;
     public int initialBulletsInInventory;

@@ -23,6 +23,8 @@ public class MeleeWeapon : GenericWeapon
         _meleeCollider = GetComponent<BoxCollider>();
         _meleeCollider.enabled = false;
 
+        //Get shootpoint
+
         //Cambiar speed animacion
     }
 
@@ -81,16 +83,6 @@ public class MeleeWeapon : GenericWeapon
     public override void Reload()
     {
         return;
-    }
-
-    public override void ReturnGameObject(GameObject item)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void SetGameObject(Vector3 objective)
-    {
-        throw new System.NotImplementedException();
     }
 
     IEnumerator HitCoroutine()

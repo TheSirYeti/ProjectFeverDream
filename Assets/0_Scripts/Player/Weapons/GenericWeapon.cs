@@ -7,10 +7,8 @@ public abstract class GenericWeapon : MonoBehaviour
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
 
-    protected int _actualMagazineBullets;
+    [SerializeField] protected int _actualMagazineBullets;
     protected int _actualReserveBullets;
-    
-    [SerializeField] protected Transform _shootPoint;
 
     //public RecoilSytem _recoilSystem;
     protected LayerMask _targetToShootMask;
@@ -18,8 +16,8 @@ public abstract class GenericWeapon : MonoBehaviour
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
     public abstract void Reload();
     public abstract void FeedBack(Vector3 hitPoint, RaycastHit hit);
-    public abstract void SetGameObject(Vector3 objective);
-    public abstract void ReturnGameObject(GameObject item);
+
+    protected ObjectPool _bulletPool;
 
     public void SetWeaponManager(WeaponManager weaponManager)
     {
@@ -115,6 +113,16 @@ public abstract class GenericWeapon : MonoBehaviour
             EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
             EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
         }
+    }
+
+    public GenericBullet GetBullet(Vector3 shootPoint)
+    {
+        return _bulletPool.GetObject(shootPoint).GetComponent<GenericBullet>();
+    }
+
+    public void ReturnBullet(GenericBullet bullet)
+    {
+        _bulletPool.ReturnObject(bullet.gameObject);
     }
 
     //CheatZone
