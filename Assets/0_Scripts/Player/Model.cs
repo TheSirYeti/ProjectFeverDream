@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Model : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class Model : MonoBehaviour
     [SerializeField] float _slideSpeed;
     [SerializeField] float _crunchSpeed;
     [SerializeField] float _slideDuration;
+    Coroutine horizontalMoveCoroutine;
 
     [Space(20)]
     [Header("-== Interact Properties ==-")]
@@ -38,10 +40,14 @@ public class Model : MonoBehaviour
     [Header("-== Jump Properties ==-")]
     [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
+    [SerializeField] float _horizontalJumpForce;
+    float _actualHorizontalForce = 0;
+    Vector3 _actualHorizontalVector = Vector3.zero;
     [SerializeField] float _coyoteTime;
     [SerializeField] LayerMask _floorMask;
     [SerializeField] LayerMask _wallMask;
 
+    Action floorChecker = delegate { };
     Coroutine _coyoteTimeCoroutine;
 
     // Movement Bools
@@ -93,6 +99,8 @@ public class Model : MonoBehaviour
         ApplyVerticalVelocity(_gravity);
 
         EventManager.Subscribe("SetAssistant", SetAssistant);
+
+        floorChecker = CheckOffFloor;
     }
 
     void Start()
@@ -105,16 +113,13 @@ public class Model : MonoBehaviour
     {
         _controller.onUpdate();
 
-        if(Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
-        {
-            _jumpCounter = 0;
-            _canJump = true;
-        }
+        floorChecker();
     }
 
     void FixedUpdate()
     {
-        _rb.velocity = _dir;
+        Debug.Log("d" + _actualHorizontalVector * _actualHorizontalForce);
+        _rb.velocity = _dir + (_actualHorizontalVector * _actualHorizontalForce * -1);
 
         _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Force);
     }
@@ -122,10 +127,10 @@ public class Model : MonoBehaviour
     public void Move(float hAxie, float vAxie)
     {
         _h = hAxie;
+
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
         _dir = AlignDir();
-
 
         if (_dir.magnitude > 1)
             _dir.Normalize();
@@ -159,11 +164,11 @@ public class Model : MonoBehaviour
 
     public void Jump()
     {
-        if ((_canJump 
-            || Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask) 
-            || Physics.Raycast(transform.position, transform.right * _h, 1, _wallMask))
-            && _jumpCounter < 2
-            )
+        if (_jumpCounter > 1) return;
+
+        RaycastHit hit;
+
+        if (_canJump)
         {
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
@@ -181,6 +186,35 @@ public class Model : MonoBehaviour
 
             _canJump = false;
             _jumpCounter++;
+        }
+        else if (Physics.Raycast(transform.position, transform.right * _h, out hit, 1, _wallMask))
+        {
+            
+
+            if (horizontalMoveCoroutine != null)
+                StopCoroutine(horizontalMoveCoroutine);
+
+            if (_jumpCoroutine != null)
+                StopCoroutine(_jumpCoroutine);
+
+            horizontalMoveCoroutine = StartCoroutine(CancelHorizontalMovement());
+            _jumpCoroutine = StartCoroutine(JumpDuration());
+
+            _actualHorizontalVector = transform.right;
+            Debug.Log("a " + transform.right);
+
+            ApplyVerticalVelocity(0);
+
+            Vector3 velocity = _rb.velocity;
+            velocity.y = 0;
+            _rb.velocity = velocity;
+            _rb.angularVelocity = Vector3.zero;
+
+            _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+
+            _canJump = false;
+            _jumpCounter++;
+
         }
     }
 
@@ -304,9 +338,37 @@ public class Model : MonoBehaviour
         _jumpCoroutine = null;
     }
 
-    private void OnTriggerEnter(Collider other)
+    IEnumerator CancelHorizontalMovement()
     {
-        if (other.gameObject.tag == "Floor")
+        Debug.Log("b");
+        _actualHorizontalForce = _horizontalJumpForce;
+        yield return new WaitForSeconds(0.5f);
+        _actualHorizontalForce = 0;
+        Debug.Log("c");
+    }
+
+    void CheckOnFloor()
+    {
+        if (!Physics.Raycast(transform.position, Vector3.up * -1, 1.1f, _floorMask))
+        {
+            if (_coyoteTimeCoroutine != null)
+                StopCoroutine(_coyoteTimeCoroutine);
+
+            if (_slideCoroutine != null)
+                StopCoroutine(_slideCoroutine);
+
+            _isOnFloor = false;
+
+            _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
+
+            ApplyVerticalVelocity(_gravity);
+            floorChecker = CheckOffFloor;
+        }
+    }
+
+    void CheckOffFloor()
+    {
+        if (Physics.Raycast(transform.position, Vector3.up * -1, 1.1f, _floorMask))
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
@@ -318,22 +380,10 @@ public class Model : MonoBehaviour
 
             if (isSlide)
                 _slideCoroutine = StartCoroutine(SlideTime());
-        }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Floor")
-        {
-            if (_coyoteTimeCoroutine != null)
-                StopCoroutine(_coyoteTimeCoroutine);
+            ApplyVerticalVelocity(0);
 
-            if (_slideCoroutine != null)
-                StopCoroutine(_slideCoroutine);
-
-            _isOnFloor = false;
-
-            _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
+            floorChecker = CheckOnFloor;
         }
     }
 
@@ -342,5 +392,6 @@ public class Model : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + _dir.normalized * 10);
         Gizmos.DrawLine(transform.position, transform.position + transform.right * _h);
+        Gizmos.DrawLine(transform.position, transform.position + transform.up * -1.1f);
     }
 }
