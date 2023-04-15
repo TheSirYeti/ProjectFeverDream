@@ -104,6 +104,12 @@ public class Model : MonoBehaviour
     void Update()
     {
         _controller.onUpdate();
+
+        if(Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+        {
+            _jumpCounter = 0;
+            _canJump = true;
+        }
     }
 
     void FixedUpdate()
