@@ -40,6 +40,7 @@ public class Model : MonoBehaviour
     [SerializeField] float _jumpForce;
     [SerializeField] float _coyoteTime;
     [SerializeField] LayerMask _floorMask;
+    [SerializeField] LayerMask _wallMask;
 
     Coroutine _coyoteTimeCoroutine;
 
@@ -48,6 +49,7 @@ public class Model : MonoBehaviour
     public bool isRunning { get; private set; } = false;
     public bool isSlide { get; private set; } = false;
 
+    int _jumpCounter = 0;
     bool _canJump = false;
     bool _isOnFloor = false;
 
@@ -57,6 +59,7 @@ public class Model : MonoBehaviour
 
     // Dir Vector
     Vector3 _dir = Vector3.zero;
+    [SerializeField] float _h = 0;
 
     // Colliders
     List<GameObject> _posibleColliders = new List<GameObject>();
@@ -112,6 +115,7 @@ public class Model : MonoBehaviour
 
     public void Move(float hAxie, float vAxie)
     {
+        _h = hAxie;
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
         _dir = AlignDir();
@@ -149,7 +153,11 @@ public class Model : MonoBehaviour
 
     public void Jump()
     {
-        if (_canJump || Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+        if ((_canJump 
+            || Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask) 
+            || Physics.Raycast(transform.position, transform.right * _h, 1, _wallMask))
+            && _jumpCounter < 2
+            )
         {
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
@@ -161,10 +169,12 @@ public class Model : MonoBehaviour
             Vector3 velocity = _rb.velocity;
             velocity.y = 0;
             _rb.velocity = velocity;
+            _rb.angularVelocity = Vector3.zero;
 
             _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
 
             _canJump = false;
+            _jumpCounter++;
         }
     }
 
@@ -296,6 +306,7 @@ public class Model : MonoBehaviour
                 StopCoroutine(_coyoteTimeCoroutine);
 
             _canJump = true;
+            _jumpCounter = 0;
 
             _isOnFloor = true;
 
@@ -324,5 +335,6 @@ public class Model : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + _dir.normalized * 10);
+        Gizmos.DrawLine(transform.position, transform.position + transform.right * _h);
     }
 }
