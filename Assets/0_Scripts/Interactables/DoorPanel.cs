@@ -14,7 +14,7 @@ public class DoorPanel : MonoBehaviour, IAttendance
 
     public void Interact()
     {
-        _door.Play("OpenDoor");
+        _door.SetBool("open", true);
         _isClose = false;
     }
 
