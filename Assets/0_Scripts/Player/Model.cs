@@ -200,7 +200,7 @@ public class Model : MonoBehaviour
             horizontalMoveCoroutine = StartCoroutine(CancelHorizontalMovement());
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
-            _actualHorizontalVector = transform.right;
+            _actualHorizontalVector = (transform.right * _h).normalized;
             Debug.Log("a " + transform.right);
 
             ApplyVerticalVelocity(0);
