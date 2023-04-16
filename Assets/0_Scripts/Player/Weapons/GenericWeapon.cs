@@ -8,8 +8,6 @@ public abstract class GenericWeapon : MonoBehaviour
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
 
-    public RuntimeAnimatorController animatorController { get; private set; }
-
     [SerializeField] protected int _actualMagazineBullets;
     protected int _actualReserveBullets;
 
@@ -97,6 +95,11 @@ public abstract class GenericWeapon : MonoBehaviour
     public string GetOnReleaseName()
     {
         return _weaponSO.onReleaseAnimatorTrigger;
+    }
+
+    public RuntimeAnimatorController GetAnimatorController()
+    {
+        return _weaponSO.animatorController;
     }
 
     public void PickUp()

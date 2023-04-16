@@ -29,4 +29,6 @@ public class SO_Weapon : ScriptableObject
     [Header("-== ANIMATORS VARS ==-")]
     public string onClickAnimatorTrigger;
     public string onReleaseAnimatorTrigger;
+
+    public RuntimeAnimatorController animatorController;
 }

@@ -34,7 +34,7 @@ public class WeaponManager : MonoBehaviour
                 OnClick = _actualWeapon.OnClick;
                 OnRelease = _actualWeapon.OnRelease;
                 _actualWeapon.gameObject.SetActive(true);
-                _view.SetAnimatorController(_actualWeapon.animatorController);
+                _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
             }
 
             _equipedWeapons[actualIndex] = weapon;
@@ -91,7 +91,7 @@ public class WeaponManager : MonoBehaviour
         _actualWeapon = _equipedWeapons[newWeapon];
         _actualWeapon.OnWeaponEquip();
 
-        _view.SetAnimatorController(_actualWeapon.animatorController);
+        _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
         OnClick = _actualWeapon.OnClick;
         OnRelease = _actualWeapon.OnRelease;
     }
@@ -102,7 +102,7 @@ public class WeaponManager : MonoBehaviour
         _actualWeapon = newWeapon;
         _actualWeapon.OnWeaponEquip();
 
-        _view.SetAnimatorController(_actualWeapon.animatorController);
+        _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
         OnClick = _actualWeapon.OnClick;
         OnRelease = _actualWeapon.OnRelease;
     }

@@ -20,6 +20,7 @@ public class Controller
         onUpdate += GetMouse;
         onUpdate += GetShootInput;
         onUpdate += GetADSInput;
+        onUpdate += GetNumsInput;
         onUpdate += GetMovementInput;
         onUpdate += GetJumpInput;
         onUpdate += GetCrunchInput;
@@ -54,6 +55,22 @@ public class Controller
         else if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             _weaponManager.ChangeADSState(false);
+        }
+    }
+
+    void GetNumsInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _weaponManager.ChangeWeapon(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _weaponManager.ChangeWeapon(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            _weaponManager.ChangeWeapon(2);
         }
     }
 
