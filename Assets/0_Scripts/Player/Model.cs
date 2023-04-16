@@ -30,6 +30,7 @@ public class Model : MonoBehaviour
     [SerializeField] float _crunchSpeed;
     [SerializeField] float _slideDuration;
     Coroutine horizontalMoveCoroutine;
+    Action crouchChecker = delegate { };
 
     [Space(20)]
     [Header("-== Interact Properties ==-")]
@@ -51,7 +52,7 @@ public class Model : MonoBehaviour
     Coroutine _coyoteTimeCoroutine;
 
     // Movement Bools
-    public bool isCrunch { get; private set; } = false;
+    public bool isCrouch { get; private set; } = false;
     public bool isRunning { get; private set; } = false;
     public bool isSlide { get; private set; } = false;
 
@@ -114,11 +115,11 @@ public class Model : MonoBehaviour
         _controller.onUpdate();
 
         floorChecker();
+        crouchChecker();
     }
 
     void FixedUpdate()
     {
-        Debug.Log("d" + _actualHorizontalVector * _actualHorizontalForce);
         _rb.velocity = _dir + (_actualHorizontalVector * _actualHorizontalForce * -1);
 
         _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Force);
@@ -189,8 +190,6 @@ public class Model : MonoBehaviour
         }
         else if (Physics.Raycast(transform.position, transform.right * _h, out hit, 1, _wallMask))
         {
-            
-
             if (horizontalMoveCoroutine != null)
                 StopCoroutine(horizontalMoveCoroutine);
 
@@ -201,7 +200,6 @@ public class Model : MonoBehaviour
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
             _actualHorizontalVector = (transform.right * _h).normalized;
-            Debug.Log("a " + transform.right);
 
             ApplyVerticalVelocity(0);
 
@@ -214,13 +212,16 @@ public class Model : MonoBehaviour
 
             _canJump = false;
             _jumpCounter++;
-
         }
     }
 
     public void Slide()
     {
-        isCrunch = true;
+        _actualCollider.SetActive(false);
+        _actualCollider = _posibleColliders[1];
+        _actualCollider.SetActive(true);
+
+        isCrouch = true;
         _actualSpeed = _slideSpeed;
         isSlide = true;
 
@@ -233,31 +234,52 @@ public class Model : MonoBehaviour
 
     public void Crouch(int state)
     {
-        _actualCollider.SetActive(false);
-        _actualCollider = _posibleColliders[state];
-        _actualCollider.SetActive(true);
-
         if (state == 1)
         {
+            crouchChecker = delegate { };
+
+            _actualCollider.SetActive(false);
+            _actualCollider = _posibleColliders[state];
+            _actualCollider.SetActive(true);
+
             Run(0);
 
             if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
                 _actualSpeed = _crunchSpeed;
 
 
-            isCrunch = true;
+            isCrouch = true;
         }
         else
-        {
-            if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
-                _actualSpeed = _walkingSpeed;
-            isCrunch = false;
+        { 
+            if(Physics.Raycast(transform.position - Vector3.up, Vector3.up, 2f, _floorMask))
+            {
+                Debug.Log("hay techo en funcion");
+
+                crouchChecker = CheckRoof;
+            }
+            else
+            {
+                Debug.Log("No hay techo en funcion");
+
+                crouchChecker = delegate { };
+
+                _cameraController.StartTranslate(0);
+
+                _actualCollider.SetActive(false);
+                _actualCollider = _posibleColliders[state];
+                _actualCollider.SetActive(true);
+
+                if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+                    _actualSpeed = _walkingSpeed;
+                isCrouch = false;
+            }
         }
     }
 
     public void Run(int state)
     {
-        if (isCrunch && state == 1) return;
+        if (isCrouch && state == 1) return;
 
         if (state == 1)
         {
@@ -268,7 +290,7 @@ public class Model : MonoBehaviour
             isRunning = false;
         }
 
-        if (!isCrunch)
+        if (!isCrouch)
         {
             if (state == 1)
             {
@@ -323,7 +345,7 @@ public class Model : MonoBehaviour
 
         _cameraController.ChangeRunningFOV(0);
 
-        if (isCrunch) _actualSpeed = _crunchSpeed;
+        if (isCrouch) _actualSpeed = _crunchSpeed;
         else if (!isRunning) _actualSpeed = _walkingSpeed;
     }
 
@@ -342,11 +364,9 @@ public class Model : MonoBehaviour
 
     IEnumerator CancelHorizontalMovement()
     {
-        Debug.Log("b");
         _actualHorizontalForce = _horizontalJumpForce;
         yield return new WaitForSeconds(0.5f);
         _actualHorizontalForce = 0;
-        Debug.Log("c");
     }
 
     void CheckOnFloor()
@@ -389,11 +409,19 @@ public class Model : MonoBehaviour
         }
     }
 
+    void CheckRoof()
+    {
+        if (!Physics.Raycast(transform.position - transform.up, Vector3.up, 1.1f, _floorMask))
+        {
+            Debug.Log("No hay techo en delegate");
+            Crouch(0);
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + _dir.normalized * 10);
-        Gizmos.DrawLine(transform.position, transform.position + transform.right * _h);
-        Gizmos.DrawLine(transform.position, transform.position + transform.up * -1.1f);
+        Gizmos.DrawLine(transform.position - transform.up, transform.position + transform.up * 2);
     }
 }

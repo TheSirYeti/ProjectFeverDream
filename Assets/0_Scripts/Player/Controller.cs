@@ -100,7 +100,6 @@ public class Controller
         else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
             _model.Crouch(0);
-            _cameraController.StartTranslate(0);
         }
     }
 

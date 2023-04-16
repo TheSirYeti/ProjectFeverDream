@@ -104,7 +104,7 @@ public class CameraController : MonoBehaviour
 
     public void ChangeRunningFOV(int state)
     {
-        if (_model.isCrunch && state == 1) return;
+        if (_model.isCrouch && state == 1) return;
 
         if ((state == 0 && !_isLargeFOV) || (state == 1 && _isLargeFOV)) return;
 
