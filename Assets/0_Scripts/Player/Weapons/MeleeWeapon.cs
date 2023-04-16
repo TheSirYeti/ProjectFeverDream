@@ -107,4 +107,9 @@ public class MeleeWeapon : GenericWeapon
             CheckUsage();
         }
     }
+
+    //solucionar despues
+    public override void OnClick(){}
+
+    public override void OnRelease(){}
 }

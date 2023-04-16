@@ -15,6 +15,11 @@ public class View : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
+    public void SetAnimatorController(RuntimeAnimatorController animCont)
+    {
+        _animator.runtimeAnimatorController = animCont;
+    }
+
     public void OnViewStart(params object[] parameters)
     {
         _model = (Model)parameters[0];

@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public abstract class GenericWeapon : MonoBehaviour
 {
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
+
+    public RuntimeAnimatorController animatorController { get; private set; }
 
     [SerializeField] protected int _actualMagazineBullets;
     protected int _actualReserveBullets;
@@ -17,7 +20,12 @@ public abstract class GenericWeapon : MonoBehaviour
     public abstract void Reload();
     public abstract void FeedBack(Vector3 hitPoint, RaycastHit hit);
 
+    public abstract void OnClick();
+    public abstract void OnRelease();
+
     protected ObjectPool _bulletPool;
+
+    protected Action OnUpdate = delegate { };
 
     public void SetWeaponManager(WeaponManager weaponManager)
     {
@@ -79,6 +87,16 @@ public abstract class GenericWeapon : MonoBehaviour
     public int GetID()
     {
         return _weaponSO.weaponID;
+    }
+
+    public string GetOnClickName()
+    {
+        return _weaponSO.onClickAnimatorTrigger;
+    }
+
+    public string GetOnReleaseName()
+    {
+        return _weaponSO.onReleaseAnimatorTrigger;
     }
 
     public void PickUp()

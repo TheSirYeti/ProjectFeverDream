@@ -25,4 +25,8 @@ public class SO_Weapon : ScriptableObject
     [Header("-== FEEDBACK ==-")]
     public ParticleSystem particleShoot;
     public GameObject lightMuzzle;
+
+    [Header("-== ANIMATORS VARS ==-")]
+    public string onClickAnimatorTrigger;
+    public string onReleaseAnimatorTrigger;
 }

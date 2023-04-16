@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Toaster : GenericWeapon
 {
-    bool _isEnemy = false;
-    [SerializeField] float randomHipRecoilX;
-    [SerializeField] float randomHipRecoilY;
-
     [SerializeField] int numPellets = 10;
     [SerializeField] float spreadAngle = 20f;
     [SerializeField] float verticalAngle = 10f;
 
+    [SerializeField] float _actualLoading = 0.3f;
+    [SerializeField] float _loadSpeed = 0;
 
     /* -------------------------------- START -------------------------------- */
     void Start()
@@ -25,6 +23,11 @@ public class Toaster : GenericWeapon
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
     }
 
+    private void Update()
+    {
+        OnUpdate();
+    }
+
 
     /* -------------------------------- SHOOT -------------------------------- */
     public override void Shoot(Transform pointOfShoot, bool isADS)
@@ -33,7 +36,13 @@ public class Toaster : GenericWeapon
 
         Vector3 actualDir = pointOfShoot.forward;
 
-        for (int i = 0; i < numPellets; i++)
+        int actualPellets = (int)(numPellets * _actualLoading);
+        int actualDmg = (int)(_weaponSO.dmg * _actualLoading);
+
+        Debug.Log("cantidad de perdigones " + actualPellets);
+        Debug.Log("cantidad de dmg " + actualDmg);
+
+        for (int i = 0; i < actualPellets; i++)
         {
             float randomHorizontalAngle = Random.Range(-spreadAngle / 2f, spreadAngle / 2f);
             Quaternion horizontalRotation = Quaternion.AngleAxis(randomHorizontalAngle, Vector3.up);
@@ -46,15 +55,14 @@ public class Toaster : GenericWeapon
             Vector3 pelletDirection = pelletRotation * actualDir;
 
             GenericBullet bullet = GetBullet(pointOfShoot.position);
-            bullet.OnStart(pelletDirection, this, _weaponSO.dmg);
-            // Instantiate or shoot the pellet in the pelletDirection
+            bullet.OnStart(pelletDirection, this, actualDmg);
         }
 
 
         //SoundManager.instance.PlaySound(SoundID.PISTOL_SHOT);
 
         _actualMagazineBullets--;
-
+        _actualLoading = 0.3f;
 
         EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
     }
@@ -96,16 +104,19 @@ public class Toaster : GenericWeapon
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
     }
 
-
-
-    /* -------------------------------- OBJECTPOOL -------------------------------- */
-    public void SetGameObject(Vector3 objective)
+    public override void OnClick()
     {
-        throw new System.NotImplementedException();
+        OnUpdate = LoadWeapon;
     }
 
-    public void ReturnGameObject(GameObject item)
+    void LoadWeapon()
     {
-        throw new System.NotImplementedException();
+        _actualLoading += _loadSpeed * Time.deltaTime;
+        _actualLoading = Mathf.Clamp01(_actualLoading);
+    }
+
+    public override void OnRelease()
+    {
+        OnUpdate = delegate { };
     }
 }

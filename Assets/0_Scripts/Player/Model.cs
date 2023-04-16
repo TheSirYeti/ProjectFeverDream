@@ -66,7 +66,7 @@ public class Model : MonoBehaviour
 
     // Dir Vector
     Vector3 _dir = Vector3.zero;
-    [SerializeField] float _h = 0;
+    float _h = 0;
 
     // Colliders
     List<GameObject> _posibleColliders = new List<GameObject>();

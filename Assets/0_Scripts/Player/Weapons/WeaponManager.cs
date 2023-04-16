@@ -13,9 +13,10 @@ public class WeaponManager : MonoBehaviour
 
     Transform _pointOfShoot;
     bool _isADS;
-    bool _isShooting;
 
-    public Action onUpdate = delegate { };
+    public Action OnClick = delegate { };
+    public Action OnRelease = delegate { };
+
 
     private void Start()
     {
@@ -25,7 +26,16 @@ public class WeaponManager : MonoBehaviour
 
         foreach (GenericWeapon weapon in equipedWeapons)
         {
-            if (weapon.enabled) _actualWeapon = weapon;
+            weapon.gameObject.SetActive(false);
+
+            if (actualIndex == 0) 
+            { 
+                _actualWeapon = weapon;
+                OnClick = _actualWeapon.OnClick;
+                OnRelease = _actualWeapon.OnRelease;
+                _actualWeapon.gameObject.SetActive(true);
+                _view.SetAnimatorController(_actualWeapon.animatorController);
+            }
 
             _equipedWeapons[actualIndex] = weapon;
             weapon.SetWeaponManager(this);
@@ -40,33 +50,26 @@ public class WeaponManager : MonoBehaviour
         _pointOfShoot = pointOfShoot;
     }
 
-    private void Update()
-    {
-        onUpdate();
-    }
-
     public void ChangeAttackState(bool state)
     {
-        _isShooting = state;
-
         if (state)
-            onUpdate += ShootAnimation;
+        {
+            _view.SetBool(_actualWeapon.GetOnClickName(), true);
+            OnClick();
+        }
+        else
+        {
+            _view.SetBool(_actualWeapon.GetOnClickName(), false);
+            OnRelease();
+
+            if (_actualWeapon.GetOnReleaseName() != "")
+                _view.SetTrigger(_actualWeapon.GetOnReleaseName());
+        }
     }
 
     public void ChangeADSState(bool state)
     {
         _isADS = state;
-    }
-
-    void ShootAnimation()
-    {
-        if (_isShooting)
-            _view.SetTrigger("attack");
-        else
-        {
-            _view.ResetTrigger("attack");
-            onUpdate -= ShootAnimation;
-        }
     }
 
     public void ExecuteShoot()
@@ -87,6 +90,10 @@ public class WeaponManager : MonoBehaviour
         _actualWeapon.OnWeaponUnequip();
         _actualWeapon = _equipedWeapons[newWeapon];
         _actualWeapon.OnWeaponEquip();
+
+        _view.SetAnimatorController(_actualWeapon.animatorController);
+        OnClick = _actualWeapon.OnClick;
+        OnRelease = _actualWeapon.OnRelease;
     }
 
     public void SetWeapon(GenericWeapon newWeapon)
@@ -94,6 +101,10 @@ public class WeaponManager : MonoBehaviour
         _actualWeapon.OnWeaponUnequip();
         _actualWeapon = newWeapon;
         _actualWeapon.OnWeaponEquip();
+
+        _view.SetAnimatorController(_actualWeapon.animatorController);
+        OnClick = _actualWeapon.OnClick;
+        OnRelease = _actualWeapon.OnRelease;
     }
 
     public void DestroyWeapon()
@@ -105,7 +116,7 @@ public class WeaponManager : MonoBehaviour
     {
         foreach (GenericWeapon weapon in _equipedWeapons)
         {
-            if(weapon != brokenWeapon)
+            if (weapon != brokenWeapon)
             {
                 _actualWeapon = weapon;
                 _actualWeapon.OnWeaponEquip();
