@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour, ITakeDamage
+public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 {
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp;
@@ -342,5 +342,21 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage
 
     public abstract void DoKnockback();
 
+
     #endregion
+
+    public void Interact()
+    {
+        Destroy(gameObject);
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public bool CanInteract()
+    {
+        return isDead;
+    }
 }

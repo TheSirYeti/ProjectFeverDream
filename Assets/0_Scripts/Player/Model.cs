@@ -290,6 +290,8 @@ public class Model : MonoBehaviour
         {
             IAttendance iAttendance = hit.collider.gameObject.GetComponent<IAttendance>();
 
+            if (iAttendance == null) iAttendance = hit.collider.gameObject.GetComponentInParent<IAttendance>();
+
             if (iAttendance == null || !iAttendance.CanInteract()) return;
 
             _assistant.SetObjective(iAttendance);
