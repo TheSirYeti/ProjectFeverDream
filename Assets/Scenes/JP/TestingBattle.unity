@@ -839,7 +839,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-120728
+  m_Name: pb_Mesh-19738
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2231,6 +2231,14 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.z
       value: -0.0016256941
       objectReference: {fileID: 0}
+    - target: {fileID: 1134129636836537965, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
+      propertyPath: hp
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 1134129636836537965, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
+      propertyPath: maxHP
+      value: 350
+      objectReference: {fileID: 0}
     - target: {fileID: 1134129636960989698, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: 0.5304586
@@ -2522,6 +2530,17 @@ MonoBehaviour:
   gizmoViewRadius: 0.25
   neighbors: []
   cost: 1
+--- !u!114 &959525745 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2051672190009415051, guid: d615f79419ce91444b957e2577939418, type: 3}
+  m_PrefabInstance: {fileID: 970582448}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444b8c8c8d9d5da4a86a58c76aa72715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &970582448
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2529,10 +2548,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1168691348844870504, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2263138825338908203, guid: d615f79419ce91444b957e2577939418, type: 3}
       propertyPath: _shootPoint
       value: 
       objectReference: {fileID: 1423219368}
+    - target: {fileID: 3267724005522825034, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 148f642240b146f4d919825fa3a259e2, type: 2}
+    - target: {fileID: 7062882637352277523, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7381402974461256629, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8258285548967387731, guid: d615f79419ce91444b957e2577939418, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -2577,6 +2612,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9211996423368475161, guid: d615f79419ce91444b957e2577939418, type: 3}
+      propertyPath: _actualWeapon
+      value: 
+      objectReference: {fileID: 959525745}
     - target: {fileID: 9211996423368475163, guid: d615f79419ce91444b957e2577939418, type: 3}
       propertyPath: m_Name
       value: NewTempAnimsCam
@@ -3342,6 +3381,14 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.z
       value: -0.0016155259
       objectReference: {fileID: 0}
+    - target: {fileID: 1134129636836537965, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
+      propertyPath: hp
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 1134129636836537965, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
+      propertyPath: maxHP
+      value: 350
+      objectReference: {fileID: 0}
     - target: {fileID: 1134129636960989698, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: 0.5304586
@@ -3644,7 +3691,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh98320
+  m_Name: pb_Mesh44222
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4779,7 +4826,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh98220
+  m_Name: pb_Mesh44122
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5467,6 +5514,14 @@ PrefabInstance:
     - target: {fileID: 1134129636457506507, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
       propertyPath: m_ConnectedAnchor.z
       value: -0.0016155259
+      objectReference: {fileID: 0}
+    - target: {fileID: 1134129636836537965, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
+      propertyPath: hp
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 1134129636836537965, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
+      propertyPath: maxHP
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 1134129636960989698, guid: 743c02357e3283c4aa7bc67f6695af24, type: 3}
       propertyPath: m_ConnectedAnchor.x
