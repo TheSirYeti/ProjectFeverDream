@@ -22,4 +22,9 @@ public class DoorPanel : MonoBehaviour, IAttendance
     {
         return _isClose;
     }
+
+    public string AnimationToExecute()
+    {
+        return "door";
+    }
 }

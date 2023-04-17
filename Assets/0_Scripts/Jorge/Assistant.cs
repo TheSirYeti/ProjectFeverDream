@@ -15,7 +15,10 @@ public class Assistant : MonoBehaviour
     [SerializeField] float _enemiesDetectionDistance;
     [SerializeField] LayerMask _enemiesMask;
 
+    [SerializeField] GameObject _vacuumVFX;
+
     Transform _actualObjective;
+    Vector3 _objectiveMultipliyer = Vector3.zero;
     Vector3 _dir;
 
     Transform _player;
@@ -35,7 +38,7 @@ public class Assistant : MonoBehaviour
 
     void Update()
     {
-        _dir = _actualObjective.position - transform.position;
+        _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
 
         Quaternion targetRotation = Quaternion.LookRotation(_dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
@@ -44,7 +47,7 @@ public class Assistant : MonoBehaviour
 
         if (_interactuable != null)
         {
-            targetMovement = _actualObjective.position + (_dir.normalized * -1 * (_interactDistance * 0.5f));
+            targetMovement = (_actualObjective.position + _objectiveMultipliyer) + (_dir.normalized * -1 * (_interactDistance * 0.5f));
             Vector3 newDir = targetMovement - transform.position;
             newDir.Normalize();
             transform.position += newDir * _speed * Time.deltaTime;
@@ -53,13 +56,13 @@ public class Assistant : MonoBehaviour
         {
             if (!CheckNearEnemies())
             {
-                targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
+                targetMovement = (_actualObjective.position + _objectiveMultipliyer) + (_dir.normalized * -1 * _followingDistance);
                 Vector3 newDir = targetMovement - transform.position;
                 transform.position += newDir * Time.deltaTime;
             }
             else
             {
-                targetMovement = _actualObjective.position + _actualObjective.forward * -1 * 2;
+                targetMovement = (_actualObjective.position + _objectiveMultipliyer) + _actualObjective.forward * -1 * 2;
                 Vector3 newDir = targetMovement - transform.position;
 
                 if (Vector3.Distance(transform.position, targetMovement) < 2)
@@ -70,9 +73,9 @@ public class Assistant : MonoBehaviour
         }
 
 
-        if (_interactuable != null && Vector3.Distance(transform.position, _actualObjective.position) < _interactDistance)
+        if (_interactuable != null && Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _interactDistance)
         {
-            _animator.SetTrigger("interact");
+            _animator.SetTrigger(_interactuable.AnimationToExecute());
         }
     }
 
@@ -92,13 +95,31 @@ public class Assistant : MonoBehaviour
     {
         _interactuable = interactuable;
         _actualObjective = interactuable.GetTransform();
+
+        if (_interactuable.AnimationToExecute() == "door")
+        {
+            _objectiveMultipliyer = Vector3.zero;
+        }
+        else
+        {
+            _objectiveMultipliyer = Vector3.up * 2;
+        }
+
+    }
+
+    public void StartAction()
+    {
+        _vacuumVFX.SetActive(true);
+        _vacuumVFX.transform.position = transform.position;
+        _vacuumVFX.transform.up = transform.position - _interactuable.GetTransform().position;
     }
 
     public void FinishAction()
     {
+        _animator.ResetTrigger(_interactuable.AnimationToExecute());
+        _vacuumVFX.SetActive(false);
         _interactuable = null;
         _actualObjective = _player;
-        _animator.ResetTrigger("interact");
     }
 
     bool CheckNearEnemies()

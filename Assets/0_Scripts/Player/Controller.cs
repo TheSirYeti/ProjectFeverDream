@@ -58,6 +58,14 @@ public class Controller
         }
     }
 
+    void GetReloadInput()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            _weaponManager.AnimReload();
+        }
+    }
+
     void GetNumsInput()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))

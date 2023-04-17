@@ -36,13 +36,11 @@ public abstract class GenericBullet : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _damagableMask))
         {
-            Debug.Log("Enemigo");
             hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg);
             _actualWeapon.ReturnBullet(this);
         }
         else if (Physics.Raycast(transform.position, transform.forward, _distanceCollision, _collisionMask))
         {
-            Debug.Log("Pared");
             GameObject decal = Instantiate(_fakeDecal, transform.position, transform.rotation);
             Destroy(decal, 3f);
             _actualWeapon.ReturnBullet(this);

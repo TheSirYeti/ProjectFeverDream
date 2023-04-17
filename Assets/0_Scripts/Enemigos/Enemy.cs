@@ -42,6 +42,8 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     [SerializeField] private bool hasRagdoll;
     protected bool isInRagdollMode = false;
     protected Rigidbody[] ragdollRigidbodies;
+    //Temp
+    [SerializeField] private Transform _bodyCenter;
 
     [Space(20)]
     [Header("-== View Properties ==-")]
@@ -345,6 +347,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 
     #endregion
 
+    #region Interact
     public void Interact()
     {
         Destroy(gameObject);
@@ -352,11 +355,17 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 
     public Transform GetTransform()
     {
-        return transform;
+        return _bodyCenter;
     }
 
     public bool CanInteract()
     {
         return isDead;
     }
+
+    public string AnimationToExecute()
+    {
+        return "vacuum";
+    }
+    #endregion
 }

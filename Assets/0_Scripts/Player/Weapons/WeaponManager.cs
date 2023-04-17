@@ -77,10 +77,15 @@ public class WeaponManager : MonoBehaviour
         _actualWeapon.Shoot(_pointOfShoot, _isADS);
     }
 
-    public void Reload()
+    public void AnimReload()
     {
         if (_actualWeapon.CanReload())
-            _actualWeapon.Reload();
+            _view.SetTrigger("reload");
+    }
+
+    public void ExecuteReload()
+    {
+        _actualWeapon.Reload();
     }
 
     public void ChangeWeapon(int newWeapon)
