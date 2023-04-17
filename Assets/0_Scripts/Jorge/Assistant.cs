@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Linq;
 
 public class Assistant : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class Assistant : MonoBehaviour
     [SerializeField] float _enemiesDetectionDistance;
     [SerializeField] LayerMask _enemiesMask;
 
+    [SerializeField] float _hidingSpotsDetectionDistance;
+    [SerializeField] LayerMask _hidingSpotsMask;
+
     [SerializeField] GameObject _vacuumVFX;
 
     Transform _actualObjective;
@@ -23,6 +28,16 @@ public class Assistant : MonoBehaviour
 
     Transform _player;
     IAttendance _interactuable;
+
+    enum JorgeStates
+    {
+        FOLLOW,
+        INTERACT,
+        HIDE
+    }
+
+    private EventFSM<JorgeStates> fsm;
+
 
     void Awake()
     {
@@ -34,49 +49,136 @@ public class Assistant : MonoBehaviour
     void Start()
     {
         EventManager.Trigger("SetAssistant", this);
+        DoFsmSetup();
     }
 
-    void Update()
+    void DoFsmSetup()
     {
-        _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
+        #region SETUP
 
-        Quaternion targetRotation = Quaternion.LookRotation(_dir);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+        var follow = new State<JorgeStates>("FOLLOW");
+        var interact = new State<JorgeStates>("INTERACT");
+        var hide = new State<JorgeStates>("HIDE");
 
-        Vector3 targetMovement;
+        StateConfigurer.Create(follow)
+            .SetTransition(JorgeStates.INTERACT, interact)
+            .SetTransition(JorgeStates.HIDE, hide)
+            .Done();
 
-        if (_interactuable != null)
+        StateConfigurer.Create(interact)
+            .SetTransition(JorgeStates.FOLLOW, follow)
+            .SetTransition(JorgeStates.HIDE, hide)
+            .Done();
+
+        StateConfigurer.Create(hide)
+            .SetTransition(JorgeStates.FOLLOW, follow)
+            .SetTransition(JorgeStates.INTERACT, interact)
+            .Done();
+
+        #endregion
+
+        #region FOLLOW
+
+        follow.OnEnter += x =>
         {
+            _actualObjective = _player;
+            _objectiveMultipliyer = Vector3.zero;
+        };
+
+        follow.OnUpdate += () =>
+        {
+            _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
+
+            Quaternion targetRotation = Quaternion.LookRotation(_dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+            Vector3 targetMovement;
+
+            targetMovement = (_actualObjective.position + _objectiveMultipliyer) + (_dir.normalized * -1 * _followingDistance);
+            Vector3 newDir = targetMovement - transform.position;
+            transform.position += newDir * Time.deltaTime;
+
+            if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
+        };
+
+        #endregion
+
+        #region INTERACT
+
+        interact.OnUpdate += () =>
+        {
+            _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
+
+            Quaternion targetRotation = Quaternion.LookRotation(_dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+            Vector3 targetMovement;
+
             targetMovement = (_actualObjective.position + _objectiveMultipliyer) + (_dir.normalized * -1 * (_interactDistance * 0.5f));
             Vector3 newDir = targetMovement - transform.position;
             newDir.Normalize();
             transform.position += newDir * _speed * Time.deltaTime;
-        }
-        else
-        {
-            if (!CheckNearEnemies())
+
+            if (Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _interactDistance)
             {
-                targetMovement = (_actualObjective.position + _objectiveMultipliyer) + (_dir.normalized * -1 * _followingDistance);
-                Vector3 newDir = targetMovement - transform.position;
-                transform.position += newDir * Time.deltaTime;
+                _animator.SetTrigger(_interactuable.AnimationToExecute());
+            }
+        };
+
+        #endregion
+
+        #region HIDE
+
+        hide.OnEnter += x =>
+        {
+            Collider[] hidingSpots = Physics.OverlapSphere(_player.position, _hidingSpotsDetectionDistance, _hidingSpotsMask);
+
+            List<Collider> colliders = hidingSpots.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
+
+            _actualObjective = colliders[0].transform;
+        };
+
+        hide.OnUpdate += () =>
+        {
+            if (!CheckNearEnemies()) SendInputToFSM(JorgeStates.FOLLOW);
+
+            if (Vector3.Distance(transform.position, _actualObjective.position) < 0.1f) 
+            {
+                _dir = _player.position - transform.position;
+
+                Quaternion targetRotation = Quaternion.LookRotation(_dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
             }
             else
             {
-                targetMovement = (_actualObjective.position + _objectiveMultipliyer) + _actualObjective.forward * -1 * 2;
-                Vector3 newDir = targetMovement - transform.position;
+                _dir = _actualObjective.position - transform.position;
 
-                if (Vector3.Distance(transform.position, targetMovement) < 2)
-                    transform.position += newDir * Time.deltaTime * _speed * 2;
-                else
-                    transform.position += newDir * Time.deltaTime * _speed;
+                Quaternion targetRotation = Quaternion.LookRotation(_dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+                transform.position += _dir * _speed * Time.deltaTime;
             }
-        }
+        };
 
+        #endregion
 
-        if (_interactuable != null && Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _interactDistance)
-        {
-            _animator.SetTrigger(_interactuable.AnimationToExecute());
-        }
+        fsm = new EventFSM<JorgeStates>(follow);
+    }
+
+    private void SendInputToFSM(JorgeStates state)
+    {
+        fsm.SendInput(state);
+    }
+
+    void Update()
+    {
+        fsm.Update();
+    }
+
+    //Implementar un movimiento general cuando tenga mas ganas
+    void GoToTarget()
+    {
+
     }
 
     public void Interact()
@@ -105,6 +207,7 @@ public class Assistant : MonoBehaviour
             _objectiveMultipliyer = Vector3.up * 2;
         }
 
+        SendInputToFSM(JorgeStates.INTERACT);
     }
 
     public void StartAction()
@@ -120,6 +223,8 @@ public class Assistant : MonoBehaviour
         _vacuumVFX.SetActive(false);
         _interactuable = null;
         _actualObjective = _player;
+
+        SendInputToFSM(JorgeStates.FOLLOW);
     }
 
     bool CheckNearEnemies()
