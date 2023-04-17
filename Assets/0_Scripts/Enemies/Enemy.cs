@@ -57,7 +57,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     [SerializeField] protected float dmg;
     [Space(10)] 
     [SerializeField] protected float weakDmg, bodyDmg, headDmg, generalDmg;
-    protected bool isDead = false;
+    public bool isDead = false; 
 
     public abstract void Attack();
     

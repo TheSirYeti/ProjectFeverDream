@@ -230,8 +230,9 @@ public class Assistant : MonoBehaviour
     bool CheckNearEnemies()
     {
         Collider[] enemies = Physics.OverlapSphere(_player.position, _enemiesDetectionDistance, _enemiesMask);
+        List<Enemy> aliveEnemies = enemies.Select(x => x.GetComponentInParent<Enemy>()).Where(x => !x.isDead).ToList();
 
-        if (enemies.Length == 0) return false;
+        if (!aliveEnemies.Any()) return false;
         else return true;
     }
 }
