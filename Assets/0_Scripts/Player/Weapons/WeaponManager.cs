@@ -52,12 +52,12 @@ public class WeaponManager : MonoBehaviour
 
     public void ChangeAttackState(bool state)
     {
-        if (state)
+        if (_actualWeapon.CanShoot() && state)
         {
             _view.SetBool(_actualWeapon.GetOnClickName(), true);
             OnClick();
         }
-        else
+        else if (!state)
         {
             _view.SetBool(_actualWeapon.GetOnClickName(), false);
             OnRelease();
@@ -94,6 +94,7 @@ public class WeaponManager : MonoBehaviour
 
         _actualWeapon.OnWeaponUnequip();
         _actualWeapon = _equipedWeapons[newWeapon];
+        _actualWeapon.SetRenderGO(true);
         _actualWeapon.OnWeaponEquip();
 
         _view.SetAnimatorController(_actualWeapon.GetAnimatorController());

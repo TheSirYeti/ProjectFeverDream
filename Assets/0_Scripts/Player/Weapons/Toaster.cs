@@ -39,9 +39,6 @@ public class Toaster : GenericWeapon
         int actualPellets = (int)(numPellets * _actualLoading);
         int actualDmg = (int)(_weaponSO.dmg * _actualLoading);
 
-        Debug.Log("cantidad de perdigones " + actualPellets);
-        Debug.Log("cantidad de dmg " + actualDmg);
-
         for (int i = 0; i < actualPellets; i++)
         {
             float randomHorizontalAngle = Random.Range(-spreadAngle / 2f, spreadAngle / 2f);
