@@ -16,7 +16,7 @@ namespace TEMP_GROUP
 
         private void LateUpdate()
         {
-            if (Input.GetKey(KeyCode.R))
+            if (Input.GetKey(KeyCode.Alpha0))
             {
                 ReloadCurrentScene();
             }
