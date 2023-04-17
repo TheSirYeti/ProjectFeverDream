@@ -19,6 +19,7 @@ public class Controller
 
         onUpdate += GetMouse;
         onUpdate += GetShootInput;
+        onUpdate += GetReloadInput;
         onUpdate += GetADSInput;
         onUpdate += GetNumsInput;
         onUpdate += GetMovementInput;
