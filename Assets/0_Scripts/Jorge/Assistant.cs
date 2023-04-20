@@ -8,7 +8,13 @@ public class Assistant : MonoBehaviour
 {
     Animator _animator;
 
-    [SerializeField] float _speed;
+    [SerializeField] LayerMask _playerMask;
+
+    [SerializeField] float _followSpeed;
+    [SerializeField] float _interactSpeed;
+    [SerializeField] float _closeDistanceSpeed;
+    [SerializeField] float _closeRadiousDetection;
+
     [SerializeField] float _followingDistance;
     [SerializeField] float _interactDistance;
 
@@ -93,10 +99,17 @@ public class Assistant : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
             Vector3 targetMovement;
+            Collider[] collisions = Physics.OverlapSphere(transform.position, _closeRadiousDetection, _playerMask);
 
-            targetMovement = (_actualObjective.position + _objectiveMultipliyer) + (_dir.normalized * -1 * _followingDistance);
+            if (!collisions.Any())
+                targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
+            else
+                targetMovement = _actualObjective.position + (_dir.normalized * - 1 * _closeDistanceSpeed);
+
+
             Vector3 newDir = targetMovement - transform.position;
             transform.position += newDir * Time.deltaTime;
+
 
             if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
         };
@@ -117,7 +130,7 @@ public class Assistant : MonoBehaviour
             targetMovement = (_actualObjective.position + _objectiveMultipliyer) + (_dir.normalized * -1 * (_interactDistance * 0.5f));
             Vector3 newDir = targetMovement - transform.position;
             newDir.Normalize();
-            transform.position += newDir * _speed * Time.deltaTime;
+            transform.position += newDir * _interactSpeed * Time.deltaTime;
 
             if (Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _interactDistance)
             {
@@ -142,7 +155,7 @@ public class Assistant : MonoBehaviour
         {
             if (!CheckNearEnemies()) SendInputToFSM(JorgeStates.FOLLOW);
 
-            if (Vector3.Distance(transform.position, _actualObjective.position) < 0.1f) 
+            if (Vector3.Distance(transform.position, _actualObjective.position) < 0.1f)
             {
                 _dir = _player.position - transform.position;
 
@@ -156,7 +169,7 @@ public class Assistant : MonoBehaviour
                 Quaternion targetRotation = Quaternion.LookRotation(_dir);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
-                transform.position += _dir * _speed * Time.deltaTime;
+                transform.position += _dir * _followSpeed * Time.deltaTime;
             }
         };
 

@@ -46,7 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe233629cb745e541b07e52289e1d32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 5
+  _playerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  _followSpeed: 5
+  _interactSpeed: 10
+  _closeDistanceSpeed: 25
+  _closeRadiousDetection: 1
   _followingDistance: 2
   _interactDistance: 1
   _rotationSpeed: 4
