@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class Model : MonoBehaviour
 {
@@ -167,8 +168,6 @@ public class Model : MonoBehaviour
     {
         if (_jumpCounter > 1) return;
 
-        RaycastHit hit;
-
         if (_canJump)
         {
             if (_jumpCoroutine != null)
@@ -188,8 +187,12 @@ public class Model : MonoBehaviour
             _canJump = false;
             _jumpCounter++;
         }
-        else if (Physics.Raycast(transform.position, transform.right * _h, out hit, 1, _wallMask))
+        else
         {
+            Collider[] collisions = Physics.OverlapSphere(transform.position, 1, _wallMask);
+
+            if (!collisions.Any()) return;
+
             if (horizontalMoveCoroutine != null)
                 StopCoroutine(horizontalMoveCoroutine);
 
@@ -199,7 +202,10 @@ public class Model : MonoBehaviour
             horizontalMoveCoroutine = StartCoroutine(CancelHorizontalMovement());
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
-            _actualHorizontalVector = (transform.right * _h).normalized;
+            Collider[] orderCollisions = collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
+            Collider closeCollider = orderCollisions.First();
+
+            _actualHorizontalVector = (closeCollider.ClosestPoint(transform.position) - transform.position).normalized;
 
             ApplyVerticalVelocity(0);
 
