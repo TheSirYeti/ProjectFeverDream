@@ -47,6 +47,7 @@ public class Model : MonoBehaviour
     Vector3 _actualHorizontalVector = Vector3.zero;
     [SerializeField] float _coyoteTime;
     [SerializeField] LayerMask _floorMask;
+    [SerializeField] LayerMask _slopeMask;
     [SerializeField] LayerMask _wallMask;
 
     Action floorChecker = delegate { };
@@ -67,7 +68,6 @@ public class Model : MonoBehaviour
 
     // Dir Vector
     Vector3 _dir = Vector3.zero;
-    float _h = 0;
 
     // Colliders
     List<GameObject> _posibleColliders = new List<GameObject>();
@@ -128,18 +128,22 @@ public class Model : MonoBehaviour
 
     public void Move(float hAxie, float vAxie)
     {
-        _h = hAxie;
-
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
-        _dir = AlignDir();
+        if (Physics.Raycast(transform.position, Vector3.up * -1, 1.2f, _slopeMask))
+            _dir = AlignDir();
+
 
         if (_dir.magnitude > 1)
             _dir.Normalize();
 
+        if (!Physics.Raycast(transform.position, Vector3.up * -1, 1.3f, _slopeMask) && _isOnFloor)
+            _dir.y = 0;
+
         _dir *= _actualSpeed * Time.fixedDeltaTime;
 
-        _dir.y = _rb.velocity.y;
+        if (!Physics.Raycast(transform.position, Vector3.up * -1, 1.2f, _slopeMask))
+            _dir.y = _rb.velocity.y;
 
         //if (_actualYVelocity != 0 && _dir.y > 0 && hAxie == 0 && vAxie == 0) _dir.y = 0;
 
@@ -154,7 +158,7 @@ public class Model : MonoBehaviour
         RaycastHit hit;
         Vector3 planeNormal;
 
-        if (Physics.Raycast(transform.position, transform.up * -1, out hit, 1.5f, _floorMask))
+        if (Physics.Raycast(transform.position, transform.up * -1, out hit, 1.2f, _slopeMask))
             planeNormal = hit.collider.transform.up;
         else
             return _dir;
@@ -257,8 +261,8 @@ public class Model : MonoBehaviour
             isCrouch = true;
         }
         else
-        { 
-            if(Physics.Raycast(transform.position - Vector3.up, Vector3.up, 2f, _floorMask))
+        {
+            if (Physics.Raycast(transform.position - Vector3.up, Vector3.up, 2f, _floorMask))
             {
                 Debug.Log("hay techo en funcion");
 
