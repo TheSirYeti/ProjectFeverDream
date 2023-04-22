@@ -6,16 +6,23 @@ using UnityEngine;
 
 public class NodeManager : MonoBehaviour
 {
-    public GameObject nodeParent;
-    public List<Node> nodes;
+    [Header("Node Parents")]
+    [SerializeField] private GameObject nodeEnemyParent;
+    public List<Node> nodesEnemy;
+    [Space(10)]
+    [SerializeField] private GameObject nodeAssistantParent;
+    public List<Node> nodesAssistant;
+    
+    [Header("Layers")]
     public LayerMask nodeMask;
     public LayerMask inSightMask;
     public LayerMask wallMask;
+    
     public static NodeManager instance;
 
     private void Awake()
     {
-        nodes = nodeParent.GetComponentsInChildren<Node>().ToList();
+        nodesEnemy = nodeEnemyParent.GetComponentsInChildren<Node>().ToList();
         
         if (instance == null)
         {
@@ -24,14 +31,20 @@ public class NodeManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public int GetClosestNode(Transform t)
+    public int GetClosestNode(Transform t, bool isForAssistant = false)
     {
+        List<Node> nodesToUse = new List<Node>();
+        
+        if(isForAssistant)
+            nodesToUse = nodesAssistant;
+        else nodesToUse = nodesEnemy;
+
         int index = 0;
         float minDistance = Mathf.Infinity;
-        for (int i = 0; i < nodes.Count; i++)
+        for (int i = 0; i < nodesToUse.Count; i++)
         {
-            float distance = Vector3.Distance(t.position, nodes[i].transform.position);
-            Vector3 dirToTarget = nodes[i].transform.position - t.position;
+            float distance = Vector3.Distance(t.position, nodesToUse[i].transform.position);
+            Vector3 dirToTarget = nodesToUse[i].transform.position - t.position;
             if (distance <= minDistance && !Physics.Raycast(t.position, dirToTarget, dirToTarget.magnitude, wallMask))
             {
                 index = i;
@@ -51,11 +64,11 @@ public class NodeManager : MonoBehaviour
     {
         int counter = 0;
         string nodesToSend = "";
-        for(int i = 0; i < nodes.Count; i++)
+        for(int i = 0; i < nodesEnemy.Count; i++)
         {
-            for(int j = i + 1; j < nodes.Count; j++)
+            for(int j = i + 1; j < nodesEnemy.Count; j++)
             {
-                if (nodes[i] != nodes[j])
+                if (nodesEnemy[i] != nodesEnemy[j])
                 {
                     nodesToSend = "";
                     nodesToSend += i + "," + j;

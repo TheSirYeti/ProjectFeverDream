@@ -164,14 +164,14 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
         if ((!isPathfinding
              || nodePath == null
              || nodePath.Count < 1
-             || NodeManager.instance.nodes[NodeManager.instance.GetClosestNode(target.transform)] !=
+             || NodeManager.instance.nodesEnemy[NodeManager.instance.GetClosestNode(target.transform)] !=
              nodePath[nodePath.Count - 1]) && pathfindingCooldown <= 0)
         {
             nodePath = new List<Node>();
             int closeNode = NodeManager.instance.GetClosestNode(transform);
             int endNode = NodeManager.instance.GetClosestNode(target.transform);
 
-            string myNodes = closeNode + "," + endNode;
+            string myNodes = closeNode + "," + endNode + "," + false;
 
             List<Node> newPath = PathfindingTable.instance.ConstructPathThetaStar(myNodes);
             if (!newPath.Any())

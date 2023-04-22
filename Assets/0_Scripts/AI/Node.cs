@@ -17,7 +17,7 @@ public class Node : MonoBehaviour
 
     private void Start()
     {
-        foreach (Node node in NodeManager.instance.nodes)
+        foreach (Node node in NodeManager.instance.nodesEnemy)
         {
             if (Vector3.Distance(node.transform.position, transform.position) <= viewRadius && node != this)
             {

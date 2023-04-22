@@ -34,8 +34,21 @@ public class PathfindingTable : MonoBehaviour
     {
         string[] splitStringArray = nodes.Split(',');
 
-        Node startingNode = NodeManager.instance.nodes[Int32.Parse(splitStringArray[0])];
-        Node goalNode = NodeManager.instance.nodes[Int32.Parse(splitStringArray[1])];
+        bool state = bool.Parse(splitStringArray[2]);
+
+        Node startingNode, goalNode;
+        if (state)
+        {
+            startingNode = NodeManager.instance.nodesAssistant[Int32.Parse(splitStringArray[0])];
+            goalNode = NodeManager.instance.nodesAssistant[Int32.Parse(splitStringArray[1])];
+        }
+        else
+        {
+            startingNode = NodeManager.instance.nodesEnemy[Int32.Parse(splitStringArray[0])];
+            goalNode = NodeManager.instance.nodesEnemy[Int32.Parse(splitStringArray[1])];
+        }
+
+
 
         var path = new List<Node>();
         path = ConstructPathAStar(startingNode, goalNode);
