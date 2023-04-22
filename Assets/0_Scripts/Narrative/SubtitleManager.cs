@@ -7,6 +7,7 @@ using UnityEngine;
 public class SubtitleManager : MonoBehaviour
 {
     public SubtitleSet currentSubtitleSet;
+    [SerializeField] private Animator animator;
     private bool isLinePlaying = false;
     
     public void SetCurrentVoicelines(object[] parameters)
@@ -22,6 +23,7 @@ public class SubtitleManager : MonoBehaviour
 
     IEnumerator PlayVoiceline()
     {
+        animator.SetBool("isSub", true);
         foreach (var voiceline in currentSubtitleSet.allVoicelines)
         {
             //TODO: Play voiceline en SoundManager
@@ -29,6 +31,7 @@ public class SubtitleManager : MonoBehaviour
             yield return new WaitForSeconds(voiceline.duration);
         }
 
+        animator.SetBool("isSub", false);
         yield return null;
     }
 }
