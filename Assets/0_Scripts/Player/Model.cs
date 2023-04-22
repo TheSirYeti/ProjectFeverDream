@@ -47,7 +47,6 @@ public class Model : MonoBehaviour
     Vector3 _actualHorizontalVector = Vector3.zero;
     [SerializeField] float _coyoteTime;
     [SerializeField] LayerMask _floorMask;
-    [SerializeField] LayerMask _slopeMask;
     [SerializeField] LayerMask _wallMask;
 
     Action floorChecker = delegate { };
@@ -124,25 +123,27 @@ public class Model : MonoBehaviour
         _rb.velocity = _dir + (_actualHorizontalVector * _actualHorizontalForce * -1);
 
         _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Force);
+
+        if (Physics.Raycast(transform.position, Vector3.up * -1, 1.5f, _floorMask) && !_isOnFloor && _jumpCoroutine == null)
+        {
+            _rb.AddForce(Vector3.up * _gravity * 2, ForceMode.Impulse);
+        }
     }
 
     public void Move(float hAxie, float vAxie)
     {
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
-        if (Physics.Raycast(transform.position, Vector3.up * -1, 1.2f, _slopeMask))
-            _dir = AlignDir();
-
+        _dir = AlignDir();
 
         if (_dir.magnitude > 1)
             _dir.Normalize();
 
-        if (!Physics.Raycast(transform.position, Vector3.up * -1, 1.3f, _slopeMask) && _isOnFloor)
-            _dir.y = 0;
-
         _dir *= _actualSpeed * Time.fixedDeltaTime;
 
-        if (!Physics.Raycast(transform.position, Vector3.up * -1, 1.2f, _slopeMask))
+        if (hAxie == 0 && vAxie == 0 && _jumpCoroutine == null && _rb.velocity.y > 0)
+            _dir.y = 0;
+        else if(!_isOnFloor)
             _dir.y = _rb.velocity.y;
 
         //if (_actualYVelocity != 0 && _dir.y > 0 && hAxie == 0 && vAxie == 0) _dir.y = 0;
@@ -158,7 +159,7 @@ public class Model : MonoBehaviour
         RaycastHit hit;
         Vector3 planeNormal;
 
-        if (Physics.Raycast(transform.position, transform.up * -1, out hit, 1.2f, _slopeMask))
+        if (Physics.Raycast(transform.position, transform.up * -1, out hit, 1.5f, _floorMask))
             planeNormal = hit.collider.transform.up;
         else
             return _dir;
@@ -264,14 +265,10 @@ public class Model : MonoBehaviour
         {
             if (Physics.Raycast(transform.position - Vector3.up, Vector3.up, 2f, _floorMask))
             {
-                Debug.Log("hay techo en funcion");
-
                 crouchChecker = CheckRoof;
             }
             else
             {
-                Debug.Log("No hay techo en funcion");
-
                 crouchChecker = delegate { };
 
                 _cameraController.StartTranslate(0);
