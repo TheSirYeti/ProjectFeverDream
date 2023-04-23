@@ -23,6 +23,7 @@ public class NodeManager : MonoBehaviour
     private void Awake()
     {
         nodesEnemy = nodeEnemyParent.GetComponentsInChildren<Node>().ToList();
+        nodesAssistant = nodeAssistantParent.GetComponentsInChildren<Node>().ToList();
         
         if (instance == null)
         {

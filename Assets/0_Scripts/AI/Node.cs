@@ -8,23 +8,41 @@ using UnityEditor;
 
 public class Node : MonoBehaviour
 {
+    public bool nodesAssistant;
     public float viewRadius;
     public float gizmoViewRadius;
     public List<Node> neighbors = new List<Node>();
-    
+
 
     public int cost = 1;
 
     private void Start()
     {
-        foreach (Node node in NodeManager.instance.nodesEnemy)
+        if (nodesAssistant)
         {
-            if (Vector3.Distance(node.transform.position, transform.position) <= viewRadius && node != this)
+            foreach (Node node in NodeManager.instance.nodesAssistant)
             {
-                Vector3 dir = node.transform.position - transform.position;
-                if (!Physics.Raycast(transform.position, dir, viewRadius, NodeManager.instance.wallMask))
+                if (Vector3.Distance(node.transform.position, transform.position) <= viewRadius && node != this)
                 {
-                    neighbors.Add(node);
+                    Vector3 dir = node.transform.position - transform.position;
+                    if (!Physics.Raycast(transform.position, dir, viewRadius, NodeManager.instance.wallMask))
+                    {
+                        neighbors.Add(node);
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (Node node in NodeManager.instance.nodesEnemy)
+            {
+                if (Vector3.Distance(node.transform.position, transform.position) <= viewRadius && node != this)
+                {
+                    Vector3 dir = node.transform.position - transform.position;
+                    if (!Physics.Raycast(transform.position, dir, viewRadius, NodeManager.instance.wallMask))
+                    {
+                        neighbors.Add(node);
+                    }
                 }
             }
         }
@@ -36,7 +54,11 @@ public class Node : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        if (nodesAssistant)
+            Gizmos.color = Color.green;
+        else
+            Gizmos.color = Color.red;
+
         Gizmos.DrawSphere(transform.position, gizmoViewRadius);
 
         if (neighbors.Any())

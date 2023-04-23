@@ -9,6 +9,7 @@ public class Assistant : MonoBehaviour
     Animator _animator;
 
     [SerializeField] LayerMask _playerMask;
+    [SerializeField] LayerMask _collisionMask;
 
     [SerializeField] float _followSpeed;
     [SerializeField] float _interactSpeed;
@@ -17,6 +18,11 @@ public class Assistant : MonoBehaviour
 
     [SerializeField] float _followingDistance;
     [SerializeField] float _interactDistance;
+    [SerializeField] float _nodeDistance;
+
+    List<Node> nodeList = new List<Node>();
+    JorgeStates _previousState;
+    Transform _previousObjective;
 
     [SerializeField] float _rotationSpeed;
 
@@ -38,6 +44,7 @@ public class Assistant : MonoBehaviour
     enum JorgeStates
     {
         FOLLOW,
+        PATHFINDING,
         INTERACT,
         HIDE
     }
@@ -63,21 +70,31 @@ public class Assistant : MonoBehaviour
         #region SETUP
 
         var follow = new State<JorgeStates>("FOLLOW");
+        var pathFinding = new State<JorgeStates>("PATHFINDING");
         var interact = new State<JorgeStates>("INTERACT");
         var hide = new State<JorgeStates>("HIDE");
 
         StateConfigurer.Create(follow)
+            .SetTransition(JorgeStates.PATHFINDING, pathFinding)
+            .SetTransition(JorgeStates.INTERACT, interact)
+            .SetTransition(JorgeStates.HIDE, hide)
+            .Done();
+
+        StateConfigurer.Create(pathFinding)
+            .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
         StateConfigurer.Create(interact)
             .SetTransition(JorgeStates.FOLLOW, follow)
+            .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
         StateConfigurer.Create(hide)
             .SetTransition(JorgeStates.FOLLOW, follow)
+            .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             .SetTransition(JorgeStates.INTERACT, interact)
             .Done();
 
@@ -95,6 +112,11 @@ public class Assistant : MonoBehaviour
         {
             _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
 
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
+            {
+                SendInputToFSM(JorgeStates.PATHFINDING);
+            }
+
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
@@ -104,7 +126,7 @@ public class Assistant : MonoBehaviour
             if (!collisions.Any())
                 targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
             else
-                targetMovement = _actualObjective.position + (_dir.normalized * - 1 * _closeDistanceSpeed);
+                targetMovement = _actualObjective.position + (_dir.normalized * -1 * _closeDistanceSpeed);
 
 
             Vector3 newDir = targetMovement - transform.position;
@@ -112,6 +134,56 @@ public class Assistant : MonoBehaviour
 
 
             if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
+        };
+
+        follow.OnExit += x =>
+        {
+            _previousState = JorgeStates.FOLLOW;
+            _previousObjective = _actualObjective;
+        };
+
+        #endregion
+
+        #region PATHFINDING
+
+        pathFinding.OnEnter += x =>
+        {
+            nodeList = PathfindingTable.instance.ConstructPathThetaStar(NodeManager.instance.GetClosestNode(transform) + "," + NodeManager.instance.GetClosestNode(_player.transform) + "," + true);
+            _actualObjective = nodeList[0].transform;
+            _objectiveMultipliyer = Vector3.zero;
+        };
+
+        pathFinding.OnUpdate += () =>
+        {
+            _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
+
+            Quaternion targetRotation = Quaternion.LookRotation(_dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+            transform.position += _dir.normalized * _interactSpeed * Time.deltaTime;
+
+            if (Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _nodeDistance)
+            {
+                Vector3 tempDir = _previousObjective.position - transform.position;
+                if (!Physics.Raycast(transform.position, tempDir, tempDir.magnitude, _collisionMask))
+                {
+                    SendInputToFSM(_previousState);
+                }
+                else
+                {
+                    nodeList.RemoveAt(0);
+
+                    if (nodeList.Any())
+                        _actualObjective = nodeList[0].transform;
+                    else
+                        SendInputToFSM(_previousState);
+                }
+            }
+        };
+
+        pathFinding.OnExit += x =>
+        {
+            _actualObjective = _previousObjective;
         };
 
         #endregion
@@ -122,20 +194,34 @@ public class Assistant : MonoBehaviour
         {
             _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
 
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
+            {
+                SendInputToFSM(JorgeStates.PATHFINDING);
+            }
+
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
             Vector3 targetMovement;
 
-            targetMovement = (_actualObjective.position + _objectiveMultipliyer) + (_dir.normalized * -1 * (_interactDistance * 0.5f));
+            targetMovement = (_actualObjective.position) + (_dir.normalized * -1 * (_interactDistance * 0.5f));
             Vector3 newDir = targetMovement - transform.position;
             newDir.Normalize();
-            transform.position += newDir * _interactSpeed * Time.deltaTime;
 
             if (Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _interactDistance)
             {
                 _animator.SetTrigger(_interactuable.AnimationToExecute());
             }
+            else
+            {
+                transform.position += newDir * _interactSpeed * Time.deltaTime;
+            }
+        };
+
+        interact.OnExit += x =>
+        {
+            _previousState = JorgeStates.INTERACT;
+            _previousObjective = _actualObjective;
         };
 
         #endregion
@@ -155,6 +241,13 @@ public class Assistant : MonoBehaviour
         {
             if (!CheckNearEnemies()) SendInputToFSM(JorgeStates.FOLLOW);
 
+            _dir = _actualObjective.position - transform.position;
+
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
+            {
+                SendInputToFSM(JorgeStates.PATHFINDING);
+            }
+
             if (Vector3.Distance(transform.position, _actualObjective.position) < 0.1f)
             {
                 _dir = _player.position - transform.position;
@@ -164,13 +257,17 @@ public class Assistant : MonoBehaviour
             }
             else
             {
-                _dir = _actualObjective.position - transform.position;
-
                 Quaternion targetRotation = Quaternion.LookRotation(_dir);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
                 transform.position += _dir * _followSpeed * Time.deltaTime;
             }
+        };
+
+        hide.OnExit += x =>
+        {
+            _previousState = JorgeStates.HIDE;
+            _previousObjective = _actualObjective;
         };
 
         #endregion
@@ -186,12 +283,6 @@ public class Assistant : MonoBehaviour
     void Update()
     {
         fsm.Update();
-    }
-
-    //Implementar un movimiento general cuando tenga mas ganas
-    void GoToTarget()
-    {
-
     }
 
     public void Interact()
