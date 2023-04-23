@@ -1,18 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectPool
 {
     public List<GameObject> objectPoolCollection = new List<GameObject>();
-    [SerializeField] private GameObject[] prefabsList = new GameObject[1];
+    private GameObject[] prefabsList = new GameObject[1];
 
 
-    public ObjectPool(GameObject prefabs, int ammountOfObjects)
+    public ObjectPool(GameObject[] prefabs, int ammountOfObjects)
     {
         objectPoolCollection.Clear();
 
-        prefabsList[0] = prefabs;
+        prefabsList = prefabs;
 
         if (prefabsList.Length <= 1)
             InstantiateObjects(ammountOfObjects);

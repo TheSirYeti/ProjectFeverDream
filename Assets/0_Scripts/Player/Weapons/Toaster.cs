@@ -11,13 +11,16 @@ public class Toaster : GenericWeapon
     [SerializeField] float _actualLoading = 0.3f;
     [SerializeField] float _loadSpeed = 0;
 
+
+    [SerializeField] protected ParticleSystem _loadingShootParticle;
+
     /* -------------------------------- START -------------------------------- */
     void Start()
     {
         _actualReserveBullets = _weaponSO.initialBulletsInInventory;
         _actualMagazineBullets = _weaponSO.maxBulletsInMagazine;
 
-        _bulletPool = new ObjectPool(_weaponSO._bulletPrefab, numPellets);
+        _bulletPool = new ObjectPool(_weaponSO._bulletsPrefabs, numPellets * 3);
 
         EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
@@ -51,7 +54,7 @@ public class Toaster : GenericWeapon
 
             Vector3 pelletDirection = pelletRotation * actualDir;
 
-            GenericBullet bullet = GetBullet(pointOfShoot.position);
+            GenericBullet bullet = GetBullet(_muzzle.position);
             bullet.OnStart(pelletDirection, this, actualDmg);
         }
 
@@ -110,10 +113,14 @@ public class Toaster : GenericWeapon
     {
         _actualLoading += _loadSpeed * Time.deltaTime;
         _actualLoading = Mathf.Clamp01(_actualLoading);
+
+        if (!_loadingShootParticle.isPlaying && _actualLoading >= 1)
+            _loadingShootParticle.Play();
     }
 
     public override void OnRelease()
     {
         OnUpdate = delegate { };
+        _loadingShootParticle.Stop();
     }
 }

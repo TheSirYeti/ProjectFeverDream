@@ -11,6 +11,8 @@ public abstract class GenericWeapon : MonoBehaviour
     [SerializeField] protected int _actualMagazineBullets;
     protected int _actualReserveBullets;
 
+    [SerializeField] protected Transform _muzzle;
+
     //public RecoilSytem _recoilSystem;
     protected LayerMask _targetToShootMask;
 

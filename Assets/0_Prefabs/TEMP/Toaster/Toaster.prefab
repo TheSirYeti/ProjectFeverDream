@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1025327553229141756
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7659620271369357979}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7659620271369357979
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025327553229141756}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6200316473020517644}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6200316473020517646
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,6 +63,7 @@ Transform:
   - {fileID: 1745162913773509934}
   - {fileID: 6155938655809097897}
   - {fileID: 4067495880189007016}
+  - {fileID: 7659620271369357979}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -50,11 +81,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponSO: {fileID: 11400000, guid: e3733388207133f459eabe333141c668, type: 2}
   _actualMagazineBullets: 0
+  _muzzle: {fileID: 7659620271369357979}
   numPellets: 55
   spreadAngle: 15
   verticalAngle: 150
   _actualLoading: 0.3
   _loadSpeed: 0.2
+  _loadingShootParticle: {fileID: 7543540617267011195}
 --- !u!1 &7629366939618459635
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,13 +113,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7629366939618459635}
-  m_LocalRotation: {x: -0.5000003, y: -0.4999997, z: 0.49999982, w: 0.5000002}
+  m_LocalRotation: {x: -0.49999985, y: 0.5000002, z: -0.5000003, w: 0.49999973}
   m_LocalPosition: {x: 0, y: 0, z: 0.794}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6200316473020517644}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
 --- !u!198 &7543540617267011195
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5069,6 +5102,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Perdigones
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3c417d3b28902ab4192089d8d4751d06, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1071325464245968372, guid: 3c417d3b28902ab4192089d8d4751d06, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -5130,11 +5167,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -6408200284572252168, guid: 3c417d3b28902ab4192089d8d4751d06, type: 3}
   m_PrefabInstance: {fileID: 4609465617621889859}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3600935032696140635 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1009100830183669784, guid: 3c417d3b28902ab4192089d8d4751d06, type: 3}
-  m_PrefabInstance: {fileID: 4609465617621889859}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6941150773880145738 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6893875598112289801, guid: 3c417d3b28902ab4192089d8d4751d06, type: 3}
@@ -5163,6 +5195,11 @@ GameObject:
 --- !u!1 &1763269736215387665 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6376964077739430574, guid: 3c417d3b28902ab4192089d8d4751d06, type: 3}
+  m_PrefabInstance: {fileID: 4609465617621889859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3600935032696140635 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1009100830183669784, guid: 3c417d3b28902ab4192089d8d4751d06, type: 3}
   m_PrefabInstance: {fileID: 4609465617621889859}
   m_PrefabAsset: {fileID: 0}
 --- !u!96 &7834959140275374294
