@@ -14,7 +14,7 @@ public class SubtitleSet : ScriptableObject
         public string title;
         public string speaker;
         public float duration;
-        public AudioSource sfx;
+        public AudioClip sfx;
         [TextArea] public string subtitle;
     }
 }
