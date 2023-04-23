@@ -238,6 +238,21 @@ public class SoundManager : MonoBehaviour
     
     #region VOICELINES
     
+    public void SetNewVoiceSet(AudioClip[] newVoiceLines)
+    {
+        voiceLine = newVoiceLines;
+
+        if (voiceLineChannel.Length < voiceLine.Length)
+        {
+            int actualIndex = voiceLineChannel.Length;
+
+            for (int i = actualIndex; i < voiceLine.Length; i++)
+            {
+                AddVoiceLineSource(gameObject.AddComponent<AudioSource>());
+            }
+        }
+    }
+
     public int AddVoiceLineSource(AudioSource myAudioSource)
     {
         List<AudioSource> tempList = new List<AudioSource>();
