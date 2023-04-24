@@ -99,6 +99,11 @@ public class Controller
             v = -1;
 
         _model.Move(h, v);
+
+        if (h != 0 || v != 0)
+            EventManager.Trigger("CameraBobbing", true);
+        else if (h == 0 && v == 0)
+            EventManager.Trigger("CameraBobbing", false);
     }
 
     void GetJumpInput()

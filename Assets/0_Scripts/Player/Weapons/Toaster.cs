@@ -58,7 +58,7 @@ public class Toaster : GenericWeapon
             bullet.OnStart(pelletDirection, this, actualDmg);
         }
 
-
+        EventManager.Trigger("CameraShake", true);
         //SoundManager.instance.PlaySound(SoundID.PISTOL_SHOT);
 
         _actualMagazineBullets--;

@@ -9,7 +9,6 @@ public class MeleeWeapon : GenericWeapon
 
     [SerializeField] int _usageAmmount = 0;
     [SerializeField] bool _isBroken = false;
-    [SerializeField] private RuntimeAnimatorController animController;
     
     [SerializeField] GenericWeapon brokenBagguete;
 
@@ -30,6 +29,8 @@ public class MeleeWeapon : GenericWeapon
     public override void Shoot(Transform pointOfShoot, bool isADS)
     {
         _meleeCollider.enabled = true;
+
+        EventManager.Trigger("CameraShake", true);
 
         if (_colliderCoroutine != null)
             StopCoroutine(_colliderCoroutine);
@@ -70,7 +71,7 @@ public class MeleeWeapon : GenericWeapon
     
     public override void FeedBack(Vector3 hitPoint, RaycastHit hit)
     {
-        throw new System.NotImplementedException();
+        return;
     }
 
     public override void Reload()

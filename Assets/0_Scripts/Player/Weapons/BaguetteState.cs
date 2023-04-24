@@ -22,16 +22,13 @@ public class BaguetteState : MonoBehaviour
 
         foreach (var baguette in allBaguetteStates)
         {
-            Debug.Log("Apago " + baguette);
             baguette.SetActive(false);
         }
         
         allBaguetteStates[(int)parameters[0]].SetActive(true);
-        Debug.Log("ACTIVATED " + allBaguetteStates[(int)parameters[0]].name);
         
         if ((int)parameters[0] == endState)
         {
-            Debug.Log("SEXO");
             EventManager.Trigger("PlayAnimation", "BigBaguetteToDualBaguette");
         }
     }
