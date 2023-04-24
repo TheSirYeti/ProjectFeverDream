@@ -474,8 +474,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f203af968cb5c46ad19156f6b62c69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 175
-  maxHP: 175
+  hp: 100
+  maxHP: 100
   target: {fileID: 0}
   minChaseDistance: 2
   attackCollider: {fileID: 8407523180311172919}
@@ -553,6 +553,7 @@ MonoBehaviour:
   bodyDmg: 1
   headDmg: 2
   generalDmg: 1
+  isDead: 0
   exclamationSign: {fileID: 5021168896320943762}
   exclamationSignTimer: 3
 --- !u!65 &8407523180311172919
