@@ -312,6 +312,7 @@ public class Assistant : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(fsm.Current.Name);
         fsm.Update();
         ExtraUpdate();
     }
