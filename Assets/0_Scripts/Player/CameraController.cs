@@ -222,7 +222,7 @@ public class CameraController : MonoBehaviour
     void CameraBobbing()
     {
         float waveslice = Mathf.Sin(_timer);
-        _timer += _bobbingSpeed;
+        _timer += _bobbingSpeed * Time.deltaTime;
 
         if (_timer > Mathf.PI * 2)
         {
