@@ -10,6 +10,7 @@ public class Toaster : GenericWeapon
 
     [SerializeField] float _actualLoading = 0.3f;
     [SerializeField] float _loadSpeed = 0;
+    [SerializeField] private Material burnToast, burnPieces;
 
 
     [SerializeField] protected ParticleSystem _loadingShootParticle;
@@ -87,6 +88,9 @@ public class Toaster : GenericWeapon
     /* -------------------------------- RELOAD -------------------------------- */
     public override void Reload()
     {
+        burnToast.SetFloat("_BurnValue", 0);
+        burnPieces.SetFloat("_BurnValue", 0);
+        
         int bulletsMissings = _weaponSO.maxBulletsInMagazine - _actualMagazineBullets;
 
         if (_actualReserveBullets >= bulletsMissings)
@@ -106,12 +110,16 @@ public class Toaster : GenericWeapon
 
     public override void OnClick()
     {
+        burnToast.SetFloat("_BurnValue", 0);
+        burnPieces.SetFloat("_BurnValue", 0);
         OnUpdate = LoadWeapon;
     }
 
     void LoadWeapon()
     {
         _actualLoading += _loadSpeed * Time.deltaTime;
+        burnToast.SetFloat("_BurnValue", _actualLoading);
+        burnPieces.SetFloat("_BurnValue", _actualLoading);
         _actualLoading = Mathf.Clamp01(_actualLoading);
 
         if (!_loadingShootParticle.isPlaying && _actualLoading >= 1)
