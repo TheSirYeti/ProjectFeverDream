@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 1822821298326233644}
   - {fileID: 2830767451965454525}
+  - {fileID: 2215310189936186350}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -59,6 +60,8 @@ MonoBehaviour:
   _followingDistance: 2
   _interactDistance: 1
   _nodeDistance: 0.5
+  nodeList: []
+  _previousObjective: {fileID: 0}
   _rotationSpeed: 4
   _enemiesDetectionDistance: 15
   _enemiesMask:
@@ -68,7 +71,11 @@ MonoBehaviour:
   _hidingSpotsMask:
     serializedVersion: 2
     m_Bits: 4096
+  _vacuumPoint: {fileID: 2215310189936186350}
   _vacuumVFX: {fileID: 4005465042356002847}
+  _blackholeMat: {fileID: 2100000, guid: 4f52e4c12922b5e45b353e1a7eeaf501, type: 2}
+  _loadingAmmount: 0
+  _loadingSpeed: 2
 --- !u!95 &8282463572660892470
 Animator:
   serializedVersion: 3
@@ -88,6 +95,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &5212998587858194474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2215310189936186350}
+  m_Layer: 0
+  m_Name: VacuumPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2215310189936186350
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5212998587858194474}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.409, z: 0.314}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2216139546459174359}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2216139547836483015
 PrefabInstance:
   m_ObjectHideFlags: 0

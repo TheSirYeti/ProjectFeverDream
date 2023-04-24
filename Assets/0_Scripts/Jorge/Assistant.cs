@@ -6,6 +6,8 @@ using System.Linq;
 
 public class Assistant : MonoBehaviour
 {
+    Action ExtraUpdate = delegate { };
+
     Animator _animator;
 
     [SerializeField] LayerMask _playerMask;
@@ -20,9 +22,9 @@ public class Assistant : MonoBehaviour
     [SerializeField] float _interactDistance;
     [SerializeField] float _nodeDistance;
 
-    [SerializeField]List<Node> nodeList = new List<Node>();
+    [SerializeField] List<Node> nodeList = new List<Node>();
     JorgeStates _previousState;
-    [SerializeField]Transform _previousObjective;
+    [SerializeField] Transform _previousObjective;
 
     [SerializeField] float _rotationSpeed;
 
@@ -32,14 +34,26 @@ public class Assistant : MonoBehaviour
     [SerializeField] float _hidingSpotsDetectionDistance;
     [SerializeField] LayerMask _hidingSpotsMask;
 
+    bool _isInteracting = false;
+
+    [SerializeField] Transform _vacuumPoint;
     [SerializeField] GameObject _vacuumVFX;
+    [SerializeField] Material _blackholeMat;
+    [SerializeField] float _loadingAmmount;
+    [SerializeField] float _loadingSpeed;
+    List<Renderer> _actualRenders;
 
     Transform _actualObjective;
-    Vector3 _objectiveMultipliyer = Vector3.zero;
     Vector3 _dir;
 
     Transform _player;
     IAttendance _interactuable;
+
+    public enum Interactuables
+    {
+        DOOR,
+        ENEMY
+    }
 
     enum JorgeStates
     {
@@ -105,12 +119,11 @@ public class Assistant : MonoBehaviour
         follow.OnEnter += x =>
         {
             _actualObjective = _player;
-            _objectiveMultipliyer = Vector3.zero;
         };
 
         follow.OnUpdate += () =>
         {
-            _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
+            _dir = (_actualObjective.position) - transform.position;
 
             if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
             {
@@ -150,19 +163,18 @@ public class Assistant : MonoBehaviour
         {
             nodeList = PathfindingTable.instance.ConstructPathThetaStar(NodeManager.instance.GetClosestNode(transform, true) + "," + NodeManager.instance.GetClosestNode(_actualObjective.transform, true) + "," + true);
             _actualObjective = nodeList[0].transform;
-            _objectiveMultipliyer = Vector3.zero;
         };
 
         pathFinding.OnUpdate += () =>
         {
-            _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
+            _dir = (_actualObjective.position) - transform.position;
 
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
             transform.position += _dir.normalized * _interactSpeed * Time.deltaTime;
 
-            if (Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _nodeDistance)
+            if (Vector3.Distance(transform.position, (_actualObjective.position)) < _nodeDistance)
             {
                 Vector3 tempDir = _previousObjective.position - transform.position;
                 if (!Physics.Raycast(transform.position, tempDir, tempDir.magnitude, _collisionMask))
@@ -198,30 +210,40 @@ public class Assistant : MonoBehaviour
 
         interact.OnUpdate += () =>
         {
-            _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
+            if (_isInteracting) return;
+
+            _dir = (_actualObjective.position) - transform.position;
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, _dir, out hit, _dir.magnitude * 0.9f, _collisionMask))
+            if (Physics.Raycast(transform.position, _dir, out hit, _dir.magnitude, _collisionMask))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
 
+            _dir.Normalize();
+
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
-            Vector3 targetMovement;
-
-            targetMovement = (_actualObjective.position) + (_dir.normalized * -1 * (_interactDistance * 0.5f));
-            Vector3 newDir = targetMovement - transform.position;
-            newDir.Normalize();
-
-            if (Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _interactDistance)
+            if (Vector3.Distance(transform.position, (_actualObjective.position)) < _interactDistance)
             {
+                _isInteracting = true;
+
+                if (_interactuable.GetType() == Interactuables.ENEMY)
+                {
+                    foreach (Renderer render in _actualRenders)
+                    {
+                        render.material = _blackholeMat;
+                        render.material.SetVector("_BlackHolePosition", new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z, 0));
+                    }
+                    ExtraUpdate = ChangeBlackHoleVars;
+                }
+
                 _animator.SetTrigger(_interactuable.AnimationToExecute());
             }
             else
             {
-                transform.position += newDir * _interactSpeed * Time.deltaTime;
+                transform.position += _dir * _interactSpeed * Time.deltaTime;
             }
         };
 
@@ -229,6 +251,7 @@ public class Assistant : MonoBehaviour
         {
             _previousState = JorgeStates.INTERACT;
             _previousObjective = _actualObjective;
+            _isInteracting = false;
         };
 
         #endregion
@@ -290,6 +313,7 @@ public class Assistant : MonoBehaviour
     void Update()
     {
         fsm.Update();
+        ExtraUpdate();
     }
 
     public void Interact()
@@ -307,16 +331,12 @@ public class Assistant : MonoBehaviour
     public void SetObjective(IAttendance interactuable)
     {
         _interactuable = interactuable;
-        _actualObjective = interactuable.GetTransform();
 
-        if (_interactuable.AnimationToExecute() == "door")
-        {
-            _objectiveMultipliyer = Vector3.zero;
-        }
-        else
-        {
-            _objectiveMultipliyer = Vector3.up * 2;
-        }
+        _actualObjective = interactuable.GetInteractPoint();
+        _previousObjective = interactuable.GetTransform();
+
+        if (_interactuable.GetType() == Interactuables.ENEMY)
+            _actualRenders = _interactuable.GetRenderer();
 
         SendInputToFSM(JorgeStates.INTERACT);
     }
@@ -324,8 +344,8 @@ public class Assistant : MonoBehaviour
     public void StartAction()
     {
         _vacuumVFX.SetActive(true);
-        _vacuumVFX.transform.position = transform.position;
-        _vacuumVFX.transform.up = transform.position - _interactuable.GetTransform().position;
+        _vacuumVFX.transform.position = _vacuumPoint.position;
+        _vacuumVFX.transform.up = _vacuumPoint.position - _interactuable.GetTransform().position;
     }
 
     public void FinishAction()
@@ -334,6 +354,8 @@ public class Assistant : MonoBehaviour
         _vacuumVFX.SetActive(false);
         _interactuable = null;
         _actualObjective = _player;
+        _loadingAmmount = 0;
+        ExtraUpdate = delegate { };
 
         SendInputToFSM(JorgeStates.FOLLOW);
     }
@@ -345,5 +367,22 @@ public class Assistant : MonoBehaviour
 
         if (!aliveEnemies.Any()) return false;
         else return true;
+    }
+
+    void ChangeBlackHoleVars()
+    {
+        _loadingAmmount += _loadingSpeed * Time.deltaTime;
+
+        foreach (Renderer render in _actualRenders)
+        {
+            render.material.SetFloat("_Effect", _loadingAmmount);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        if (_previousObjective)
+            Gizmos.DrawLine(transform.position, _previousObjective.position);
     }
 }

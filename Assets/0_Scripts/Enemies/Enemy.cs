@@ -6,6 +6,11 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 {
+    [Header("-== TEMP ==-")]
+    [SerializeField] Assistant.Interactuables _type;
+    [SerializeField] Transform _interactPoint;
+    [Space(20)]
+
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp;
     [SerializeField] protected float maxHP;
@@ -366,6 +371,21 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     public string AnimationToExecute()
     {
         return "vacuum";
+    }
+
+    public Transform GetInteractPoint()
+    {
+        return _interactPoint;
+    }
+
+    public List<Renderer> GetRenderer()
+    {
+        return renderers;
+    }
+
+    Assistant.Interactuables IAttendance.GetType()
+    {
+        return _type;
     }
     #endregion
 }
