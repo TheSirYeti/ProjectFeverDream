@@ -19,6 +19,22 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 9e47c0b660db86d458e76c64a3720616, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emission:
+        m_Texture: {fileID: 2800000, guid: 3d71c2897a5a39c4d90505b0a9b566d0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicSmoothness:
+        m_Texture: {fileID: 2800000, guid: 1517a836104074d41b8d6a0f2202c945, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: 0291d380e16205a42be30e7683fae739, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TextureSample0:
         m_Texture: {fileID: 2800000, guid: 0291d380e16205a42be30e7683fae739, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -48,10 +64,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Effect: 10
+    - _Effect: 0
     - _FallOff: 0.1
     - _Falloff: 2
-    - _Float0: 1.2
+    - _Float0: 0.84
     - _Float1: 1
     - _Float10: 0.31444737
     - _Float11: 0.43087304
@@ -69,30 +85,36 @@ Material:
     - _Float9: 1
     - _FresnelBias: -0.13
     - _FresnelIntensity: 0.31444737
-    - _FresnelPower: 2.93
-    - _FresnelScale: 1.87
+    - _FresnelIntesity: 0.3
+    - _FresnelPower: 3
+    - _FresnelScale: 1.9
     - _HalfLambert: 0.5
     - _IntensetyHalfLambert: 0
     - _IntensetySpecular: 0.1
+    - _IntensitySpecular: 0.09
     - _IntesentySmothness: 0
     - _LightAttenuation: 1
     - _Radius: 2
-    - _Range: 0
-    - _Shadow: 0.14117648
+    - _Range: 10
+    - _Shadow: 0
     - _Smoothness: 0.1
     - _Specsomething: 2
     - _SpecularIntensety: 0.081764705
+    - _Specularsomething: 2
     - _SubstractSphereMask: 1
     - _Subtract: 1
     - _SubtractNegative: 1
+    - _TurningOFF: 1
     - _Turningoff: 0
-    - __dirty: 1
+    - __dirty: 0
     m_Colors:
-    - _BlackHolePosition: {r: 0, g: 16.06, b: 0, a: 0}
+    - _BlackHolePosition: {r: 0, g: 0, b: 0, a: 0}
     - _Color0: {r: 0.43867922, g: 0.7948788, b: 1, a: 0}
     - _Color1: {r: 0.6650944, g: 0.8121902, b: 1, a: 0}
     - _Color2: {r: 1, g: 1, b: 1, a: 0}
-    - _ColorFresnel: {r: 0.43867922, g: 0.7948788, b: 1, a: 0}
+    - _ColorFresnel: {r: 0.4392157, g: 0.7960785, b: 1, a: 1}
+    - _ColorFresnel1: {r: 0.4392157, g: 0.7960785, b: 1, a: 1}
+    - _ColorSpecular: {r: 0.6666667, g: 0.8117648, b: 1, a: 1}
     - _PointSubtract: {r: 0, g: 4.54, b: -12.24, a: 0}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
     - _Vector0: {r: 0, g: 0, b: 1, a: 0}
