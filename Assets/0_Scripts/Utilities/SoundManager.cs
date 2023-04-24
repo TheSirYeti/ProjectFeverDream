@@ -248,9 +248,16 @@ public class SoundManager : MonoBehaviour
 
             for (int i = actualIndex; i < voiceLine.Length; i++)
             {
-                AddVoiceLineSource(gameObject.AddComponent<AudioSource>());
+                AudioSource actualAudioSource = gameObject.AddComponent<AudioSource>();
+                actualAudioSource.playOnAwake = false;
+                AddVoiceLineSource(actualAudioSource);
             }
         }
+
+        for (int i = 0; i < voiceLineChannel.Length; i++)
+        {
+            voiceLineChannel[i].clip = voiceLine[i];
+        } 
     }
 
     public int AddVoiceLineSource(AudioSource myAudioSource)

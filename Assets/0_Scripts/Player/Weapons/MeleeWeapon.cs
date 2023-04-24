@@ -9,7 +9,6 @@ public class MeleeWeapon : GenericWeapon
 
     [SerializeField] int _usageAmmount = 0;
     [SerializeField] bool _isBroken = false;
-    public Animator animator;
     [SerializeField] private RuntimeAnimatorController animController;
     
     [SerializeField] GenericWeapon brokenBagguete;
@@ -63,16 +62,10 @@ public class MeleeWeapon : GenericWeapon
             {
                 EventManager.Trigger("OnBaguetteChangeState", 4);
                 brokenBagguete.gameObject.SetActive(true);
-                brokenBagguete.GetComponent<MeleeWeapon>().OnStartup();
                 _weaponManager.SetWeapon(brokenBagguete);
                 gameObject.SetActive(false);
             }
         }
-    }
-
-    public void OnStartup()
-    {
-        animator.runtimeAnimatorController = animController;
     }
     
     public override void FeedBack(Vector3 hitPoint, RaycastHit hit)
