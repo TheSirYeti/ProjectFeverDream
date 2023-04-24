@@ -20,9 +20,9 @@ public class Assistant : MonoBehaviour
     [SerializeField] float _interactDistance;
     [SerializeField] float _nodeDistance;
 
-    List<Node> nodeList = new List<Node>();
+    [SerializeField]List<Node> nodeList = new List<Node>();
     JorgeStates _previousState;
-    Transform _previousObjective;
+    [SerializeField]Transform _previousObjective;
 
     [SerializeField] float _rotationSpeed;
 
@@ -106,6 +106,7 @@ public class Assistant : MonoBehaviour
         {
             _actualObjective = _player;
             _objectiveMultipliyer = Vector3.zero;
+            Debug.Log("Empezo Follow");
         };
 
         follow.OnUpdate += () =>
@@ -148,9 +149,10 @@ public class Assistant : MonoBehaviour
 
         pathFinding.OnEnter += x =>
         {
-            nodeList = PathfindingTable.instance.ConstructPathThetaStar(NodeManager.instance.GetClosestNode(transform) + "," + NodeManager.instance.GetClosestNode(_player.transform) + "," + true);
+            nodeList = PathfindingTable.instance.ConstructPathThetaStar(NodeManager.instance.GetClosestNode(transform, true) + "," + NodeManager.instance.GetClosestNode(_actualObjective.transform, true) + "," + true);
             _actualObjective = nodeList[0].transform;
             _objectiveMultipliyer = Vector3.zero;
+            Debug.Log("Empezo path");
         };
 
         pathFinding.OnUpdate += () =>
@@ -164,9 +166,12 @@ public class Assistant : MonoBehaviour
 
             if (Vector3.Distance(transform.position, (_actualObjective.position + _objectiveMultipliyer)) < _nodeDistance)
             {
+                Debug.Log("Llegue al nodo");
+
                 Vector3 tempDir = _previousObjective.position - transform.position;
                 if (!Physics.Raycast(transform.position, tempDir, tempDir.magnitude, _collisionMask))
                 {
+                    Debug.Log("Tengo en vista");
                     SendInputToFSM(_previousState);
                 }
                 else
@@ -174,9 +179,20 @@ public class Assistant : MonoBehaviour
                     nodeList.RemoveAt(0);
 
                     if (nodeList.Any())
+                    {
+                        Debug.Log("No esta en vista, siguiente nodo");
+
                         _actualObjective = nodeList[0].transform;
+                    }
                     else
-                        SendInputToFSM(_previousState);
+                    {
+                        Debug.Log("No esta en vista, No hay mas nodos, rehago path");
+
+                        string path = NodeManager.instance.GetClosestNode(transform, true) + "," + NodeManager.instance.GetClosestNode(_previousObjective.transform, true) + "," + true;
+                        Debug.Log(path);
+                        nodeList = PathfindingTable.instance.ConstructPathThetaStar(path);
+                        _actualObjective = nodeList[0].transform;
+                    }
                 }
             }
         };
@@ -190,12 +206,19 @@ public class Assistant : MonoBehaviour
 
         #region INTERACT
 
+        interact.OnEnter += x =>
+        {
+            Debug.Log("Empezo interact");
+        };
+
         interact.OnUpdate += () =>
         {
             _dir = (_actualObjective.position + _objectiveMultipliyer) - transform.position;
 
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, _dir, out hit, _dir.magnitude * 0.9f, _collisionMask))
             {
+                Debug.Log("collisone con un obstaculo " + hit.collider.name);
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
 
@@ -235,6 +258,8 @@ public class Assistant : MonoBehaviour
             List<Collider> colliders = hidingSpots.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
 
             _actualObjective = colliders[0].transform;
+
+            Debug.Log("Empezo Hide");
         };
 
         hide.OnUpdate += () =>
@@ -243,7 +268,7 @@ public class Assistant : MonoBehaviour
 
             _dir = _actualObjective.position - transform.position;
 
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
