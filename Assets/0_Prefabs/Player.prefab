@@ -95,9 +95,6 @@ MonoBehaviour:
   _floorMask:
     serializedVersion: 2
     m_Bits: 8256
-  _slopeMask:
-    serializedVersion: 2
-    m_Bits: 8192
   _wallMask:
     serializedVersion: 2
     m_Bits: 128
@@ -116,6 +113,10 @@ MonoBehaviour:
   _cameraSens: 1500
   _walkingFOV: 60
   _runningFOV: 75
+  _shakeMagnitude: 0.2
+  _dampingSpeed: 1
+  _bobbingSpeed: 0.05
+  _bobbingAmount: 0.1
   _maxYRot: 90
   _minYRot: -90
 --- !u!65 &2050201400054601326

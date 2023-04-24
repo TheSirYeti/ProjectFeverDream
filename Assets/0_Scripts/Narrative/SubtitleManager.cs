@@ -40,7 +40,7 @@ public class SubtitleManager : MonoBehaviour
         animator.SetBool("isSub", true);
         foreach (var voiceline in currentSubtitleSet.allVoicelines)
         {
-            SoundManager.instance.PlayVoiceLineByID(voiceline.id);
+            SoundManager.instance.PlayVoiceLineByID(voiceline.id - 1);
             speaker.text = voiceline.speaker;
             subtitles.text = voiceline.subtitle;
             EventManager.Trigger("OnVoiceLineStarted", voiceline.speaker, voiceline.subtitle);
