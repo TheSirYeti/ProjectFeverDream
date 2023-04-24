@@ -21,30 +21,26 @@ public class WeaponManager : MonoBehaviour
     private void Start()
     {
         //TODO: El getcomponents no anda
-        //Debug.Log("c");
-        //GenericWeapon[] equipedWeapons = transform.GetComponentsInChildren<GenericWeapon>();
+        GenericWeapon[] equipedWeapons = transform.GetComponentsInChildren<GenericWeapon>();
 
-        //int actualIndex = 0;
+        int actualIndex = 0;
 
-        //foreach (GenericWeapon weapon in equipedWeapons)
-        //{
-        //    weapon.gameObject.SetActive(false);
-        //    Debug.Log("b");
-        //    if (actualIndex == 0) 
-        //    {
-        //        Debug.Log("a");
-        //        _actualWeapon = weapon;
-        //        _actualWeapon.gameObject.SetActive(true);
-        //        Debug.Log(_actualWeapon.gameObject.name);
-        //        OnClick = _actualWeapon.OnClick;
-        //        OnRelease = _actualWeapon.OnRelease;
-        //        _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
-        //    }
+        foreach (GenericWeapon weapon in equipedWeapons)
+        {
+            weapon.gameObject.SetActive(false);
+            if (actualIndex == 0)
+            {
+                _actualWeapon = weapon;
+                _actualWeapon.gameObject.SetActive(true);
+                OnClick = _actualWeapon.OnClick;
+                OnRelease = _actualWeapon.OnRelease;
+                _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
+            }
 
-        //    _equipedWeapons[actualIndex] = weapon;
-        //    weapon.SetWeaponManager(this);
-        //    actualIndex++;
-        //}
+            _equipedWeapons[actualIndex] = weapon;
+            weapon.SetWeaponManager(this);
+            actualIndex++;
+        }
     }
 
     public void SetRef(Model model, Transform pointOfShoot, View view)
