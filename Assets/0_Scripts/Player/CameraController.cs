@@ -26,13 +26,13 @@ public class CameraController : MonoBehaviour
     Vector3 _initialCamPos;
     bool _isShaking = false;
     float _shakeDuration = 0f;
-    float _shakeMagnitude = 0.7f;
-    float _dampingSpeed = 1.0f;
+    [SerializeField] float _shakeMagnitude = 0.7f;
+    [SerializeField] float _dampingSpeed = 1.0f;
 
     // Camera bobbing variables
     bool _isBobbing = false;
-    float _bobbingSpeed = 0.18f;
-    float _bobbingAmount = 0.2f;
+    [SerializeField] float _bobbingSpeed = 0.18f;
+    [SerializeField] float _bobbingAmount = 0.2f;
     float _timer = 0.0f;
 
 
