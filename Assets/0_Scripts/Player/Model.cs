@@ -420,7 +420,6 @@ public class Model : MonoBehaviour
     {
         if (!Physics.Raycast(transform.position - transform.up, Vector3.up, 1.1f, _floorMask))
         {
-            Debug.Log("No hay techo en delegate");
             Crouch(0);
         }
     }

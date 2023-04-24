@@ -6,7 +6,7 @@ using System;
 public class WeaponManager : MonoBehaviour
 {
     Model _model;
-    View _view;
+    public View _view;
 
     [SerializeField] GenericWeapon _actualWeapon;
     [SerializeField] GenericWeapon[] _equipedWeapons = new GenericWeapon[3];
@@ -54,16 +54,11 @@ public class WeaponManager : MonoBehaviour
     {
         if (_actualWeapon.CanShoot() && state)
         {
-            _view.SetBool(_actualWeapon.GetOnClickName(), true);
-            OnClick();
+            _actualWeapon.OnClick();
         }
         else if (!state)
         {
-            _view.SetBool(_actualWeapon.GetOnClickName(), false);
-            OnRelease();
-
-            if (_actualWeapon.GetOnReleaseName() != "")
-                _view.SetTrigger(_actualWeapon.GetOnReleaseName());
+            _actualWeapon.OnRelease();
         }
     }
 

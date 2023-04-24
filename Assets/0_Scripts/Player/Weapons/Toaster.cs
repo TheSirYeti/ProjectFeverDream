@@ -110,6 +110,7 @@ public class Toaster : GenericWeapon
 
     public override void OnClick()
     {
+        _weaponManager._view.SetBool(GetOnClickName(), true);
         burnToast.SetFloat("_BurnValue", 0);
         burnPieces.SetFloat("_BurnValue", 0);
         OnUpdate = LoadWeapon;
@@ -128,6 +129,7 @@ public class Toaster : GenericWeapon
 
     public override void OnRelease()
     {
+        _weaponManager._view.SetBool(GetOnClickName(), false);
         OnUpdate = delegate { };
         _loadingShootParticle.Stop();
     }

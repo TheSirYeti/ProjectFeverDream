@@ -157,6 +157,9 @@ MonoBehaviour:
   _usageAmmount: 24
   _isBroken: 0
   brokenBagguete: {fileID: 0}
+  _maxCombo: 4
+  _comboDuration: 1
+  _holdSpeed: 2
 --- !u!65 &4840142359804244905
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -252,6 +255,9 @@ MonoBehaviour:
   _usageAmmount: 12
   _isBroken: 0
   brokenBagguete: {fileID: 4840142359804244904}
+  _maxCombo: 3
+  _comboDuration: 1
+  _holdSpeed: 2
 --- !u!65 &4840142360380251098
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -917,6 +923,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -23.864262
       objectReference: {fileID: 0}
+    - target: {fileID: 3546043224793817203, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 3797761869265433567, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -1265,6 +1275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d3da4d9c641b2e4bbdafa77111a5dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _view: {fileID: 0}
   _actualWeapon: {fileID: 4840142360380251097}
   _equipedWeapons:
   - {fileID: 4840142360380251097}

@@ -51,14 +51,14 @@ public class View : MonoBehaviour
         _animator.SetBool(boolName, state);
     }
 
+    public void SetInt(string intName, int value)
+    {
+        _animator.SetInteger(intName, value);
+    }
+
     //Seccion de Eventos
     public void ShootEvent()
     {
         _weaponManager.ExecuteShoot();
-    }
-
-    public void ReloadEvent()
-    {
-
     }
 }

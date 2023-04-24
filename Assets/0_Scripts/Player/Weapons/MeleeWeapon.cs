@@ -9,12 +9,19 @@ public class MeleeWeapon : GenericWeapon
 
     [SerializeField] int _usageAmmount = 0;
     [SerializeField] bool _isBroken = false;
-    
+
     [SerializeField] GenericWeapon brokenBagguete;
+
+    [SerializeField] int _maxCombo;
+    [SerializeField] float _comboDuration;
+    int _actualAttack = 0;
+    float _holdTimer = 0;
+    [SerializeField] float _holdSpeed;
 
     List<ITakeDamage> _actualEnemiesHit = new List<ITakeDamage>();
 
     Coroutine _colliderCoroutine;
+    Coroutine _comboCoroutine;
 
     private void Start()
     {
@@ -26,8 +33,18 @@ public class MeleeWeapon : GenericWeapon
         //Cambiar speed animacion
     }
 
+    private void Update()
+    {
+        OnUpdate();
+    }
+
     public override void Shoot(Transform pointOfShoot, bool isADS)
     {
+        _actualAttack++;
+
+        if (_actualAttack > _maxCombo - 1)
+            _actualAttack = 0;
+
         _meleeCollider.enabled = true;
 
         EventManager.Trigger("CameraShake", true);
@@ -36,13 +53,17 @@ public class MeleeWeapon : GenericWeapon
             StopCoroutine(_colliderCoroutine);
 
         _colliderCoroutine = StartCoroutine(HitCoroutine());
+
+        if (_comboCoroutine != null)
+            StopCoroutine(_comboCoroutine);
+
+        _comboCoroutine = StartCoroutine(ComboCoroutine());
     }
 
     void CheckUsage()
     {
         if (_isBroken)
         {
-            Debug.Log("Broken");
             if (_usageAmmount <= 0)
             {
                 OnWeaponUnequip();
@@ -52,7 +73,6 @@ public class MeleeWeapon : GenericWeapon
         }
         else
         {
-            Debug.Log("Not broken");
             float actualPercent = _usageAmmount * 100 / 10;
 
             if (actualPercent > 75) return;
@@ -68,7 +88,7 @@ public class MeleeWeapon : GenericWeapon
             }
         }
     }
-    
+
     public override void FeedBack(Vector3 hitPoint, RaycastHit hit)
     {
         return;
@@ -86,13 +106,18 @@ public class MeleeWeapon : GenericWeapon
         _meleeCollider.enabled = false;
     }
 
+    IEnumerator ComboCoroutine()
+    {
+        yield return new WaitForSeconds(_comboDuration);
+        _actualAttack = 0;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         ITakeDamage damagableInterface = other.GetComponentInParent<ITakeDamage>();
 
         if (damagableInterface != null && !_actualEnemiesHit.Contains(damagableInterface))
         {
-            Debug.Log("Dmg");
             _actualEnemiesHit.Add(damagableInterface);
             damagableInterface.TakeDamage("Body", _weaponSO.dmg, true);
 
@@ -103,7 +128,30 @@ public class MeleeWeapon : GenericWeapon
     }
 
     //solucionar despues
-    public override void OnClick(){}
+    public override void OnClick()
+    {
+        _weaponManager._view.SetInt("actualAttack", _actualAttack);
+        _weaponManager._view.SetTrigger(GetOnClickName());
+        _holdTimer = 0;
+        OnUpdate = OnHold;
+    }
 
-    public override void OnRelease(){}
+    void OnHold()
+    {
+        _holdTimer += Time.deltaTime * _holdSpeed;
+
+        if (_holdTimer > 1)
+        {
+            _weaponManager._view.SetTrigger(GetOnClickName());
+        }
+    }
+
+    public override void OnRelease()
+    {
+        if (_holdTimer > 1)
+            _weaponManager._view.ResetTrigger(GetOnClickName());
+
+        _holdTimer = 0;
+        OnUpdate = delegate { };
+    }
 }
