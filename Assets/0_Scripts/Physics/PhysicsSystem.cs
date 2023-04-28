@@ -96,6 +96,17 @@ public class PhysicsSystem
             }
         }
     }
+
+    public void RemoveImpulse(string forceName)
+    {
+          if(!_impulseName.Contains(forceName)) return;
+
+int index = _impulseName.IndexOf(forceName);
+_impulseName.RemoveAt(index);
+_impulseDir.RemoveAt(index);
+_impulseForce.RemoveAt(index);
+_impulseSpeed.RemoveAt(index);
+    }
     #endregion
 
     #region Constant Functions
