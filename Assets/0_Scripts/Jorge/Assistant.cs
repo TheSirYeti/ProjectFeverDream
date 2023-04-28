@@ -167,6 +167,15 @@ public class Assistant : MonoBehaviour
 
         pathFinding.OnUpdate += () =>
         {
+            int i = 0;
+            while (!nodeList.Any())
+            {
+                nodeList = PathfindingTable.instance.ConstructPathThetaStar(NodeManager.instance.GetClosestNode(transform, true) + "," + NodeManager.instance.GetClosestNode(_actualObjective.transform, true) + "," + true);
+                i++;
+
+                if (i > 10) fsm.SendInput(JorgeStates.FOLLOW); break;
+            }
+
             _dir = (_actualObjective.position) - transform.position;
 
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
@@ -179,10 +188,12 @@ public class Assistant : MonoBehaviour
                 Vector3 tempDir = _previousObjective.position - transform.position;
                 if (!Physics.Raycast(transform.position, tempDir, tempDir.magnitude, _collisionMask))
                 {
+                    Debug.Log("volvi a previo");
                     SendInputToFSM(_previousState);
                 }
                 else
                 {
+                    Debug.Log("rearme path");
                     nodeList.RemoveAt(0);
 
                     if (nodeList.Any())
@@ -201,6 +212,7 @@ public class Assistant : MonoBehaviour
 
         pathFinding.OnExit += x =>
         {
+            Debug.Log("mi nuevo objetivo es " + _previousObjective.gameObject.name);
             _actualObjective = _previousObjective;
         };
 
@@ -312,7 +324,7 @@ public class Assistant : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(fsm.Current.Name);
+        //Debug.Log(fsm.Current.Name);
         fsm.Update();
         ExtraUpdate();
     }

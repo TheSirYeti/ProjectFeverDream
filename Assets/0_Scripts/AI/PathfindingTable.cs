@@ -133,7 +133,7 @@ public class PathfindingTable : MonoBehaviour
                 }
             }
         }
-        return default;
+        return new List<Node>();
     }
 
     float Heuristic(Vector3 a, Vector3 b)
