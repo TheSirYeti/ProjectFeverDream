@@ -7,6 +7,7 @@ using System.Linq;
 public class Model : MonoBehaviour
 {
     //Class Reference
+    PhysicsSystem _physics;
     Controller _controller;
     View _view;
     WeaponManager _weaponManager;
@@ -83,6 +84,7 @@ public class Model : MonoBehaviour
         _cameraController = GetComponent<CameraController>();
         _controller = new Controller(this, _cameraController, _weaponManager);
         _rb = GetComponent<Rigidbody>();
+        _physics = new PhysicsSystem(_rb);
 
         Transform povParent = transform.Find("Colliders");
 
@@ -97,7 +99,7 @@ public class Model : MonoBehaviour
 
         _actualSpeed = _walkingSpeed;
 
-        ApplyVerticalVelocity(_gravity);
+        _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
 
         EventManager.Subscribe("SetAssistant", SetAssistant);
 
@@ -120,9 +122,8 @@ public class Model : MonoBehaviour
 
     void FixedUpdate()
     {
-        _rb.velocity = _dir + (_actualHorizontalVector * _actualHorizontalForce * -1);
 
-        _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Force);
+        _physics.PhysicsFixedUpdate();
 
         if (Physics.Raycast(transform.position, Vector3.up * -1, 1.5f, _floorMask) && !_isOnFloor && _jumpCoroutine == null)
         {
@@ -139,12 +140,12 @@ public class Model : MonoBehaviour
         if (_dir.magnitude > 1)
             _dir.Normalize();
 
-        _dir *= _actualSpeed * Time.fixedDeltaTime;
+        //_dir *= _actualSpeed * Time.fixedDeltaTime;
 
-        if (hAxie == 0 && vAxie == 0 && _jumpCoroutine == null && _rb.velocity.y > 0)
-            _dir.y = 0;
-        else if(!_isOnFloor)
-            _dir.y = _rb.velocity.y;
+        //if (hAxie == 0 && vAxie == 0 && _jumpCoroutine == null && _rb.velocity.y > 0)
+        //    _dir.y = 0;
+        //else if(!_isOnFloor)
+        //    _dir.y = _rb.velocity.y;
 
         //if (_actualYVelocity != 0 && _dir.y > 0 && hAxie == 0 && vAxie == 0) _dir.y = 0;
 
@@ -152,6 +153,8 @@ public class Model : MonoBehaviour
             _cameraController.ChangeRunningFOV(1);
         else
             _cameraController.ChangeRunningFOV(0);
+
+        _physics.ApplyConstantForce("movement", _dir, _actualSpeed, 0);
     }
 
     Vector3 AlignDir()
@@ -390,7 +393,7 @@ public class Model : MonoBehaviour
 
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
 
-            ApplyVerticalVelocity(_gravity);
+            //_physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity); ;
             floorChecker = CheckOffFloor;
         }
     }
@@ -410,7 +413,7 @@ public class Model : MonoBehaviour
             if (isSlide)
                 _slideCoroutine = StartCoroutine(SlideTime());
 
-            ApplyVerticalVelocity(0);
+            _physics.RemoveAcceleration("gravity");
 
             floorChecker = CheckOnFloor;
         }
@@ -427,7 +430,7 @@ public class Model : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + _dir.normalized * 10);
+        Gizmos.DrawLine(transform.position, transform.position + _dir.normalized);
         Gizmos.DrawLine(transform.position - transform.up, transform.position + transform.up * 2);
     }
 }
