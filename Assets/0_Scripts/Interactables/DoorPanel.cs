@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DoorPanel : MonoBehaviour, IAttendance
@@ -13,11 +14,12 @@ public class DoorPanel : MonoBehaviour, IAttendance
 
     [Header("TEMP")] [SerializeField] 
     private Material activatedMat;
-    private Renderer rend;
+    [SerializeField] private List<Renderer> renderers;
 
     private void Start()
     {
-        rend = GetComponent<Renderer>();
+        if(renderers == null)
+            renderers = GetComponentsInChildren<Renderer>().ToList();
     }
 
     public Transform GetTransform()
@@ -27,7 +29,11 @@ public class DoorPanel : MonoBehaviour, IAttendance
 
     public void Interact()
     {
-        rend.material = activatedMat;
+        foreach (var rend in renderers)
+        {
+            rend.material = activatedMat;
+        }
+        
         _door.SetBool("open", true);
         _isClose = false;
     }
