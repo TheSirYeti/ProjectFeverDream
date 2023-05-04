@@ -8,8 +8,8 @@ using Random = UnityEngine.Random;
 
 public class BaseMeleeEnemy : Enemy
 {
-    [Space(50)]
-    [Header("-== EXTRA MELEE ENEMY PROPERTIES ==-")] 
+    [Space(50)] [Header("-== EXTRA MELEE ENEMY PROPERTIES ==-")] 
+    [SerializeField] private string animationPrefix;
     [Space(20)]
     [Header("-== DETECT PROPERTIES ==-")]
     [SerializeField] private GameObject exclamationSign;
@@ -143,7 +143,7 @@ public class BaseMeleeEnemy : Enemy
 
         detect.OnEnter += x =>
         {
-            animator.Play("BasicRobot_Detect");
+            animator.Play(animationPrefix + "_Detect");
             StopCoroutine(DoDetectSign());
             StartCoroutine(DoDetectSign());
         };
@@ -360,7 +360,7 @@ public class BaseMeleeEnemy : Enemy
 
     public override void DoKnockback()
     {
-        animator.Play("BasicRobot_Knockback");
+        animator.Play(animationPrefix + "_Knockback");
     }
 
     #endregion
