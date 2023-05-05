@@ -7,6 +7,7 @@ using System.Linq;
 public class Model : MonoBehaviour
 {
     //Class Reference
+    PhysicsSystem _physics;
     Controller _controller;
     View _view;
     WeaponManager _weaponManager;
@@ -30,7 +31,6 @@ public class Model : MonoBehaviour
     [SerializeField] float _slideSpeed;
     [SerializeField] float _crunchSpeed;
     [SerializeField] float _slideDuration;
-    Coroutine horizontalMoveCoroutine;
     Action crouchChecker = delegate { };
 
     [Space(20)]
@@ -42,9 +42,10 @@ public class Model : MonoBehaviour
     [Header("-== Jump Properties ==-")]
     [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
-    [SerializeField] float _horizontalJumpForce;
-    float _actualHorizontalForce = 0;
-    Vector3 _actualHorizontalVector = Vector3.zero;
+    [SerializeField] float _walljumpDuration;
+    [SerializeField] float _walljumpForce;
+    [SerializeField] float _jumpDesacceleration;
+    [SerializeField] float _wallJumpDesacceleration;
     [SerializeField] float _coyoteTime;
     [SerializeField] LayerMask _floorMask;
     [SerializeField] LayerMask _wallMask;
@@ -64,6 +65,7 @@ public class Model : MonoBehaviour
     // Coroutines
     Coroutine _slideCoroutine;
     Coroutine _jumpCoroutine;
+    Coroutine _walljumpCoroutine;
 
     // Dir Vector
     Vector3 _dir = Vector3.zero;
@@ -83,6 +85,7 @@ public class Model : MonoBehaviour
         _cameraController = GetComponent<CameraController>();
         _controller = new Controller(this, _cameraController, _weaponManager);
         _rb = GetComponent<Rigidbody>();
+        _physics = new PhysicsSystem(_rb);
 
         Transform povParent = transform.Find("Colliders");
 
@@ -97,7 +100,7 @@ public class Model : MonoBehaviour
 
         _actualSpeed = _walkingSpeed;
 
-        ApplyVerticalVelocity(_gravity);
+        _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
 
         EventManager.Subscribe("SetAssistant", SetAssistant);
 
@@ -120,14 +123,7 @@ public class Model : MonoBehaviour
 
     void FixedUpdate()
     {
-        _rb.velocity = _dir + (_actualHorizontalVector * _actualHorizontalForce * -1);
-
-        _rb.AddForce(Vector3.up * _actualYVelocity, ForceMode.Force);
-
-        if (Physics.Raycast(transform.position, Vector3.up * -1, 1.5f, _floorMask) && !_isOnFloor && _jumpCoroutine == null)
-        {
-            _rb.AddForce(Vector3.up * _gravity * 2, ForceMode.Impulse);
-        }
+        _physics.PhysicsFixedUpdate();
     }
 
     public void Move(float hAxie, float vAxie)
@@ -139,19 +135,12 @@ public class Model : MonoBehaviour
         if (_dir.magnitude > 1)
             _dir.Normalize();
 
-        _dir *= _actualSpeed * Time.fixedDeltaTime;
-
-        if (hAxie == 0 && vAxie == 0 && _jumpCoroutine == null && _rb.velocity.y > 0)
-            _dir.y = 0;
-        else if(!_isOnFloor)
-            _dir.y = _rb.velocity.y;
-
-        //if (_actualYVelocity != 0 && _dir.y > 0 && hAxie == 0 && vAxie == 0) _dir.y = 0;
-
         if ((hAxie != 0 || vAxie != 0) && isRunning)
             _cameraController.ChangeRunningFOV(1);
         else
             _cameraController.ChangeRunningFOV(0);
+
+        _physics.ApplyConstantForce("movement", _dir, _actualSpeed, 0);
     }
 
     Vector3 AlignDir()
@@ -180,14 +169,10 @@ public class Model : MonoBehaviour
 
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
-            ApplyVerticalVelocity(0);
+            _physics.RemoveAcceleration("gravity");
 
-            Vector3 velocity = _rb.velocity;
-            velocity.y = 0;
-            _rb.velocity = velocity;
-            _rb.angularVelocity = Vector3.zero;
 
-            _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
 
             _canJump = false;
             _jumpCounter++;
@@ -198,28 +183,23 @@ public class Model : MonoBehaviour
 
             if (!collisions.Any()) return;
 
-            if (horizontalMoveCoroutine != null)
-                StopCoroutine(horizontalMoveCoroutine);
-
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
 
-            horizontalMoveCoroutine = StartCoroutine(CancelHorizontalMovement());
+            if (_walljumpCoroutine != null)
+                StopCoroutine(_walljumpCoroutine);
+
             _jumpCoroutine = StartCoroutine(JumpDuration());
+            _walljumpCoroutine = StartCoroutine(WallJumpDuration());
 
             Collider[] orderCollisions = collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
             Collider closeCollider = orderCollisions.First();
 
-            _actualHorizontalVector = (closeCollider.ClosestPoint(transform.position) - transform.position).normalized;
 
-            ApplyVerticalVelocity(0);
+            _physics.RemoveAcceleration("gravity");
 
-            Vector3 velocity = _rb.velocity;
-            velocity.y = 0;
-            _rb.velocity = velocity;
-            _rb.angularVelocity = Vector3.zero;
-
-            _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+            _physics.ApplyImpulse("walljump", (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _walljumpForce, _wallJumpDesacceleration);
+            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
 
             _canJump = false;
             _jumpCounter++;
@@ -327,11 +307,6 @@ public class Model : MonoBehaviour
         }
     }
 
-    void ApplyVerticalVelocity(float newVelocity)
-    {
-        _actualYVelocity = newVelocity;
-    }
-
     void SetAssistant(params object[] parameters)
     {
         _assistant = (Assistant)parameters[0];
@@ -365,20 +340,23 @@ public class Model : MonoBehaviour
     IEnumerator JumpDuration()
     {
         yield return new WaitForSeconds(_jumpDuration);
-        ApplyVerticalVelocity(_gravity);
+
+        _physics.RemoveImpulse("jump");
+        _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
         _jumpCoroutine = null;
     }
 
-    IEnumerator CancelHorizontalMovement()
+    IEnumerator WallJumpDuration()
     {
-        _actualHorizontalForce = _horizontalJumpForce;
-        yield return new WaitForSeconds(0.5f);
-        _actualHorizontalForce = 0;
+        yield return new WaitForSeconds(_walljumpDuration);
+
+        _physics.RemoveImpulse("walljump");
+        _walljumpCoroutine = null;
     }
 
     void CheckOnFloor()
     {
-        if (!Physics.Raycast(transform.position, Vector3.up * -1, 1.1f, _floorMask))
+        if (_jumpCoroutine == null && !Physics.Raycast(transform.position, Vector3.up * -1, 1.1f, _floorMask))
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
@@ -390,7 +368,7 @@ public class Model : MonoBehaviour
 
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
 
-            ApplyVerticalVelocity(_gravity);
+            _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity); ;
             floorChecker = CheckOffFloor;
         }
     }
@@ -410,7 +388,7 @@ public class Model : MonoBehaviour
             if (isSlide)
                 _slideCoroutine = StartCoroutine(SlideTime());
 
-            ApplyVerticalVelocity(0);
+            _physics.RemoveAcceleration("gravity");
 
             floorChecker = CheckOnFloor;
         }
@@ -427,7 +405,7 @@ public class Model : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + _dir.normalized * 10);
-        Gizmos.DrawLine(transform.position - transform.up, transform.position + transform.up * 2);
+        Gizmos.DrawLine(transform.position, transform.position + _dir.normalized);
+        Gizmos.DrawLine(transform.position, transform.position + transform.up * -1.1f);
     }
 }
