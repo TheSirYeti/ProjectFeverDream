@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3402224842086855904}
   - component: {fileID: 636087535181250602}
   - component: {fileID: 2238926318931205289}
-  - component: {fileID: 4249459158613959460}
+  - component: {fileID: 9221357486385933930}
   m_Layer: 0
   m_Name: BigBaguettePrefab
   m_TagString: Untagged
@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428532021472780799}
   m_LocalRotation: {x: -0.70710677, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.87, y: 5.46, z: 2.07}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.87, y: 5.4886, z: 2.07}
+  m_LocalScale: {x: 0.46586, y: 0.46586, z: 0.46586}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1428532021472780799}
-  m_Mesh: {fileID: 3562986263409630012, guid: e72ddb4cb5446044083be94d2f8eb396, type: 3}
+  m_Mesh: {fileID: -5302450589649609848, guid: 1d44bff92f938354cbfc2404ce40d08e, type: 3}
 --- !u!23 &636087535181250602
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e425d2d7d14871d47931a89e626e7bb3, type: 2}
+  - {fileID: 2100000, guid: 79322c1f3028ca64dbc57414f1bddc87, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,8 +99,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!65 &4249459158613959460
-BoxCollider:
+--- !u!136 &9221357486385933930
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -109,6 +109,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.25574243, y: 0.3087381, z: 0.061396852}
-  m_Center: {x: 0, y: 0.0034384727, z: 0.030698426}
+  m_Radius: 0.31
+  m_Height: 1.1631659
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0.04323096}

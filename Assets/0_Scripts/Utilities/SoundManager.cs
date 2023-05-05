@@ -352,24 +352,16 @@ public class SoundManager : MonoBehaviour
 
 public enum SoundID
 {
-    #region MOVEMENT
-
     FOOTSTEP_1,
     FOOTSTEP_2,
     SLIDE,
-
-    #endregion
-
-    #region MEME
-
-    BAGUETTE
-
-    #endregion
+    BAGUETTE,
+    TEST_TOASTER_DING
 }
 
 public enum MusicID
 {
-
+    TEST_JIGGY
 }
 
 public enum VoiceLineID
