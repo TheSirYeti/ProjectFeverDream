@@ -86,8 +86,6 @@ public class PhysicsSystem
 
         for (int i = 0; i < _impulseName.Count; i++)
         {
-            Debug.Log(_impulseName[i]);
-            Debug.Log(_impulseForce[i]);
             _impulseVector += _impulseDir[i] * _impulseForce[i];
             _impulseForce[i] -= _impulseSpeed[i] * Time.deltaTime;
 
@@ -207,10 +205,6 @@ public class PhysicsSystem
 
         for (int i = 0; i < _accelerationName.Count; i++)
         {
-
-            Debug.Log(_accelerationName[i]);
-            Debug.Log(_accelerationForce[i]);
-
             _accelerationVector += _accelerationDir[i] * _accelerationForce[i];
             _accelerationForce[i] += _accelerationSpeed[i] * Time.deltaTime;
             _accelerationDuration[i] -= Time.deltaTime;

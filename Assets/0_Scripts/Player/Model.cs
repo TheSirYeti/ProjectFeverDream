@@ -130,7 +130,8 @@ public class Model : MonoBehaviour
     {
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
-        _dir = AlignDir();
+        if (_jumpCoroutine == null)
+            _dir = AlignDir();
 
         if (_dir.magnitude > 1)
             _dir.Normalize();
@@ -149,7 +150,7 @@ public class Model : MonoBehaviour
         Vector3 planeNormal;
 
         if (Physics.Raycast(transform.position, transform.up * -1, out hit, 1.5f, _floorMask))
-            planeNormal = hit.collider.transform.up;
+            planeNormal = hit.normal;
         else
             return _dir;
 
@@ -405,7 +406,8 @@ public class Model : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + _dir.normalized);
+        Gizmos.DrawLine(transform.position, transform.position + _dir.normalized * 5);
+        Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + transform.up * -1.1f);
     }
 }
