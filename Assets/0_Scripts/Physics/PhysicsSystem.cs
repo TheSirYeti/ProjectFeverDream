@@ -63,14 +63,14 @@ public class PhysicsSystem
 
             _impulseDir[index] = dir;
             _impulseForce[index] = force;
-            _impulseSpeed[index] = desacceleration * -1;
+            _impulseSpeed[index] = desacceleration;
         }
         else
         {
             _impulseName.Add(forceName);
             _impulseDir.Add(dir);
             _impulseForce.Add(force);
-            _impulseSpeed.Add(desacceleration * -1);
+            _impulseSpeed.Add(desacceleration);
         }
     }
 

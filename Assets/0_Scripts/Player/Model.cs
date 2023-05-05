@@ -31,7 +31,6 @@ public class Model : MonoBehaviour
     [SerializeField] float _slideSpeed;
     [SerializeField] float _crunchSpeed;
     [SerializeField] float _slideDuration;
-    Coroutine horizontalMoveCoroutine;
     Action crouchChecker = delegate { };
 
     [Space(20)]
@@ -43,9 +42,10 @@ public class Model : MonoBehaviour
     [Header("-== Jump Properties ==-")]
     [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
-    [SerializeField] float _horizontalJumpForce;
-    float _actualHorizontalForce = 0;
-    Vector3 _actualHorizontalVector = Vector3.zero;
+    [SerializeField] float _walljumpDuration;
+    [SerializeField] float _walljumpForce;
+    [SerializeField] float _jumpDesacceleration;
+    [SerializeField] float _wallJumpDesacceleration;
     [SerializeField] float _coyoteTime;
     [SerializeField] LayerMask _floorMask;
     [SerializeField] LayerMask _wallMask;
@@ -65,6 +65,7 @@ public class Model : MonoBehaviour
     // Coroutines
     Coroutine _slideCoroutine;
     Coroutine _jumpCoroutine;
+    Coroutine _walljumpCoroutine;
 
     // Dir Vector
     Vector3 _dir = Vector3.zero;
@@ -170,8 +171,8 @@ public class Model : MonoBehaviour
 
             _physics.RemoveAcceleration("gravity");
 
-            Debug.Log("jump");
-            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, 4);
+
+            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
 
             _canJump = false;
             _jumpCounter++;
@@ -185,7 +186,11 @@ public class Model : MonoBehaviour
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
 
+            if (_walljumpCoroutine != null)
+                StopCoroutine(_walljumpCoroutine);
+
             _jumpCoroutine = StartCoroutine(JumpDuration());
+            _walljumpCoroutine = StartCoroutine(WallJumpDuration());
 
             Collider[] orderCollisions = collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
             Collider closeCollider = orderCollisions.First();
@@ -193,8 +198,8 @@ public class Model : MonoBehaviour
 
             _physics.RemoveAcceleration("gravity");
 
-            _physics.ApplyImpulse("walljump", (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _horizontalJumpForce, 1);
-            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, 4);
+            _physics.ApplyImpulse("walljump", (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _walljumpForce, _wallJumpDesacceleration);
+            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
 
             _canJump = false;
             _jumpCounter++;
@@ -337,9 +342,16 @@ public class Model : MonoBehaviour
         yield return new WaitForSeconds(_jumpDuration);
 
         _physics.RemoveImpulse("jump");
-        _physics.RemoveImpulse("walljump");
         _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
         _jumpCoroutine = null;
+    }
+
+    IEnumerator WallJumpDuration()
+    {
+        yield return new WaitForSeconds(_walljumpDuration);
+
+        _physics.RemoveImpulse("walljump");
+        _walljumpCoroutine = null;
     }
 
     void CheckOnFloor()
