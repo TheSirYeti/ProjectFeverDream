@@ -341,7 +341,7 @@ public class BaseMeleeEnemy : Enemy
         {
             LeanTween.value(0, 1, 0.3f).setOnUpdate((float value) =>
             {
-                renderer.material.SetFloat("_WarningValue", value);
+                renderer.material.SetFloat("_ValueWarning", value);
             });
         }
     }
@@ -353,7 +353,7 @@ public class BaseMeleeEnemy : Enemy
         {
             LeanTween.value(1, 0, 0.3f).setOnUpdate((float value) =>
             {
-                renderer.material.SetFloat("_WarningValue", value);
+                renderer.material.SetFloat("_ValueWarning", value);
             });
         }
     }

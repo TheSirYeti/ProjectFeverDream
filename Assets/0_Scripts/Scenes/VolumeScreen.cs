@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class VolumeScreen : MonoBehaviour
 {
     [SerializeField] private Slider sfxSlider, musicSlider;
+    [SerializeField] private int nextScene;
     
     private void Start()
     {
@@ -24,7 +25,6 @@ public class VolumeScreen : MonoBehaviour
             PlayerPrefs.SetFloat("MUSIC_VOLUME_VALUE", 0.5f);
         }
     }
-
 
     public void SetSFXVolume()
     {
@@ -46,5 +46,12 @@ public class VolumeScreen : MonoBehaviour
     public void TestMusic()
     {
         SoundManager.instance.PlayMusic(MusicID.TEST_JIGGY);
+    }
+
+    public void SetupFinished()
+    {
+        SoundManager.instance.StopAllMusic();
+        SoundManager.instance.StopAllSounds();
+        SceneLoader.instance.SetupLoadScene(nextScene);
     }
 }

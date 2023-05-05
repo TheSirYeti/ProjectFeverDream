@@ -329,7 +329,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6600281106644926181, guid: 9c3cd794977ef674dbe9ea993638292f, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6600281106644926181, guid: 9c3cd794977ef674dbe9ea993638292f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1995,7 +1995,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Please make sure to adjust your audio settings b efore you continue.
+  m_text: Please make sure to adjust your audio settings before you continue.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cc3e9ac9973d08f4d84f05a68a84fa58, type: 2}
   m_sharedMaterial: {fileID: 1603214966908577272, guid: cc3e9ac9973d08f4d84f05a68a84fa58, type: 2}
@@ -2178,6 +2178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sfxSlider: {fileID: 139724044}
   musicSlider: {fileID: 2055507713}
+  nextScene: 2
 --- !u!4 &1537730638
 Transform:
   m_ObjectHideFlags: 0
@@ -2190,7 +2191,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1592594398
 GameObject:
@@ -2490,7 +2491,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1732880706}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1537730637}
+        m_TargetAssemblyTypeName: VolumeScreen, Assembly-CSharp
+        m_MethodName: SetupFinished
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1732880706
 MonoBehaviour:
   m_ObjectHideFlags: 0

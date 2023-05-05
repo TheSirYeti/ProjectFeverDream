@@ -17,7 +17,7 @@ public class MainMenuManager : MonoBehaviour
     public void LoadScene(int sceneID)
     {
         EventManager.ResetEventDictionary();
-        SceneManager.LoadScene(sceneID);
+        SceneLoader.instance.SetupLoadScene(sceneID);
     }
 
     public void QuitGame()
