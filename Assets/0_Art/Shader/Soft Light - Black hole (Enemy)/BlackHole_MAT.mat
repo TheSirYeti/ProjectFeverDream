@@ -23,8 +23,12 @@ Material:
         m_Texture: {fileID: 2800000, guid: 9e47c0b660db86d458e76c64a3720616, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _AmbientOcclusionTexture:
+        m_Texture: {fileID: 2800000, guid: d50517ba947ca654fae0d6dd8e78e7b6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Emission:
-        m_Texture: {fileID: 2800000, guid: 3d71c2897a5a39c4d90505b0a9b566d0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1517a836104074d41b8d6a0f2202c945, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicSmoothness:
@@ -36,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: 0291d380e16205a42be30e7683fae739, type: 3}
+        m_Texture: {fileID: 2800000, guid: d50517ba947ca654fae0d6dd8e78e7b6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample1:
@@ -64,6 +68,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AmbientOcclusion: 0.8854578
+    - _EdgeLength: 15
     - _Effect: 0
     - _FallOff: 0.1
     - _Falloff: 2
@@ -85,39 +91,41 @@ Material:
     - _Float9: 1
     - _FresnelBias: -0.13
     - _FresnelIntensity: 0.31444737
-    - _FresnelIntesity: 0.3
+    - _FresnelIntesity: 0.6
     - _FresnelPower: 4.21
     - _FresnelScale: 0.95
     - _HalfLambert: 0.5
     - _IntensetyHalfLambert: 0
     - _IntensetySpecular: 0.1
-    - _IntensitySpecular: 0.172
+    - _IntensitySpecular: 0.5
     - _IntesentySmothness: 0
     - _LightAttenuation: 1
+    - _Max: 2.24
     - _Maxshadow: 1
+    - _Min: 1.69
     - _Minshadow: 0.5
     - _Radius: 2
     - _Range: 1
-    - _Shadow: 0.578
+    - _Shadow: 0.6
     - _Shininess: 0.1
-    - _Smoothness: 0.1
+    - _Smoothness: 0.3
     - _Specsomething: 2
     - _SpecularIntensety: 0.081764705
-    - _Specularsomething: 2
+    - _Specularsomething: 1
     - _SubstractSphereMask: 1
     - _Subtract: 1
     - _SubtractNegative: 1
     - _TurningOFF: 1
     - _Turningoff: 0
-    - __dirty: 1
+    - __dirty: 0
     m_Colors:
-    - _BlackHolePosition: {r: -5.406998, g: 7.839999, b: 17.572, a: 0}
+    - _BlackHolePosition: {r: 2.407526, g: 4.759042, b: 12.03546, a: 0}
     - _Color0: {r: 0.43867922, g: 0.7948788, b: 1, a: 0}
     - _Color1: {r: 0.6650944, g: 0.8121902, b: 1, a: 0}
     - _Color2: {r: 1, g: 1, b: 1, a: 0}
     - _ColorFresnel: {r: 0.4392157, g: 0.7960785, b: 1, a: 1}
     - _ColorFresnel1: {r: 0.4392157, g: 0.7960785, b: 1, a: 1}
-    - _ColorSpecular: {r: 0.6666667, g: 0.8117648, b: 1, a: 1}
+    - _ColorSpecular: {r: 0.41037738, g: 0.6515867, b: 1, a: 1}
     - _MainColor: {r: 0.3921569, g: 0.3921569, b: 0.3921569, a: 1}
     - _PointSubtract: {r: 0, g: 4.54, b: -12.24, a: 0}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
