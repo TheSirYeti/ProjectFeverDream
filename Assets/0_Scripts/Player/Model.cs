@@ -183,14 +183,15 @@ public class Model : MonoBehaviour
 
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
-            ApplyVerticalVelocity(0);
+            _physics.RemoveAcceleration("gravity");
 
-            Vector3 velocity = _rb.velocity;
-            velocity.y = 0;
-            _rb.velocity = velocity;
-            _rb.angularVelocity = Vector3.zero;
+            //Vector3 velocity = _rb.velocity;
+            //velocity.y = 0;
+            //_rb.velocity = velocity;
+            //_rb.angularVelocity = Vector3.zero;
 
-            _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+
+            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, 2);
 
             _canJump = false;
             _jumpCounter++;
@@ -201,28 +202,23 @@ public class Model : MonoBehaviour
 
             if (!collisions.Any()) return;
 
-            if (horizontalMoveCoroutine != null)
-                StopCoroutine(horizontalMoveCoroutine);
-
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
 
-            horizontalMoveCoroutine = StartCoroutine(CancelHorizontalMovement());
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
             Collider[] orderCollisions = collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
             Collider closeCollider = orderCollisions.First();
 
-            _actualHorizontalVector = (closeCollider.ClosestPoint(transform.position) - transform.position).normalized;
 
-            ApplyVerticalVelocity(0);
+            _physics.RemoveAcceleration("gravity");
 
-            Vector3 velocity = _rb.velocity;
-            velocity.y = 0;
-            _rb.velocity = velocity;
-            _rb.angularVelocity = Vector3.zero;
-
-            _rb.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+            _physics.ApplyImpulse("walljump", (closeCollider.ClosestPoint(transform.position) - transform.position).normalized, _horizontalJumpForce, 1);
+            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, 1);
+            //Vector3 velocity = _rb.velocity;
+            //velocity.y = 0;
+            //_rb.velocity = velocity;
+            //_rb.angularVelocity = Vector3.zero;
 
             _canJump = false;
             _jumpCounter++;
@@ -368,15 +364,9 @@ public class Model : MonoBehaviour
     IEnumerator JumpDuration()
     {
         yield return new WaitForSeconds(_jumpDuration);
-        ApplyVerticalVelocity(_gravity);
-        _jumpCoroutine = null;
-    }
 
-    IEnumerator CancelHorizontalMovement()
-    {
-        _actualHorizontalForce = _horizontalJumpForce;
-        yield return new WaitForSeconds(0.5f);
-        _actualHorizontalForce = 0;
+        _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
+        _jumpCoroutine = null;
     }
 
     void CheckOnFloor()
@@ -393,7 +383,7 @@ public class Model : MonoBehaviour
 
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
 
-            //_physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity); ;
+            _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity); ;
             floorChecker = CheckOffFloor;
         }
     }
