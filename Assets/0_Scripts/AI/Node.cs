@@ -13,10 +13,39 @@ public class Node : MonoBehaviour
     public float gizmoViewRadius;
     public List<Node> neighbors = new List<Node>();
 
+    public LayerMask tempLayerMask;
+
 
     public int cost = 1;
 
     private void Start()
+    {
+        CalculateNodes();
+    }
+    public List<Node> GetNeighbors()
+    {
+        return neighbors;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (nodesAssistant)
+            Gizmos.color = Color.green;
+        else
+            Gizmos.color = Color.red;
+
+        Gizmos.DrawSphere(transform.position, gizmoViewRadius);
+
+        if (neighbors.Any())
+        {
+            foreach (var node in neighbors)
+            {
+                Gizmos.DrawLine(transform.position, node.transform.position);
+            }
+        }
+    }
+
+    public void CalculateNodes()
     {
         if (nodesAssistant)
         {
@@ -44,28 +73,6 @@ public class Node : MonoBehaviour
                         neighbors.Add(node);
                     }
                 }
-            }
-        }
-    }
-    public List<Node> GetNeighbors()
-    {
-        return neighbors;
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (nodesAssistant)
-            Gizmos.color = Color.green;
-        else
-            Gizmos.color = Color.red;
-
-        Gizmos.DrawSphere(transform.position, gizmoViewRadius);
-
-        if (neighbors.Any())
-        {
-            foreach (var node in neighbors)
-            {
-                Gizmos.DrawLine(transform.position, node.transform.position);
             }
         }
     }
