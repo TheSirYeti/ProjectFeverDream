@@ -76,14 +76,18 @@ public class PhysicsSystem
 
     void Impulse()
     {
-        if (!_impulseName.Any()) return;
+        if (!_impulseName.Any())
+        {
+            _impulseVector = Vector3.zero; 
+            return;
+        }
 
         _impulseVector = Vector3.zero;
 
         for (int i = 0; i < _impulseName.Count; i++)
         {
-            Debug.Log(_impulseForce[i] + " gravity?");
-
+            Debug.Log(_impulseName[i]);
+            Debug.Log(_impulseForce[i]);
             _impulseVector += _impulseDir[i] * _impulseForce[i];
             _impulseForce[i] -= _impulseSpeed[i] * Time.deltaTime;
 
@@ -99,13 +103,13 @@ public class PhysicsSystem
 
     public void RemoveImpulse(string forceName)
     {
-          if(!_impulseName.Contains(forceName)) return;
+        if (!_impulseName.Contains(forceName)) return;
 
-int index = _impulseName.IndexOf(forceName);
-_impulseName.RemoveAt(index);
-_impulseDir.RemoveAt(index);
-_impulseForce.RemoveAt(index);
-_impulseSpeed.RemoveAt(index);
+        int index = _impulseName.IndexOf(forceName);
+        _impulseName.RemoveAt(index);
+        _impulseDir.RemoveAt(index);
+        _impulseForce.RemoveAt(index);
+        _impulseSpeed.RemoveAt(index);
     }
     #endregion
 
@@ -132,20 +136,20 @@ _impulseSpeed.RemoveAt(index);
 
     void ConstantForce()
     {
-        if (!_constantName.Any()) return;
+        if (!_constantName.Any())
+        {
+            _constantVector = Vector3.zero;
+            return;
+        }
 
         _constantVector = Vector3.zero;
 
-        Debug.Log(_constantName.Count);
-
         for (int i = 0; i < _constantName.Count; i++)
         {
-            //Debug.Log(_constantDir[i] * _constantForce[i]);
-
             _constantVector += _constantDir[i] * _constantForce[i];
             _constantDuration[i] -= Time.deltaTime;
 
-            if(_constantDuration[i] <= 0)
+            if (_constantDuration[i] <= 0)
             {
                 _constantName.RemoveAt(i);
                 _constantDir.RemoveAt(i);
@@ -193,12 +197,20 @@ _impulseSpeed.RemoveAt(index);
 
     void Acceleration()
     {
-        if (!_accelerationName.Any()) return;
+        if (!_accelerationName.Any())
+        {
+            _accelerationVector = Vector3.zero;
+            return;
+        }
 
         _accelerationVector = Vector3.zero;
 
         for (int i = 0; i < _accelerationName.Count; i++)
         {
+
+            Debug.Log(_accelerationName[i]);
+            Debug.Log(_accelerationForce[i]);
+
             _accelerationVector += _accelerationDir[i] * _accelerationForce[i];
             _accelerationForce[i] += _accelerationSpeed[i] * Time.deltaTime;
             _accelerationDuration[i] -= Time.deltaTime;

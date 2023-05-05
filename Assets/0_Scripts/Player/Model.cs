@@ -122,13 +122,7 @@ public class Model : MonoBehaviour
 
     void FixedUpdate()
     {
-
         _physics.PhysicsFixedUpdate();
-
-        if (Physics.Raycast(transform.position, Vector3.up * -1, 1.5f, _floorMask) && !_isOnFloor && _jumpCoroutine == null)
-        {
-            _rb.AddForce(Vector3.up * _gravity * 2, ForceMode.Impulse);
-        }
     }
 
     public void Move(float hAxie, float vAxie)
@@ -139,15 +133,6 @@ public class Model : MonoBehaviour
 
         if (_dir.magnitude > 1)
             _dir.Normalize();
-
-        //_dir *= _actualSpeed * Time.fixedDeltaTime;
-
-        //if (hAxie == 0 && vAxie == 0 && _jumpCoroutine == null && _rb.velocity.y > 0)
-        //    _dir.y = 0;
-        //else if(!_isOnFloor)
-        //    _dir.y = _rb.velocity.y;
-
-        //if (_actualYVelocity != 0 && _dir.y > 0 && hAxie == 0 && vAxie == 0) _dir.y = 0;
 
         if ((hAxie != 0 || vAxie != 0) && isRunning)
             _cameraController.ChangeRunningFOV(1);
@@ -185,13 +170,8 @@ public class Model : MonoBehaviour
 
             _physics.RemoveAcceleration("gravity");
 
-            //Vector3 velocity = _rb.velocity;
-            //velocity.y = 0;
-            //_rb.velocity = velocity;
-            //_rb.angularVelocity = Vector3.zero;
-
-
-            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, 2);
+            Debug.Log("jump");
+            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, 4);
 
             _canJump = false;
             _jumpCounter++;
@@ -213,12 +193,8 @@ public class Model : MonoBehaviour
 
             _physics.RemoveAcceleration("gravity");
 
-            _physics.ApplyImpulse("walljump", (closeCollider.ClosestPoint(transform.position) - transform.position).normalized, _horizontalJumpForce, 1);
-            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, 1);
-            //Vector3 velocity = _rb.velocity;
-            //velocity.y = 0;
-            //_rb.velocity = velocity;
-            //_rb.angularVelocity = Vector3.zero;
+            _physics.ApplyImpulse("walljump", (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _horizontalJumpForce, 1);
+            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, 4);
 
             _canJump = false;
             _jumpCounter++;
@@ -326,11 +302,6 @@ public class Model : MonoBehaviour
         }
     }
 
-    void ApplyVerticalVelocity(float newVelocity)
-    {
-        _actualYVelocity = newVelocity;
-    }
-
     void SetAssistant(params object[] parameters)
     {
         _assistant = (Assistant)parameters[0];
@@ -365,13 +336,15 @@ public class Model : MonoBehaviour
     {
         yield return new WaitForSeconds(_jumpDuration);
 
+        _physics.RemoveImpulse("jump");
+        _physics.RemoveImpulse("walljump");
         _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
         _jumpCoroutine = null;
     }
 
     void CheckOnFloor()
     {
-        if (!Physics.Raycast(transform.position, Vector3.up * -1, 1.1f, _floorMask))
+        if (_jumpCoroutine == null && !Physics.Raycast(transform.position, Vector3.up * -1, 1.1f, _floorMask))
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
@@ -421,6 +394,6 @@ public class Model : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + _dir.normalized);
-        Gizmos.DrawLine(transform.position - transform.up, transform.position + transform.up * 2);
+        Gizmos.DrawLine(transform.position, transform.position + transform.up * -1.1f);
     }
 }
