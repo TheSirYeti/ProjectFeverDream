@@ -15,6 +15,17 @@ public class LogoSceneLogic : MonoBehaviour
         StartCoroutine(DoIntroCycle());
     }
 
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.Space))
+        {
+            StopCoroutine(DoIntroCycle());
+            SoundManager.instance.StopAllMusic();
+            SoundManager.instance.StopAllSounds();
+            SceneLoader.instance.SetupLoadScene(nextSceneToLoad);
+        }
+    }
+
     private IEnumerator DoIntroCycle()
     {
         SoundManager.instance.PlayMusic(MusicID.INTRO_JINGLE);
