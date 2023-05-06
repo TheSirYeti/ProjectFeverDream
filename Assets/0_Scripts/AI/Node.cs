@@ -8,9 +8,9 @@ using UnityEditor;
 
 public class Node : MonoBehaviour
 {
-    public bool nodesAssistant;
-    public float viewRadius;
-    public float gizmoViewRadius;
+    public bool nodesAssistant = true;
+    public float viewRadius = 7f;
+    public float gizmoViewRadius = 0.5f;
     public List<Node> neighbors = new List<Node>();
 
     public LayerMask tempLayerMask;
