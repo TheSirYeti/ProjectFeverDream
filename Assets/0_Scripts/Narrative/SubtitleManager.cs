@@ -32,6 +32,7 @@ public class SubtitleManager : MonoBehaviour
         SoundManager.instance.SetNewVoiceSet(allSfx);
         
         //temp?
+        StopCoroutine(PlayVoiceline());
         StartCoroutine(PlayVoiceline());
     }
 
