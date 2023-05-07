@@ -52,6 +52,8 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void ChangeAttackState(bool state)
     {
+        if (_actualWeapon == null) return;
+
         if (_actualWeapon.CanShoot() && state)
         {
             _actualWeapon.OnClick();
@@ -74,6 +76,8 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void AnimReload()
     {
+        if (!_actualWeapon) return;
+
         if (_actualWeapon.CanReload())
             _view.SetTrigger("reload");
     }
@@ -119,8 +123,6 @@ public class WeaponManager : MonoBehaviour, IAttendance
         if (!usableItem) return;
 
         GenericWeapon weapon = usableItem.GetComponent<GenericWeapon>();
-
-        Debug.Log(weapon.gameObject.name);
 
         SetWeapon(weapon);
     }

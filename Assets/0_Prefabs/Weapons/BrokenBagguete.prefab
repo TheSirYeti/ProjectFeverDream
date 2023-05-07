@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5939499799720654519}
   - component: {fileID: 1573082437074274175}
+  - component: {fileID: 2908720009875150881}
   - component: {fileID: 6944131159214997261}
   - component: {fileID: 6552387713201666549}
-  - component: {fileID: 2908720009875150881}
   m_Layer: 10
   m_Name: BrokenBagguete
   m_TagString: Untagged
@@ -52,6 +52,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &2908720009875150881
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3805262004713893292}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 4, y: 8, z: 4}
+  m_Center: {x: 0, y: 3, z: 3}
 --- !u!65 &6944131159214997261
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -90,19 +103,6 @@ MonoBehaviour:
   _maxCombo: 3
   _comboDuration: 1
   _holdSpeed: 2
---- !u!65 &2908720009875150881
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3805262004713893292}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 4, y: 8, z: 4}
-  m_Center: {x: 0, y: 3, z: 3}
 --- !u!1001 &8069648419571811906
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -177,10 +177,23 @@ public class Assistant : MonoBehaviour
                 nodeList = PathfindingTable.instance.ConstructPathThetaStar(NodeManager.instance.GetClosestNode(transform, true) + "," + NodeManager.instance.GetClosestNode(_actualObjective.transform, true) + "," + true);
                 i++;
 
-                if (i > 10) fsm.SendInput(JorgeStates.FOLLOW); break;
+                if (i > 10)
+                {
+                    transform.position = _player.position - transform.forward * 2;
+                    _interactuable = null;
+                    SendInputToFSM(JorgeStates.FOLLOW);
+                    break;
+                }
             }
 
             _dir = (_actualObjective.position) - transform.position;
+
+            if (_dir == Vector3.zero)
+            {
+                transform.position = _player.position - transform.forward * 2;
+                _interactuable = null;
+                SendInputToFSM(JorgeStates.FOLLOW);
+            }
 
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
@@ -257,7 +270,6 @@ public class Assistant : MonoBehaviour
                         _animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
                     case Interactuables.WEAPON:
-                        Debug.Log("get weapon");
                         _interactuable.GetTransform().parent = transform;
                         _interactuable.Interact();
                         _holdingItem = _interactuable;
@@ -266,7 +278,6 @@ public class Assistant : MonoBehaviour
                         _isInteracting = false;
                         break;
                     case Interactuables.WEAPONMANAGER:
-                        Debug.Log("Give Weapon");
                         _interactuable.Interact(_holdingItem.GetTransform().gameObject);
                         _interactuable = null;
                         SendInputToFSM(JorgeStates.FOLLOW);
