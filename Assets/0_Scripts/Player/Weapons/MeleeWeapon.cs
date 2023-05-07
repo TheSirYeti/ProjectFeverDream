@@ -47,8 +47,6 @@ public class MeleeWeapon : GenericWeapon
 
         _meleeCollider.enabled = true;
 
-        EventManager.Trigger("CameraShake", true);
-
         if (_colliderCoroutine != null)
             StopCoroutine(_colliderCoroutine);
 
@@ -117,6 +115,7 @@ public class MeleeWeapon : GenericWeapon
 
         if (damagableInterface != null && !_actualEnemiesHit.Contains(damagableInterface))
         {
+            EventManager.Trigger("CameraShake", true);
             _actualEnemiesHit.Add(damagableInterface);
             damagableInterface.TakeDamage("Body", _weaponSO.dmg, true);
 
