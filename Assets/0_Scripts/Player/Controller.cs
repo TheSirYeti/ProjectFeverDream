@@ -21,7 +21,7 @@ public class Controller
         onUpdate += GetShootInput;
         onUpdate += GetReloadInput;
         onUpdate += GetADSInput;
-        onUpdate += GetNumsInput;
+        //onUpdate += GetNumsInput;
         onUpdate += GetMovementInput;
         onUpdate += GetJumpInput;
         onUpdate += GetCrunchInput;
@@ -67,21 +67,21 @@ public class Controller
         }
     }
 
-    void GetNumsInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            _weaponManager.ChangeWeapon(0);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            _weaponManager.ChangeWeapon(1);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            _weaponManager.ChangeWeapon(2);
-        }
-    }
+    //void GetNumsInput()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha1))
+    //    {
+    //        _weaponManager.ChangeWeapon(0);
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Alpha2))
+    //    {
+    //        _weaponManager.ChangeWeapon(1);
+    //    }
+    //    else if (Input.GetKeyDown(KeyCode.Alpha3))
+    //    {
+    //        _weaponManager.ChangeWeapon(2);
+    //    }
+    //}
 
     void GetMovementInput()
     {

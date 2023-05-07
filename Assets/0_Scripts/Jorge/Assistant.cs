@@ -47,12 +47,16 @@ public class Assistant : MonoBehaviour
     Vector3 _dir;
 
     Transform _player;
+    IAttendance _holdingItem;
+    IAttendance _weaponManager;
     IAttendance _interactuable;
 
     public enum Interactuables
     {
         DOOR,
-        ENEMY
+        ENEMY,
+        WEAPON,
+        WEAPONMANAGER
     }
 
     enum JorgeStates
@@ -212,7 +216,6 @@ public class Assistant : MonoBehaviour
 
         pathFinding.OnExit += x =>
         {
-            Debug.Log("mi nuevo objetivo es " + _previousObjective.gameObject.name);
             _actualObjective = _previousObjective;
         };
 
@@ -241,17 +244,37 @@ public class Assistant : MonoBehaviour
             {
                 _isInteracting = true;
 
-                if (_interactuable.GetType() == Interactuables.ENEMY)
+                switch (_interactuable.GetType())
                 {
-                    foreach (Renderer render in _actualRenders)
-                    {
-                        render.material = _blackholeMat;
-                        render.material.SetVector("_BlackHolePosition", new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z, 0));
-                    }
-                    ExtraUpdate = ChangeBlackHoleVars;
+                    case Interactuables.DOOR:
+                        _animator.SetTrigger(_interactuable.AnimationToExecute());
+                        break;
+                    case Interactuables.ENEMY:
+                        foreach (Renderer render in _actualRenders)
+                        {
+                            render.material = _blackholeMat;
+                            render.material.SetVector("_BlackHolePosition", new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z, 0));
+                        }
+                        ExtraUpdate = ChangeBlackHoleVars;
+                        _animator.SetTrigger(_interactuable.AnimationToExecute());
+                        break;
+                    case Interactuables.WEAPON:
+                        Debug.Log("get weapon");
+                        _interactuable.GetTransform().parent = transform;
+                        _interactuable.Interact();
+                        _holdingItem = _interactuable;
+                        _interactuable = _weaponManager;
+                        _actualObjective = _interactuable.GetTransform();
+                        _isInteracting = false;
+                        break;
+                    case Interactuables.WEAPONMANAGER:
+                        Debug.Log("Give Weapon");
+                        _interactuable.Interact(_holdingItem.GetTransform().gameObject);
+                        SendInputToFSM(JorgeStates.FOLLOW);
+                        break;
+                    default:
+                        break;
                 }
-
-                _animator.SetTrigger(_interactuable.AnimationToExecute());
             }
             else
             {
@@ -338,11 +361,14 @@ public class Assistant : MonoBehaviour
     public void OnAssistantStart(params object[] parameter)
     {
         _player = (Transform)parameter[0];
+        _weaponManager = (IAttendance)parameter[1];
         _actualObjective = _player;
     }
 
     public void SetObjective(IAttendance interactuable)
     {
+        if (_interactuable != null) return;
+
         _interactuable = interactuable;
 
         _actualObjective = interactuable.GetInteractPoint();

@@ -133,4 +133,9 @@ public class Toaster : GenericWeapon
         OnUpdate = delegate { };
         _loadingShootParticle.Stop();
     }
+
+    public override void CheckUsage()
+    {
+        return;
+    }
 }

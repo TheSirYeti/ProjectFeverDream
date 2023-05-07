@@ -27,7 +27,7 @@ public class DoorPanel : MonoBehaviour, IAttendance
         return transform;
     }
 
-    public void Interact()
+    public void Interact(GameObject usableItem = null)
     {
         foreach (var rend in renderers)
         {

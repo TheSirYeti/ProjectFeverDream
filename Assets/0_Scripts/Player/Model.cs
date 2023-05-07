@@ -21,7 +21,6 @@ public class Model : MonoBehaviour
     [Space(20)]
     [Header("-== Physics Properties ==-")]
     [SerializeField] float _gravity = -10f;
-    float _actualYVelocity = 0;
 
     [Space(20)]
     [Header("-== Movement Properties ==-")]
@@ -109,7 +108,7 @@ public class Model : MonoBehaviour
 
     void Start()
     {
-        EventManager.Trigger("OnAssistantStart", _camera.transform);
+        EventManager.Trigger("OnAssistantStart", _camera.transform, _weaponManager.GetComponent<IAttendance>());
         EventManager.Trigger("OnViewStart", this, _weaponManager);
     }
 

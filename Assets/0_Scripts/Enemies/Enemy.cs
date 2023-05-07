@@ -353,7 +353,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     #endregion
 
     #region Interact
-    public void Interact()
+    public void Interact(GameObject usableItem = null)
     {
         Destroy(gameObject);
     }

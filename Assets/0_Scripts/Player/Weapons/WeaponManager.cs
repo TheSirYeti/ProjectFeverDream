@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : MonoBehaviour, IAttendance
 {
     Model _model;
-    public View _view;
+    [HideInInspector] public View _view;
+
+    [Serializable]
+    public struct WeaponRenderer
+    {
+        public List<Renderer> _myRenders;
+    }
+
+    [SerializeField] List<WeaponRenderer> _weaponsRenderer;
+
 
     [SerializeField] GenericWeapon _actualWeapon;
-    [SerializeField] GenericWeapon[] _equipedWeapons = new GenericWeapon[3];
 
     Transform _pointOfShoot;
     bool _isADS;
@@ -20,26 +28,18 @@ public class WeaponManager : MonoBehaviour
 
     private void Start()
     {
-        //TODO: El getcomponents no anda
-        GenericWeapon[] equipedWeapons = transform.GetComponentsInChildren<GenericWeapon>();
-
-        int actualIndex = 0;
-
-        foreach (GenericWeapon weapon in equipedWeapons)
+        if (_actualWeapon)
         {
-            weapon.gameObject.SetActive(false);
-            if (actualIndex == 0)
+            foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
             {
-                _actualWeapon = weapon;
-                _actualWeapon.gameObject.SetActive(true);
-                OnClick = _actualWeapon.OnClick;
-                OnRelease = _actualWeapon.OnRelease;
-                _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
+                item.enabled = true;
             }
 
-            _equipedWeapons[actualIndex] = weapon;
-            weapon.SetWeaponManager(this);
-            actualIndex++;
+            _actualWeapon.OnWeaponEquip(transform, this);
+
+            OnClick = _actualWeapon.OnClick;
+            OnRelease = _actualWeapon.OnRelease;
+            _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
         }
     }
 
@@ -83,25 +83,26 @@ public class WeaponManager : MonoBehaviour
         _actualWeapon.Reload();
     }
 
-    public void ChangeWeapon(int newWeapon)
-    {
-        if (_equipedWeapons[newWeapon] == null) return;
-
-        _actualWeapon.OnWeaponUnequip();
-        _actualWeapon = _equipedWeapons[newWeapon];
-        //_actualWeapon.SetRenderGO(true);
-        _actualWeapon.OnWeaponEquip();
-
-        _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
-        OnClick = _actualWeapon.OnClick;
-        OnRelease = _actualWeapon.OnRelease;
-    }
-
     public void SetWeapon(GenericWeapon newWeapon)
     {
-        _actualWeapon.OnWeaponUnequip();
+        if (_actualWeapon != null)
+        {
+            _actualWeapon.OnWeaponUnequip();
+
+            foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+            {
+                item.enabled = false;
+            }
+        }
+
+
         _actualWeapon = newWeapon;
-        _actualWeapon.OnWeaponEquip();
+        _actualWeapon.OnWeaponEquip(transform, this);
+
+        foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+        {
+            item.enabled = true;
+        }
 
         _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
         OnClick = _actualWeapon.OnClick;
@@ -113,18 +114,44 @@ public class WeaponManager : MonoBehaviour
         Destroy(_actualWeapon.gameObject);
     }
 
-    public void GoToNextWeapon(GenericWeapon brokenWeapon)
+    public void Interact(GameObject usableItem = null)
     {
-        foreach (GenericWeapon weapon in _equipedWeapons)
-        {
-            if (weapon != brokenWeapon)
-            {
-                _actualWeapon = weapon;
-                _actualWeapon.OnWeaponEquip();
-                break;
-            }
-        }
+        if (!usableItem) return;
 
-        // Go to hands weapon
+        GenericWeapon weapon = usableItem.GetComponent<GenericWeapon>();
+
+        Debug.Log(weapon.gameObject.name);
+
+        SetWeapon(weapon);
+    }
+
+    Assistant.Interactuables IAttendance.GetType()
+    {
+        return Assistant.Interactuables.WEAPONMANAGER;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public Transform GetInteractPoint()
+    {
+        return transform;
+    }
+
+    public List<Renderer> GetRenderer()
+    {
+        return null;
+    }
+
+    public bool CanInteract()
+    {
+        return true;
+    }
+
+    public string AnimationToExecute()
+    {
+        return "GiveWeapon";
     }
 }

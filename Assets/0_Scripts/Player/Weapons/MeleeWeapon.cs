@@ -60,15 +60,14 @@ public class MeleeWeapon : GenericWeapon
         _comboCoroutine = StartCoroutine(ComboCoroutine());
     }
 
-    void CheckUsage()
+    public override void CheckUsage()
     {
         if (_isBroken)
         {
             if (_usageAmmount <= 0)
             {
                 OnWeaponUnequip();
-                _weaponManager.GoToNextWeapon(this);
-                Destroy(gameObject);
+                _weaponManager.DestroyWeapon();
             }
         }
         else
