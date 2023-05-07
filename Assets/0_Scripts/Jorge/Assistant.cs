@@ -192,12 +192,10 @@ public class Assistant : MonoBehaviour
                 Vector3 tempDir = _previousObjective.position - transform.position;
                 if (!Physics.Raycast(transform.position, tempDir, tempDir.magnitude, _collisionMask))
                 {
-                    Debug.Log("volvi a previo");
                     SendInputToFSM(_previousState);
                 }
                 else
                 {
-                    Debug.Log("rearme path");
                     nodeList.RemoveAt(0);
 
                     if (nodeList.Any())
@@ -270,6 +268,7 @@ public class Assistant : MonoBehaviour
                     case Interactuables.WEAPONMANAGER:
                         Debug.Log("Give Weapon");
                         _interactuable.Interact(_holdingItem.GetTransform().gameObject);
+                        _interactuable = null;
                         SendInputToFSM(JorgeStates.FOLLOW);
                         break;
                     default:
