@@ -62,6 +62,7 @@ public class UIController : MonoBehaviour
 
     void ChangeBulletUI(params object[] parameters)
     {
+        Debug.Log("A" + parameters[0]);
         _primaryBulletUI.text = parameters[0].ToString();
 
         float a = (int)parameters[0];

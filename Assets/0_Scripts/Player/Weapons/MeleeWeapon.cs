@@ -67,7 +67,6 @@ public class MeleeWeapon : GenericWeapon
         {
             if (usageAmmount <= 0)
             {
-                OnWeaponUnequip();
                 _weaponManager.DestroyWeapon();
             }
         }

@@ -95,9 +95,17 @@ public class WeaponManager : MonoBehaviour, IAttendance
         {
             _actualWeapon.OnWeaponUnequip();
 
-            foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+            //foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+            //{
+            //    item.enabled = false;
+            //}
+        }
+
+        foreach (WeaponRenderer weaponStruct in _weaponsRenderer)
+        {
+            foreach (Renderer render in weaponStruct._myRenders)
             {
-                item.enabled = false;
+                render.enabled = false;
             }
         }
 
@@ -117,6 +125,11 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void DestroyWeapon()
     {
+        Debug.Log("here?");
+
+        OnClick = delegate { };
+        OnRelease = delegate { };
+
         foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
         {
             item.enabled = false;
@@ -124,6 +137,7 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
         _view.SetAnimatorController(_noWeaponAnimator);
         EventManager.Trigger("ChangeEquipedWeapontUI", -1);
+        EventManager.Trigger("ChangeBulletUI", 0, 0);
         Destroy(_actualWeapon.gameObject);
     }
 
