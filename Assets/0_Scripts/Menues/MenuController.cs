@@ -20,10 +20,7 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Subscribe("PauseGame", MenuOn);
-        EventManager.Subscribe("ResumeGame", MenuOff);
-
-        EventManager.Subscribe("TempMenu", TempMenu);
+        EventManager.Subscribe("MenuChanger", MenuChanger);
 
         /*musicSlider.value = SoundManager.instance.volumeMusic;
         soundSlider.value = SoundManager.instance.volumeSFX;*/
@@ -34,42 +31,26 @@ public class MenuController : MonoBehaviour
             sensSlider.value = 500;
     }
 
-    void TempMenu(params object[] parameter)
+    void MenuChanger(params object[] parameter)
     {
         if (!_tempState)
         {
             pauseMenu.SetActive(true);
             Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+
+            //TODO: Change Later
+            Time.timeScale = 0;
         }
         else
         {
             pauseMenu.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Time.timeScale = 1;
         }
 
         _tempState = !_tempState;
-    }
-
-    void MenuOn(params object[] parameter)
-    {
-        _actualMenu = landingmMenu;
-
-        SoundManager.instance.PauseAllSounds();
-        SoundManager.instance.PauseAllMusic();
-
-        pauseMenu.SetActive(true);
-    }
-
-    void MenuOff(params object[] parameter)
-    {
-        _actualMenu.SetActive(false);
-        _actualMenu = landingmMenu;
-        _actualMenu.SetActive(true);
-
-        SoundManager.instance.ResumeAllMusic();
-        SoundManager.instance.ResumeAllSounds();
-
-        pauseMenu.SetActive(false);
     }
 
     public void ReturnToMainMenu()
@@ -80,7 +61,7 @@ public class MenuController : MonoBehaviour
 
     public void BTN_ResumeGame()
     {
-        EventManager.Trigger("ResumeGame");
+        EventManager.Trigger("MenuChanger");
     }
 
     public void BTN_Options()

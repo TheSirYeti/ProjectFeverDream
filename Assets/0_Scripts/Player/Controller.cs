@@ -153,7 +153,7 @@ public class Controller
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            EventManager.Trigger("TempMenu");
+            EventManager.Trigger("MenuChanger");
         }
     }
 }

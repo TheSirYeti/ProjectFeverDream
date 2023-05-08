@@ -32,6 +32,7 @@ public class SceneLoader : MonoBehaviour
 
     public void SetupLoadScene(int sceneID)
     {
+        Time.timeScale = 1;
         currentSceneToLoad = sceneID;
         DoFadeIn();
     }
