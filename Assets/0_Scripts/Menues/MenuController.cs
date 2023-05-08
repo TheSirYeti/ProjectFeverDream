@@ -2,19 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MenuController : MonoBehaviour
 {
     public GameObject pauseMenu;
 
-    GameObject _actualMenu;
+    public GameObject _primaryMenu;
+    public GameObject _secondaryMenu;
 
-    public GameObject landingmMenu;
+    public GameObject landingMenu;
     public GameObject options;
+    public GameObject audioOptions;
+    public GameObject controlsOptions;
+    public GameObject graphicOptions;
 
     public Slider sensSlider;
     public Slider musicSlider;
     public Slider soundSlider;
+
+    public TextMeshProUGUI sensText;
+    public TextMeshProUGUI musicText;
+    public TextMeshProUGUI sfxText;
 
     bool _tempState = false;
 
@@ -38,12 +47,16 @@ public class MenuController : MonoBehaviour
             pauseMenu.SetActive(true);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-
+            _primaryMenu = landingMenu;
             //TODO: Change Later
             Time.timeScale = 0;
         }
         else
         {
+            _primaryMenu.SetActive(false);
+            _secondaryMenu?.SetActive(false);
+            _primaryMenu = landingMenu;
+            _primaryMenu.SetActive(true);
             pauseMenu.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -66,16 +79,40 @@ public class MenuController : MonoBehaviour
 
     public void BTN_Options()
     {
-        _actualMenu.SetActive(false);
-        _actualMenu = options;
-        _actualMenu.SetActive(true);
+        _primaryMenu.SetActive(false);
+        _primaryMenu = options;
+        _secondaryMenu = audioOptions;
+        _secondaryMenu.SetActive(true);
+        _primaryMenu.SetActive(true);
+    }
+
+    public void BTN_AudioOptions()
+    {
+        _secondaryMenu?.SetActive(false);
+        _secondaryMenu = audioOptions;
+        _secondaryMenu.SetActive(true);
+    }
+
+    public void BTN_ControlOptions()
+    {
+        _secondaryMenu?.SetActive(false);
+        _secondaryMenu = controlsOptions;
+        _secondaryMenu.SetActive(true);
+    }
+
+    public void BTN_GraphicOptions()
+    {
+        _secondaryMenu?.SetActive(false);
+        _secondaryMenu = graphicOptions;
+        _secondaryMenu.SetActive(true);
     }
 
     public void BTN_Return()
     {
-        _actualMenu.SetActive(false);
-        _actualMenu = landingmMenu;
-        _actualMenu.SetActive(true);
+        _primaryMenu.SetActive(false);
+        _secondaryMenu?.SetActive(false);
+        _primaryMenu = landingMenu;
+        _primaryMenu.SetActive(true);
     }
 
     public void BTN_Quit()
@@ -86,15 +123,18 @@ public class MenuController : MonoBehaviour
     public void ChangeSense(float sens)
     {
         EventManager.Trigger("ChangeSens", sens);
+        sensText.text = ((sens / 1000) * 100).ToString("000");
     }
 
     public void ChangeSoundsVolume(float soundsVol)
     {
         SoundManager.instance.ChangeVolumeSound(soundsVol);
+        sfxText.text = ((soundsVol / 1) * 100).ToString("000");
     }
 
     public void ChangeMusicVolume(float musicVol)
     {
         SoundManager.instance.ChangeVolumeMusic(musicVol);
+        musicText.text = ((musicVol / 1) * 100).ToString("000");
     }
 }
