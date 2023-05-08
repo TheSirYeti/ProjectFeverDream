@@ -328,17 +328,17 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
         
         if (partDamaged == "Body")
         {
-            EventManager.Trigger("AddCoin", 10);
+            //EventManager.Trigger("AddCoin", 10);
             EventManager.Trigger("OnDamageableHit", 0);
         }
         else if (partDamaged == "Head")
         {
-            EventManager.Trigger("AddCoin", 20);
+            //EventManager.Trigger("AddCoin", 20);
             EventManager.Trigger("OnDamageableHit", 1);
         }
         else if (partDamaged == "WeakPart")
         {
-            EventManager.Trigger("AddCoin", 5);
+            //EventManager.Trigger("AddCoin", 5);
             EventManager.Trigger("OnDamageableHit", 2);
         }
         else

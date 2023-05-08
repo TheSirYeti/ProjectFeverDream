@@ -10,6 +10,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
 
     [SerializeField] protected int _actualMagazineBullets;
     protected int _actualReserveBullets;
+    [SerializeField] protected int usageAmmount = 0;
 
     [SerializeField] protected Transform _muzzle;
 
@@ -83,8 +84,16 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
 
         CheckUsage();
 
-        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
-        EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
+        if (_weaponSO.isMelee)
+        {
+            EventManager.Trigger("ChangeBulletUI", usageAmmount);
+            EventManager.Trigger("ChangeReserveBulletUI", 0);
+        }
+        else
+        {
+            EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
+            EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
+        }
         EventManager.Trigger("ChangeEquipedWeapontUI", _weaponSO.weaponID);
     }
 

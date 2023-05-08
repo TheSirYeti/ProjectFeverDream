@@ -7,7 +7,7 @@ public class MeleeWeapon : GenericWeapon
     [SerializeField] Collider _meleeCollider;
     [SerializeField] float _colliderDuration;
 
-    [SerializeField] int _usageAmmount = 0;
+
     [SerializeField] bool _isBroken = false;
 
     [SerializeField] GenericWeapon brokenBagguete;
@@ -60,9 +60,11 @@ public class MeleeWeapon : GenericWeapon
 
     public override void CheckUsage()
     {
+        EventManager.Trigger("ChangeBulletUI", usageAmmount);
+
         if (_isBroken)
         {
-            if (_usageAmmount <= 0)
+            if (usageAmmount <= 0)
             {
                 OnWeaponUnequip();
                 _weaponManager.DestroyWeapon();
@@ -70,7 +72,7 @@ public class MeleeWeapon : GenericWeapon
         }
         else
         {
-            float actualPercent = _usageAmmount * 100 / 10;
+            float actualPercent = usageAmmount * 100 / 10;
 
             if (actualPercent > 75) return;
             else if (actualPercent > 50) EventManager.Trigger("OnBaguetteChangeState", 1);
@@ -119,7 +121,7 @@ public class MeleeWeapon : GenericWeapon
             _actualEnemiesHit.Add(damagableInterface);
             damagableInterface.TakeDamage("Body", _weaponSO.dmg, true);
 
-            _usageAmmount--;
+            usageAmmount--;
 
             CheckUsage();
         }

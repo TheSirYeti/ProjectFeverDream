@@ -27,8 +27,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3805262004713893292}
-  m_LocalRotation: {x: -0.10079374, y: 0.504396, z: -0.059426636, w: -0.85550797}
-  m_LocalPosition: {x: -100.83389, y: -3.8346677, z: 42.851658}
+  m_LocalRotation: {x: 0.24102809, y: 0.48731276, z: -0.14199126, w: 0.8272063}
+  m_LocalPosition: {x: -15.391215, y: 3.2879438, z: -2.6466844}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 7527660154190537129}
@@ -50,7 +50,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!65 &2908720009875150881
 BoxCollider:
@@ -92,12 +92,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponSO: {fileID: 11400000, guid: c051b46193acd534495ab03df5b1c189, type: 2}
   _actualMagazineBullets: 0
+  usageAmmount: 10
   _muzzle: {fileID: 0}
   _rigidbody: {fileID: 1573082437074274175}
   _collider: {fileID: 6944131159214997261}
   _meleeCollider: {fileID: 2908720009875150881}
   _colliderDuration: 0.2
-  _usageAmmount: 10
   _isBroken: 1
   brokenBagguete: {fileID: 0}
   _maxCombo: 3
