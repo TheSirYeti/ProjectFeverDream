@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 2050201400054601314}
   - component: {fileID: 2050201400054601326}
   - component: {fileID: 2050201400054601327}
+  - component: {fileID: 8069790271823676622}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -152,6 +153,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &8069790271823676622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2050201400054601315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06e1851cb44660944a4f55249c3011d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baguette: {fileID: 8643491506422241674, guid: c3eb9913d33b36c4d9f7b444f81909dc, type: 3}
+  toaster: {fileID: 5107873363231152035, guid: eba4ea49470286946bc09eda5a78c6b6, type: 3}
 --- !u!1 &2050201400333242714
 GameObject:
   m_ObjectHideFlags: 0
