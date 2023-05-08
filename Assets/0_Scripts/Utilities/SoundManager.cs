@@ -362,7 +362,8 @@ public enum SoundID
 public enum MusicID
 {
     TEST_JIGGY,
-    INTRO_JINGLE
+    INTRO_JINGLE,
+    MAINMENU
 }
 
 public enum VoiceLineID

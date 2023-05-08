@@ -28,13 +28,13 @@ public class VolumeScreen : MonoBehaviour
 
     public void SetSFXVolume()
     {
-        SoundManager.instance.volumeSFX = sfxSlider.value;
+        SoundManager.instance.ChangeVolumeSound(sfxSlider.value);
         PlayerPrefs.SetFloat("SFX_VOLUME_VALUE", sfxSlider.value);
     }
     
     public void SetMusicVolume()
     {
-        SoundManager.instance.volumeMusic = musicSlider.value;
+        SoundManager.instance.ChangeVolumeMusic(musicSlider.value);
         PlayerPrefs.SetFloat("MUSIC_VOLUME_VALUE", musicSlider.value);
     }
     

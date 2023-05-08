@@ -15,6 +15,9 @@ public class MainMenuManager : MonoBehaviour
     
     private void Start()
     {
+        SoundManager.instance.StopAllMusic();
+        SoundManager.instance.StopAllSounds();
+        SoundManager.instance.PlayMusic(MusicID.MAINMENU, true);
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
@@ -38,7 +41,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void SetSFXVolume()
     {
-        SoundManager.instance.volumeSFX = sfxSlider.value;
+        SoundManager.instance.ChangeVolumeSound(sfxSlider.value);
         PlayerPrefs.SetFloat("SFX_VOLUME_VALUE", sfxSlider.value);
         float value = sfxSlider.value * 100f;
         sfxVolumeNumber.text = Convert.ToInt32(value).ToString();
@@ -46,7 +49,7 @@ public class MainMenuManager : MonoBehaviour
     
     public void SetMusicVolume()
     {
-        SoundManager.instance.volumeMusic = musicSlider.value;
+        SoundManager.instance.ChangeVolumeMusic(musicSlider.value);
         PlayerPrefs.SetFloat("MUSIC_VOLUME_VALUE", musicSlider.value);
         float value = musicSlider.value * 100f;
         musicVolumeNumber.text = Convert.ToInt32(value).ToString();
@@ -65,6 +68,8 @@ public class MainMenuManager : MonoBehaviour
     
     public void LoadScene(int sceneID)
     {
+        SoundManager.instance.StopAllMusic();
+        SoundManager.instance.StopAllSounds();
         EventManager.ResetEventDictionary();
         SceneLoader.instance.SetupLoadScene(sceneID);
     }
