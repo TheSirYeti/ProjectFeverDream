@@ -78,10 +78,9 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void AnimReload()
     {
-        if (!_actualWeapon) return;
+        if (!_actualWeapon || !_actualWeapon.CanReload()) return;
 
-        if (_actualWeapon.CanReload())
-            _view.SetTrigger("reload");
+        _view.SetTrigger("reload");
     }
 
     public void ExecuteReload()
