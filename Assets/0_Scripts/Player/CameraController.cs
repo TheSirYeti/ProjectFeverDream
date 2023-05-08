@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
 {
     Model _model;
 
-    private Camera _mainCamera;
+    [SerializeField] private Camera _mainCamera;
     private Transform _mainCameraParent;
 
     private Transform _actualCameraPos;
