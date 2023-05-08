@@ -127,6 +127,8 @@ public class MeleeWeapon : GenericWeapon
             {
                 usageAmmount--;
 
+                usageAmmount = Mathf.Clamp(usageAmmount, 0, _maxUsageAmmount);
+
                 CheckUsage();
             }
 

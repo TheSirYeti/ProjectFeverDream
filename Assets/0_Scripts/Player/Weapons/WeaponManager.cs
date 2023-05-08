@@ -125,8 +125,6 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void DestroyWeapon()
     {
-        Debug.Log("here?");
-
         OnClick = delegate { };
         OnRelease = delegate { };
 
