@@ -74,7 +74,8 @@ public class MenuController : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        EventManager.Trigger("OnReturnToMainMenu");
+        //EventManager.Trigger("OnReturnToMainMenu");
+        SceneLoader.instance.SetupLoadScene(3);
     }
 
     public void BTN_ResumeGame()
@@ -98,7 +99,7 @@ public class MenuController : MonoBehaviour
 
     public void BTN_Quit()
     {
-        EventManager.Trigger("OnLoadSceneRequest", 1);
+        SceneLoader.instance.SetupLoadScene(3);
     }
 
     public void ChangeSense(float sens)

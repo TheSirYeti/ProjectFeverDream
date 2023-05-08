@@ -190,7 +190,8 @@ GameObject:
   - component: {fileID: 2688147882679337369}
   - component: {fileID: 4426654848789264388}
   - component: {fileID: 2047123707940857613}
-  m_Layer: 0
+  - component: {fileID: 1290050456080457576}
+  m_Layer: 7
   m_Name: Bottom-Wall-WithDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,6 +261,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1290050456080457576
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6059654642128667481}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8198984098812305567, guid: 6c976bc988e9a8a4cbc7687bbc4718b4, type: 3}
 --- !u!1001 &5716937261219412048
 PrefabInstance:
   m_ObjectHideFlags: 0

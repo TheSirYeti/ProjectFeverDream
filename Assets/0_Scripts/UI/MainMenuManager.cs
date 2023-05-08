@@ -15,7 +15,7 @@ public class MainMenuManager : MonoBehaviour
     
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
 
@@ -58,8 +58,8 @@ public class MainMenuManager : MonoBehaviour
         {
             musicSlider.value = SoundManager.instance.volumeMusic;
             sfxSlider.value = SoundManager.instance.volumeSFX;
-            musicVolumeNumber.text = (musicSlider.value * 100f).ToString();
-            sfxVolumeNumber.text = (sfxSlider.value * 100f).ToString();
+            musicVolumeNumber.text = Convert.ToInt32(musicSlider.value * 100f).ToString();
+            sfxVolumeNumber.text = Convert.ToInt32(sfxSlider.value * 100f).ToString();
         }
     }
     
