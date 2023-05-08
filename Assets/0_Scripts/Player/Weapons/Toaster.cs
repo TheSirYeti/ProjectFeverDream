@@ -55,7 +55,7 @@ public class Toaster : GenericWeapon
 
             Vector3 pelletDirection = pelletRotation * actualDir;
 
-            GenericBullet bullet = GetBullet(_muzzle.position);
+            GenericBullet bullet = GetBullet(_nozzlePoint.position);
             bullet.OnStart(pelletDirection, this, actualDmg);
         }
 
@@ -118,6 +118,8 @@ public class Toaster : GenericWeapon
 
     void LoadWeapon()
     {
+        _loadingShootParticle.gameObject.transform.position = _nozzlePoint.position;
+
         _actualLoading += _loadSpeed * Time.deltaTime;
         burnToast.SetFloat("_BurnValue", _actualLoading);
         burnPieces.SetFloat("_BurnValue", _actualLoading);

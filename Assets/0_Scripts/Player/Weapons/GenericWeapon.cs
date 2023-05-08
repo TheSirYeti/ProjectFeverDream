@@ -16,6 +16,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
     [SerializeField] Rigidbody _rigidbody;
     [SerializeField] Collider _collider;
 
+    protected Transform _nozzlePoint;
     //public RecoilSytem _recoilSystem;
     protected LayerMask _targetToShootMask;
 
@@ -68,8 +69,10 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
             return false;
     }
 
-    public void OnWeaponEquip(Transform parent, WeaponManager weaponManager)
+    public void OnWeaponEquip(Transform parent, WeaponManager weaponManager, Transform nozzlePoint)
     {
+        _nozzlePoint = nozzlePoint;
+
         _weaponManager = weaponManager;
 
         _rigidbody.constraints = RigidbodyConstraints.FreezeAll;

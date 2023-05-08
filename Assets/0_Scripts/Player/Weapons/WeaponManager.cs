@@ -19,6 +19,7 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     [SerializeField] GenericWeapon _actualWeapon;
 
+    [SerializeField] Transform _nozzlePoint;
     Transform _pointOfShoot;
     bool _isADS;
 
@@ -35,7 +36,7 @@ public class WeaponManager : MonoBehaviour, IAttendance
                 item.enabled = true;
             }
 
-            _actualWeapon.OnWeaponEquip(transform, this);
+            _actualWeapon.OnWeaponEquip(transform, this, _nozzlePoint);
 
             OnClick = _actualWeapon.OnClick;
             OnRelease = _actualWeapon.OnRelease;
@@ -71,7 +72,7 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void ExecuteShoot()
     {
-        _actualWeapon.Shoot(_pointOfShoot, _isADS);
+        _actualWeapon.Shoot(_nozzlePoint, _isADS);
     }
 
     public void AnimReload()
@@ -84,6 +85,7 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void ExecuteReload()
     {
+        _view.ResetTrigger("reload");
         _actualWeapon.Reload();
     }
 
@@ -101,7 +103,7 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
 
         _actualWeapon = newWeapon;
-        _actualWeapon.OnWeaponEquip(transform, this);
+        _actualWeapon.OnWeaponEquip(transform, this, _nozzlePoint);
 
         foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
         {
