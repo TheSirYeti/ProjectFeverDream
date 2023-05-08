@@ -127,6 +127,11 @@ public class Model : MonoBehaviour
 
     public void Move(float hAxie, float vAxie)
     {
+        if (_isOnFloor && (hAxie != 0 || vAxie != 0))
+            EventManager.Trigger("CameraBobbing", true);
+        else
+            EventManager.Trigger("CameraBobbing", false);
+
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
         if (_jumpCoroutine == null)
@@ -379,6 +384,9 @@ public class Model : MonoBehaviour
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
+
+            if (_jumpCoroutine != null)
+                StopCoroutine(_jumpCoroutine);
 
             _canJump = true;
             _jumpCounter = 0;
