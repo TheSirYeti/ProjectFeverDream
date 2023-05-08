@@ -60,7 +60,7 @@ public class MeleeWeapon : GenericWeapon
 
     public override void CheckUsage()
     {
-        EventManager.Trigger("ChangeBulletUI", usageAmmount);
+        EventManager.Trigger("ChangeBulletUI", usageAmmount, _maxUsageAmmount);
 
         if (_isBroken)
         {

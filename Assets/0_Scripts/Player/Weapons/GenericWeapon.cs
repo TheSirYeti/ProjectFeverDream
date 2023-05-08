@@ -10,6 +10,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
 
     [SerializeField] protected int _actualMagazineBullets;
     protected int _actualReserveBullets;
+    [SerializeField] protected int _maxUsageAmmount;
     [SerializeField] protected int usageAmmount = 0;
 
     [SerializeField] protected Transform _muzzle;
@@ -86,12 +87,12 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
 
         if (_weaponSO.isMelee)
         {
-            EventManager.Trigger("ChangeBulletUI", usageAmmount);
+            EventManager.Trigger("ChangeBulletUI", usageAmmount, _maxUsageAmmount);
             EventManager.Trigger("ChangeReserveBulletUI", 0);
         }
         else
         {
-            EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
+            EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
             EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
         }
         EventManager.Trigger("ChangeEquipedWeapontUI", _weaponSO.weaponID);
@@ -138,7 +139,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
     public void PickUp()
     {
         gameObject.SetActive(true);
-        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
+        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
         EventManager.Trigger("ChangeEquipedWeapontUI", _weaponSO.weaponID);
     }
@@ -164,7 +165,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
 
         if (isActiveAndEnabled)
         {
-            EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
+            EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
             EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
         }
     }
@@ -221,7 +222,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
     {
         _actualReserveBullets = newAmmo;
 
-        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
+        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
     }
 }

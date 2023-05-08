@@ -9,32 +9,22 @@ public class UIController : MonoBehaviour
 {
     [Header("Player UI")]
     [SerializeField] TextMeshProUGUI _healthUI;
+    [SerializeField] Image _bulletsBar;
     [SerializeField] TextMeshProUGUI _primaryBulletUI;
     [SerializeField] TextMeshProUGUI _reserveBulletUI;
     [SerializeField] List<GameObject> _weaponsUI;
-    //[SerializeField] List<GameObject> _granadesUI;
     int _actualWeapon = 0;
 
-    //[Header("Enemies UI")]
-    //[SerializeField] TextMeshProUGUI _enemiesCounterUI;
-    //[SerializeField] TextMeshProUGUI _waveCounterUI;
-    //[SerializeField] Animator _waveCounterAnimator;
-    //[SerializeField] TextMeshProUGUI _coinsUI;
-    //[SerializeField] TextMeshProUGUI _interactuableUI;
-    //[SerializeField] TextMeshProUGUI _waveClearUI;
-    //[SerializeField] TextMeshProUGUI _waveTimerUI;
 
     [Header("ObjetiveText")]
     [SerializeField] TextMeshProUGUI _titleObjetive;
     [SerializeField] TextMeshProUGUI _descriptionObjetive;
-    //[SerializeField] TextMeshProUGUI _stateObjetive;
     [SerializeField] TextMeshProUGUI _progressObjective;
 
     [Header("GameObjects")]
     [SerializeField] GameObject hitmarker, hitmarkerDead, hitmarkerWeak, hitmarkerHeadshot;
     [SerializeField] GameObject playerDamageMarker;
     [SerializeField] GameObject crosshair;
-    //[SerializeField] GameObject _hookUI;
 
     [Header("Subtitles")] 
     [SerializeField] private TextMeshProUGUI subtitleText;
@@ -49,30 +39,14 @@ public class UIController : MonoBehaviour
         EventManager.Subscribe("ChangeBulletUI", ChangeBulletUI);
         EventManager.Subscribe("ChangeReserveBulletUI", ChangeReserveBulletUI);
         EventManager.Subscribe("ChangeEquipedWeapontUI", ChangeEquipedWeapontUI);
-        //EventManager.Subscribe("ChangeGranadeUI", ChangeGranadeUI);
-        //EventManager.Subscribe("ChangeCoinsUI", ChangeCoinsUI);
-        //EventManager.Subscribe("ChangeEnemiesUI", ChangesEnemiesLeft);
-        //EventManager.Subscribe("ChangeWaveUI", ChangesWaveCounter);
         EventManager.Subscribe("OnDamageableHit", TriggerHitmarker);
         EventManager.Subscribe("PlayerDamage", TriggerPlayerDamage);
         EventManager.Subscribe("OnADSEnabled", EnableADS);
         EventManager.Subscribe("OnADSDisabled", DisableADS);
-        //EventManager.Subscribe("OnPhaseEnd", OnPhaseEnd);
-        //EventManager.Subscribe("OnPhaseStart", OnPhaseStart);
-        //EventManager.Subscribe("ChangeTimer", ChangeTimer);
         EventManager.Subscribe("ChangeObjetive", ChangesObjective);
         EventManager.Subscribe("ChangeObjectiveProgress", ChangeObjectiveProgress);
-        //EventManager.Subscribe("ChangeActualObjectiveState", ChangeActualObjectiveState);
-        //EventManager.Subscribe("HookUI", HookUI);
         EventManager.Subscribe("OnSubtitleOn", DoSubtitle);
         EventManager.Subscribe("OnSubtitleOff", DisableSubtitle);
-        //EventManager.Subscribe("ShopUI", ShopUI);
-        //EventManager.Subscribe("DoorUI", DoorUI);
-        //EventManager.Subscribe("PickUpUI", InteractUI);
-        //EventManager.Subscribe("BuyItem", BuyItem);
-        //EventManager.Subscribe("RefuseItem", RefuseItem);
-
-        //_interactuableUI.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -80,17 +54,6 @@ public class UIController : MonoBehaviour
         //int current = (int)(1f / Time.unscaledDeltaTime);
         //fpsCounter.text = current.ToString();
     }
-
-    //void ChangesEnemiesLeft(params object[] parameters)
-    //{
-    //    _enemiesCounterUI.text = "Enemies remaining: " + parameters[0].ToString();
-    //}
-
-    //void ChangesWaveCounter(params object[] parameters)
-    //{
-    //    StartCoroutine(DoRoundCounterCycle((int)parameters[0]));
-    //    //_waveCounterUI.text = parameters[0].ToString();
-    //}
 
     void ChangeHealthUI(params object[] parameters)
     {
@@ -100,17 +63,18 @@ public class UIController : MonoBehaviour
     void ChangeBulletUI(params object[] parameters)
     {
         _primaryBulletUI.text = parameters[0].ToString();
+
+        float a = (int)parameters[0];
+        float b = (int)parameters[1];
+        float value = a / b;
+
+        _bulletsBar.fillAmount = value;
     }
 
     void ChangeReserveBulletUI(params object[] parameters)
     {
         _reserveBulletUI.text = parameters[0].ToString();
     }
-
-    //void ChangeGranadeUI(params object[] parameters)
-    //{
-    //    _granadesUI[(int)parameters[0]].SetActive((bool)parameters[1]);
-    //}
 
     void ChangeEquipedWeapontUI(params object[] parameters)
     {

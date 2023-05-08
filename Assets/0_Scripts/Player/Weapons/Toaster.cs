@@ -23,8 +23,8 @@ public class Toaster : GenericWeapon
 
         _bulletPool = new ObjectPool(_weaponSO._bulletsPrefabs, numPellets * 3);
 
-        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
-        EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
+        //EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
+        //EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
     }
 
     private void Update()
@@ -65,7 +65,7 @@ public class Toaster : GenericWeapon
         _actualMagazineBullets--;
         _actualLoading = 0.3f;
 
-        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
+        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
     }
 
 
@@ -104,7 +104,7 @@ public class Toaster : GenericWeapon
             _actualReserveBullets = 0;
         }
 
-        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets);
+        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
     }
 
