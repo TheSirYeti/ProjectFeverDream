@@ -377,7 +377,7 @@ public class Assistant : MonoBehaviour
 
     public void SetObjective(IAttendance interactuable)
     {
-        if (_interactuable != null) return;
+        //if (_interactuable != null) return;
 
         _interactuable = interactuable;
 
