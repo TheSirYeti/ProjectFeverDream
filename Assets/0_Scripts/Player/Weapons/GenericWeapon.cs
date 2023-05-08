@@ -73,6 +73,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
 
     public void OnWeaponEquip(Transform parent, WeaponManager weaponManager, Transform nozzlePoint)
     {
+        _collider.enabled = false;
         _nozzlePoint = nozzlePoint;
 
         _weaponManager = weaponManager;

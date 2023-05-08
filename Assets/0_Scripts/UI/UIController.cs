@@ -78,12 +78,12 @@ public class UIController : MonoBehaviour
 
     void ChangeEquipedWeapontUI(params object[] parameters)
     {
-        if (!_weaponsUI[(int)parameters[0]]) return;
-
         foreach (var uiImage in _weaponsUI)
         {
             uiImage.SetActive(false);
         }
+
+        if (!_weaponsUI[(int)parameters[0]]) return;
 
         _actualWeapon = (int)parameters[0];
         _weaponsUI[_actualWeapon].SetActive(true);

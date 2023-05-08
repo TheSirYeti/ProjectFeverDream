@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MeleeWeapon : GenericWeapon
 {
@@ -10,7 +11,7 @@ public class MeleeWeapon : GenericWeapon
 
     [SerializeField] bool _isBroken = false;
 
-    [SerializeField] GenericWeapon brokenBagguete;
+    [SerializeField] GameObject brokenBagguete;
 
     [SerializeField] int _maxCombo;
     [SerializeField] float _comboDuration;
@@ -81,9 +82,10 @@ public class MeleeWeapon : GenericWeapon
             else if (actualPercent <= 0)
             {
                 EventManager.Trigger("OnBaguetteChangeState", 4);
-                brokenBagguete.gameObject.SetActive(true);
-                _weaponManager.SetWeapon(brokenBagguete);
-                gameObject.SetActive(false);
+                GameObject broken = Instantiate(brokenBagguete, transform.parent);
+
+                _weaponManager.SetWeapon(broken.GetComponent<GenericWeapon>(), false);
+                Destroy(gameObject);
             }
         }
     }
@@ -117,13 +119,20 @@ public class MeleeWeapon : GenericWeapon
 
         if (damagableInterface != null && !_actualEnemiesHit.Contains(damagableInterface))
         {
+            if (!damagableInterface.IsAlive())
+                return;
+
             EventManager.Trigger("CameraShake", true);
+
+            if (!_actualEnemiesHit.Any())
+            {
+                usageAmmount--;
+
+                CheckUsage();
+            }
+
             _actualEnemiesHit.Add(damagableInterface);
             damagableInterface.TakeDamage("Body", _weaponSO.dmg, true);
-
-            usageAmmount--;
-
-            CheckUsage();
         }
     }
 

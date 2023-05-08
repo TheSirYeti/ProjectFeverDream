@@ -7,6 +7,7 @@ public class WeaponManager : MonoBehaviour, IAttendance
 {
     Model _model;
     [HideInInspector] public View _view;
+    [SerializeField] RuntimeAnimatorController _noWeaponAnimator;
 
     [Serializable]
     public struct WeaponRenderer
@@ -72,7 +73,7 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void ExecuteShoot()
     {
-        _actualWeapon.Shoot(_nozzlePoint, _isADS);
+        _actualWeapon.Shoot(_pointOfShoot, _isADS);
     }
 
     public void AnimReload()
@@ -89,9 +90,9 @@ public class WeaponManager : MonoBehaviour, IAttendance
         _actualWeapon.Reload();
     }
 
-    public void SetWeapon(GenericWeapon newWeapon)
+    public void SetWeapon(GenericWeapon newWeapon, bool turnOffPrevious = true)
     {
-        if (_actualWeapon != null)
+        if (_actualWeapon != null && turnOffPrevious)
         {
             _actualWeapon.OnWeaponUnequip();
 
@@ -117,6 +118,13 @@ public class WeaponManager : MonoBehaviour, IAttendance
 
     public void DestroyWeapon()
     {
+        foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+        {
+            item.enabled = false;
+        }
+
+        _view.SetAnimatorController(_noWeaponAnimator);
+        EventManager.Trigger("ChangeEquipedWeapontUI", -1);
         Destroy(_actualWeapon.gameObject);
     }
 

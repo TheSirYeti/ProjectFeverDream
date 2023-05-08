@@ -347,6 +347,11 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
         }
     }
 
+    public bool IsAlive()
+    {
+        return !isDead;
+    }
+
     public abstract void DoKnockback();
 
 

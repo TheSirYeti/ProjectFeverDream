@@ -39,9 +39,10 @@ public abstract class GenericBullet : MonoBehaviour
             hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg);
             _actualWeapon.ReturnBullet(this);
         }
-        else if (Physics.Raycast(transform.position, transform.forward, _distanceCollision, _collisionMask))
+        else if (Physics.Raycast(transform.position, transform.forward,out hit, _distanceCollision, _collisionMask))
         {
             GameObject decal = Instantiate(_fakeDecal, transform.position, transform.rotation);
+            decal.transform.up = hit.normal;
             Destroy(decal, 3f);
             _actualWeapon.ReturnBullet(this);
         }
