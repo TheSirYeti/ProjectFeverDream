@@ -2655,6 +2655,8 @@ MonoBehaviour:
   maxHP: 1000
   target: {fileID: 0}
   minChaseDistance: 0
+  _type: 0
+  _interactPoint: {fileID: 0}
   attackCollider: {fileID: 0}
   attackCooldown: 0
   currentAttackCooldown: 0
@@ -2666,8 +2668,15 @@ MonoBehaviour:
   isPathfinding: 0
   pathfindingCooldown: 0
   pathfindingRate: 0
+  fovViewRadius: 0
+  fovViewAngle: 0
+  fovTransformPoint: {fileID: 7824737043373075793}
+  entityDetectionMask:
+    serializedVersion: 2
+    m_Bits: 0
   rb: {fileID: 0}
   hasRagdoll: 0
+  _bodyCenter: {fileID: 0}
   animator: {fileID: 0}
   renderers: []
   dmg: 1
@@ -2675,6 +2684,7 @@ MonoBehaviour:
   bodyDmg: 1
   headDmg: 1
   generalDmg: 1
+  isDead: 0
 --- !u!1 &3635574732126094899
 GameObject:
   m_ObjectHideFlags: 0
