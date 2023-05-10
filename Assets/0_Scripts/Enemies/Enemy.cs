@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,6 @@ using UnityEngine;
 
 public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 {
-    [Header("-== TEMP ==-")]
-    [SerializeField] Assistant.Interactuables _type;
-    [SerializeField] Transform _interactPoint;
-    [Space(20)]
-
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp;
     [SerializeField] protected float maxHP;
@@ -20,6 +16,12 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     [SerializeField] protected GameObject target;
     protected bool wasDetected = false;
     [SerializeField] private float minChaseDistance;
+    
+    [Header("-== Assistant Interactions ==-")]
+    //Quizas sea TEMP, quizas no
+    [SerializeField] Assistant.Interactuables _type;
+    [SerializeField] Transform _interactPoint;
+    [Space(20)]
 
     [Space(20)] [Header("-== Attack Properties ==-")] 
     [SerializeField] protected Collider attackCollider;
@@ -41,6 +43,13 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     [SerializeField] protected bool isPathfinding;
     [SerializeField] protected float pathfindingCooldown, pathfindingRate;
 
+    [Space(20)]
+    [Header("-== Detection / FoV Properties")]
+    [SerializeField] protected float fovViewRadius;
+    [SerializeField] protected float fovViewAngle;
+    [SerializeField] protected Transform fovTransformPoint;
+    [SerializeField] protected LayerMask entityDetectionMask;
+    
     [Space(20)]
     [Header("-== Ragdoll Properties ==-")] 
     [SerializeField] private Rigidbody rb;
@@ -290,6 +299,37 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     }
 
     #endregion
+
+    #region DETECTION / SIGHT METHODS
+
+    public bool IsInFieldOfView()
+    {
+        bool isInView = false;
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(fovTransformPoint.position, fovViewRadius, entityDetectionMask);
+
+        foreach (var item in targetsInViewRadius)
+        {
+            Vector3 dirToTarget = (item.transform.position - fovTransformPoint.position);
+            
+            if (Vector3.Angle(fovTransformPoint.forward, dirToTarget.normalized) < fovViewAngle / 2)
+            {
+                if (InSight(fovTransformPoint.position, item.transform.position))
+                {
+                    Debug.DrawLine(fovTransformPoint.position, item.transform.position, Color.red);
+                    isInView = true;
+                }
+                else
+                {
+                    Debug.DrawLine(fovTransformPoint.position, item.transform.position, Color.green);
+                    isInView = false;
+                }
+            }
+        }
+
+        return isInView;
+    }
+
+    #endregion
     
     #region DAMAGE / HEALTH
     
@@ -357,7 +397,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 
     #endregion
 
-    #region Interact
+    #region INTERACTIONS
     public void Interact(GameObject usableItem = null)
     {
         Destroy(gameObject);
@@ -392,5 +432,23 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     {
         return _type;
     }
+    #endregion
+
+    #region GIZMOS
+
+    private void OnDrawGizmos()
+    {
+        Vector3 lineA = DirFromAngle(fovViewAngle / 2 + fovTransformPoint.eulerAngles.y);
+        Vector3 lineB = DirFromAngle(-fovViewAngle / 2 + fovTransformPoint.eulerAngles.y);
+
+        Gizmos.DrawLine(fovTransformPoint.position, fovTransformPoint.position + lineA * fovViewRadius);
+        Gizmos.DrawLine(fovTransformPoint.position, fovTransformPoint.position + lineB * fovViewRadius);
+    }
+    
+    Vector3 DirFromAngle(float angle)
+    {
+        return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
+    }
+
     #endregion
 }

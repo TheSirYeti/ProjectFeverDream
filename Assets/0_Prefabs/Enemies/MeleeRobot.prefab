@@ -31,6 +31,36 @@ Transform:
   m_Father: {fileID: 257058407817775116}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &284175813949685756
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3018129205651511124}
+  m_Layer: 11
+  m_Name: FoV Pov
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3018129205651511124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284175813949685756}
+  m_LocalRotation: {x: 0.000000039115548, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.081, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4234393484071137987}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &545275852804960649
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,6 +1711,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3551590018113428409}
+  - {fileID: 3018129205651511124}
   m_Father: {fileID: 7330463433641262782}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2171,12 +2202,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f203af968cb5c46ad19156f6b62c69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 1
-  _interactPoint: {fileID: 6967037595312877410}
   hp: 200
   maxHP: 200
   target: {fileID: 0}
   minChaseDistance: 2
+  _type: 1
+  _interactPoint: {fileID: 6967037595312877410}
   attackCollider: {fileID: 6967037594578705491}
   attackCooldown: 4
   currentAttackCooldown: 0
@@ -2188,6 +2219,12 @@ MonoBehaviour:
   isPathfinding: 0
   pathfindingCooldown: 0
   pathfindingRate: 2
+  fovViewRadius: 10
+  fovViewAngle: 100
+  fovTransformPoint: {fileID: 3018129205651511124}
+  entityDetectionMask:
+    serializedVersion: 2
+    m_Bits: 8
   rb: {fileID: 6967037594578705493}
   hasRagdoll: 1
   _bodyCenter: {fileID: 3131418419907406254}

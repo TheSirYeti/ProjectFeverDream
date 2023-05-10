@@ -118,7 +118,7 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
-            if (!InSight(transform.position, target.transform.position)) return;
+            if (!IsInFieldOfView()) return;
 
             if (!wasDetected)
             {
