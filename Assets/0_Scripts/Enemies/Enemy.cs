@@ -438,11 +438,14 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 
     private void OnDrawGizmos()
     {
-        Vector3 lineA = DirFromAngle(fovViewAngle / 2 + fovTransformPoint.eulerAngles.y);
-        Vector3 lineB = DirFromAngle(-fovViewAngle / 2 + fovTransformPoint.eulerAngles.y);
+        if (fovTransformPoint != null)
+        {
+            Vector3 lineA = DirFromAngle(fovViewAngle / 2 + fovTransformPoint.eulerAngles.y);
+            Vector3 lineB = DirFromAngle(-fovViewAngle / 2 + fovTransformPoint.eulerAngles.y);
 
-        Gizmos.DrawLine(fovTransformPoint.position, fovTransformPoint.position + lineA * fovViewRadius);
-        Gizmos.DrawLine(fovTransformPoint.position, fovTransformPoint.position + lineB * fovViewRadius);
+            Gizmos.DrawLine(fovTransformPoint.position, fovTransformPoint.position + lineA * fovViewRadius);
+            Gizmos.DrawLine(fovTransformPoint.position, fovTransformPoint.position + lineB * fovViewRadius);
+        }
     }
     
     Vector3 DirFromAngle(float angle)
