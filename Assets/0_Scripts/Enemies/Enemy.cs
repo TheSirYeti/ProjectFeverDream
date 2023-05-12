@@ -8,8 +8,8 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 {
     [Header("-== Base Properties ==-")]
-    [SerializeField] protected float hp;
-    [SerializeField] protected float maxHP;
+    [SerializeField] protected float hp; 
+    protected float maxHP;
     [Space(20)]
 
     [Header("-== Target Properties ==-")]
@@ -139,6 +139,14 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
         
         transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
         transform.position += transform.forward * speed * Time.deltaTime;
+    }
+
+    protected void DoGenericRunAway()
+    {
+        transform.forward = (target.transform.position - transform.position) * -1;
+        
+        transform.LookAt(new Vector3(target.transform.position.x, -transform.position.y, target.transform.position.z) * -1);
+        transform.position += transform.forward * (speed * 2f) * Time.deltaTime;
     }
 
     public void DoPathfinding()
