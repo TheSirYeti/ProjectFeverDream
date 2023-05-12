@@ -361,7 +361,7 @@ public class Model : MonoBehaviour
 
     void CheckOnFloor()
     {
-        if (_jumpCoroutine == null && !Physics.Raycast(transform.position, Vector3.up * -1, 1.1f, _floorMask))
+        if (_jumpCoroutine == null && !Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f), transform.rotation, _floorMask))
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
@@ -380,7 +380,7 @@ public class Model : MonoBehaviour
 
     void CheckOffFloor()
     {
-        if (Physics.Raycast(transform.position, Vector3.up * -1, 1.1f, _floorMask))
+        if (Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f), transform.rotation, _floorMask))
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
@@ -413,6 +413,7 @@ public class Model : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f));
         Gizmos.DrawLine(transform.position, transform.position + _dir.normalized * 5);
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + transform.up * -1.1f);
