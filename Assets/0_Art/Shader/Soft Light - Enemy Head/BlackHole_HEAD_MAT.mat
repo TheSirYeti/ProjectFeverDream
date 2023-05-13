@@ -10,7 +10,7 @@ Material:
   m_Name: BlackHole_HEAD_MAT
   m_Shader: {fileID: 4800000, guid: 390d835a40c06704fae71447bb6f807a, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 0
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -52,13 +52,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _ControlFace: 1
     - _Effect: 0
-    - _Float0: 0.25
-    - _Float1: 0.25
+    - _FaceChange: 1
+    - _Float0: 10
+    - _Float1: 0
     - _Float4: -0.97
     - _FresnelIntesity: 0.3
     - _FresnelPower: 5
     - _FresnelScale: 0.6
+    - _G: 0
     - _IntensitySpecular: 0.15
     - _PointOffset: 0.25
     - _Range: 1
@@ -66,9 +69,10 @@ Material:
     - _Smoothness: 0
     - _Specularsomething: 2
     - _Speed: 0.1
+    - _StaticChangeFace: 0
     - _TurningOFF: 1
     - _ValueWarning: 0
-    - __dirty: 0
+    - __dirty: 1
     m_Colors:
     - _BlackHolePosition: {r: -5.453, g: 7.94, b: 17.419, a: 0}
     - _Color0: {r: 1, g: 0, b: 0, a: 0}
@@ -76,7 +80,8 @@ Material:
     - _ColorFresnel: {r: 0.4392157, g: 0.7960785, b: 1, a: 1}
     - _ColorSpecular: {r: 0.2249911, g: 0.37902933, b: 0.6037736, a: 1}
     - _MoveFace: {r: 1, g: 0, b: 0, a: 0}
-    - _Vector0: {r: 0, g: 0.75, b: 0, a: 0}
+    - _Tilling: {r: 0, g: 0.75, b: 0, a: 0}
+    - _Vector0: {r: -0.025, g: 0, b: 0, a: 0}
     - _Vector1: {r: 0, g: 0, b: 0, a: 0}
     - _Vector2: {r: 0, g: 0, b: 0, a: 0}
     - _Warningposition: {r: 1, g: 0, b: 0, a: 0}
