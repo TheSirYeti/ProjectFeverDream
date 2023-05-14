@@ -10,7 +10,7 @@ public class TutorialTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!hasTriggered && other.gameObject.tag == "Player")
+        if (!hasTriggered && other.gameObject.CompareTag("Player"))
         {
             hasTriggered = true;
             EventManager.Trigger("OnTutorialTriggered", tutorialID);

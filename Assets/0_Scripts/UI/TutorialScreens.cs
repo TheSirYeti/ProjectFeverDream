@@ -10,15 +10,14 @@ public class TutorialScreens : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(DoTutorialSign(0));
         EventManager.Subscribe("OnTutorialTriggered", TriggerTutorial);
+        EventManager.Subscribe("OnTutorialExit", DisableTutorials);
     }
 
     public void TriggerTutorial(object[] parameters)
     {
-        foreach (var sign in tutorialSigns)
-        {
-            sign.SetActive(false);
-        }
+        DisableTutorials(null);
         StartCoroutine(DoTutorialSign((int)parameters[0]));
     }
 
@@ -28,5 +27,13 @@ public class TutorialScreens : MonoBehaviour
         yield return new WaitForSeconds(timeSignActive);
         tutorialSigns[sign].SetActive(false);
         yield return null;
+    }
+
+    public void DisableTutorials(object[] parameters)
+    {
+        foreach (var sign in tutorialSigns)
+        {
+            sign.SetActive(false);
+        }
     }
 }
