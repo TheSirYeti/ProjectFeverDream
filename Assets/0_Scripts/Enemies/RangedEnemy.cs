@@ -433,7 +433,7 @@ public class RangedEnemy : Enemy
     {
         GameObject bullet = Instantiate(bulletPrefab);
         bullet.transform.position = spawnPoint.position;
-        bullet.transform.forward = target.transform.position - spawnPoint.position;
+        bullet.transform.forward = (target.transform.position + (Vector3.up / 3)) - spawnPoint.position;
     }
 
     public void OnShotOver()
