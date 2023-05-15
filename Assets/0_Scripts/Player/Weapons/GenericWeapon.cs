@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class GenericWeapon : MonoBehaviour, IAttendance
+public abstract class GenericWeapon : MonoBehaviour//, IAttendance
 {
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
@@ -20,7 +20,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
 
     protected Transform _nozzlePoint;
     //public RecoilSytem _recoilSystem;
-    protected LayerMask _targetToShootMask;
+    [SerializeField] protected LayerMask _shooteableMask;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
     public abstract void Reload();
@@ -181,41 +181,41 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
         _bulletPool.ReturnObject(bullet.gameObject);
     }
 
-    public void Interact(GameObject usableItem = null)
-    {
-        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        _collider.enabled = false;
-    }
+    //public void Interact(GameObject usableItem = null)
+    //{
+    //    _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+    //    _collider.enabled = false;
+    //}
 
-    Assistant.Interactuables IAttendance.GetType()
-    {
-        return Assistant.Interactuables.WEAPON;
-    }
+    //Assistant.Interactuables IAttendance.GetType()
+    //{
+    //    return Assistant.Interactuables.WEAPON;
+    //}
 
-    public Transform GetTransform()
-    {
-        return transform;
-    }
+    //public Transform GetTransform()
+    //{
+    //    return transform;
+    //}
 
-    public Transform GetInteractPoint()
-    {
-        return transform;
-    }
+    //public Transform GetInteractPoint()
+    //{
+    //    return transform;
+    //}
 
-    public List<Renderer> GetRenderer()
-    {
-        throw new NotImplementedException();
-    }
+    //public List<Renderer> GetRenderer()
+    //{
+    //    throw new NotImplementedException();
+    //}
 
-    public bool CanInteract()
-    {
-        return true;
-    }
+    //public bool CanInteract()
+    //{
+    //    return true;
+    //}
 
-    public string AnimationToExecute()
-    {
-        return "PickUp";
-    }
+    //public string AnimationToExecute()
+    //{
+    //    return "PickUp";
+    //}
 
     //CheatZone
 

@@ -36,8 +36,10 @@ public class Toaster : GenericWeapon
     /* -------------------------------- SHOOT -------------------------------- */
     public override void Shoot(Transform pointOfShoot, bool isADS)
     {
+        Debug.Log("xd");
         if (_actualMagazineBullets <= 0) return;
 
+        Debug.Log("dx");
         Vector3 actualDir = pointOfShoot.forward;
 
         int actualPellets = (int)(numPellets * _actualLoading);
@@ -55,8 +57,14 @@ public class Toaster : GenericWeapon
 
             Vector3 pelletDirection = pelletRotation * actualDir;
 
-            GenericBullet bullet = GetBullet(_nozzlePoint.position);
-            bullet.OnStart(pelletDirection, this, actualDmg);
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, pelletDirection, out hit, Mathf.Infinity,  _shooteableMask))
+            {
+                Vector3 dir = hit.point - _nozzlePoint.position;
+
+                GenericBullet bullet = GetBullet(_nozzlePoint.position);
+                bullet.OnStart(dir, this, actualDmg);
+            }
         }
 
         EventManager.Trigger("CameraShake", true);
