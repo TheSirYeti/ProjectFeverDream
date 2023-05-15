@@ -1326,6 +1326,7 @@ Transform:
   - {fileID: 7447029764456416672}
   - {fileID: 8002605128947729768}
   - {fileID: 5471815192749234249}
+  - {fileID: 494355910516912856}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 135, z: 0}
@@ -1406,7 +1407,7 @@ MonoBehaviour:
   target: {fileID: 0}
   minChaseDistance: 15
   _type: 1
-  _interactPoint: {fileID: 14954856848748535}
+  _interactPoint: {fileID: 494355910516912856}
   attackCollider: {fileID: 5471815192462616798}
   attackCooldown: 5
   currentAttackCooldown: 0
@@ -1666,6 +1667,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1262062717399282842}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5782517063210770734
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 494355910516912856}
+  m_Layer: 11
+  m_Name: InteractPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &494355910516912856
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5782517063210770734}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.026, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5504933183083024227}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5924087134489848551
 GameObject:
