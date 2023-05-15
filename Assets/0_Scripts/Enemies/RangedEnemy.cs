@@ -72,6 +72,7 @@ public class RangedEnemy : Enemy
         
         DoFsmSetup();
         StopRagdoll();
+        DoFaceTransition(FaceID.IDLE);
     }
 
     void DoFsmSetup()
@@ -189,6 +190,7 @@ public class RangedEnemy : Enemy
         detect.OnEnter += x =>
         {
             animator.Play(animationPrefix + "_Detect");
+            DoFaceTransition(FaceID.DETECT);
             StartCoroutine(DoDetectSign());
         };
         
@@ -196,6 +198,11 @@ public class RangedEnemy : Enemy
         {
             transform.LookAt(
                 new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+        };
+
+        detect.OnExit += x =>
+        {
+            DoFaceTransition(FaceID.COMBAT);
         };
 
         #endregion
@@ -373,6 +380,15 @@ public class RangedEnemy : Enemy
         };
 
         #endregion
+        
+        #region DEAD
+
+        die.OnEnter += x =>
+        {
+            DoFaceTransition(FaceID.DEAD);
+        };
+
+        #endregion
 
         fsm = new EventFSM<RangedEnemyStates>(idle);
     }
@@ -442,7 +458,7 @@ public class RangedEnemy : Enemy
 
     public override void DoKnockback()
     {
-        throw new System.NotImplementedException();
+        animator.Play(animationPrefix + "_Knockback");
     }
 
     public bool InDanger()

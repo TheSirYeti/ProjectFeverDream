@@ -145,6 +145,7 @@ public class BaseMeleeEnemy : Enemy
 
         detect.OnEnter += x =>
         {
+            DoFaceTransition(FaceID.DETECT);
             animator.Play(animationPrefix + "_Detect");
             StopCoroutine(DoDetectSign());
             StartCoroutine(DoDetectSign());
@@ -154,6 +155,11 @@ public class BaseMeleeEnemy : Enemy
         {
             transform.LookAt(
                 new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+        };
+
+        detect.OnExit += x =>
+        {
+            DoFaceTransition(FaceID.COMBAT);
         };
 
         #endregion
@@ -237,6 +243,15 @@ public class BaseMeleeEnemy : Enemy
             }
             
             Attack();
+        };
+
+        #endregion
+
+        #region DEAD
+
+        die.OnEnter += x =>
+        {
+            DoFaceTransition(FaceID.DEAD);
         };
 
         #endregion

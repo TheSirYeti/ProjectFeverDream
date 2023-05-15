@@ -80,19 +80,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gravity: 30
-  _walkingSpeed: 15
-  _runningSpeed: 23
-  _slideSpeed: 35
-  _crunchSpeed: 7
+  _walkingSpeed: 13
+  _runningSpeed: 17
+  _slideSpeed: 25
+  _crunchSpeed: 5
   _slideDuration: 0.75
   _interactDistance: 45
   _interactMask:
     serializedVersion: 2
     m_Bits: 3072
-  _jumpDuration: 0.4
-  _jumpForce: 13
+  _jumpDuration: 0.3
+  _jumpForce: 10
   _walljumpDuration: 0.7
-  _walljumpForce: 9
+  _walljumpForce: 10
   _jumpDesacceleration: 15
   _wallJumpDesacceleration: 15
   _coyoteTime: 0.3
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2050201400054601315}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06e1851cb44660944a4f55249c3011d1, type: 3}
   m_Name: 
@@ -177,7 +177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2050201400333242661}
   - component: {fileID: 2050201400333242660}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: CrunchCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2050201401256933103}
   - component: {fileID: 2050201401256933102}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: StandUpCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

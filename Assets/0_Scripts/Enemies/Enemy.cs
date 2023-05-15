@@ -64,6 +64,10 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     [SerializeField] protected Animator animator;
     [Space(20)] 
     [SerializeField] protected List<Renderer> renderers;
+    [Space(20)] 
+    [SerializeField] protected Renderer faceRenderer;
+    [SerializeField] protected float faceTransitionTime;
+    [SerializeField] protected float minTransitionValue = 0f, maxTransitionValue = 10f;
     
     protected Dictionary<string, float> _damageRecive = new Dictionary<string, float>();
     [Space(20)] 
@@ -143,10 +147,18 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 
     protected void DoGenericRunAway()
     {
-        transform.forward = (target.transform.position - transform.position) * -1;
+        Vector3 desired = target.transform.position - transform.position;
+        desired = new Vector3(desired.x, transform.position.y, desired.z);
+        desired.Normalize();
+        desired *= -1;
+
+        transform.forward = desired;
+
+        Vector3 lookAtValue =
+            new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
         
-        transform.LookAt(new Vector3(target.transform.position.x, -transform.position.y, target.transform.position.z) * -1);
-        transform.position += transform.forward * (speed * 2f) * Time.deltaTime;
+        transform.LookAt(transform.position - (lookAtValue - transform.position));
+        transform.position += desired * speed * Time.deltaTime;
     }
 
     public void DoPathfinding()
@@ -155,7 +167,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
         if (isPathfinding && nodePath != null)
         {
             direction = nodePath[currentNode].transform.position - transform.position;
-            //direction = new Vector3(direction.x, transform.position.y, direction.z).normalized;
+            
             transform.forward = direction;
             transform.position += transform.forward * speed * Time.deltaTime;
             transform.LookAt(new Vector3(transform.forward.x, transform.position.y, transform.forward.z));
@@ -440,6 +452,45 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     {
         return _type;
     }
+    #endregion
+
+    #region FACE VALUES
+
+    public enum FaceID
+    {
+        IDLE,
+        COMBAT,
+        DETECT,
+        DEAD
+    }
+    
+    public void DoFaceTransition(FaceID faceID)
+    {
+        StopCoroutine(FaceSwap(faceID));
+        StartCoroutine(FaceSwap(faceID));
+    }
+
+    IEnumerator FaceSwap(FaceID faceID)
+    {
+        LeanTween.value(minTransitionValue, maxTransitionValue, faceTransitionTime).setOnUpdate((float value) =>
+        {
+            faceRenderer.materials[1].SetFloat("_StaticChangeFace", value);
+        });
+        
+        yield return new WaitForSeconds(faceTransitionTime);
+
+        
+        faceRenderer.materials[1].SetFloat("_ControlFace", (int)faceID);
+        
+        
+        LeanTween.value(maxTransitionValue, minTransitionValue, faceTransitionTime).setOnUpdate((float value) =>
+        {
+            faceRenderer.materials[1].SetFloat("_StaticChangeFace", value);
+        });
+        
+        yield return new WaitForSeconds(faceTransitionTime);
+    }
+
     #endregion
 
     #region GIZMOS

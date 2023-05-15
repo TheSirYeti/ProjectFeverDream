@@ -1402,7 +1402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95eaf221a20eb0443b201c54af458052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 15
+  hp: 200
   target: {fileID: 0}
   minChaseDistance: 15
   _type: 1
@@ -1433,6 +1433,10 @@ MonoBehaviour:
   - {fileID: 4767208593664758213}
   - {fileID: 3245521186718886137}
   - {fileID: 1917066592419360667}
+  faceRenderer: {fileID: 1917066592419360667}
+  faceTransitionTime: 0.3
+  minTransitionValue: 0
+  maxTransitionValue: 10
   dmg: 3
   weakDmg: 0.5
   bodyDmg: 1
