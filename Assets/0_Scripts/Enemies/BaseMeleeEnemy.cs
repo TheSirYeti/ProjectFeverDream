@@ -47,6 +47,8 @@ public class BaseMeleeEnemy : Enemy
         }
 
         ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
+        StopRagdoll();
+        
         
         maxHP = hp;
         maxSpeed = speed;
@@ -249,9 +251,13 @@ public class BaseMeleeEnemy : Enemy
 
     IEnumerator DoDetectSign()
     {
-        exclamationSign.SetActive(true);
+        if(exclamationSign != null)
+            exclamationSign.SetActive(true);
+        
         yield return new WaitForSeconds(exclamationSignTimer);
-        exclamationSign.SetActive(false);
+        
+        if(exclamationSign != null)
+            exclamationSign.SetActive(false);
         
         SendInputToFSM(MeleeEnemyStates.CHASING);
         yield return null;

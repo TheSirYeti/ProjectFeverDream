@@ -65,12 +65,13 @@ public class RangedEnemy : Enemy
         }
 
         ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
-        
+
         maxHP = hp;
         maxSpeed = speed;
         speed = 0;
         
         DoFsmSetup();
+        StopRagdoll();
     }
 
     void DoFsmSetup()

@@ -55,7 +55,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     [SerializeField] private Rigidbody rb;
     [SerializeField] private bool hasRagdoll;
     protected bool isInRagdollMode = false;
-    protected Rigidbody[] ragdollRigidbodies;
+    [SerializeField] protected Rigidbody[] ragdollRigidbodies;
     //Temp
     [SerializeField] private Transform _bodyCenter;
 
