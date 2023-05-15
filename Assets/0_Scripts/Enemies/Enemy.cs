@@ -52,7 +52,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
     
     [Space(20)]
     [Header("-== Ragdoll Properties ==-")] 
-    [SerializeField] private Rigidbody rb;
+    [SerializeField] protected Rigidbody rb;
     [SerializeField] private bool hasRagdoll;
     protected bool isInRagdollMode = false;
     [SerializeField] protected Rigidbody[] ragdollRigidbodies;
@@ -90,7 +90,8 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 
         foreach (var rigidbody in ragdollRigidbodies)
         {
-            rigidbody.isKinematic = false;
+            if(rigidbody != rb)
+                rigidbody.isKinematic = false;
         }
         
         //collider.enabled = false;
@@ -107,7 +108,8 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 
         foreach (var rigidbody in ragdollRigidbodies)
         {
-            rigidbody.isKinematic = true;
+            if(rigidbody != rb)
+                rigidbody.isKinematic = true;
         }
         
         //collider.enabled = true;
@@ -362,6 +364,11 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
         if (damagable != null)
         {
             damagable.DoDamage(dmg, transform.position);
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            speed = 0f;
         }
     }
     

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RangedEnemy : Enemy
@@ -72,6 +73,7 @@ public class RangedEnemy : Enemy
         
         DoFsmSetup();
         StopRagdoll();
+        rb.isKinematic = false;
         DoFaceTransition(FaceID.IDLE);
     }
 
@@ -369,7 +371,7 @@ public class RangedEnemy : Enemy
                 SendInputToFSM(RangedEnemyStates.CHASE);
                 return;
             }
-            
+
             SetSpeedValue(Time.deltaTime);
             DoGenericRunAway();
         };
