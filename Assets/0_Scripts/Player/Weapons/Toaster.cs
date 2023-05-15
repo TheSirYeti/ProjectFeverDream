@@ -58,10 +58,10 @@ public class Toaster : GenericWeapon
             Vector3 pelletDirection = pelletRotation * actualDir;
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, pelletDirection, out hit, Mathf.Infinity,  _shooteableMask))
+            if (Physics.Raycast(pointOfShoot.position, pelletDirection, out hit, Mathf.Infinity, _shooteableMask))
             {
                 Vector3 dir = hit.point - _nozzlePoint.position;
-
+                
                 GenericBullet bullet = GetBullet(_nozzlePoint.position);
                 bullet.OnStart(dir, this, actualDmg);
             }
