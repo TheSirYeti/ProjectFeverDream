@@ -17,7 +17,9 @@ public class NodeManager : MonoBehaviour
     public LayerMask nodeMask;
     public LayerMask inSightMask;
     public LayerMask wallMask;
-    
+
+    [Header("Extra Properties")] 
+    [SerializeField] private float escapeViewRadius;
     public static NodeManager instance;
 
     private void Awake()
@@ -50,6 +52,45 @@ public class NodeManager : MonoBehaviour
             {
                 index = i;
                 minDistance = distance;
+            }
+        }
+
+        return index;
+    }
+    
+    public int GetEscapeNode(Transform t, bool isForAssistant = false)
+    {
+        List<Node> nodesToUse = new List<Node>();
+        Collider[] nearbyNodes = Physics.OverlapSphere(t.position, escapeViewRadius, nodeMask);
+
+        if (!nearbyNodes.Any()) return 0;
+
+        foreach (var col in nearbyNodes)
+        {
+            Debug.Log(col.gameObject.name);
+        }
+        
+        var filteredNodes = nearbyNodes
+            .Where(x => x.gameObject.GetComponent<Node>().nodesAssistant == isForAssistant)
+            .ToList();
+        
+        foreach (var node in filteredNodes)
+        {
+            nodesToUse.Add(node.gameObject.GetComponent<Node>());
+        }
+
+        if (!nodesToUse.Any()) return 0;
+
+        int index = 0;
+        float maxDistance = -1;
+        for (int i = 0; i < nodesToUse.Count; i++)
+        {
+            float distance = Vector3.Distance(t.position, nodesToUse[i].transform.position);
+            Vector3 dirToTarget = nodesToUse[i].transform.position - t.position;
+            if (distance >= maxDistance && !Physics.Raycast(t.position, dirToTarget, dirToTarget.magnitude, wallMask))
+            {
+                index = i;
+                maxDistance = distance;
             }
         }
 

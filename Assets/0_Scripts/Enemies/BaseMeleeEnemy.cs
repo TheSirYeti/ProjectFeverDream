@@ -196,7 +196,7 @@ public class BaseMeleeEnemy : Enemy
 
         pathfind.OnEnter += x =>
         {
-            CalculatePathPreview();
+            CalculatePathPreview(false);
         };
 
         pathfind.OnUpdate += () =>
@@ -322,7 +322,7 @@ public class BaseMeleeEnemy : Enemy
             }
             else
             {
-                CalculatePathPreview();
+                CalculatePathPreview(false);
             }
             return;
         }

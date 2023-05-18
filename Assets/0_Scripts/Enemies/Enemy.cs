@@ -172,7 +172,8 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
             
             transform.forward = direction;
             transform.position += transform.forward * speed * Time.deltaTime;
-            transform.LookAt(new Vector3(transform.forward.x, transform.position.y, transform.forward.z));
+            
+            transform.LookAt(new Vector3(nodePath[currentNode].transform.position.x, transform.position.y, nodePath[currentNode].transform.position.z));
             
             if (direction.magnitude <= minDistanceToNode)
             {
@@ -195,7 +196,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
 
     #region PATHFINDING
 
-    protected void CalculatePathPreview()
+    protected void CalculatePathPreview(bool amEscaping)
     {
         if ((!isPathfinding
              || nodePath == null
@@ -204,8 +205,18 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
              nodePath[nodePath.Count - 1]) && pathfindingCooldown <= 0)
         {
             nodePath = new List<Node>();
-            int closeNode = NodeManager.instance.GetClosestNode(transform);
-            int endNode = NodeManager.instance.GetClosestNode(target.transform);
+            int closeNode, endNode;
+
+            if (amEscaping)
+            {
+                closeNode = NodeManager.instance.GetClosestNode(transform);
+                endNode = NodeManager.instance.GetEscapeNode(target.transform);
+            }
+            else
+            {
+                closeNode = NodeManager.instance.GetClosestNode(transform);
+                endNode = NodeManager.instance.GetClosestNode(target.transform);
+            }
 
             string myNodes = closeNode + "," + endNode + "," + false;
 

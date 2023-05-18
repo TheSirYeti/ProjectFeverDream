@@ -72,9 +72,9 @@ public class RangedEnemy : Enemy
         speed = 0;
         
         DoFsmSetup();
-        StopRagdoll();
         rb.isKinematic = false;
         DoFaceTransition(FaceID.IDLE);
+        StopRagdoll();
     }
 
     void DoFsmSetup()
@@ -247,7 +247,7 @@ public class RangedEnemy : Enemy
 
         pathfind.OnEnter += x =>
         {
-            CalculatePathPreview();
+            CalculatePathPreview(false);
         };
 
         pathfind.OnUpdate += () =>
@@ -275,9 +275,13 @@ public class RangedEnemy : Enemy
                 SendInputToFSM(RangedEnemyStates.CHASE);
                 return;
             }
-            
-            SetSpeedValue(Time.deltaTime);
-            DoPathfinding();
+
+            if (nodePath.Any() || currentNode < nodePath.Count)
+            {
+                SetSpeedValue(Time.deltaTime);
+                DoPathfinding();
+            }
+            else StopSpeed();
         };
 
         #endregion
@@ -358,6 +362,7 @@ public class RangedEnemy : Enemy
 
         scared.OnEnter += x =>
         {
+            CalculatePathPreview(true);
             currentScare = timeScared;
             animator.Play("ScaredMovement");
         };
@@ -373,7 +378,7 @@ public class RangedEnemy : Enemy
             }
 
             SetSpeedValue(Time.deltaTime);
-            DoGenericRunAway();
+            DoPathfinding();
         };
 
         scared.OnExit += x =>
