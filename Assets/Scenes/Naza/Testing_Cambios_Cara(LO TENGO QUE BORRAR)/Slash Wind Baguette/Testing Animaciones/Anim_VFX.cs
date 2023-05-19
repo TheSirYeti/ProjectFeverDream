@@ -5,7 +5,7 @@ using UnityEngine;
 public class Anim_VFX : MonoBehaviour
 {
     public Animator anim;
-    public ParticleSystem slash;
+    public ParticleSystem slash, bread;
 
     void Update()
     {
@@ -18,5 +18,10 @@ public class Anim_VFX : MonoBehaviour
     void slashActivc()
     {
         slash.Play();
+    }
+
+    void traceBread()
+    {
+        bread.Play();
     }
 }
