@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class WeaponManager : MonoBehaviour, IAttendance
+public class WeaponManager : MonoBehaviour//, IAttendance
 {
     Model _model;
     [HideInInspector] public View _view;
@@ -139,42 +139,42 @@ public class WeaponManager : MonoBehaviour, IAttendance
         Destroy(_actualWeapon.gameObject);
     }
 
-    public void Interact(GameObject usableItem = null)
-    {
-        if (!usableItem) return;
+    //public void Interact(GameObject usableItem = null)
+    //{
+    //    if (!usableItem) return;
 
-        GenericWeapon weapon = usableItem.GetComponent<GenericWeapon>();
+    //    GenericWeapon weapon = usableItem.GetComponent<GenericWeapon>();
 
-        SetWeapon(weapon);
-    }
+    //    SetWeapon(weapon);
+    //}
 
-    Assistant.Interactuables IAttendance.GetType()
-    {
-        return Assistant.Interactuables.WEAPONMANAGER;
-    }
+    //Assistant.Interactuables IAttendance.GetType()
+    //{
+    //    return Assistant.Interactuables.WEAPONMANAGER;
+    //}
 
-    public Transform GetTransform()
-    {
-        return transform;
-    }
+    //public Transform GetTransform()
+    //{
+    //    return transform;
+    //}
 
-    public Transform GetInteractPoint()
-    {
-        return transform;
-    }
+    //public Transform GetInteractPoint()
+    //{
+    //    return transform;
+    //}
 
-    public List<Renderer> GetRenderer()
-    {
-        return null;
-    }
+    //public List<Renderer> GetRenderer()
+    //{
+    //    return null;
+    //}
 
-    public bool CanInteract()
-    {
-        return true;
-    }
+    //public bool CanInteract()
+    //{
+    //    return true;
+    //}
 
-    public string AnimationToExecute()
-    {
-        return "GiveWeapon";
-    }
+    //public string AnimationToExecute()
+    //{
+    //    return "GiveWeapon";
+    //}
 }
