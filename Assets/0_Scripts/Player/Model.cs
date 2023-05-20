@@ -10,7 +10,7 @@ public class Model : MonoBehaviour
     PhysicsSystem _physics;
     Controller _controller;
     View _view;
-    WeaponManager _weaponManager;
+    [HideInInspector] public WeaponManager weaponManager { get; private set; }
     CameraController _cameraController;
     Assistant _assistant;
 
@@ -36,6 +36,8 @@ public class Model : MonoBehaviour
     [Header("-== Interact Properties ==-")]
     [SerializeField] float _interactDistance;
     [SerializeField] LayerMask _interactMask;
+    [SerializeField] LayerMask _pickupMask;
+    [SerializeField] LayerMask _usabletMask;
 
     [Space(20)]
     [Header("-== Jump Properties ==-")]
@@ -76,13 +78,13 @@ public class Model : MonoBehaviour
     private void Awake()
     {
         _view = FindObjectOfType<View>();
-        _weaponManager = FindObjectOfType<WeaponManager>();
+        weaponManager = FindObjectOfType<WeaponManager>();
 
         _camera = Camera.main;
 
-        _weaponManager.SetRef(this, _camera.transform, _view);
+        weaponManager.SetRef(this, _camera.transform, _view);
         _cameraController = GetComponent<CameraController>();
-        _controller = new Controller(this, _cameraController, _weaponManager);
+        _controller = new Controller(this, _cameraController, weaponManager);
         _rb = GetComponent<Rigidbody>();
         _physics = new PhysicsSystem(_rb);
 
@@ -108,8 +110,10 @@ public class Model : MonoBehaviour
 
     void Start()
     {
-        EventManager.Trigger("OnAssistantStart", _camera.transform, _weaponManager.GetComponent<IAttendance>());
-        EventManager.Trigger("OnViewStart", this, _weaponManager);
+        EventManager.Trigger("OnAssistantStart", _camera.transform, weaponManager.GetComponent<IAssistInteract>());
+        EventManager.Trigger("OnViewStart", this, weaponManager);
+
+        GameManager.instace.Player = this;
     }
 
     void Update()
@@ -302,13 +306,35 @@ public class Model : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _interactDistance, _interactMask))
         {
-            IAttendance iAttendance = hit.collider.gameObject.GetComponent<IAttendance>();
+            IAssistInteract iInteract = hit.collider.gameObject.GetComponent<IAssistInteract>();
 
-            if (iAttendance == null) iAttendance = hit.collider.gameObject.GetComponentInParent<IAttendance>();
+            if (iInteract == null) iInteract = hit.collider.gameObject.GetComponentInParent<IAssistInteract>();
 
-            if (iAttendance == null || !iAttendance.CanInteract()) return;
+            if (iInteract == null || !iInteract.CanInteract()) return;
 
-            _assistant.SetObjective(iAttendance);
+            _assistant.SetObjective(iInteract.GetInteractPoint(), Assistant.JorgeStates.INTERACT);
+        }
+        else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _interactDistance, _pickupMask))
+        {
+            IAssistPickUp iPickUp = hit.collider.gameObject.GetComponent<IAssistPickUp>();
+
+            if (iPickUp == null) iPickUp = hit.collider.gameObject.GetComponentInParent<IAssistPickUp>();
+
+            if (iPickUp == null) return;
+
+            _assistant.SetObjective(iPickUp.GetGameObject().transform, Assistant.JorgeStates.PICKUP);
+        }
+        else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _interactDistance, _usabletMask))
+        {
+            IAssistUsable iPickUp = hit.collider.gameObject.GetComponent<IAssistUsable>();
+
+            if (iPickUp == null) iPickUp = hit.collider.gameObject.GetComponentInParent<IAssistUsable>();
+
+            if (iPickUp == null) return;
+
+            if (iPickUp.InteractID() != _assistant._holdingItem.InteractID()) return;
+
+            _assistant.SetObjective(iPickUp.GetGameObject().transform, Assistant.JorgeStates.USEIT);
         }
     }
 

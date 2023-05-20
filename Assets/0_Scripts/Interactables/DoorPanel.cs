@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DoorPanel : MonoBehaviour, IAttendance
+public class DoorPanel : MonoBehaviour, IAssistInteract
 {
     [SerializeField] Assistant.Interactuables _type;
 
@@ -58,7 +58,7 @@ public class DoorPanel : MonoBehaviour, IAttendance
         return null;
     }
 
-    Assistant.Interactuables IAttendance.GetType()
+    Assistant.Interactuables IAssistInteract.GetType()
     {
         return _type;
     }

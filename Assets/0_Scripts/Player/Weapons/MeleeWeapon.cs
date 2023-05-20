@@ -29,9 +29,7 @@ public class MeleeWeapon : GenericWeapon
         _meleeCollider = GetComponent<BoxCollider>();
         _meleeCollider.enabled = false;
 
-        //Get shootpoint
-
-        //Cambiar speed animacion
+        StartCoroutine(LateStart());
     }
 
     private void Update()
@@ -83,7 +81,7 @@ public class MeleeWeapon : GenericWeapon
                 EventManager.Trigger("OnBaguetteChangeState", 4);
                 GameObject broken = Instantiate(brokenBagguete, transform.parent);
 
-                _weaponManager.SetWeapon(broken.GetComponent<GenericWeapon>(), false);
+                _weaponManager.EquipWeapon(broken.GetComponent<GenericWeapon>(), false);
                 Destroy(gameObject);
             }
         }

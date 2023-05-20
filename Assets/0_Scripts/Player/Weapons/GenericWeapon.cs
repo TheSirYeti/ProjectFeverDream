@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class GenericWeapon : MonoBehaviour, IAttendance
+public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp
 {
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
@@ -19,8 +19,9 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
     [SerializeField] Collider _collider;
 
     protected Transform _nozzlePoint;
-    //public RecoilSytem _recoilSystem;
     [SerializeField] protected LayerMask _shooteableMask;
+
+    [SerializeField] int _pickUpID;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
     public abstract void Reload();
@@ -33,11 +34,6 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
     protected ObjectPool _bulletPool;
 
     protected Action OnUpdate = delegate { };
-
-    public void SetWeaponManager(WeaponManager weaponManager)
-    {
-        _weaponManager = weaponManager;
-    }
 
     public bool CanShoot()
     {
@@ -112,6 +108,13 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
 
     }
 
+    protected IEnumerator LateStart()
+    {
+        yield return new WaitForEndOfFrame();
+        _weaponManager = GameManager.instace.Player.weaponManager;
+    }
+
+    #region SO Getters
     public bool GetTypeOfWeapons()
     {
         return _weaponSO.isMelee;
@@ -136,21 +139,9 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
     {
         return _weaponSO.animatorController;
     }
+    #endregion
 
-    public void PickUp()
-    {
-        gameObject.SetActive(true);
-        EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
-        EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
-        EventManager.Trigger("ChangeEquipedWeapontUI", _weaponSO.weaponID);
-    }
-
-    public void DropIt()
-    {
-        gameObject.SetActive(false);
-    }
-
-
+    #region Bullets Region
     public void AddBullets(int ammountToAddBullets)
     {
         int missingBullets = _weaponSO.maxBulletsInInventory - _actualReserveBullets;
@@ -180,45 +171,36 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
     {
         _bulletPool.ReturnObject(bullet.gameObject);
     }
+    #endregion
 
-    public void Interact(GameObject usableItem = null)
-    {
-        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-        _collider.enabled = false;
-    }
-
-    Assistant.Interactuables IAttendance.GetType()
-    {
-        return Assistant.Interactuables.WEAPON;
-    }
-
-    public Transform GetTransform()
-    {
-        return transform;
-    }
-
-    public Transform GetInteractPoint()
-    {
-        return transform;
-    }
-
-    public List<Renderer> GetRenderer()
+    #region Usable Interface
+    public void Use(IAssistUsable actionable)
     {
         throw new NotImplementedException();
     }
 
-    public bool CanInteract()
+    public GameObject GetGameObject()
+    {
+        return gameObject;
+    }
+
+    public bool IsAutoUsable()
     {
         return true;
     }
 
-    public string AnimationToExecute()
+    public Transform GetTarget()
     {
-        return "PickUp";
+        return _weaponManager.transform;
     }
 
-    //CheatZone
+    public int InteractID()
+    {
+        return _pickUpID;
+    }
+    #endregion
 
+    #region CheatZone
     public void SetAmmo(int newAmmo)
     {
         _actualReserveBullets = newAmmo;
@@ -226,4 +208,5 @@ public abstract class GenericWeapon : MonoBehaviour, IAttendance
         EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
     }
+    #endregion
 }

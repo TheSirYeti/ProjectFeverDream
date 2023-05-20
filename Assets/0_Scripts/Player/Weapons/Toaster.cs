@@ -25,6 +25,8 @@ public class Toaster : GenericWeapon
 
         //EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
         //EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
+
+        StartCoroutine(LateStart());
     }
 
     private void Update()
@@ -36,10 +38,8 @@ public class Toaster : GenericWeapon
     /* -------------------------------- SHOOT -------------------------------- */
     public override void Shoot(Transform pointOfShoot, bool isADS)
     {
-        Debug.Log("xd");
         if (_actualMagazineBullets <= 0) return;
 
-        Debug.Log("dx");
         Vector3 actualDir = pointOfShoot.forward;
 
         int actualPellets = (int)(numPellets * _actualLoading);

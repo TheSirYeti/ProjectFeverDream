@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class WeaponManager : MonoBehaviour//, IAttendance
+public class WeaponManager : MonoBehaviour, IAssistUsable
 {
     Model _model;
     [HideInInspector] public View _view;
     [SerializeField] RuntimeAnimatorController _noWeaponAnimator;
+
+    [SerializeField] int _usableID;
 
     [Serializable]
     public struct WeaponRenderer
@@ -89,7 +91,7 @@ public class WeaponManager : MonoBehaviour//, IAttendance
         _actualWeapon.Reload();
     }
 
-    public void SetWeapon(GenericWeapon newWeapon, bool turnOffPrevious = true)
+    public void EquipWeapon(GenericWeapon newWeapon, bool turnOffPrevious = true)
     {
         if (_actualWeapon != null && turnOffPrevious)
         {
@@ -139,42 +141,19 @@ public class WeaponManager : MonoBehaviour//, IAttendance
         Destroy(_actualWeapon.gameObject);
     }
 
-    //public void Interact(GameObject usableItem = null)
-    //{
-    //    if (!usableItem) return;
+    public void UseItem(IAssistPickUp usable)
+    {
 
-    //    GenericWeapon weapon = usableItem.GetComponent<GenericWeapon>();
+        EquipWeapon(usable.GetGameObject().GetComponent<GenericWeapon>());
+    }
 
-    //    SetWeapon(weapon);
-    //}
+    public GameObject GetGameObject()
+    {
+        return gameObject;
+    }
 
-    //Assistant.Interactuables IAttendance.GetType()
-    //{
-    //    return Assistant.Interactuables.WEAPONMANAGER;
-    //}
-
-    //public Transform GetTransform()
-    //{
-    //    return transform;
-    //}
-
-    //public Transform GetInteractPoint()
-    //{
-    //    return transform;
-    //}
-
-    //public List<Renderer> GetRenderer()
-    //{
-    //    return null;
-    //}
-
-    //public bool CanInteract()
-    //{
-    //    return true;
-    //}
-
-    //public string AnimationToExecute()
-    //{
-    //    return "GiveWeapon";
-    //}
+    public int InteractID()
+    {
+        return _usableID;
+    }
 }

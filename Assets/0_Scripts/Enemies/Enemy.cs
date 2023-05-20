@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
+public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract
 {
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp; 
@@ -466,7 +466,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAttendance
         return renderers;
     }
 
-    Assistant.Interactuables IAttendance.GetType()
+    Assistant.Interactuables IAssistInteract.GetType()
     {
         return _type;
     }

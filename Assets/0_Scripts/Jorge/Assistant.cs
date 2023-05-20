@@ -11,15 +11,12 @@ public class Assistant : MonoBehaviour
     Animator _animator;
     public Rigidbody _rb;
 
-    Vector3 actualDir;
+    Vector3 _actualDir;
 
-    [SerializeField] LayerMask _playerMask;
     [SerializeField] LayerMask _collisionMask;
 
     [SerializeField] float _followSpeed;
     [SerializeField] float _interactSpeed;
-    [SerializeField] float _closeDistanceSpeed;
-    [SerializeField] float _closeRadiousDetection;
 
     [SerializeField] float _followingDistance;
     [SerializeField] float _interactDistance;
@@ -50,10 +47,8 @@ public class Assistant : MonoBehaviour
     Vector3 _dir;
 
     Transform _player;
-    IAttendance _interactuable;
-
-    GenericWeapon _holdingWeapon;
-    WeaponManager _weaponManager;
+    IAssistInteract _interactuable;
+    public IAssistPickUp _holdingItem { get; private set; }
 
     public enum Interactuables
     {
@@ -63,7 +58,7 @@ public class Assistant : MonoBehaviour
         WEAPONMANAGER
     }
 
-    enum JorgeStates
+    public enum JorgeStates
     {
         FOLLOW,
         PATHFINDING,
@@ -98,7 +93,7 @@ public class Assistant : MonoBehaviour
         var pathFinding = new State<JorgeStates>("PATHFINDING");
         var interact = new State<JorgeStates>("INTERACT");
         var pickup = new State<JorgeStates>("PICKUP");
-        var useIt = new State<JorgeStates>("USEIT");
+        var useit = new State<JorgeStates>("USEIT");
         var hide = new State<JorgeStates>("HIDE");
 
         StateConfigurer.Create(follow)
@@ -112,7 +107,7 @@ public class Assistant : MonoBehaviour
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
-            .SetTransition(JorgeStates.USEIT, useIt)
+            .SetTransition(JorgeStates.USEIT, useit)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
@@ -127,11 +122,11 @@ public class Assistant : MonoBehaviour
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             .SetTransition(JorgeStates.INTERACT, interact)
-            .SetTransition(JorgeStates.USEIT, useIt)
+            .SetTransition(JorgeStates.USEIT, useit)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
-        StateConfigurer.Create(useIt)
+        StateConfigurer.Create(useit)
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             .SetTransition(JorgeStates.INTERACT, interact)
@@ -144,7 +139,7 @@ public class Assistant : MonoBehaviour
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
-            .SetTransition(JorgeStates.USEIT, useIt)
+            .SetTransition(JorgeStates.USEIT, useit)
             .Done();
 
         #endregion
@@ -179,7 +174,7 @@ public class Assistant : MonoBehaviour
 
 
             Vector3 newDir = targetMovement - transform.position;
-            actualDir = newDir * _followingDistance;
+            _actualDir = newDir * _followingDistance;
 
 
             if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
@@ -231,7 +226,7 @@ public class Assistant : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
-            actualDir = _dir.normalized * _interactSpeed;
+            _actualDir = _dir.normalized * _interactSpeed;
 
             if (Vector3.Distance(transform.position, (_actualObjective.position)) < _nodeDistance)
             {
@@ -261,6 +256,7 @@ public class Assistant : MonoBehaviour
         pathFinding.OnExit += x =>
         {
             _actualObjective = _previousObjective;
+            _previousObjective = null;
         };
 
         #endregion
@@ -270,6 +266,12 @@ public class Assistant : MonoBehaviour
         interact.OnEnter += x =>
         {
             Debug.Log("interact");
+
+            _interactuable = _actualObjective.gameObject.GetComponent<IAssistInteract>();
+            if (_interactuable == null)
+                _interactuable = _actualObjective.gameObject.GetComponentInParent<IAssistInteract>();
+
+            Debug.Log(_interactuable.GetTransform().gameObject.name);
         };
 
         interact.OnUpdate += () =>
@@ -291,7 +293,7 @@ public class Assistant : MonoBehaviour
 
             if (Vector3.Distance(transform.position, (_actualObjective.position)) < _interactDistance)
             {
-                actualDir = Vector3.zero;
+                _actualDir = Vector3.zero;
                 _isInteracting = true;
 
                 switch (_interactuable.GetType())
@@ -300,6 +302,7 @@ public class Assistant : MonoBehaviour
                         _animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
                     case Interactuables.ENEMY:
+                        _actualRenders = _interactuable.GetRenderer();
                         foreach (Renderer render in _actualRenders)
                         {
                             render.material = _blackholeMat;
@@ -308,26 +311,13 @@ public class Assistant : MonoBehaviour
                         ExtraUpdate = ChangeBlackHoleVars;
                         _animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
-                    //case Interactuables.WEAPON:
-                    //    _interactuable.GetTransform().parent = transform;
-                    //    _interactuable.Interact();
-                    //    //_holdingWeapon = _interactuable;
-                    //    //_interactuable = _weaponManager;
-                    //    _actualObjective = _interactuable.GetTransform();
-                    //    _isInteracting = false;
-                    //    break;
-                    //case Interactuables.WEAPONMANAGER:
-                    //    //_interactuable.Interact(_holdingWeapon.GetTransform().gameObject);
-                    //    _interactuable = null;
-                    //    SendInputToFSM(JorgeStates.FOLLOW);
-                    //    break;
                     default:
                         break;
                 }
             }
             else
             {
-                actualDir = _dir * _interactSpeed;
+                _actualDir = _dir * _interactSpeed;
             }
         };
 
@@ -342,18 +332,92 @@ public class Assistant : MonoBehaviour
 
         #region PICKUP
 
+        pickup.OnEnter += x =>
+        {
+            Debug.Log("Pick Up");
+        };
+
         pickup.OnUpdate += () =>
         {
-            Debug.Log("a");
+            _dir = _actualObjective.position - transform.position;
+
+            Quaternion targetRotation = Quaternion.LookRotation(_dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
+            {
+                SendInputToFSM(JorgeStates.PATHFINDING);
+            }
+
+            if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _interactDistance)
+            {
+                _actualObjective.transform.parent = transform;
+                _holdingItem = _actualObjective.gameObject.GetComponent<IAssistPickUp>();
+                
+
+                if (_holdingItem.IsAutoUsable())
+                {
+                    SendInputToFSM(JorgeStates.USEIT);
+                }
+                else
+                {
+                    SendInputToFSM(JorgeStates.FOLLOW);
+                }
+            }
+
+            _actualDir = _dir * _interactSpeed;
+        };
+
+        pickup.OnExit += x =>
+        {
+            _previousObjective = _actualObjective;
+            _previousState = JorgeStates.PICKUP;
         };
 
         #endregion
 
-        #region GIVEIT
+        #region USEIT
 
-        useIt.OnUpdate += () =>
+        useit.OnEnter += x =>
         {
-            Debug.Log("b");
+            _actualObjective = _holdingItem.GetTarget();
+            Debug.Log(_actualObjective.name);
+        };
+
+        useit.OnUpdate += () =>
+        {
+            _dir = _actualObjective.position - transform.position;
+
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
+            {
+                SendInputToFSM(JorgeStates.PATHFINDING);
+            }
+
+            if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _interactDistance * 1.6f)
+            {
+                Debug.Log("a");
+                IAssistUsable tempItemAction = _actualObjective.GetComponent<IAssistUsable>();
+
+                if (tempItemAction != null)
+                {
+                    _holdingItem.GetGameObject().transform.parent = null;
+                    tempItemAction.UseItem(_holdingItem);
+                }
+                else
+                {
+                    Destroy(_holdingItem.GetGameObject());
+                }
+
+                SendInputToFSM(JorgeStates.FOLLOW);
+            }
+
+            _actualDir = _dir.normalized * _interactSpeed;
+        };
+
+        useit.OnExit += x =>
+        {
+            _previousObjective = _actualObjective;
+            _previousState = JorgeStates.USEIT;
         };
 
         #endregion
@@ -384,7 +448,7 @@ public class Assistant : MonoBehaviour
 
             if (Vector3.Distance(transform.position, _actualObjective.position) < 0.1f)
             {
-                actualDir = Vector3.zero;
+                _actualDir = Vector3.zero;
                 _dir = _player.position - transform.position;
 
                 Quaternion targetRotation = Quaternion.LookRotation(_dir);
@@ -395,7 +459,7 @@ public class Assistant : MonoBehaviour
                 Quaternion targetRotation = Quaternion.LookRotation(_dir);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
-                actualDir = _dir * _followSpeed;
+                _actualDir = _dir * _followSpeed;
             }
         };
 
@@ -424,7 +488,7 @@ public class Assistant : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.velocity = actualDir;
+        _rb.velocity = _actualDir;
     }
 
     public void Interact()
@@ -440,19 +504,13 @@ public class Assistant : MonoBehaviour
         _actualObjective = _player;
     }
 
-    public void SetObjective(IAttendance interactuable)
+    public void SetObjective(Transform interactuable, JorgeStates goToState)
     {
         //if (_interactuable != null) return;
 
-        _interactuable = interactuable;
+        _actualObjective = interactuable;
 
-        _actualObjective = interactuable.GetInteractPoint();
-        _previousObjective = interactuable.GetTransform();
-
-        if (_interactuable.GetType() == Interactuables.ENEMY)
-            _actualRenders = _interactuable.GetRenderer();
-
-        SendInputToFSM(JorgeStates.INTERACT);
+        SendInputToFSM(goToState);
     }
 
     public void StartAction()
