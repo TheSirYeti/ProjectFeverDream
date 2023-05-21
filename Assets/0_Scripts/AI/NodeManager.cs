@@ -101,6 +101,17 @@ public class NodeManager : MonoBehaviour
     {
         StartCoroutine(DoLazyNodeCalculation());
     }
+
+    public Node GetNode(int id, bool isForAssistant)
+    {
+        List<Node> nodes = new List<Node>();
+        
+        if (isForAssistant)
+            nodes = nodesAssistant;
+        else nodes = nodesEnemy;
+
+        return nodes[id];
+    }
  
     IEnumerator DoLazyNodeCalculation()
     {
