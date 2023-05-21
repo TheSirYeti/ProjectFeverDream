@@ -56,6 +56,11 @@ public class View : MonoBehaviour
         _animator.SetInteger(intName, value);
     }
 
+    public void PlayAnimation(string animationName)
+    {
+        _animator.Play(animationName);
+    }
+
     //Seccion de Eventos
     public void ShootEvent()
     {

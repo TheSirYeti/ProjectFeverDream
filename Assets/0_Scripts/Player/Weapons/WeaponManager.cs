@@ -91,7 +91,7 @@ public class WeaponManager : MonoBehaviour, IAssistUsable
         _actualWeapon.Reload();
     }
 
-    public void EquipWeapon(GenericWeapon newWeapon, bool turnOffPrevious = true)
+    public void EquipWeapon(GenericWeapon newWeapon, bool turnOffPrevious = true, bool isFromTheFloor = false)
     {
         if (_actualWeapon != null && turnOffPrevious)
         {
@@ -121,12 +121,19 @@ public class WeaponManager : MonoBehaviour, IAssistUsable
         }
 
         _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
+
+        if(isFromTheFloor && _actualWeapon.GetID() == 1)
+        {
+            _view.PlayAnimation("ANIM_Player_BaguetteDUAL_Idle");
+        }
+
         OnClick = _actualWeapon.OnClick;
         OnRelease = _actualWeapon.OnRelease;
     }
 
     public void DestroyWeapon()
     {
+        Debug.Log("A");
         OnClick = delegate { };
         OnRelease = delegate { };
 
@@ -143,8 +150,7 @@ public class WeaponManager : MonoBehaviour, IAssistUsable
 
     public void UseItem(IAssistPickUp usable)
     {
-
-        EquipWeapon(usable.GetGameObject().GetComponent<GenericWeapon>());
+        EquipWeapon(usable.GetGameObject().GetComponent<GenericWeapon>(), true, true);
     }
 
     public GameObject GetGameObject()

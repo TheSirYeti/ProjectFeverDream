@@ -20,6 +20,7 @@ public class Assistant : MonoBehaviour
 
     [SerializeField] float _followingDistance;
     [SerializeField] float _interactDistance;
+    [SerializeField] float _pickupDistance;
     [SerializeField] float _nodeDistance;
 
     [SerializeField] List<Node> nodeList = new List<Node>();
@@ -207,21 +208,12 @@ public class Assistant : MonoBehaviour
 
                 if (i > 10)
                 {
-                    transform.position = _player.position - transform.forward * 2;
-                    _interactuable = null;
-                    SendInputToFSM(JorgeStates.FOLLOW);
+                    Respawn();
                     break;
                 }
             }
 
             _dir = (_actualObjective.position) - transform.position;
-
-            if (_dir == Vector3.zero)
-            {
-                transform.position = _player.position - transform.forward * 2;
-                _interactuable = null;
-                SendInputToFSM(JorgeStates.FOLLOW);
-            }
 
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
@@ -349,7 +341,7 @@ public class Assistant : MonoBehaviour
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
 
-            if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _interactDistance)
+            if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
             {
                 _actualObjective.transform.parent = transform;
                 _holdingItem = _actualObjective.gameObject.GetComponent<IAssistPickUp>();
@@ -388,12 +380,15 @@ public class Assistant : MonoBehaviour
         {
             _dir = _actualObjective.position - transform.position;
 
+            Quaternion targetRotation = Quaternion.LookRotation(_dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
             if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
 
-            if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _interactDistance * 1.6f)
+            if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
             {
                 Debug.Log("a");
                 IAssistUsable tempItemAction = _actualObjective.GetComponent<IAssistUsable>();
@@ -509,6 +504,7 @@ public class Assistant : MonoBehaviour
         //if (_interactuable != null) return;
 
         _actualObjective = interactuable;
+        _previousObjective = interactuable;
 
         SendInputToFSM(goToState);
     }
@@ -549,6 +545,13 @@ public class Assistant : MonoBehaviour
         {
             render.material.SetFloat("_Effect", _loadingAmmount);
         }
+    }
+
+    void Respawn()
+    {
+        transform.position = NodeManager.instance.GetNode(NodeManager.instance.GetClosestNode(_player, true), true).transform.position;
+        _interactuable = null;
+        SendInputToFSM(JorgeStates.FOLLOW);
     }
 
     private void OnDrawGizmos()

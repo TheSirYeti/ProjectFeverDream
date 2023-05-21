@@ -306,6 +306,7 @@ public class Model : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _interactDistance, _interactMask))
         {
+            Debug.Log(hit.collider.gameObject.name);
             IAssistInteract iInteract = hit.collider.gameObject.GetComponent<IAssistInteract>();
 
             if (iInteract == null) iInteract = hit.collider.gameObject.GetComponentInParent<IAssistInteract>();

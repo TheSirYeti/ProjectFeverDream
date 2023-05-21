@@ -84,7 +84,7 @@ public class UIController : MonoBehaviour
             uiImage.SetActive(false);
         }
 
-        if (!_weaponsUI[(int)parameters[0]]) return;
+        if ((int)parameters[0] == -1) return;
 
         _actualWeapon = (int)parameters[0];
         _weaponsUI[_actualWeapon].SetActive(true);
