@@ -12,6 +12,7 @@ public class Anim_VFX : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             anim.SetTrigger("Attack");
+            Debug.Log("Me llamo");
         }
     }
 
