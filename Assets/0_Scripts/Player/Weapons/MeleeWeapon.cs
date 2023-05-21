@@ -61,6 +61,17 @@ public class MeleeWeapon : GenericWeapon
     {
         EventManager.Trigger("ChangeBulletUI", usageAmmount, _maxUsageAmmount);
 
+        if (SoundManager.instance != null)
+        {
+            int rand = Random.Range(1, 4);
+            
+            if(rand == 1)
+                SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_1);
+            else if(rand == 2)
+                SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_2);
+            else SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_3);
+        }
+        
         if (_isBroken)
         {
             if (usageAmmount <= 0)
@@ -82,6 +93,7 @@ public class MeleeWeapon : GenericWeapon
                 GameObject broken = Instantiate(brokenBagguete, transform.parent);
 
                 _weaponManager.EquipWeapon(broken.GetComponent<GenericWeapon>(), false);
+                SoundManager.instance.PlaySound(SoundID.BAGUETTE_BREAK);
                 Destroy(gameObject);
             }
         }

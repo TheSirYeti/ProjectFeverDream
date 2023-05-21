@@ -356,7 +356,11 @@ public enum SoundID
     FOOTSTEP_2,
     SLIDE,
     BAGUETTE,
-    TEST_TOASTER_DING
+    TEST_TOASTER_DING,
+    BAGUETTE_IMPACT_1,
+    BAGUETTE_IMPACT_2,
+    BAGUETTE_IMPACT_3,
+    BAGUETTE_BREAK
 }
 
 public enum MusicID
