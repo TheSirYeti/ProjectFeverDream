@@ -93,7 +93,6 @@ public class MeleeWeapon : GenericWeapon
                 GameObject broken = Instantiate(brokenBagguete, transform.parent);
 
                 _weaponManager.EquipWeapon(broken.GetComponent<GenericWeapon>(), false);
-                SoundManager.instance.PlaySound(SoundID.BAGUETTE_BREAK);
                 Destroy(gameObject);
             }
         }

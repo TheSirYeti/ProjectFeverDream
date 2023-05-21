@@ -362,6 +362,7 @@ public class RangedEnemy : Enemy
 
         scared.OnEnter += x =>
         {
+            DoWarningFadeOut();
             CalculatePathPreview(true);
             currentScare = timeScared;
             animator.Play("ScaredMovement");
@@ -369,6 +370,12 @@ public class RangedEnemy : Enemy
 
         scared.OnUpdate += () =>
         {
+            if (isDead)
+            {
+                SendInputToFSM(RangedEnemyStates.DIE);
+                return;
+            }
+            
             currentScare -= Time.deltaTime;
 
             if (!InDanger() && currentScare <= 0)
@@ -392,6 +399,7 @@ public class RangedEnemy : Enemy
 
         die.OnEnter += x =>
         {
+            DoWarningFadeOut();
             DoFaceTransition(FaceID.DEAD);
         };
 

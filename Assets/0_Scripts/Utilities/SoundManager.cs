@@ -352,15 +352,30 @@ public class SoundManager : MonoBehaviour
 
 public enum SoundID
 {
-    FOOTSTEP_1,
-    FOOTSTEP_2,
-    SLIDE,
+    //0
+    FOOTSTEP_1, 
+    //1
+    FOOTSTEP_2, 
+    //2
+    SLIDE,  
+    //3
     BAGUETTE,
+    //4
     TEST_TOASTER_DING,
+    //5
     BAGUETTE_IMPACT_1,
+    //6
     BAGUETTE_IMPACT_2,
+    //7
     BAGUETTE_IMPACT_3,
-    BAGUETTE_BREAK
+    //8
+    BAGUETTE_BREAK,
+    //9
+    TOASTER_PULL,
+    //10
+    TOASTER_EJECT,
+    //11
+    ASSISTANT_SUCK,
 }
 
 public enum MusicID

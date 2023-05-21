@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8282463572660892470}
   - component: {fileID: 3051743638370247909}
   - component: {fileID: 8718188787302933048}
+  - component: {fileID: 4011259398120768338}
   m_Layer: 0
   m_Name: Assistant
   m_TagString: Untagged
@@ -50,16 +51,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 0}
-  _playerMask:
-    serializedVersion: 2
-    m_Bits: 8
   _collisionMask:
     serializedVersion: 2
     m_Bits: 192
   _followSpeed: 5
   _interactSpeed: 10
-  _closeDistanceSpeed: 25
-  _closeRadiousDetection: 1
   _followingDistance: 2
   _interactDistance: 1
   _nodeDistance: 0.5
@@ -127,6 +123,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4011259398120768338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2216139546459174358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9bdf10616ff944086554525d3af9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5212998587858194474
 GameObject:
   m_ObjectHideFlags: 0
