@@ -268,20 +268,20 @@ public class Assistant : MonoBehaviour
 
         interact.OnUpdate += () =>
         {
-            if (_isInteracting) return;
-
             _dir = (_actualObjective.position) - transform.position;
+
+            _dir.Normalize();
+
+            Quaternion targetRotation = Quaternion.LookRotation(_dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+            if (_isInteracting) return;
 
             RaycastHit hit;
             if (Physics.Raycast(transform.position, _dir, out hit, _dir.magnitude, _collisionMask))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
-
-            _dir.Normalize();
-
-            Quaternion targetRotation = Quaternion.LookRotation(_dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, (_actualObjective.position)) < _interactDistance)
             {
