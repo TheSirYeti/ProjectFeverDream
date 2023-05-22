@@ -52,6 +52,11 @@ public class SceneLoader : MonoBehaviour
     
     public IEnumerator DoAsyncSceneLoading()
     {
+        EventManager.ResetEventDictionary();
+        SoundManager.instance.StopAllMusic();
+        SoundManager.instance.StopAllSounds();
+        SoundManager.instance.StopAllVoiceLines();
+        
         yield return new WaitForSeconds(timeToIdle);
         
         AsyncOperation operation = SceneManager.LoadSceneAsync(currentSceneToLoad);

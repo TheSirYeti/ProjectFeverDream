@@ -51,5 +51,9 @@ public class CheckpointManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("CurrentCheckpoint", 0);
     }
-    
+
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetInt("CurrentCheckpoint", 0);
+    }
 }

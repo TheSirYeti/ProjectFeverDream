@@ -376,6 +376,8 @@ public enum SoundID
     TOASTER_EJECT,
     //11
     ASSISTANT_SUCK,
+    //12
+    PLAYER_HURT
 }
 
 public enum MusicID

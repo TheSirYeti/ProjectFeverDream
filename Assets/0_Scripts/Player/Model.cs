@@ -464,6 +464,8 @@ public class Model : MonoBehaviour, IPlayerLife
         EventManager.Trigger("ChangeHealthUI", _life);
 
         //TODO: Add SFX and VFX for player dmg
+        if(SoundManager.instance != null)
+            SoundManager.instance.PlaySound(SoundID.PLAYER_HURT);
 
         if(_life <= 0)
         {
