@@ -27,7 +27,6 @@ public class CheckpointManager : MonoBehaviour
         EventManager.Subscribe("OnNewSceneLoaded", ResetCheckpoints);
 
         currentCheckpoint = PlayerPrefs.GetInt("CurrentCheckpoint");
-        Debug.Log("BUENAS, CURRENT CHECKPOINT ES " + currentCheckpoint);
         DoPlayerSpawn();
     }
 
@@ -39,7 +38,6 @@ public class CheckpointManager : MonoBehaviour
         
         currentCheckpoint = newCheckpoint;
         PlayerPrefs.SetInt("CurrentCheckpoint", currentCheckpoint);
-        Debug.Log("NEW CHECKPOINT! es " + currentCheckpoint);
     }
 
     void DoPlayerSpawn()

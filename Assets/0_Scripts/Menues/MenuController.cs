@@ -50,17 +50,14 @@ public class MenuController : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
             _primaryMenu = landingMenu;
+            SoundManager.instance.PauseAllMusic();
+            SoundManager.instance.PauseAllSounds();
+            SoundManager.instance.PauseAllVoiceLines();
             //TODO: Change Later
             Time.timeScale = 0;
         }
         else
         {
-            foreach (GameObject item in selectedButtons)
-            {
-                item.SetActive(false);
-            }
-            selectedButtons[0].SetActive(true);
-            BTN_AudioOptions();
             _primaryMenu.SetActive(false);
             _secondaryMenu?.SetActive(false);
             _primaryMenu = landingMenu;
@@ -68,6 +65,10 @@ public class MenuController : MonoBehaviour
             pauseMenu.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            SoundManager.instance.ResumeAllMusic();
+            SoundManager.instance.ResumeAllSounds();
+            SoundManager.instance.ResumeAllVoiceLines();
+            //TODO: Change Later
             Time.timeScale = 1;
         }
 
