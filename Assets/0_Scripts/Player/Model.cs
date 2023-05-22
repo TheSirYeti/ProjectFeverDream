@@ -21,6 +21,7 @@ public class Model : MonoBehaviour, IPlayerLife
     [Header("-== Life Properties ==-")]
     [SerializeField] int _maxLife;
     int _life;
+    bool _canGetDmg = false;
 
     [Space(20)]
     [Header("-== Physics Properties ==-")]
@@ -413,6 +414,7 @@ public class Model : MonoBehaviour, IPlayerLife
 
     public void GetDamage(int dmg)
     {
+        if (!_canGetDmg) return;
         if (_life <= 0) return;
 
         _life -= dmg;
@@ -448,6 +450,10 @@ public class Model : MonoBehaviour, IPlayerLife
         {
             int health = UnityEngine.Random.Range(2, 10);
             Health(health);
+        }
+        else if (Input.GetKeyDown(KeyCode.Y))
+        {
+            _canGetDmg = !_canGetDmg;
         }
     }
 
