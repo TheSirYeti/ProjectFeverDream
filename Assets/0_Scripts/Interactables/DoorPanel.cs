@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DoorPanel : MonoBehaviour, IAssistInteract
+public class DoorPanel : MonoBehaviour, IAssistInteract, IInteractUI
 {
     [SerializeField] Assistant.Interactuables _type;
 
@@ -61,5 +61,10 @@ public class DoorPanel : MonoBehaviour, IAssistInteract
     Assistant.Interactuables IAssistInteract.GetType()
     {
         return _type;
+    }
+
+    public string ActionName()
+    {
+        return "Open the door";
     }
 }

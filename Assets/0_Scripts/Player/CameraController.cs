@@ -5,45 +5,61 @@ using System;
 
 public class CameraController : MonoBehaviour
 {
+    // Model
     Model _model;
 
-    private Camera _camera;
-    private Camera _cameraGetter { get { if (_camera) _camera = Camera.main; return _camera; } set { _camera = value; } }
-    private Transform _mainCameraParent;
+    // Cameras & Positions
+    Camera _camera;
+    Camera _cameraGetter { get { if (_camera) _camera = Camera.main; return _camera; } set { _camera = value; } }
+    Transform _mainCameraParent;
 
-    private Transform _actualCameraPos;
-    private List<Transform> _cameraPositions = new List<Transform>();
+    Transform _actualCameraPos;
+    List<Transform> _cameraPositions = new List<Transform>();
 
+    [Header("-== Sensibility Properties ==-")]
     [SerializeField] private float _cameraSens = 500;
     private float _cameraSpeeed = 10;
 
+    [Space(20)]
+    [Header("-== FOV Properties ==-")]
     [SerializeField] float _walkingFOV;
     [SerializeField] float _runningFOV;
     float _actualFOV;
-
     bool _isLargeFOV = false;
 
-    //Shake Vars
+    [Space(20)]
+    [Header("-== Shake Properties ==-")]
     Vector3 _initialCamPos;
     bool _isShaking = false;
     float _shakeDuration = 0f;
     [SerializeField] float _shakeMagnitude = 0.7f;
     [SerializeField] float _dampingSpeed = 1.0f;
 
-    // Camera bobbing variables
+    [Space(20)]
+    [Header("-== Bobbing Properties ==-")]
     bool _isBobbing = false;
     [SerializeField] float _bobbingSpeed = 0.18f;
     [SerializeField] float _bobbingAmount = 0.2f;
     float _timer = 0.0f;
 
-
+    [Space(20)]
+    [Header("-== Camera Clamp Properties ==-")]
     [SerializeField] private float _maxYRot = 50, _minYRot = -50;
 
     private float _xRotation;
     private float _yRotation;
 
+    [Space(20)]
+    [Header("-== Interact Properties ==-")]
+    [SerializeField] float _interactDistance;
+    [SerializeField] LayerMask _interactMask;
+    [SerializeField] LayerMask _pickupMask;
+    [SerializeField] LayerMask _usableMask;
+    [HideInInspector] public CameraAim cameraAim { get; private set; }
+
     Action cameraMovement = delegate { };
     Action cameraEffects = delegate { };
+    Action interactChecker = delegate { };
 
     void Awake()
     {
@@ -83,10 +99,13 @@ public class CameraController : MonoBehaviour
 
         if (PlayerPrefs.HasKey("Sensibilidad"))
             _cameraSens = PlayerPrefs.GetFloat("Sensibilidad");
+
+        StartCoroutine(LateStart());
     }
 
     private void Update()
     {
+        interactChecker();
         cameraMovement();
         cameraEffects();
     }
@@ -246,5 +265,12 @@ public class CameraController : MonoBehaviour
             pos.y = _initialCamPos.y;
             _cameraGetter.transform.localPosition = pos;
         }
+    }
+
+    IEnumerator LateStart()
+    {
+        yield return new WaitForEndOfFrame();
+        cameraAim = new CameraAim(_cameraGetter, GameManager.instace.Assistant, _interactDistance, _interactMask, _usableMask, _pickupMask);
+        interactChecker = cameraAim.CheckActualAim;
     }
 }

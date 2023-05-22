@@ -37,13 +37,6 @@ public class Model : MonoBehaviour, IPlayerLife
     Action crouchChecker = delegate { };
 
     [Space(20)]
-    [Header("-== Interact Properties ==-")]
-    [SerializeField] float _interactDistance;
-    [SerializeField] LayerMask _interactMask;
-    [SerializeField] LayerMask _pickupMask;
-    [SerializeField] LayerMask _usabletMask;
-
-    [Space(20)]
     [Header("-== Jump Properties ==-")]
     [SerializeField] float _jumpDuration;
     [SerializeField] float _jumpForce;
@@ -306,44 +299,6 @@ public class Model : MonoBehaviour, IPlayerLife
                 if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
                     _actualSpeed = _walkingSpeed;
             }
-        }
-    }
-
-    public void CheckInteract()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _interactDistance, _interactMask))
-        {
-            Debug.Log(hit.collider.gameObject.name);
-            IAssistInteract iInteract = hit.collider.gameObject.GetComponent<IAssistInteract>();
-
-            if (iInteract == null) iInteract = hit.collider.gameObject.GetComponentInParent<IAssistInteract>();
-
-            if (iInteract == null || !iInteract.CanInteract()) return;
-
-            _assistant.SetObjective(iInteract.GetInteractPoint(), Assistant.JorgeStates.INTERACT);
-        }
-        else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _interactDistance, _pickupMask))
-        {
-            IAssistPickUp iPickUp = hit.collider.gameObject.GetComponent<IAssistPickUp>();
-
-            if (iPickUp == null) iPickUp = hit.collider.gameObject.GetComponentInParent<IAssistPickUp>();
-
-            if (iPickUp == null) return;
-
-            _assistant.SetObjective(iPickUp.GetGameObject().transform, Assistant.JorgeStates.PICKUP);
-        }
-        else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _interactDistance, _usabletMask))
-        {
-            IAssistUsable iPickUp = hit.collider.gameObject.GetComponent<IAssistUsable>();
-
-            if (iPickUp == null) iPickUp = hit.collider.gameObject.GetComponentInParent<IAssistUsable>();
-
-            if (iPickUp == null) return;
-
-            if (iPickUp.InteractID() != _assistant._holdingItem.InteractID()) return;
-
-            _assistant.SetObjective(iPickUp.GetGameObject().transform, Assistant.JorgeStates.USEIT);
         }
     }
 

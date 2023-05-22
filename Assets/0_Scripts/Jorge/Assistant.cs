@@ -83,6 +83,7 @@ public class Assistant : MonoBehaviour
     void Start()
     {
         EventManager.Trigger("SetAssistant", this);
+        GameManager.instace.Assistant = this;
         DoFsmSetup();
     }
 

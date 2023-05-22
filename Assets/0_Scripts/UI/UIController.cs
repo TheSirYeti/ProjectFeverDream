@@ -29,6 +29,8 @@ public class UIController : MonoBehaviour
     [Header("Subtitles")] 
     [SerializeField] private TextMeshProUGUI subtitleText;
 
+    [SerializeField] private TextMeshProUGUI _interactuableUI;
+
     [SerializeField] Color _baseTextColor;
 
     [SerializeField] TextMeshProUGUI fpsCounter;
@@ -45,6 +47,7 @@ public class UIController : MonoBehaviour
         EventManager.Subscribe("OnADSDisabled", DisableADS);
         EventManager.Subscribe("ChangeObjetive", ChangesObjective);
         EventManager.Subscribe("ChangeObjectiveProgress", ChangeObjectiveProgress);
+        EventManager.Subscribe("InteractUI", InteractUI);
         EventManager.Subscribe("OnSubtitleOn", DoSubtitle);
         EventManager.Subscribe("OnSubtitleOff", DisableSubtitle);
     }
@@ -116,16 +119,16 @@ public class UIController : MonoBehaviour
     //        _interactuableUI.gameObject.SetActive(false);
     //}
 
-    //void InteractUI(params object[] parameters)
-    //{
-    //    if ((bool)parameters[0])
-    //    {
-    //        _interactuableUI.gameObject.SetActive(true);
-    //        _interactuableUI.text = (string)parameters[1];
-    //    }
-    //    else
-    //        _interactuableUI.gameObject.SetActive(false);
-    //}
+    void InteractUI(params object[] parameters)
+    {
+        if ((bool)parameters[0])
+        {
+            _interactuableUI.gameObject.SetActive(true);
+            _interactuableUI.text = "Press F to: " + (string)parameters[1];
+        }
+        else
+            _interactuableUI.gameObject.SetActive(false);
+    }
 
     //void BuyItem(params object[] parameters)
     //{

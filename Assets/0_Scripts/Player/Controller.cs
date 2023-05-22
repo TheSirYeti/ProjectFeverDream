@@ -145,7 +145,7 @@ public class Controller
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            _model.CheckInteract();
+            _cameraController.cameraAim.Interact();
         }
     }
 

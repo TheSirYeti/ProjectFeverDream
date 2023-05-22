@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp
+public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp, IInteractUI
 {
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
@@ -197,6 +197,11 @@ public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp
     public int InteractID()
     {
         return _pickUpID;
+    }
+
+    public string ActionName()
+    {
+        return "Pick up the weapon";
     }
     #endregion
 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract
+public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract, IInteractUI
 {
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp; 
@@ -471,6 +471,11 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract
     {
         return _type;
     }
+
+    public string ActionName()
+    {
+        return "Eat the Robot";
+    }
     #endregion
 
     #region FACE VALUES
@@ -530,6 +535,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
+
 
     #endregion
 }
