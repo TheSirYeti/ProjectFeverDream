@@ -64,7 +64,7 @@ public class SceneLoader : MonoBehaviour
         yield return null;
     }
 
-    public void ReloadScene(object[] parameters)
+    public void ReloadScene()
     {
         SetupLoadScene(SceneManager.GetActiveScene().buildIndex);
     }
