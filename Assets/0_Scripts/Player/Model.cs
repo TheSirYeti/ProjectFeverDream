@@ -177,6 +177,7 @@ public class Model : MonoBehaviour, IPlayerLife
     public void Jump()
     {
         if (_jumpCounter > 1) return;
+        if (Physics.Raycast(transform.position - Vector3.up, Vector3.up, 2f, _floorMask)) return;
 
         if (_canJump)
         {
