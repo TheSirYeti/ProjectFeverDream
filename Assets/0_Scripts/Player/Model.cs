@@ -122,6 +122,8 @@ public class Model : MonoBehaviour, IPlayerLife
         crouchChecker();
 
         CheckDmg();
+
+        if (_isOnFloor && _physics.HasGravity()) _physics.RemoveAcceleration("gravity");
     }
 
     void FixedUpdate()

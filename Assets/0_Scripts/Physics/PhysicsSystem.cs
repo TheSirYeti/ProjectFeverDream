@@ -232,5 +232,13 @@ public class PhysicsSystem
         _accelerationSpeed.RemoveAt(index);
         _accelerationDuration.RemoveAt(index);
     }
+
+    public bool HasGravity()
+    {
+        if (_accelerationName.Contains("gravity"))
+            return true;
+
+        return false;
+    }
     #endregion
 }
