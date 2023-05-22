@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d5f56f9a924dcc4ea6e496df0019c8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxLife: 100
   _gravity: 30
   _walkingSpeed: 10
   _runningSpeed: 15
@@ -104,7 +105,7 @@ MonoBehaviour:
   _coyoteTime: 0.3
   _floorMask:
     serializedVersion: 2
-    m_Bits: 8256
+    m_Bits: 64
   _wallMask:
     serializedVersion: 2
     m_Bits: 128

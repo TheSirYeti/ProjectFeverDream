@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class Model : MonoBehaviour
+public class Model : MonoBehaviour, IPlayerLife
 {
     //Class Reference
     PhysicsSystem _physics;
@@ -17,6 +17,10 @@ public class Model : MonoBehaviour
     //Component Reference
     Rigidbody _rb;
     Camera _camera;
+
+    [Header("-== Life Properties ==-")]
+    [SerializeField] int _maxLife;
+    int _life;
 
     [Space(20)]
     [Header("-== Physics Properties ==-")]
@@ -100,6 +104,7 @@ public class Model : MonoBehaviour
         _actualCollider.SetActive(true);
 
         _actualSpeed = _walkingSpeed;
+        _life = _maxLife;
 
         _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
 
@@ -122,6 +127,8 @@ public class Model : MonoBehaviour
 
         floorChecker();
         crouchChecker();
+
+        CheckDmg();
     }
 
     void FixedUpdate()
@@ -434,6 +441,52 @@ public class Model : MonoBehaviour
         if (!Physics.Raycast(transform.position - transform.up, Vector3.up, 1.1f, _floorMask))
         {
             Crouch(0);
+        }
+    }
+
+
+    public void Health(int healthAmmount)
+    {
+        _life += healthAmmount;
+        _life = Mathf.Clamp(_life, 0, _maxLife);
+
+        EventManager.Trigger("ChangeHealthUI", _life);
+    }
+
+    public void GetDamage(int dmg)
+    {
+        if (_life <= 0) return;
+
+        _life -= dmg;
+
+        _life = Mathf.Clamp(_life, 0, _maxLife);
+        EventManager.Trigger("ChangeHealthUI", _life);
+
+        //TODO: Add SFX and VFX for player dmg
+
+        if(_life <= 0)
+        {
+            Death();
+        }
+    }
+
+    void Death()
+    {
+        //TODO: Add death reset
+    }
+
+    //TODO: Delete when you add the dmg to the enemies
+    void CheckDmg()
+    {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            int dmg = UnityEngine.Random.Range(2, 10);
+            GetDamage(dmg);
+        }
+        else if (Input.GetKeyDown(KeyCode.I))
+        {
+            int health = UnityEngine.Random.Range(2, 10);
+            Health(health);
         }
     }
 

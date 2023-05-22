@@ -133,7 +133,6 @@ public class WeaponManager : MonoBehaviour, IAssistUsable
 
     public void DestroyWeapon()
     {
-        Debug.Log("A");
         OnClick = delegate { };
         OnRelease = delegate { };
 
