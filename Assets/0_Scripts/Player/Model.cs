@@ -21,7 +21,7 @@ public class Model : MonoBehaviour, IPlayerLife
     [Header("-== Life Properties ==-")]
     [SerializeField] int _maxLife;
     int _life;
-    bool _canGetDmg = false;
+    bool _canGetDmg = true;
 
     [Space(20)]
     [Header("-== Physics Properties ==-")]
