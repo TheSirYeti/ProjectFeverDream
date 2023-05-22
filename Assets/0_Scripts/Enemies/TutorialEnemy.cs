@@ -29,6 +29,7 @@ public class TutorialEnemy : Enemy
         maxHP = hp;
         maxSpeed = speed;
         speed = 0;
+        StopRagdoll();
     }
 
     public override void Attack()
