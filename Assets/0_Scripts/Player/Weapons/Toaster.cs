@@ -12,8 +12,7 @@ public class Toaster : GenericWeapon
     [SerializeField] float _loadSpeed = 0;
     [SerializeField] private Material burnToast, burnPieces;
 
-
-    [SerializeField] protected ParticleSystem _loadingShootParticle;
+    bool _particleIsActive = false;
 
     /* -------------------------------- START -------------------------------- */
     void Start()
@@ -68,6 +67,7 @@ public class Toaster : GenericWeapon
         }
 
         EventManager.Trigger("CameraShake", true);
+        EventManager.Trigger("VFX_ToasterON", 1);
         //SoundManager.instance.PlaySound(SoundID.PISTOL_SHOT);
 
         _actualMagazineBullets--;
@@ -122,28 +122,30 @@ public class Toaster : GenericWeapon
     {
         _weaponManager._view.SetBool(GetOnClickName(), true);
         burnToast.SetFloat("_BurnValue", 0);
-        burnPieces.SetFloat("_BurnValue", 0);
+        //burnPieces.SetFloat("_BurnValue", 0);
         OnUpdate = LoadWeapon;
     }
 
     void LoadWeapon()
     {
-        _loadingShootParticle.gameObject.transform.position = _nozzlePoint.position;
-
         _actualLoading += _loadSpeed * Time.deltaTime;
         burnToast.SetFloat("_BurnValue", _actualLoading);
-        burnPieces.SetFloat("_BurnValue", _actualLoading);
+        //burnPieces.SetFloat("_BurnValue", _actualLoading);
         _actualLoading = Mathf.Clamp01(_actualLoading);
 
-        if (!_loadingShootParticle.isPlaying && _actualLoading >= 1)
-            _loadingShootParticle.Play();
+        if (!_particleIsActive && _actualLoading > 0.2f)
+        {
+            EventManager.Trigger("VFX_ToasterON", 0);
+            _particleIsActive = true;
+        }
     }
 
     public override void OnRelease()
     {
         _weaponManager._view.SetBool(GetOnClickName(), false);
         OnUpdate = delegate { };
-        _loadingShootParticle.Stop();
+        EventManager.Trigger("VFX_ToasterOFF", 0);
+        _particleIsActive = false;
     }
 
     public override void CheckUsage()

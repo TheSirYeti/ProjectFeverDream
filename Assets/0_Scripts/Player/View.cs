@@ -66,4 +66,14 @@ public class View : MonoBehaviour
     {
         _weaponManager.ExecuteShoot();
     }
+
+    public void BrokenBaggueteVFX(int attack)
+    {
+        EventManager.Trigger("VFX_BrokenSlice", attack);
+    }
+
+    public void FullBaggueteVFX(int attack)
+    {
+        EventManager.Trigger("VFX_FullSlice", attack);
+    }
 }

@@ -64,14 +64,14 @@ public class MeleeWeapon : GenericWeapon
         if (SoundManager.instance != null)
         {
             int rand = Random.Range(1, 4);
-            
-            if(rand == 1)
+
+            if (rand == 1)
                 SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_1);
-            else if(rand == 2)
+            else if (rand == 2)
                 SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_2);
             else SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_3);
         }
-        
+
         if (_isBroken)
         {
             if (usageAmmount <= 0)
