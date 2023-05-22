@@ -370,18 +370,13 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract, IInte
     
     private void OnTriggerEnter(Collider other)
     {
-        if (isDead) return;
+        if (isDead || !isAttacking) return;
         
         IPlayerLife playerLife = other.GetComponentInParent<IPlayerLife>();
 
         if (playerLife != null)
         {
             playerLife.GetDamage((int)dmg);
-        }
-
-        if (other.gameObject.layer == LayerMask.NameToLayer("Wall"))
-        {
-            speed = 0f;
         }
     }
     

@@ -245,6 +245,11 @@ public class BaseMeleeEnemy : Enemy
             Attack();
         };
 
+        attack.OnExit += x =>
+        {
+            isAttacking = false;
+        };
+
         #endregion
 
         #region DEAD
@@ -289,6 +294,7 @@ public class BaseMeleeEnemy : Enemy
         
         currentAttackCooldown = attackCooldown;
         animator.SetTrigger("punch");
+        isAttacking = true;
         StopSpeed();
     }
 

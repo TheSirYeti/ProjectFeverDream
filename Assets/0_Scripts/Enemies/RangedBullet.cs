@@ -8,6 +8,7 @@ public class RangedBullet : MonoBehaviour
 {
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float timeToDie;
+    [SerializeField] private float rotateSpeed;
     public float bulletDmg;
     [SerializeField] private List<GameObject> viewObjects;
     private int rand = 0;
@@ -47,10 +48,10 @@ public class RangedBullet : MonoBehaviour
     {
         while (true)
         {
-            LeanTween.rotateX(viewObjects[rand], 180f, 0.1f);
-            yield return new WaitForSeconds(0.1f);
-            LeanTween.rotateX(viewObjects[rand], 360f, 0.1f);
-            yield return new WaitForSeconds(0.1f);
+            LeanTween.rotateY(viewObjects[rand], 180f, rotateSpeed);
+            yield return new WaitForSeconds(rotateSpeed);
+            LeanTween.rotateY(viewObjects[rand], 360f, rotateSpeed);
+            yield return new WaitForSeconds(rotateSpeed);
         }
     }
 }
