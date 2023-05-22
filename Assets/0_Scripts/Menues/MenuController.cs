@@ -17,6 +17,8 @@ public class MenuController : MonoBehaviour
     public GameObject controlsOptions;
     public GameObject graphicOptions;
 
+    public List<GameObject> selectedButtons;
+
     public Slider sensSlider;
     public Slider musicSlider;
     public Slider soundSlider;
@@ -31,8 +33,8 @@ public class MenuController : MonoBehaviour
     {
         EventManager.Subscribe("MenuChanger", MenuChanger);
 
-        /*musicSlider.value = SoundManager.instance.volumeMusic;
-        soundSlider.value = SoundManager.instance.volumeSFX;*/
+        musicSlider.value = SoundManager.instance.volumeMusic;
+        soundSlider.value = SoundManager.instance.volumeSFX;
 
         if (PlayerPrefs.HasKey("Sensibilidad"))
             sensSlider.value = PlayerPrefs.GetFloat("Sensibilidad");
@@ -53,6 +55,12 @@ public class MenuController : MonoBehaviour
         }
         else
         {
+            foreach (GameObject item in selectedButtons)
+            {
+                item.SetActive(false);
+            }
+            selectedButtons[0].SetActive(true);
+            BTN_AudioOptions();
             _primaryMenu.SetActive(false);
             _secondaryMenu?.SetActive(false);
             _primaryMenu = landingMenu;
