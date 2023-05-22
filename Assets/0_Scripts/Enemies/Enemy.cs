@@ -370,8 +370,9 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract
     
     private void OnTriggerEnter(Collider other)
     {
-        IPlayerLife playerLife = other.GetComponent<IPlayerLife>();
-        //IReciveDamage damagable = other.GetComponent<IReciveDamage>();
+        if (isDead) return;
+        
+        IPlayerLife playerLife = other.GetComponentInParent<IPlayerLife>();
 
         if (playerLife != null)
         {

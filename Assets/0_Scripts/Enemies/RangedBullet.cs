@@ -8,6 +8,7 @@ public class RangedBullet : MonoBehaviour
 {
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float timeToDie;
+    public float bulletDmg;
     [SerializeField] private List<GameObject> viewObjects;
     private int rand = 0;
 
@@ -26,6 +27,14 @@ public class RangedBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        IPlayerLife playerLife = other.GetComponentInParent<IPlayerLife>();
+        //IReciveDamage damagable = other.GetComponent<IReciveDamage>();
+
+        if (playerLife != null)
+        {
+            playerLife.GetDamage((int)bulletDmg);
+        }
+        
         if (other.gameObject.layer == LayerMask.NameToLayer("Wall") ||
             other.gameObject.layer == LayerMask.NameToLayer("Floor") ||
             other.gameObject.layer == LayerMask.NameToLayer("Player"))

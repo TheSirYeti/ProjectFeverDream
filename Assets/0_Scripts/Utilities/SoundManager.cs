@@ -377,7 +377,9 @@ public enum SoundID
     //11
     ASSISTANT_SUCK,
     //12
-    PLAYER_HURT
+    PLAYER_HURT,
+    //13
+    ASSISTANT_INTERACT_BUTTON,
 }
 
 public enum MusicID
