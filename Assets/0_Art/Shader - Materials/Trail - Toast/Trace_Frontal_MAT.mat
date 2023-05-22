@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PhoenixWall
-  m_Shader: {fileID: 4800000, guid: 72f6a686376cbfd459d2e28779f301ed, type: 3}
+  m_Name: Trace_Frontal_MAT
+  m_Shader: {fileID: 4800000, guid: f682342c36e32f84a82ab100c17f5be8, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 0
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -19,14 +19,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _FlowMapEgdes:
-        m_Texture: {fileID: 2800000, guid: 7bdfa49f68e9b2441b54a6d151567d0b, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _FlowMapLine:
-        m_Texture: {fileID: 2800000, guid: 7bdfa49f68e9b2441b54a6d151567d0b, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -39,12 +31,16 @@ Material:
         m_Texture: {fileID: 2800000, guid: 16aa8fb6f94c2c74f9d2ae03a2574388, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _NoiseSmoke:
-        m_Texture: {fileID: 2800000, guid: e55aca2a6ff2b0d4ea6e7b26f6e7a265, type: 3}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 044ad747e9f1aef408edd1b0c1652326, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _TexturedLine:
+    - _TextureSample1:
         m_Texture: {fileID: 2800000, guid: 2cd6dde56b14f9247a1687185effb286, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tex4coord:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -53,21 +49,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Cutoff: 0.5
-    - _EdgeLength: 30
-    - _EdgesLowFlame: 0.58
-    - _EgdesAmountHorizontal: 0.3173166
-    - _HigherFlame: 0.69350076
-    - _Intensity: 2
-    - _IntesityMask: 0.43
+    - _Dissolve: 20
+    - _Float0: 0.61877584
+    - _Float1: 3.16
     - _InvFade: 1
-    - _MaskPainting: 0.2
-    - __dirty: 0
+    - _Sature: 3
+    - _Speed: 0.5
+    - _Speed2: 0.5
+    - __dirty: 1
     m_Colors:
-    - _HighFlameOne: {r: 1, g: 0.4156863, b: 0.3333333, a: 0}
-    - _HighFlameTwo: {r: 0.4509804, g: 0.04705882, b: 0, a: 1}
-    - _LowFlameOne: {r: 1, g: 0.4156863, b: 0.3333333, a: 1}
-    - _LowFlameTwo: {r: 1, g: 0.9058824, b: 0.6470588, a: 1}
-    - _SpeedNoisePrimary: {r: 0.5, g: 0.5, b: 0, a: 0}
-    - _SpeedNoiseSecondary: {r: 0.5, g: 1, b: 0, a: 0}
+    - _Color0: {r: 1, g: 0.41788515, b: 0.33245158, a: 1}
+    - _Color1: {r: 0.2735849, g: 0.02854799, b: 0, a: 1}
+    - _DissolveSpeed: {r: -0.5, g: 0, b: 0, a: 0}
     - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - _Vector0: {r: -1, g: 0, b: 0, a: 0}
+    - _Vector2: {r: -1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
