@@ -370,11 +370,12 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract
     
     private void OnTriggerEnter(Collider other)
     {
-        IReciveDamage damagable = other.GetComponent<IReciveDamage>();
+        IPlayerLife playerLife = other.GetComponent<IPlayerLife>();
+        //IReciveDamage damagable = other.GetComponent<IReciveDamage>();
 
-        if (damagable != null)
+        if (playerLife != null)
         {
-            damagable.DoDamage(dmg, transform.position);
+            playerLife.GetDamage((int)dmg);
         }
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Wall"))

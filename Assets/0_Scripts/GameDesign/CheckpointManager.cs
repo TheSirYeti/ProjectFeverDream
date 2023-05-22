@@ -21,6 +21,9 @@ public class CheckpointManager : MonoBehaviour
         {
             checkpoints[i].SetID(i++);
         }
+        
+        EventManager.Subscribe("OnCheckpointTriggered", SetNewCheckpoint);
+        EventManager.Subscribe("OnNewSceneLoaded", ResetCheckpoints);
 
         currentCheckpoint = PlayerPrefs.GetInt("CurrentCheckpoint");
         DoPlayerSpawn();

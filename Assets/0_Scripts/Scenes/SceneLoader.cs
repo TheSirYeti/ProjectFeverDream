@@ -26,7 +26,7 @@ public class SceneLoader : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
+        
         _animator = GetComponent<Animator>();
     }
 
@@ -34,6 +34,12 @@ public class SceneLoader : MonoBehaviour
     {
         Time.timeScale = 1;
         currentSceneToLoad = sceneID;
+
+        if (sceneID != SceneManager.GetActiveScene().buildIndex)
+        {
+            EventManager.Trigger("OnNewSceneLoaded");
+        }
+        
         DoFadeIn();
     }
 
@@ -58,6 +64,10 @@ public class SceneLoader : MonoBehaviour
         yield return null;
     }
 
+    public void ReloadScene(object[] parameters)
+    {
+        SetupLoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
     #region FADE AREA
 
