@@ -41,8 +41,8 @@ public abstract class GenericBullet : MonoBehaviour
         }
         else if (Physics.Raycast(transform.position, transform.forward,out hit, _distanceCollision, _collisionMask))
         {
-            GameObject decal = Instantiate(_fakeDecal, transform.position, transform.rotation);
-            decal.transform.up = hit.normal;
+            GameObject decal = Instantiate(_fakeDecal, hit.point, transform.rotation);
+            decal.transform.forward = hit.normal * -1;
             Destroy(decal, 3f);
             _actualWeapon.ReturnBullet(this);
         }
