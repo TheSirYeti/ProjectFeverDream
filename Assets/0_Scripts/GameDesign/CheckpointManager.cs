@@ -14,18 +14,20 @@ public class CheckpointManager : MonoBehaviour
     {
         if (!PlayerPrefs.HasKey("CurrentCheckpoint"))
         {
+            Debug.Log("Huh?");
             PlayerPrefs.SetInt("CurrentCheckpoint", 0);
         }
 
         for (int i = 0; i < checkpoints.Count; i++)
         {
-            checkpoints[i].SetID(i++);
+            checkpoints[i].SetID(i);
         }
         
         EventManager.Subscribe("OnCheckpointTriggered", SetNewCheckpoint);
         EventManager.Subscribe("OnNewSceneLoaded", ResetCheckpoints);
 
         currentCheckpoint = PlayerPrefs.GetInt("CurrentCheckpoint");
+        Debug.Log("BUENAS, CURRENT CHECKPOINT ES " + currentCheckpoint);
         DoPlayerSpawn();
     }
 
@@ -37,6 +39,7 @@ public class CheckpointManager : MonoBehaviour
         
         currentCheckpoint = newCheckpoint;
         PlayerPrefs.SetInt("CurrentCheckpoint", currentCheckpoint);
+        Debug.Log("NEW CHECKPOINT! es " + currentCheckpoint);
     }
 
     void DoPlayerSpawn()
