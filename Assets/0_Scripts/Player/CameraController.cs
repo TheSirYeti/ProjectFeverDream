@@ -7,7 +7,8 @@ public class CameraController : MonoBehaviour
 {
     Model _model;
 
-    [SerializeField] private Camera _mainCamera;
+    private Camera _camera;
+    private Camera _cameraGetter { get { if (_camera) _camera = Camera.main; return _camera; } set { _camera = value; } }
     private Transform _mainCameraParent;
 
     private Transform _actualCameraPos;
@@ -54,7 +55,7 @@ public class CameraController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         // Get Main Camera
-        _mainCamera = Camera.main;
+        _cameraGetter = Camera.main;
         _mainCameraParent = Camera.main.transform.parent;
 
         // Get all the posible points for the camera
@@ -73,7 +74,7 @@ public class CameraController : MonoBehaviour
 
         _actualFOV = _walkingFOV;
 
-        _initialCamPos = _mainCamera.transform.localPosition;
+        _initialCamPos = _cameraGetter.transform.localPosition;
     }
 
     private void Start()
@@ -124,7 +125,7 @@ public class CameraController : MonoBehaviour
         if (Vector3.Distance(_mainCameraParent.transform.position, _actualCameraPos.position) < 0.1f)
         {
             _mainCameraParent.transform.position = _actualCameraPos.position;
-            _initialCamPos = _mainCamera.transform.localPosition;
+            _initialCamPos = _cameraGetter.transform.localPosition;
             cameraMovement = delegate { };
         }
     }
@@ -150,9 +151,9 @@ public class CameraController : MonoBehaviour
             _isLargeFOV = true;
         }
 
-        LeanTween.value(_mainCamera.fieldOfView, _actualFOV, 0.15f).setOnUpdate((float value) =>
+        LeanTween.value(_cameraGetter.fieldOfView, _actualFOV, 0.15f).setOnUpdate((float value) =>
         {
-            _mainCamera.fieldOfView = value;
+            _cameraGetter.fieldOfView = value;
         });
     }
     #endregion
@@ -187,14 +188,14 @@ public class CameraController : MonoBehaviour
 
     void CameraShake()
     {
-        _mainCamera.transform.localPosition = _initialCamPos + UnityEngine.Random.insideUnitSphere * _shakeMagnitude;
+        _cameraGetter.transform.localPosition = _initialCamPos + UnityEngine.Random.insideUnitSphere * _shakeMagnitude;
 
         _shakeDuration -= Time.deltaTime * _dampingSpeed;
 
         if (_shakeDuration <= 0)
         {
             _shakeDuration = 0f;
-            _mainCamera.transform.localPosition = _initialCamPos;
+            _cameraGetter.transform.localPosition = _initialCamPos;
             _isShaking = false;
             cameraEffects -= CameraShake;
         }
@@ -211,9 +212,9 @@ public class CameraController : MonoBehaviour
         {
             _isBobbing = false;
 
-            Vector3 pos = _mainCamera.transform.localPosition;
+            Vector3 pos = _cameraGetter.transform.localPosition;
             pos.y = _initialCamPos.y;
-            _mainCamera.transform.localPosition = pos;
+            _cameraGetter.transform.localPosition = pos;
 
             cameraEffects -= CameraBobbing;
         }
@@ -235,15 +236,15 @@ public class CameraController : MonoBehaviour
             float totalAxes = 1 + 1;
             totalAxes = Mathf.Clamp(totalAxes, 0.0f, 1.0f);
             translateChange *= totalAxes;
-            Vector3 pos = _mainCamera.transform.localPosition;
+            Vector3 pos = _cameraGetter.transform.localPosition;
             pos.y = _initialCamPos.y + translateChange;
-            _mainCamera.transform.localPosition = pos;
+            _cameraGetter.transform.localPosition = pos;
         }
         else
         {
-            Vector3 pos = _mainCamera.transform.localPosition;
+            Vector3 pos = _cameraGetter.transform.localPosition;
             pos.y = _initialCamPos.y;
-            _mainCamera.transform.localPosition = pos;
+            _cameraGetter.transform.localPosition = pos;
         }
     }
 }
