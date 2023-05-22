@@ -474,6 +474,7 @@ public class Model : MonoBehaviour, IPlayerLife
     void Death()
     {
         //TODO: Add death reset
+        SceneLoader.instance.ReloadScene();
     }
 
     //TODO: Delete when you add the dmg to the enemies
