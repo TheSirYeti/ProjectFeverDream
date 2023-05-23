@@ -471,6 +471,11 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract, IInte
     {
         return "Eat the Robot";
     }
+
+    public bool IsInteractable()
+    {
+        return !isDead;
+    }
     #endregion
 
     #region FACE VALUES
@@ -530,7 +535,5 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract, IInte
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
-
-
     #endregion
 }

@@ -7,6 +7,7 @@ public class CameraAim
     Camera _camera;
     Assistant _assistant;
     float _interactDistance;
+    LayerMask _collisionMask;
     LayerMask _fullLayerMask;
     LayerMask _interactMask;
     LayerMask _usableMask;
@@ -14,10 +15,12 @@ public class CameraAim
 
     IInteractUI _actualUI;
 
-    public CameraAim(Camera camera, Assistant assistant, float interactDistance, LayerMask interactMask, LayerMask usableMask, LayerMask pickupMask)
+    public CameraAim(Camera camera, Assistant assistant, float interactDistance, LayerMask collisionMask, LayerMask interactMask, LayerMask usableMask, LayerMask pickupMask)
     {
         _camera = camera;
         _assistant = assistant;
+
+        _collisionMask = collisionMask;
 
         _fullLayerMask = interactMask + usableMask + pickupMask;
         _interactDistance = interactDistance;
@@ -29,9 +32,12 @@ public class CameraAim
     public void CheckActualAim()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _fullLayerMask))
+        IInteractUI tempUI;
+        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _fullLayerMask) &&
+            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask) &&
+            hit.collider.GetComponent<IInteractUI>().IsInteractable())
         {
-            IInteractUI tempUI = hit.collider.GetComponent<IInteractUI>();
+            tempUI = hit.collider.GetComponent<IInteractUI>();
 
             if (tempUI == _actualUI) return;
 
@@ -48,7 +54,8 @@ public class CameraAim
     public void Interact()
     {
         RaycastHit hit;
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _interactMask))
+        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _interactMask) &&
+            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask))
         {
             Debug.Log(hit.collider.gameObject.name);
             IAssistInteract iInteract = hit.collider.gameObject.GetComponent<IAssistInteract>();
@@ -59,7 +66,8 @@ public class CameraAim
 
             _assistant.SetObjective(iInteract.GetInteractPoint(), Assistant.JorgeStates.INTERACT);
         }
-        else if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _pickupMask))
+        else if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _pickupMask) &&
+            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask))
         {
             IAssistPickUp iPickUp = hit.collider.gameObject.GetComponent<IAssistPickUp>();
 
@@ -69,7 +77,8 @@ public class CameraAim
 
             _assistant.SetObjective(iPickUp.GetGameObject().transform, Assistant.JorgeStates.PICKUP);
         }
-        else if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _usableMask))
+        else if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _usableMask) &&
+            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask))
         {
             IAssistUsable iPickUp = hit.collider.gameObject.GetComponent<IAssistUsable>();
 

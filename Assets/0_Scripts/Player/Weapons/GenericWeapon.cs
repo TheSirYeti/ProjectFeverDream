@@ -22,6 +22,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp, IInteractUI
     [SerializeField] protected LayerMask _shooteableMask;
 
     [SerializeField] int _pickUpID;
+    bool _isEquiped = false;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
     public abstract void Reload();
@@ -69,6 +70,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp, IInteractUI
 
     public void OnWeaponEquip(Transform parent, WeaponManager weaponManager, Transform nozzlePoint)
     {
+        _isEquiped = true;
         _collider.enabled = false;
         _nozzlePoint = nozzlePoint;
 
@@ -103,6 +105,8 @@ public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp, IInteractUI
         _collider.enabled = true;
 
         _rigidbody.constraints = RigidbodyConstraints.None;
+
+        _isEquiped = false;
 
         EventManager.Trigger("OnADSDisable");
 
@@ -202,6 +206,11 @@ public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp, IInteractUI
     public string ActionName()
     {
         return "Pick up the weapon";
+    }
+
+    public bool IsInteractable()
+    {
+        return !_isEquiped;
     }
     #endregion
 

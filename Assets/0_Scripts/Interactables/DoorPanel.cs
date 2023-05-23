@@ -67,4 +67,9 @@ public class DoorPanel : MonoBehaviour, IAssistInteract, IInteractUI
     {
         return "Open the door";
     }
+
+    public bool IsInteractable()
+    {
+        return _isClose;
+    }
 }

@@ -52,6 +52,7 @@ public class CameraController : MonoBehaviour
     [Space(20)]
     [Header("-== Interact Properties ==-")]
     [SerializeField] float _interactDistance;
+    [SerializeField] LayerMask _collisionMask;
     [SerializeField] LayerMask _interactMask;
     [SerializeField] LayerMask _pickupMask;
     [SerializeField] LayerMask _usableMask;
@@ -270,7 +271,7 @@ public class CameraController : MonoBehaviour
     IEnumerator LateStart()
     {
         yield return new WaitForEndOfFrame();
-        cameraAim = new CameraAim(_cameraGetter, GameManager.instace.Assistant, _interactDistance, _interactMask, _usableMask, _pickupMask);
+        cameraAim = new CameraAim(_cameraGetter, GameManager.instace.Assistant, _interactDistance, _collisionMask ,_interactMask, _usableMask, _pickupMask);
         interactChecker = cameraAim.CheckActualAim;
     }
 }
