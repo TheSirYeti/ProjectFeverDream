@@ -19,19 +19,39 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 3c4b40125f30da940abc7434d4fd766c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Albedo1:
         m_Texture: {fileID: 2800000, guid: 3c4b40125f30da940abc7434d4fd766c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emission:
+        m_Texture: {fileID: 2800000, guid: 7d065b4dec0f7d3479aa86926de29fa2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emission1:
         m_Texture: {fileID: 2800000, guid: 7d065b4dec0f7d3479aa86926de29fa2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Metallic_Smoothness:
+        m_Texture: {fileID: 2800000, guid: 17bb4ed394025c64db6b506569049c15, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Metallic_Smoothness1:
         m_Texture: {fileID: 2800000, guid: 17bb4ed394025c64db6b506569049c15, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: 0291d380e16205a42be30e7683fae739, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Normal1:
+        m_Texture: {fileID: 2800000, guid: 021463de951cdd640b65aae654f4a1e1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal2:
         m_Texture: {fileID: 2800000, guid: 021463de951cdd640b65aae654f4a1e1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -40,17 +60,28 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _FresnelBias: -2.86
     - _FresnelBias1: -2.86
+    - _FresnelIntesity: 0.0602
     - _FresnelIntesity1: 0.0602
+    - _FresnelPower: 2
     - _FresnelPower1: 2
+    - _FresnelScale: 5.4
     - _FresnelScale1: 5.4
-    - _IntensitySpecular1: 0.2
-    - _Shadow1: 0.65
-    - _Smoothness1: 0.2
+    - _IntensitySpecular: 0.2
+    - _IntensitySpecular1: 0.067
+    - _Shadow: 0.65
+    - _Shadow1: 1
+    - _Smoothness: 0.2
+    - _Smoothness1: 0.3
+    - _Specsomething: 2
     - _Specsomething1: 2
+    - _Value: 0.5
     - _Value1: 0.5
     - __dirty: 0
     m_Colors:
+    - _ColorFresnel: {r: 1, g: 1, b: 1, a: 1}
     - _ColorFresnel1: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorSpec1: {r: 0.9386792, g: 0.9493017, b: 1, a: 1}
+    - _ColorSpec: {r: 0.48593807, g: 0.4915183, b: 0.5283019, a: 1}
+    - _ColorSpec1: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
