@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using _0_Scripts.Utilities;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -64,6 +66,8 @@ public class GameManager : MonoBehaviour
             if (!_assistant) _assistant = value;
         }
     }
+
+    #region Scenes Funcs
 
     public void ChangeScene(int indexToLoad)
     {
@@ -130,4 +134,18 @@ public class GameManager : MonoBehaviour
 
         //Start
     }
+
+    #endregion
+
+    public Camera SetCameraParent(Transform parent, int newLayer = 0, CameraClearFlags clearFlag = CameraClearFlags.Skybox)
+    {
+        _myCameras[0].transform.position = parent.position;
+        _myCameras[0].transform.rotation = parent.rotation;
+        //_myCameras[0].gameObject.layer = newLayer;
+
+        _myCameras[0].clearFlags = clearFlag;
+
+        return _myCameras[0];
+    }
+    
 }

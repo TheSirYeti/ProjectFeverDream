@@ -50,7 +50,6 @@ public class VolumeScreen : MonoBehaviour
 
     public void SetupFinished()
     {
-        Debug.Log("a");
         SoundManager.instance.StopAllMusic();
         SoundManager.instance.StopAllSounds();
         GameManager.Instance.NextScene();

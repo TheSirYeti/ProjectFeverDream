@@ -5,10 +5,18 @@ using UnityEngine;
 
 public class LogoSceneLogic : MonoBehaviour
 {
+    [SerializeField] private Transform _cameraPos;
+    [SerializeField] private Canvas _canvas;
+    
     [SerializeField] private Animator _animator;
     [SerializeField] private float firstSongSection;
     [SerializeField] private float secondSongSection;
     [SerializeField] private int nextSceneToLoad;
+
+    private void Awake()
+    {
+        _canvas.worldCamera = GameManager.Instance.SetCameraParent(_cameraPos, 5, CameraClearFlags.SolidColor);
+    }
 
     private void Start()
     {
@@ -22,7 +30,7 @@ public class LogoSceneLogic : MonoBehaviour
             StopCoroutine(DoIntroCycle());
             SoundManager.instance.StopAllMusic();
             SoundManager.instance.StopAllSounds();
-            SceneLoader.instance.SetupLoadScene(nextSceneToLoad);
+            GameManager.Instance.ChangeScene(nextSceneToLoad);
         }
     }
 
@@ -32,7 +40,7 @@ public class LogoSceneLogic : MonoBehaviour
         yield return new WaitForSeconds(firstSongSection);
         _animator.Play("FadeInLogo");
         yield return new WaitForSeconds(secondSongSection);
-        SceneLoader.instance.SetupLoadScene(nextSceneToLoad);
+        GameManager.Instance.ChangeScene(nextSceneToLoad);
         yield return null;
     }
 }
