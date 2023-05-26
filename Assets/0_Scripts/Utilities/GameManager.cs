@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,12 +11,20 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     [SerializeField] private List<Camera> _myCameras = new List<Camera>();
 
+    private int _actualScene = 0;
+    private bool _isLoading = false;
+
     private void Awake()
     {
         if (Instance != null)
             Destroy(gameObject);
 
         Instance = this;
+    }
+
+    private void Start()
+    {
+        ChangeScene(0);
     }
 
     private void Update()
@@ -58,35 +67,50 @@ public class GameManager : MonoBehaviour
 
     public void ChangeScene(int indexToLoad)
     {
-        if (!InGameSceneManager._instace.HaveTheScene(indexToLoad)) return;
+        if(_isLoading) return;
+        if (!InGameSceneManager.instace.HaveTheScene(indexToLoad)) return;
         
-        InGameSceneManager._instace.SetNextScene(indexToLoad);
+        InGameSceneManager.instace.SetNextScene(indexToLoad);
+        _isLoading = true;
+        _actualScene = indexToLoad;
+        
+        StartCoroutine(SceneLoader());
+    }
+
+    public void NextScene()
+    {
+        if(_isLoading) return;
+        if (!InGameSceneManager.instace.HaveTheScene(_actualScene + 1)) return;
+        
+        _actualScene++;
+        
+        InGameSceneManager.instace.SetNextScene(_actualScene);
+        _isLoading = true;
         
         StartCoroutine(SceneLoader());
     }
 
     private IEnumerator SceneLoader()
     {
+        InGameSceneManager.instace.SetLoadingScreen(true);
+        
         UpdateManager._instance.OnSceneUnload();
         
-        InGameSceneManager._instace.UnloadScene();
+        InGameSceneManager.instace.UnloadScene();
         
         yield return new WaitForEndOfFrame();
-        yield return new WaitUntil(() => !InGameSceneManager._instace.corutineIsOn);
+        yield return new WaitUntil(() => !InGameSceneManager.instace.corutineIsOn);
         yield return new WaitForEndOfFrame();
 
-        InGameSceneManager._instace.LoadScene();
+        InGameSceneManager.instace.LoadScene();
         
         yield return new WaitForEndOfFrame();
-        yield return new WaitUntil(() => !InGameSceneManager._instace.corutineIsOn);
+        yield return new WaitUntil(() => !InGameSceneManager.instace.corutineIsOn);
         yield return new WaitForEndOfFrame();
-
-        UpdateManager._instance.OnSceneLoad();
-
-        yield return new WaitForEndOfFrame();
+        
+        InGameSceneManager.instace.SetLoadingScreen(false);
 
         List<Camera> allCameras = Camera.allCameras.ToList();
-
         
         foreach (var camera in _myCameras)
         {
@@ -97,6 +121,13 @@ public class GameManager : MonoBehaviour
         {
             Destroy(camera.gameObject);
         }
+        
+        yield return new WaitForEndOfFrame();
+        
+        UpdateManager._instance.OnSceneLoad();
+
+        _isLoading = false;
+
         //Start
     }
 }

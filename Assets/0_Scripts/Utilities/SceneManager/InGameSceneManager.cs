@@ -6,14 +6,15 @@ using System.Linq;
 
 public class InGameSceneManager : MonoBehaviour
 {
-    public static InGameSceneManager _instace;
+    public static InGameSceneManager instace;
 
     [SerializeField] List<SO_Scene> _scenes;
+    [SerializeField] private SO_Scene _loadingScene;
 
     private SO_Scene _sceneToLoad;
     private SO_Scene _actualScene;
 
-    private AsyncOperation[] asincOperations;
+    [SerializeField] private AsyncOperation[] asincOperations;
 
     private Coroutine _actualCoroutine;
 
@@ -21,9 +22,9 @@ public class InGameSceneManager : MonoBehaviour
 
     void Awake()
     {
-        if (_instace) Destroy(gameObject);
+        if (instace) Destroy(gameObject);
 
-        _instace = this;
+        instace = this;
     }
 
     public bool HaveTheScene(int index)
@@ -36,51 +37,76 @@ public class InGameSceneManager : MonoBehaviour
         _sceneToLoad = _scenes[index];
     }
 
+    public void SetLoadingScreen(bool state)
+    {
+        if (state)
+            SceneManager.LoadSceneAsync(_loadingScene.unityScenes[0].ScenePath, LoadSceneMode.Additive);
+        else
+            SceneManager.UnloadSceneAsync(_loadingScene.unityScenes[0].ScenePath);
+    }
+
     public void LoadScene()
     {
         _actualCoroutine = StartCoroutine(IE_LoadScene());
     }
-    
+
     private IEnumerator IE_LoadScene()
     {
         _actualScene = _sceneToLoad;
         _sceneToLoad = null;
 
-        asincOperations = new AsyncOperation[_actualScene._unityScenes.Count()];
-        for (int i = 0; i < _actualScene._unityScenes.Count(); i++)
+        asincOperations = new AsyncOperation[_actualScene.unityScenes.Count()];
+        for (int i = 0; i < _actualScene.unityScenes.Count(); i++)
         {
-            asincOperations[i] = SceneManager.LoadSceneAsync(_actualScene._unityScenes[i].ScenePath, LoadSceneMode.Additive);
+            asincOperations[i] =
+                SceneManager.LoadSceneAsync(_actualScene.unityScenes[i].ScenePath, LoadSceneMode.Additive);
+            asincOperations[i].allowSceneActivation = false;
         }
 
         yield return new WaitUntil(() =>
         {
-            AsyncOperation[] tempArray = asincOperations.Where(x => x.isDone).ToArray();
+            AsyncOperation[] tempArray = asincOperations.Where(x => x.progress > 0.85f).ToArray();
             return tempArray.Length == asincOperations.Length;
         });
 
+        for (int i = 0; i < _actualScene.unityScenes.Count(); i++)
+        {
+            asincOperations[i].allowSceneActivation = true;
+        }
+
+        SoundManager.instance.SetNewMusicSet(_actualScene.myMusic.actualLevelAudioClip);
+        SoundManager.instance.SetNewSoundSet(_actualScene.mySFX.actualLevelAudioClip);
+        
         _actualCoroutine = null;
     }
 
     public void UnloadScene()
     {
+        if (!_actualScene) return;
+
         _actualCoroutine = StartCoroutine(IE_UnloadScene());
     }
 
     private IEnumerator IE_UnloadScene()
     {
-        asincOperations = new AsyncOperation[_actualScene._unityScenes.Count()];
-        for (int i = 0; i < _actualScene._unityScenes.Count(); i++)
+        asincOperations = new AsyncOperation[_actualScene.unityScenes.Count()];
+        for (int i = 0; i < _actualScene.unityScenes.Count(); i++)
         {
-            asincOperations[i] = SceneManager.UnloadSceneAsync(_actualScene._unityScenes[i].ScenePath);
+            asincOperations[i] = SceneManager.UnloadSceneAsync(_actualScene.unityScenes[i].ScenePath);
+            asincOperations[i].allowSceneActivation = false;
         }
 
         yield return new WaitUntil(() =>
         {
-            AsyncOperation[] tempArray = asincOperations.Where(x => x.isDone).ToArray();
+            AsyncOperation[] tempArray = asincOperations.Where(x => x.progress > 0.85f).ToArray();
             return tempArray.Length == asincOperations.Length;
         });
 
+        for (int i = 0; i < _actualScene.unityScenes.Count(); i++)
+        {
+            asincOperations[i].allowSceneActivation = true;
+        }
+
         _actualCoroutine = null;
     }
-
 }

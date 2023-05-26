@@ -32,6 +32,7 @@ public class SoundManager : MonoBehaviour
             PlayerPrefs.SetFloat("PREFS_VolumeMusic", volumeSFX);
         }
 
+        //TODO: Sacar dont destroy on load
         if (instance == null)
         {
             instance = this;
@@ -67,6 +68,29 @@ public class SoundManager : MonoBehaviour
     }
     
     #region SOUND
+    public void SetNewSoundSet(AudioClip[] newVoiceLines)
+    {
+        sounds = newVoiceLines;
+        sfxChannel = new AudioSource[sounds.Length];
+
+        if (sfxChannel.Length < sounds.Length)
+        {
+            int actualIndex = sfxChannel.Length;
+
+            for (int i = actualIndex; i < sounds.Length; i++)
+            {
+                AudioSource actualAudioSource = gameObject.AddComponent<AudioSource>();
+                actualAudioSource.playOnAwake = false;
+                AddSFXSource(actualAudioSource);
+            }
+        }
+
+        for (int i = 0; i < sfxChannel.Length; i++)
+        {
+            sfxChannel[i].clip = sounds[i];
+        } 
+    }
+    
     public int AddSFXSource(AudioSource myAudioSource)
     {
         List<AudioSource> tempList = new List<AudioSource>();
@@ -164,6 +188,40 @@ public class SoundManager : MonoBehaviour
     #endregion
 
     #region MUSIC
+    public void SetNewMusicSet(AudioClip[] newVoiceLines)
+    {
+        music = newVoiceLines;
+        musicChannel = new AudioSource[music.Length];
+
+        if (musicChannel.Length < music.Length)
+        {
+            int actualIndex = musicChannel.Length;
+
+            for (int i = actualIndex; i < music.Length; i++)
+            {
+                AudioSource actualAudioSource = gameObject.AddComponent<AudioSource>();
+                actualAudioSource.playOnAwake = false;
+                AddMusicSource(actualAudioSource);
+            }
+        }
+
+        for (int i = 0; i < musicChannel.Length; i++)
+        {
+            musicChannel[i].clip = music[i];
+        } 
+    }
+
+    public int AddMusicSource(AudioSource myAudioSource)
+    {
+        List<AudioSource> tempList = new List<AudioSource>();
+
+        tempList.AddRange(musicChannel);
+        tempList.Add(myAudioSource);
+
+        musicChannel = tempList.ToArray();
+
+        return (musicChannel.Length - 1);
+    }
     
     public bool isMusicPlaying(MusicID id)
     {
