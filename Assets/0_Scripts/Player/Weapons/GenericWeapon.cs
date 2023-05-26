@@ -115,7 +115,7 @@ public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp, IInteractUI
     protected IEnumerator LateStart()
     {
         yield return new WaitForEndOfFrame();
-        _weaponManager = GameManager.instace.Player.weaponManager;
+        _weaponManager = GameManager.Instance.Player.weaponManager;
     }
 
     #region SO Getters

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Weapon SO", menuName = ("ScriptableObjects / Weapon"))]
+[CreateAssetMenu(fileName = "Weapon SO", menuName = ("ScriptableObjects/Weapon"))]
 public class SO_Weapon : ScriptableObject
 {
     [Header("-== WEAPON ID ==-")]

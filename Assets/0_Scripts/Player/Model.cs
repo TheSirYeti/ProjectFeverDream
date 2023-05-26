@@ -112,7 +112,7 @@ public class Model : MonoBehaviour, IPlayerLife
         EventManager.Trigger("OnAssistantStart", _camera.transform, weaponManager.GetComponent<IAssistInteract>());
         EventManager.Trigger("OnViewStart", this, weaponManager);
 
-        GameManager.instace.Player = this;
+        GameManager.Instance.Player = this;
     }
 
     void Update()

@@ -271,7 +271,7 @@ public class CameraController : MonoBehaviour
     IEnumerator LateStart()
     {
         yield return new WaitForEndOfFrame();
-        cameraAim = new CameraAim(_cameraGetter, GameManager.instace.Assistant, _interactDistance, _collisionMask ,_interactMask, _usableMask, _pickupMask);
+        cameraAim = new CameraAim(_cameraGetter, GameManager.Instance.Assistant, _interactDistance, _collisionMask ,_interactMask, _usableMask, _pickupMask);
         interactChecker = cameraAim.CheckActualAim;
     }
 }

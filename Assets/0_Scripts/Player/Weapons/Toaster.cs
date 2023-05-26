@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using _0_Scripts.Utilities;
 using UnityEngine;
 
 public class Toaster : GenericWeapon
@@ -63,6 +64,7 @@ public class Toaster : GenericWeapon
                 
                 GenericBullet bullet = GetBullet(_nozzlePoint.position);
                 bullet.OnStart(dir, this, actualDmg);
+                //Ejecutar Dmg
             }
         }
 
