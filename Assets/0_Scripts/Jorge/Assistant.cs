@@ -504,6 +504,7 @@ public class Assistant : MonoBehaviour
     {
         //if (_interactuable != null) return;
 
+        EventManager.Trigger("OnAssistantPing", interactuable);
         _actualObjective = interactuable;
         _previousObjective = interactuable;
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -29,6 +30,18 @@ public class UIController : MonoBehaviour
     [Header("Subtitles")] 
     [SerializeField] private TextMeshProUGUI subtitleText;
 
+    [Header("Ping System")] 
+    [SerializeField] private Image ping;
+    [SerializeField] private Transform currentPingTarget;
+    private bool isPingEnabled = false;    
+    public Renderer buttonRenderer;
+    private float fadeInValue = 0.5f;
+    private float yBias = 35f;
+    
+    
+    
+    private Camera cam;
+
     [SerializeField] private TextMeshProUGUI _interactuableUI;
 
     [SerializeField] Color _baseTextColor;
@@ -50,12 +63,15 @@ public class UIController : MonoBehaviour
         EventManager.Subscribe("InteractUI", InteractUI);
         EventManager.Subscribe("OnSubtitleOn", DoSubtitle);
         EventManager.Subscribe("OnSubtitleOff", DisableSubtitle);
+        EventManager.Subscribe("OnAssistantPing", DoPingStart);
     }
 
     private void Update()
     {
-        //int current = (int)(1f / Time.unscaledDeltaTime);
-        //fpsCounter.text = current.ToString();
+        if (!isPingEnabled) return;
+        
+        if(currentPingTarget != null)
+            SetPingPosition();
     }
 
     void ChangeHealthUI(params object[] parameters)
@@ -286,5 +302,47 @@ public class UIController : MonoBehaviour
     {
         subtitleText.text = "";
         subtitleText.enabled = false;
+    }
+    
+    void SetPingPosition()
+    {
+        ping.gameObject.SetActive(true);
+        ping.transform.position = Camera.main.WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
+
+        /*if (buttonRenderer.isVisible)
+        {
+            ping.gameObject.SetActive(true);
+            ping.transform.position = Camera.main.WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
+        }
+        else ping.gameObject.SetActive(false);*/
+    }
+    
+    void DoPingStart(object[] parameters)
+    {
+        currentPingTarget = parameters[0] as Transform;
+
+        isPingEnabled = true;
+        LeanTween.value(0, 1, fadeInValue).setOnUpdate((float value) =>
+        {
+            ping.color = new Color(ping.color.r, ping.color.g, ping.color.b, value);
+        });
+
+        StartCoroutine(DoPingRuntime());
+    }
+
+    IEnumerator DoPingRuntime()
+    {
+        yield return new WaitForSeconds(2.5f);
+        DoPingEnd(null);
+        yield return new WaitForSeconds(fadeInValue);
+        isPingEnabled = false;
+    }
+    
+    void DoPingEnd(object[] parameters)
+    {
+        LeanTween.value(1, 0, fadeInValue).setOnUpdate((float value) =>
+        {
+            ping.color = new Color(ping.color.r, ping.color.g, ping.color.b, value);
+        });
     }
 }
