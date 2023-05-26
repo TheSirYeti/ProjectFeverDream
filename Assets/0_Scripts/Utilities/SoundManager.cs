@@ -1,26 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 //Modelos y Algoritmos 1 / Aplicacion de Motores 2 - JUAN PABLO RSHAID
 public class SoundManager : MonoBehaviour
 {
+    [Header("Audio Clips")] 
     public AudioClip[] sounds;
     public AudioClip[] music;
     public AudioClip[] voiceLine;
+    
+    [Header("Audio Source")] 
     public AudioSource[] sfxChannel;
     public AudioSource[] musicChannel;
     public AudioSource[] voiceLineChannel;
 
+    [Header("Volumes")] 
     public float volumeSFX;
     public float volumeMusic;
+
+    [Header("Sound Names")] 
+    [SerializeField] private List<string> _actualSfxNames; 
+    [SerializeField] private List<string> _actualMusicNames;
 
     public static SoundManager instance;
 
     void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        
+        
         if (PlayerPrefs.HasKey("PREFS_VolumeSFX"))
         {
             volumeSFX = PlayerPrefs.GetFloat("PREFS_VolumeSFX");
@@ -31,18 +47,8 @@ public class SoundManager : MonoBehaviour
             PlayerPrefs.SetFloat("PREFS_VolumeSFX", volumeSFX);
             PlayerPrefs.SetFloat("PREFS_VolumeMusic", volumeSFX);
         }
-
-        //TODO: Sacar dont destroy on load
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
+        
+        instance = this;
 
         sfxChannel = new AudioSource[sounds.Length];
         for (int i = 0; i < sfxChannel.Length; i++)
@@ -68,27 +74,20 @@ public class SoundManager : MonoBehaviour
     }
     
     #region SOUND
-    public void SetNewSoundSet(AudioClip[] newVoiceLines)
+    public void SetNewSoundSet(SO_AudioSet newAudioSet)
     {
-        sounds = newVoiceLines;
+        _actualSfxNames = newAudioSet.audioClipNames;
+        sounds = newAudioSet.actualLevelAudioClip;
         sfxChannel = new AudioSource[sounds.Length];
-
-        if (sfxChannel.Length < sounds.Length)
-        {
-            int actualIndex = sfxChannel.Length;
-
-            for (int i = actualIndex; i < sounds.Length; i++)
-            {
-                AudioSource actualAudioSource = gameObject.AddComponent<AudioSource>();
-                actualAudioSource.playOnAwake = false;
-                AddSFXSource(actualAudioSource);
-            }
-        }
 
         for (int i = 0; i < sfxChannel.Length; i++)
         {
+            AudioSource actualAudioSource = gameObject.AddComponent<AudioSource>();
+
+            actualAudioSource.playOnAwake = false;
+            sfxChannel[i] = actualAudioSource;
             sfxChannel[i].clip = sounds[i];
-        } 
+        }
     }
     
     public int AddSFXSource(AudioSource myAudioSource)
@@ -110,10 +109,16 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySound(SoundID id, bool loop = false, float pitch = 1)
     {
-        sfxChannel[(int)id].Play();
-        sfxChannel[(int)id].loop = loop;
-        sfxChannel[(int)id].volume = volumeSFX;
-        sfxChannel[(int)id].pitch = pitch;  
+        var actualName = id.ToString();
+        
+        if(!_actualSfxNames.Contains(actualName)) return;
+
+        var idToPlay = _actualSfxNames.IndexOf(actualName);
+        
+        sfxChannel[idToPlay].Play();
+        sfxChannel[idToPlay].loop = loop;
+        sfxChannel[idToPlay].volume = volumeSFX;
+        sfxChannel[idToPlay].pitch = pitch;  
     }
 
     public void PlaySoundByID(int id, bool loop = false, float pitch = 1)
@@ -133,7 +138,7 @@ public class SoundManager : MonoBehaviour
     {
         for (int i = 0; i < sfxChannel.Length; i++)
         {
-            if(sfxChannel[i] != null)
+            if(sfxChannel[i])
                 sfxChannel[i].Stop();
         }
     }
@@ -188,27 +193,20 @@ public class SoundManager : MonoBehaviour
     #endregion
 
     #region MUSIC
-    public void SetNewMusicSet(AudioClip[] newVoiceLines)
+    public void SetNewMusicSet(SO_AudioSet newAudioSet)
     {
-        music = newVoiceLines;
+        _actualMusicNames = newAudioSet.audioClipNames;
+        music = newAudioSet.actualLevelAudioClip;
         musicChannel = new AudioSource[music.Length];
-
-        if (musicChannel.Length < music.Length)
-        {
-            int actualIndex = musicChannel.Length;
-
-            for (int i = actualIndex; i < music.Length; i++)
-            {
-                AudioSource actualAudioSource = gameObject.AddComponent<AudioSource>();
-                actualAudioSource.playOnAwake = false;
-                AddMusicSource(actualAudioSource);
-            }
-        }
 
         for (int i = 0; i < musicChannel.Length; i++)
         {
+            AudioSource actualAudioSource = gameObject.AddComponent<AudioSource>();
+            actualAudioSource.playOnAwake = false;
+
+            musicChannel[i] = actualAudioSource;
             musicChannel[i].clip = music[i];
-        } 
+        }
     }
 
     public int AddMusicSource(AudioSource myAudioSource)
@@ -227,12 +225,19 @@ public class SoundManager : MonoBehaviour
     {
         return musicChannel[(int)id].isPlaying;
     }
+    
     public void PlayMusic(MusicID id, bool loop = false, float pitch = 1)
     {
-        musicChannel[(int)id].Play();
-        musicChannel[(int)id].loop = loop;
-        musicChannel[(int)id].volume = volumeMusic;
-        musicChannel[(int)id].pitch = pitch;
+        var actualName = id.ToString();
+        
+        if(!_actualMusicNames.Contains(actualName)) return;
+
+        var idToPlay = _actualMusicNames.IndexOf(actualName);
+        
+        musicChannel[idToPlay].Play();
+        musicChannel[idToPlay].loop = loop;
+        musicChannel[idToPlay].volume = volumeMusic;
+        musicChannel[idToPlay].pitch = pitch;  
     }
 
     public void StopAllMusic()

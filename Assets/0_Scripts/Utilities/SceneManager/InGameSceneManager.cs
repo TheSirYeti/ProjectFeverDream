@@ -74,8 +74,8 @@ public class InGameSceneManager : MonoBehaviour
             asincOperations[i].allowSceneActivation = true;
         }
 
-        SoundManager.instance.SetNewMusicSet(_actualScene.myMusic.actualLevelAudioClip);
-        SoundManager.instance.SetNewSoundSet(_actualScene.mySFX.actualLevelAudioClip);
+        SoundManager.instance.SetNewMusicSet(_actualScene.myMusic);
+        SoundManager.instance.SetNewSoundSet(_actualScene.mySFX);
         
         _actualCoroutine = null;
     }

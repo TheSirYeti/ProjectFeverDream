@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SceneLoader()
     {
-        InGameSceneManager.instace.SetLoadingScreen(true);
+        //InGameSceneManager.instace.SetLoadingScreen(true);
         
         UpdateManager._instance.OnSceneUnload();
         
@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => !InGameSceneManager.instace.corutineIsOn);
         yield return new WaitForEndOfFrame();
         
-        InGameSceneManager.instace.SetLoadingScreen(false);
+        //InGameSceneManager.instace.SetLoadingScreen(false);
 
         List<Camera> allCameras = Camera.allCameras.ToList();
         
