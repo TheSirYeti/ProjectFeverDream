@@ -17,6 +17,11 @@ public class PingSystem : GenericObject
     
     private float yBias = 35f;
     private Camera cam;
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
 
     public override void OnStart()
     {

@@ -29,7 +29,11 @@ public class WeaponManager : GenericObject, IAssistUsable
     public Action OnClick = delegate { };
     public Action OnRelease = delegate { };
 
-
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         if (_actualWeapon)

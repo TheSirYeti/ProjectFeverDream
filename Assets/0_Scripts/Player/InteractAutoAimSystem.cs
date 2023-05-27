@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class InteractAutoAimSystem : GenericObject
 {
-
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
 }

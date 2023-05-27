@@ -71,7 +71,11 @@ public class Assistant : GenericObject
 
     private EventFSM<JorgeStates> fsm;
 
-
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnAwake()
     {
         EventManager.Subscribe("OnAssistantStart", OnAssistantStart);

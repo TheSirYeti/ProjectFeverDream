@@ -7,6 +7,12 @@ public class View : GenericObject
     Model _model;
     Animator _animator;
     WeaponManager _weaponManager;
+    
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
 
     public override void OnAwake()
     {

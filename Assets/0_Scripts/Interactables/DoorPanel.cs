@@ -16,6 +16,11 @@ public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
     private Material activatedMat;
     [SerializeField] private List<Renderer> renderers;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         if(renderers == null)

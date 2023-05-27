@@ -10,6 +10,11 @@ public class BaguetteState : GenericObject
 
     private int lastState = 0;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         endState = allBaguetteStates.Count - 1;

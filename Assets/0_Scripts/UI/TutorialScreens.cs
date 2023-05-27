@@ -8,6 +8,11 @@ public class TutorialScreens : GenericObject
     [SerializeField] private List<GameObject> tutorialSigns;
     [SerializeField] private float timeSignActive;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         StartCoroutine(DoTutorialSign(0));

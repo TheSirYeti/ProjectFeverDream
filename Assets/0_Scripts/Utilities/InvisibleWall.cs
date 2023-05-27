@@ -7,6 +7,11 @@ public class InvisibleWall : GenericObject
     [SerializeField] private bool isInvisible = true;
     private Renderer renderer;
     
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         renderer = GetComponent<Renderer>();

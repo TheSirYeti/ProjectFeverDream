@@ -8,6 +8,11 @@ public class TutorialTrigger : GenericObject
     private bool hasTriggered = false;
     [SerializeField] private int tutorialID;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (!hasTriggered && other.gameObject.CompareTag("Player"))

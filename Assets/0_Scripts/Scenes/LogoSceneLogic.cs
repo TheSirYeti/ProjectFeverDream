@@ -13,6 +13,11 @@ public class LogoSceneLogic : GenericObject
     [SerializeField] private float secondSongSection;
     [SerializeField] private int nextSceneToLoad;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnAwake()
     {
         _canvas.worldCamera = GameManager.Instance.SetCameraParent(_cameraPos, 5, CameraClearFlags.SolidColor);

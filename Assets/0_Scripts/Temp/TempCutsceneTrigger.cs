@@ -9,6 +9,12 @@ public class TempCutsceneTrigger : GenericObject
     public float timeToWait;
     public int sceneToLoad;
     private bool hasTriggered = false;
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player" && !hasTriggered)

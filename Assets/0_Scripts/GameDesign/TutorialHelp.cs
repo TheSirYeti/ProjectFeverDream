@@ -10,6 +10,11 @@ public class TutorialHelp : GenericObject
     [SerializeField] private float rotationTime;
     [Space(20)] [SerializeField] private int tutorialID;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         StartCoroutine(DoSignRotation());

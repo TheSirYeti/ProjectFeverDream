@@ -8,6 +8,10 @@ namespace TEMP_GROUP
 {
     public class ResetScene : GenericObject
     {
+        private void Awake()
+        {
+            UpdateManager._instance.AddObject(this);
+        }
         public override void OnStart()
         {
             EventManager.UnSubscribe("OnReturnToMainMenu", ReturnToMenu);

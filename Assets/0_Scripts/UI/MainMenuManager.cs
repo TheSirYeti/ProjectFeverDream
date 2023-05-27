@@ -13,6 +13,11 @@ public class MainMenuManager : GenericObject
     [SerializeField] private TextMeshProUGUI sfxVolumeNumber, musicVolumeNumber;
     [SerializeField] private GameObject mainMenu, generalMenu, audioMenu, controllerMenu, graphicsMenu;
     
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         SoundManager.instance.StopAllMusic();

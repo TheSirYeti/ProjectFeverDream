@@ -15,6 +15,11 @@ public class SceneLoader : GenericObject
     
     private Animator _animator;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnAwake()
     {
         if (instance == null)

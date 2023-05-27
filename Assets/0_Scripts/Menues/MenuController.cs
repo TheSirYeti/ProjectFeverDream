@@ -29,6 +29,11 @@ public class MenuController : GenericObject
 
     bool _tempState = false;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         EventManager.Subscribe("MenuChanger", MenuChanger);

@@ -62,6 +62,11 @@ public class CameraController : GenericObject
     Action cameraEffects = delegate { };
     Action interactChecker = delegate { };
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnAwake()
     {
         EventManager.Subscribe("CameraShake", ShakeState);

@@ -48,6 +48,12 @@ public class UIController : GenericObject
 
     [SerializeField] TextMeshProUGUI fpsCounter;
 
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         EventManager.Subscribe("ChangeHealthUI", ChangeHealthUI);

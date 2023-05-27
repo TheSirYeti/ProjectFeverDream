@@ -24,6 +24,11 @@ public abstract class GenericWeapon : GenericObject, IAssistPickUp, IInteractUI
     [SerializeField] int _pickUpID;
     bool _isEquiped = false;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
     public abstract void Reload();
     public abstract void FeedBack(Vector3 hitPoint, RaycastHit hit);

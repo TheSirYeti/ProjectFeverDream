@@ -24,7 +24,12 @@ public class MeleeWeapon : GenericWeapon
     Coroutine _colliderCoroutine;
     Coroutine _comboCoroutine;
 
-    private void Start()
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
+    public override void OnStart()
     {
         _meleeCollider = GetComponent<BoxCollider>();
         _meleeCollider.enabled = false;
@@ -32,7 +37,7 @@ public class MeleeWeapon : GenericWeapon
         StartCoroutine(LateStart());
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
         OnDelegateUpdate();
     }

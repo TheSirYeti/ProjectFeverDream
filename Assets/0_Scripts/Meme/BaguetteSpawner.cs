@@ -9,6 +9,10 @@ public class BaguetteSpawner : GenericObject
     private float maxValue = 360;
     private float minValue = 0;
     
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
     
     public void SpawnBaguettes()
     {

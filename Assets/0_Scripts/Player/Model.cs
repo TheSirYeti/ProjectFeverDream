@@ -73,6 +73,11 @@ public class Model : GenericObject, IPlayerLife
     List<GameObject> _posibleColliders = new List<GameObject>();
     GameObject _actualCollider;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnAwake()
     {
         _view = FindObjectOfType<View>();

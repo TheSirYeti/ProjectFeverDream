@@ -10,6 +10,12 @@ public class VFXManager : GenericObject
     [SerializeField] List<ParticleSystem> _toasterParticles;
 
     [SerializeField] ParticleSystem _bagguetHit;
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnAwake()
     {
         EventManager.Subscribe("VFX_FullSlice", FullSlice);

@@ -6,6 +6,12 @@ using UnityEngine;
 public class TempSpawnWeapons : GenericObject
 {
     public GameObject baguette, toaster;
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnUpdate()
     {
         if (Input.GetKeyDown(KeyCode.P))

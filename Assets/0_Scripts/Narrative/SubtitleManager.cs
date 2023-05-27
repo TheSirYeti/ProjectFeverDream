@@ -15,6 +15,11 @@ public class SubtitleManager : GenericObject
     [Header("SUBTITLE UI PROPERTIES")] 
     [SerializeField] private TextMeshProUGUI subtitles, speaker;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         EventManager.Subscribe("OnVoicelineSetTriggered", SetCurrentVoicelines);

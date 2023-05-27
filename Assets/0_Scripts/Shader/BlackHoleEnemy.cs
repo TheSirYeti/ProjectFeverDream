@@ -12,6 +12,11 @@ public class BlackHoleEnemy : GenericObject
     [Range(0.0f, 10.0f)]
     [SerializeField] private float _effect;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         _blackHole.SetVector("_BlackHolePosition", _pos.position);

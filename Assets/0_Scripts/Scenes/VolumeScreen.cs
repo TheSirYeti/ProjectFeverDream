@@ -9,6 +9,11 @@ public class VolumeScreen : GenericObject
     [SerializeField] private Slider sfxSlider, musicSlider;
     [SerializeField] private int nextScene;
     
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         if (PlayerPrefs.HasKey("SFX_VOLUME_VALUE"))

@@ -9,6 +9,11 @@ public class DisplayHitmarkers : GenericObject
     [SerializeField] private Image normalHitmarker, headshotHitmarker, weakHitmarker, deadHitmarker;
     [SerializeField] private float hitmarkerDuration;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         EventManager.Subscribe("OnDamageableHit", TriggerHitmarker);
