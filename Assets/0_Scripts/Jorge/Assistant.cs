@@ -505,6 +505,7 @@ public class Assistant : MonoBehaviour
         //if (_interactuable != null) return;
 
         EventManager.Trigger("OnAssistantPing", interactuable);
+        //SoundManager Asistant Ping
         _actualObjective = interactuable;
         _previousObjective = interactuable;
 
