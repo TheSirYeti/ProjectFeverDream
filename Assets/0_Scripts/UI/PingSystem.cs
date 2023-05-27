@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PingSystem : MonoBehaviour
+public class PingSystem : GenericObject
 {
     [SerializeField] private Image ping;
     [SerializeField] private Transform currentTarget;
@@ -18,12 +18,12 @@ public class PingSystem : MonoBehaviour
     private float yBias = 35f;
     private Camera cam;
 
-    private void Start()
+    public override void OnStart()
     {
         cam = Camera.main;
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
         if (!isPingEnabled) return;
         

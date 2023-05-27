@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class WeaponManager : MonoBehaviour, IAssistUsable
+public class WeaponManager : GenericObject, IAssistUsable
 {
     Model _model;
     [HideInInspector] public View _view;
@@ -30,7 +30,7 @@ public class WeaponManager : MonoBehaviour, IAssistUsable
     public Action OnRelease = delegate { };
 
 
-    private void Start()
+    public override void OnStart()
     {
         if (_actualWeapon)
         {

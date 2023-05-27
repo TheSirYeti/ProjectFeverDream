@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VFXManager : MonoBehaviour
+public class VFXManager : GenericObject
 {
     [SerializeField] List<ParticleSystem> _fullBaggeteSlice;
     [SerializeField] List<ParticleSystem> _brokenBaggeteSlice;
@@ -10,7 +10,7 @@ public class VFXManager : MonoBehaviour
     [SerializeField] List<ParticleSystem> _toasterParticles;
 
     [SerializeField] ParticleSystem _bagguetHit;
-    void Awake()
+    public override void OnAwake()
     {
         EventManager.Subscribe("VFX_FullSlice", FullSlice);
         EventManager.Subscribe("VFX_BrokenSlice", BrokenSlice);

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class CheckpointManager : MonoBehaviour
+public class CheckpointManager : GenericObject
 {
     private int currentCheckpoint;
     [SerializeField] private List<CheckpointTrigger> checkpoints;
     [SerializeField] private Transform playerPos;
     
-    private void Start()
+    public override void OnStart()
     {
         if (!PlayerPrefs.HasKey("CurrentCheckpoint"))
         {

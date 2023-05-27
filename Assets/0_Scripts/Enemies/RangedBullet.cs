@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class RangedBullet : MonoBehaviour
+public class RangedBullet : GenericObject
 {
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float timeToDie;
@@ -13,7 +13,7 @@ public class RangedBullet : MonoBehaviour
     [SerializeField] private List<GameObject> viewObjects;
     private int rand = 0;
 
-    private void Start()
+    public override void OnStart()
     {
         rand = Random.Range(0, viewObjects.Count);
         viewObjects[rand].SetActive(true);
@@ -21,7 +21,7 @@ public class RangedBullet : MonoBehaviour
         Destroy(gameObject, timeToDie);
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
         transform.position += transform.forward * bulletSpeed * Time.fixedDeltaTime;
     }

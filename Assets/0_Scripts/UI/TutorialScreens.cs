@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialScreens : MonoBehaviour
+public class TutorialScreens : GenericObject
 {
     [SerializeField] private List<GameObject> tutorialSigns;
     [SerializeField] private float timeSignActive;
 
-    private void Start()
+    public override void OnStart()
     {
         StartCoroutine(DoTutorialSign(0));
         EventManager.Subscribe("OnTutorialTriggered", TriggerTutorial);

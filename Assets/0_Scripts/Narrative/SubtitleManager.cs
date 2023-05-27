@@ -5,7 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public class SubtitleManager : MonoBehaviour
+public class SubtitleManager : GenericObject
 {
     [Header("SUBTITLE SETTINGS")]
     public SubtitleSet currentSubtitleSet;
@@ -15,7 +15,7 @@ public class SubtitleManager : MonoBehaviour
     [Header("SUBTITLE UI PROPERTIES")] 
     [SerializeField] private TextMeshProUGUI subtitles, speaker;
 
-    private void Start()
+    public override void OnStart()
     {
         EventManager.Subscribe("OnVoicelineSetTriggered", SetCurrentVoicelines);
     }

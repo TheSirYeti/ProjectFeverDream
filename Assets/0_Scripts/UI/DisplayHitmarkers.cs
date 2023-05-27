@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayHitmarkers : MonoBehaviour
+public class DisplayHitmarkers : GenericObject
 {
     [SerializeField] private Image normalHitmarker, headshotHitmarker, weakHitmarker, deadHitmarker;
     [SerializeField] private float hitmarkerDuration;
 
-    private void Start()
+    public override void OnStart()
     {
         EventManager.Subscribe("OnDamageableHit", TriggerHitmarker);
     }

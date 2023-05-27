@@ -6,15 +6,15 @@ using UnityEngine.SceneManagement;
 
 namespace TEMP_GROUP
 {
-    public class ResetScene : MonoBehaviour
+    public class ResetScene : GenericObject
     {
-        private void Start()
+        public override void OnStart()
         {
             EventManager.UnSubscribe("OnReturnToMainMenu", ReturnToMenu);
             EventManager.Subscribe("OnReturnToMainMenu", ReturnToMenu);
         }
 
-        private void LateUpdate()
+        public override void OnLateUpdate()
         {
             if (Input.GetKey(KeyCode.Alpha0))
             {

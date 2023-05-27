@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericBullet : MonoBehaviour
+public abstract class GenericBullet : GenericObject
 {
     [SerializeField] protected float _timerToBack;
     protected float _time;

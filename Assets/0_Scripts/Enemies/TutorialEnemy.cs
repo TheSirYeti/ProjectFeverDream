@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TutorialEnemy : Enemy
 {
-    private void Start()
+    public override void OnStart()
     {
         if (!_damageRecive.ContainsKey("WeakPart"))
             _damageRecive.Add("WeakPart", weakDmg);

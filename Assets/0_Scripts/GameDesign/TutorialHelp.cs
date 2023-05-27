@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialHelp : MonoBehaviour
+public class TutorialHelp : GenericObject
 {
     [SerializeField] private GameObject rotatingSign;
     [SerializeField] private Vector3 rotationAmount;
     [SerializeField] private float rotationTime;
     [Space(20)] [SerializeField] private int tutorialID;
 
-    private void Start()
+    public override void OnStart()
     {
         StartCoroutine(DoSignRotation());
     }

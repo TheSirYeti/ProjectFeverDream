@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LogoSceneLogic : MonoBehaviour
+public class LogoSceneLogic : GenericObject
 {
     [SerializeField] private Transform _cameraPos;
     [SerializeField] private Canvas _canvas;
@@ -13,17 +13,17 @@ public class LogoSceneLogic : MonoBehaviour
     [SerializeField] private float secondSongSection;
     [SerializeField] private int nextSceneToLoad;
 
-    private void Awake()
+    public override void OnAwake()
     {
         _canvas.worldCamera = GameManager.Instance.SetCameraParent(_cameraPos, 5, CameraClearFlags.SolidColor);
     }
 
-    private void Start()
+    public override void OnStart()
     {
         StartCoroutine(DoIntroCycle());
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
         if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.Space))
         {

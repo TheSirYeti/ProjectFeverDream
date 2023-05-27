@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class NodeManager : MonoBehaviour
+public class NodeManager : GenericObject
 {
     [Header("Node Parents")]
     [SerializeField] private GameObject nodeEnemyParent;
@@ -22,7 +22,7 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private float escapeViewRadius;
     public static NodeManager instance;
 
-    private void Awake()
+    public override void OnAwake()
     {
         nodesEnemy = nodeEnemyParent.GetComponentsInChildren<Node>().ToList();
         nodesAssistant = nodeAssistantParent.GetComponentsInChildren<Node>().ToList();

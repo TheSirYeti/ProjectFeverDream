@@ -46,7 +46,7 @@ public class RangedEnemy : Enemy
     
     private EventFSM<RangedEnemyStates> fsm;
 
-    private void Start()
+    public override void OnStart()
     {
         if (!_damageRecive.ContainsKey("WeakPart"))
             _damageRecive.Add("WeakPart", weakDmg);
@@ -408,7 +408,7 @@ public class RangedEnemy : Enemy
         fsm = new EventFSM<RangedEnemyStates>(idle);
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
         animator.SetFloat("movementSpeed", speed);
         currentAttackCooldown -= Time.deltaTime;

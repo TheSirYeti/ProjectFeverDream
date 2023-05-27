@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security;
 using UnityEngine;
 
-public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract, IInteractUI
+public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInteractUI
 {
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp; 
@@ -474,7 +474,7 @@ public abstract class Enemy : MonoBehaviour, ITakeDamage, IAssistInteract, IInte
 
     public bool IsInteractable()
     {
-        return !isDead;
+        return isDead;
     }
     #endregion
 

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VolumeScreen : MonoBehaviour
+public class VolumeScreen : GenericObject
 {
     [SerializeField] private Slider sfxSlider, musicSlider;
     [SerializeField] private int nextScene;
     
-    private void Start()
+    public override void OnStart()
     {
         if (PlayerPrefs.HasKey("SFX_VOLUME_VALUE"))
         {

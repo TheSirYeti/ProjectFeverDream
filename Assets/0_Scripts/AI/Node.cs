@@ -6,7 +6,7 @@ using UnityEngine;
 using TMPro;
 using UnityEditor;
 
-public class Node : MonoBehaviour
+public class Node : GenericObject
 {
     public bool nodesAssistant = true;
     public float viewRadius = 7f;
@@ -18,7 +18,7 @@ public class Node : MonoBehaviour
 
     public int cost = 1;
 
-    private void Start()
+    public override void OnStart()
     {
         CalculateNodes();
     }

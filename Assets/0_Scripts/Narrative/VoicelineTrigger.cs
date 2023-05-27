@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VoicelineTrigger : MonoBehaviour
+public class VoicelineTrigger : GenericObject
 {
     public SubtitleSet mySet;
     private bool hasBeenTriggered = false;

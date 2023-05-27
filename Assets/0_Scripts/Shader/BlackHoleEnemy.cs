@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlackHoleEnemy : MonoBehaviour
+public class BlackHoleEnemy : GenericObject
 {
     [SerializeField] private Material _blackHole;
     [SerializeField] private Transform _pos;
@@ -12,14 +12,14 @@ public class BlackHoleEnemy : MonoBehaviour
     [Range(0.0f, 10.0f)]
     [SerializeField] private float _effect;
 
-    void Start()
+    public override void OnStart()
     {
         _blackHole.SetVector("_BlackHolePosition", _pos.position);
         _blackHole.SetFloat("_Effect", _effect);
         _blackHole.SetFloat("_Range", _range);
     }
 
-    void Update()
+    public override void OnUpdate()
     {
         _blackHole.SetVector("_BlackHolePosition", _pos.position);
         _blackHole.SetFloat("_Effect", _effect);

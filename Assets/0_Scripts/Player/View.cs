@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class View : MonoBehaviour
+public class View : GenericObject
 {
     Model _model;
     Animator _animator;
     WeaponManager _weaponManager;
 
-    private void Awake()
+    public override void OnAwake()
     {
         EventManager.Subscribe("OnViewStart", OnViewStart);
         EventManager.Subscribe("PlayAnimation", PlayAnimation);

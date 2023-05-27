@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TempSpawnWeapons : MonoBehaviour
+public class TempSpawnWeapons : GenericObject
 {
     public GameObject baguette, toaster;
-    private void Update()
+    public override void OnUpdate()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {

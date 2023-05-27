@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawnTrigger : MonoBehaviour
+public class EnemySpawnTrigger : GenericObject
 {
     private bool hasTriggered = false;
     [SerializeField] private List<EnemySpawner> enemySpawners;

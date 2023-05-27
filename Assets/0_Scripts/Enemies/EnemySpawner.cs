@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : GenericObject
 {
     [SerializeField] private List<GameObject> enemiesToEnable;
     [SerializeField] private Transform spawnpoint;
     [Space(20)] [SerializeField] private float gizmoViewRadius;
     [SerializeField] private Color gizmoColor;
 
-    private void Start()
+    public override void OnStart()
     {
         foreach (var enemy in enemiesToEnable)
         {

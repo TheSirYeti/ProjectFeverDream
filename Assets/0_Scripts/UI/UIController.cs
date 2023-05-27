@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class UIController : MonoBehaviour
+public class UIController : GenericObject
 {
     [Header("Player UI")]
     [SerializeField] TextMeshProUGUI _healthUI;
@@ -48,7 +48,7 @@ public class UIController : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI fpsCounter;
 
-    void Start()
+    public override void OnStart()
     {
         EventManager.Subscribe("ChangeHealthUI", ChangeHealthUI);
         EventManager.Subscribe("ChangeBulletUI", ChangeBulletUI);

@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class Assistant : MonoBehaviour
+public class Assistant : GenericObject
 {
     Action ExtraUpdate = delegate { };
 
@@ -72,7 +72,7 @@ public class Assistant : MonoBehaviour
     private EventFSM<JorgeStates> fsm;
 
 
-    void Awake()
+    public override void OnAwake()
     {
         EventManager.Subscribe("OnAssistantStart", OnAssistantStart);
 
@@ -80,7 +80,7 @@ public class Assistant : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    void Start()
+    public override void OnStart()
     {
         EventManager.Trigger("SetAssistant", this);
         GameManager.Instance.Assistant = this;
@@ -475,14 +475,14 @@ public class Assistant : MonoBehaviour
         fsm.SendInput(state);
     }
 
-    void Update()
+    public override void OnUpdate()
     {
         //Debug.Log(fsm.Current.Name);
         fsm.Update();
         ExtraUpdate();
     }
 
-    private void FixedUpdate()
+    public override void OnFixedUpdate()
     {
         _rb.velocity = _actualDir;
     }

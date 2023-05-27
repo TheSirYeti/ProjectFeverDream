@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+public class SceneLoader : GenericObject
 {
     public static SceneLoader instance;
     
@@ -15,7 +15,7 @@ public class SceneLoader : MonoBehaviour
     
     private Animator _animator;
 
-    private void Awake()
+    public override void OnAwake()
     {
         if (instance == null)
         {

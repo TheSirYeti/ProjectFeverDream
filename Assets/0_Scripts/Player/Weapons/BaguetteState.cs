@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaguetteState : MonoBehaviour
+public class BaguetteState : GenericObject
 {
     public List<GameObject> allBaguetteStates;
     private int endState;
 
     private int lastState = 0;
 
-    private void Start()
+    public override void OnStart()
     {
         endState = allBaguetteStates.Count - 1;
         EventManager.Subscribe("OnBaguetteChangeState", SetCurrentState);

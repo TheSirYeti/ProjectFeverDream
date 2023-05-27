@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaguetteSpawner : MonoBehaviour
+public class BaguetteSpawner : GenericObject
 {
     public GameObject baguettePrefab;
     public List<Transform> allSpawnPositions;

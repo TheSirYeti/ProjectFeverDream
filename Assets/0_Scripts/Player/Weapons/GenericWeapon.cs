@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class GenericWeapon : MonoBehaviour, IAssistPickUp, IInteractUI
+public abstract class GenericWeapon : GenericObject, IAssistPickUp, IInteractUI
 {
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;

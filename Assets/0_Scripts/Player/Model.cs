@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class Model : MonoBehaviour, IPlayerLife
+public class Model : GenericObject, IPlayerLife
 {
     //Class Reference
     PhysicsSystem _physics;
@@ -73,7 +73,7 @@ public class Model : MonoBehaviour, IPlayerLife
     List<GameObject> _posibleColliders = new List<GameObject>();
     GameObject _actualCollider;
 
-    private void Awake()
+    public override void OnAwake()
     {
         _view = FindObjectOfType<View>();
         weaponManager = FindObjectOfType<WeaponManager>();
@@ -107,7 +107,7 @@ public class Model : MonoBehaviour, IPlayerLife
         floorChecker = CheckOffFloor;
     }
 
-    void Start()
+    public override void OnStart()
     {
         EventManager.Trigger("OnAssistantStart", _camera.transform, weaponManager.GetComponent<IAssistInteract>());
         EventManager.Trigger("OnViewStart", this, weaponManager);
@@ -115,7 +115,7 @@ public class Model : MonoBehaviour, IPlayerLife
         GameManager.Instance.Player = this;
     }
 
-    void Update()
+    public override void OnUpdate()
     {
         _controller.onUpdate();
 
@@ -127,7 +127,7 @@ public class Model : MonoBehaviour, IPlayerLife
         if (_isOnFloor && _physics.HasGravity()) _physics.RemoveAcceleration("gravity");
     }
 
-    void FixedUpdate()
+    public override void OnFixedUpdate()
     {
         _physics.PhysicsFixedUpdate();
     }

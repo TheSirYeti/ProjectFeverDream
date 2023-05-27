@@ -7,13 +7,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Cursor = UnityEngine.Cursor;
 
-public class MainMenuManager : MonoBehaviour
+public class MainMenuManager : GenericObject
 {
     [SerializeField] private Slider sfxSlider, musicSlider;
     [SerializeField] private TextMeshProUGUI sfxVolumeNumber, musicVolumeNumber;
     [SerializeField] private GameObject mainMenu, generalMenu, audioMenu, controllerMenu, graphicsMenu;
     
-    private void Start()
+    public override void OnStart()
     {
         SoundManager.instance.StopAllMusic();
         SoundManager.instance.StopAllSounds();
@@ -22,7 +22,7 @@ public class MainMenuManager : MonoBehaviour
         Cursor.visible = true;
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {

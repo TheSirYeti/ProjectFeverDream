@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CameraController : MonoBehaviour
+public class CameraController : GenericObject
 {
     // Model
     Model _model;
@@ -62,7 +62,7 @@ public class CameraController : MonoBehaviour
     Action cameraEffects = delegate { };
     Action interactChecker = delegate { };
 
-    void Awake()
+    public override void OnAwake()
     {
         EventManager.Subscribe("CameraShake", ShakeState);
         EventManager.Subscribe("CameraBobbing", SetBobbing);
@@ -94,7 +94,7 @@ public class CameraController : MonoBehaviour
         _initialCamPos = _cameraGetter.transform.localPosition;
     }
 
-    private void Start()
+    public override void OnStart()
     {
         EventManager.Subscribe("ChangeSens", ChangeSens);
 
@@ -104,7 +104,7 @@ public class CameraController : MonoBehaviour
         StartCoroutine(LateStart());
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
         interactChecker();
         cameraMovement();

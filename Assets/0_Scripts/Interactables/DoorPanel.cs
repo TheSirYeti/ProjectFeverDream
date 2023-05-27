@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DoorPanel : MonoBehaviour, IAssistInteract, IInteractUI
+public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
 {
     [SerializeField] Assistant.Interactuables _type;
 
@@ -16,7 +16,7 @@ public class DoorPanel : MonoBehaviour, IAssistInteract, IInteractUI
     private Material activatedMat;
     [SerializeField] private List<Renderer> renderers;
 
-    private void Start()
+    public override void OnStart()
     {
         if(renderers == null)
             renderers = GetComponentsInChildren<Renderer>().ToList();

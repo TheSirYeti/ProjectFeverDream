@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TempCutsceneTrigger : MonoBehaviour
+public class TempCutsceneTrigger : GenericObject
 {
     public List<GameObject> objectsToEnable;
     public float timeToWait;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckpointTrigger : MonoBehaviour
+public class CheckpointTrigger : GenericObject
 {
     private bool isTriggered = false;
     private int checkpointID;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TutorialTrigger : MonoBehaviour
+public class TutorialTrigger : GenericObject
 {
     private bool hasTriggered = false;
     [SerializeField] private int tutorialID;

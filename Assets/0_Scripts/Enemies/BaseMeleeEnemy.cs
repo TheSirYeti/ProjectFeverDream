@@ -27,7 +27,7 @@ public class BaseMeleeEnemy : Enemy
 
     private EventFSM<MeleeEnemyStates> fsm;
 
-    private void Start()
+    public override void OnStart()
     {
         if (!_damageRecive.ContainsKey("WeakPart"))
             _damageRecive.Add("WeakPart", weakDmg);
@@ -297,7 +297,6 @@ public class BaseMeleeEnemy : Enemy
         isAttacking = true;
         StopSpeed();
     }
-
     public override void Death()
     {
         if (isDead) return;
@@ -339,7 +338,7 @@ public class BaseMeleeEnemy : Enemy
         DoGenericChase();
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
         animator.SetFloat("movementSpeed", speed);
         currentAttackCooldown -= Time.deltaTime;

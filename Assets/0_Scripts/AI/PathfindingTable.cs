@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PathfindingTable : MonoBehaviour
+public class PathfindingTable : GenericObject
 {
     public LookUpTable<string, List<Node>> pathTable;
 
     public static PathfindingTable instance;
 
-    private void Awake()
+    public override void OnAwake()
     {
         if (instance == null)
         {

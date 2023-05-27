@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class MenuController : MonoBehaviour
+public class MenuController : GenericObject
 {
     public GameObject pauseMenu;
 
@@ -29,7 +29,7 @@ public class MenuController : MonoBehaviour
 
     bool _tempState = false;
 
-    private void Start()
+    public override void OnStart()
     {
         EventManager.Subscribe("MenuChanger", MenuChanger);
 
