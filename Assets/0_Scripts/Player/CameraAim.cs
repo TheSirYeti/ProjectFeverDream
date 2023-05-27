@@ -34,10 +34,18 @@ public class CameraAim
         RaycastHit hit;
         IInteractUI tempUI;
         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _fullLayerMask) &&
-            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask) &&
-            hit.collider.GetComponent<IInteractUI>().IsInteractable())
+            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask))
         {
             tempUI = hit.collider.GetComponent<IInteractUI>();
+
+            if (tempUI == null) tempUI = hit.collider.GetComponentInParent<IInteractUI>();
+            
+            if (tempUI == null || !tempUI.IsInteractable())
+            {
+                EventManager.Trigger("InteractUI", false);
+                _actualUI = null;
+                return;
+            }
 
             if (tempUI == _actualUI) return;
 
