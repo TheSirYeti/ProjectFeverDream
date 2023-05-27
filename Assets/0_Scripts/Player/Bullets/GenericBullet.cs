@@ -12,12 +12,12 @@ public abstract class GenericBullet : GenericObject
     [SerializeField] LayerMask _collisionMask;
     [SerializeField] protected LayerMask _damagableMask;
 
-    [Header("THIS IS A TEMP GAMEOBJECT, CHANGE LATER")]
-    [SerializeField] protected GameObject _fakeDecal;
+    [Header("THIS IS A TEMP GAMEOBJECT, CHANGE LATER")] [SerializeField]
+    protected GameObject _fakeDecal;
 
     protected GenericWeapon _actualWeapon;
-    protected bool _canDmg;
-    
+    [SerializeField] protected bool _canDmg;
+
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -32,7 +32,7 @@ public abstract class GenericBullet : GenericObject
 
     protected void Movement()
     {
-        transform.position += transform.forward * _speed * Time.deltaTime;
+        transform.position += transform.forward * (_speed * Time.deltaTime);
         CheckCollisions();
     }
 
@@ -41,10 +41,12 @@ public abstract class GenericBullet : GenericObject
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _damagableMask))
         {
-            hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg);
+            if (_canDmg)
+                hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg);
+            
             _actualWeapon.ReturnBullet(this);
         }
-        else if (Physics.Raycast(transform.position, transform.forward,out hit, _distanceCollision, _collisionMask))
+        else if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _collisionMask))
         {
             GameObject decal = Instantiate(_fakeDecal, hit.point, transform.rotation);
             decal.transform.forward = hit.normal * -1;

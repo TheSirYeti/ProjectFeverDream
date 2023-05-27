@@ -13,7 +13,7 @@ public class Toaster : GenericWeapon
     [SerializeField] private Material burnToast, burnPieces;
 
     bool _particleIsActive = false;
-    
+
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -33,6 +33,11 @@ public class Toaster : GenericWeapon
         StartCoroutine(LateStart());
     }
 
+    public override void OnLateStart()
+    {
+        //TODO: Pasar los late start de las armas a cada una
+    }
+
     public override void OnUpdate()
     {
         OnDelegateUpdate();
@@ -49,6 +54,9 @@ public class Toaster : GenericWeapon
         int actualPellets = (int)(numPellets * _actualLoading);
         int actualDmg = (int)(_weaponSO.dmg * _actualLoading);
 
+        List<RaycastHit> toasterHits = new List<RaycastHit>();
+        List<int> ammountPellets = new List<int>();
+
         for (int i = 0; i < actualPellets; i++)
         {
             float randomHorizontalAngle = Random.Range(-spreadAngle / 2f, spreadAngle / 2f);
@@ -64,12 +72,24 @@ public class Toaster : GenericWeapon
             RaycastHit hit;
             if (Physics.Raycast(pointOfShoot.position, pelletDirection, out hit, Mathf.Infinity, _shooteableMask))
             {
+                if (!toasterHits.Contains(hit))
+                {
+                    toasterHits.Add(hit);
+                    ammountPellets.Add(0);
+                }
+
+                ammountPellets[toasterHits.IndexOf(hit)]++;
+
                 Vector3 dir = hit.point - _nozzlePoint.position;
-                
+
                 GenericBullet bullet = GetBullet(_nozzlePoint.position);
                 bullet.OnStart(dir, this, actualDmg);
-                //Ejecutar Dmg
             }
+        }
+
+        for (int i = 0; i < toasterHits.Count; i++)
+        {
+            toasterHits[i].collider.GetComponentInParent<ITakeDamage>()?.TakeDamage("Body", actualDmg * ammountPellets[i]);
         }
 
         EventManager.Trigger("CameraShake", true);
@@ -83,7 +103,6 @@ public class Toaster : GenericWeapon
 
         EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
     }
-
 
 
     /* -------------------------------- FEEDBACK -------------------------------- */
@@ -100,13 +119,12 @@ public class Toaster : GenericWeapon
     }
 
 
-
     /* -------------------------------- RELOAD -------------------------------- */
     public override void Reload()
     {
         burnToast.SetFloat("_BurnValue", 0);
         burnPieces.SetFloat("_BurnValue", 0);
-        
+
         int bulletsMissings = _weaponSO.maxBulletsInMagazine - _actualMagazineBullets;
 
         if (_actualReserveBullets >= bulletsMissings)
