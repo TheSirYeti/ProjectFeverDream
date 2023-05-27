@@ -34,7 +34,7 @@ public class MeleeWeapon : GenericWeapon
 
     private void Update()
     {
-        OnUpdate();
+        OnDelegateUpdate();
     }
 
     public override void Shoot(Transform pointOfShoot, bool isADS)
@@ -152,7 +152,7 @@ public class MeleeWeapon : GenericWeapon
         _weaponManager._view.SetInt("actualAttack", _actualAttack);
         _weaponManager._view.SetTrigger(GetOnClickName());
         _holdTimer = 0;
-        OnUpdate = OnHold;
+        OnDelegateUpdate = OnHold;
     }
 
     void OnHold()
@@ -171,6 +171,6 @@ public class MeleeWeapon : GenericWeapon
             _weaponManager._view.ResetTrigger(GetOnClickName());
 
         _holdTimer = 0;
-        OnUpdate = delegate { };
+        OnDelegateUpdate = delegate { };
     }
 }

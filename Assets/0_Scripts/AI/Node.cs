@@ -18,6 +18,11 @@ public class Node : GenericObject
 
     public int cost = 1;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         CalculateNodes();

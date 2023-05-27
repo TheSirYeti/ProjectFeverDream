@@ -4,8 +4,6 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-namespace _0_Scripts.Utilities
-{
     public class UpdateManager : MonoBehaviour, ISceneChanges
     {
         public static UpdateManager _instance;
@@ -112,4 +110,3 @@ namespace _0_Scripts.Utilities
             }
         }
     }
-}

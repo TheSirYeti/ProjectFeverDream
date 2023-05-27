@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using _0_Scripts.Utilities;
 using UnityEngine;
 
 public class Toaster : GenericWeapon
@@ -14,9 +13,14 @@ public class Toaster : GenericWeapon
     [SerializeField] private Material burnToast, burnPieces;
 
     bool _particleIsActive = false;
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
 
     /* -------------------------------- START -------------------------------- */
-    void Start()
+    public override void OnStart()
     {
         _actualReserveBullets = _weaponSO.initialBulletsInInventory;
         _actualMagazineBullets = _weaponSO.maxBulletsInMagazine;
@@ -29,9 +33,9 @@ public class Toaster : GenericWeapon
         StartCoroutine(LateStart());
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
-        OnUpdate();
+        OnDelegateUpdate();
     }
 
 
@@ -125,7 +129,7 @@ public class Toaster : GenericWeapon
         _weaponManager._view.SetBool(GetOnClickName(), true);
         burnToast.SetFloat("_BurnValue", 0);
         //burnPieces.SetFloat("_BurnValue", 0);
-        OnUpdate = LoadWeapon;
+        OnDelegateUpdate = LoadWeapon;
     }
 
     void LoadWeapon()
@@ -145,7 +149,7 @@ public class Toaster : GenericWeapon
     public override void OnRelease()
     {
         _weaponManager._view.SetBool(GetOnClickName(), false);
-        OnUpdate = delegate { };
+        OnDelegateUpdate = delegate { };
         EventManager.Trigger("VFX_ToasterOFF", 0);
         _particleIsActive = false;
     }

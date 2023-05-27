@@ -34,7 +34,7 @@ public abstract class GenericWeapon : GenericObject, IAssistPickUp, IInteractUI
 
     protected ObjectPool _bulletPool;
 
-    protected Action OnUpdate = delegate { };
+    protected Action OnDelegateUpdate = delegate { };
 
     public bool CanShoot()
     {

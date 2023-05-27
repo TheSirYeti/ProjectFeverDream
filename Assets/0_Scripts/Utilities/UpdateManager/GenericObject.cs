@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using _0_Scripts.Utilities;
 using UnityEngine;
 
 public abstract class GenericObject : MonoBehaviour, IOnInit, IOnUpdate
