@@ -10,6 +10,11 @@ public class CheckpointManager : GenericObject
     [SerializeField] private List<CheckpointTrigger> checkpoints;
     [SerializeField] private Transform playerPos;
     
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         if (!PlayerPrefs.HasKey("CurrentCheckpoint"))

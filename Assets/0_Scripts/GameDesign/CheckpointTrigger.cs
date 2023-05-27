@@ -9,6 +9,11 @@ public class CheckpointTrigger : GenericObject
     private int checkpointID;
     [SerializeField] private Transform spawnpoint;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (isTriggered || !other.gameObject.tag.Equals("Player")) return;

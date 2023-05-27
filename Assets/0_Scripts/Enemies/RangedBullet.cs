@@ -12,6 +12,11 @@ public class RangedBullet : GenericObject
     public float bulletDmg;
     [SerializeField] private List<GameObject> viewObjects;
     private int rand = 0;
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
 
     public override void OnStart()
     {

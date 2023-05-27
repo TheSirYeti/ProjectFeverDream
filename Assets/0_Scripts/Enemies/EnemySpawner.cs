@@ -10,6 +10,11 @@ public class EnemySpawner : GenericObject
     [Space(20)] [SerializeField] private float gizmoViewRadius;
     [SerializeField] private Color gizmoColor;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnStart()
     {
         foreach (var enemy in enemiesToEnable)

@@ -17,6 +17,11 @@ public abstract class GenericBullet : GenericObject
 
     protected GenericWeapon _actualWeapon;
     protected bool _canDmg;
+    
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
 
     public void OnStart(Vector3 dir, GenericWeapon actualWeapon, float dmg)
     {

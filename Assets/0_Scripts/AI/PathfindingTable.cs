@@ -10,6 +10,11 @@ public class PathfindingTable : GenericObject
 
     public static PathfindingTable instance;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnAwake()
     {
         if (instance == null)

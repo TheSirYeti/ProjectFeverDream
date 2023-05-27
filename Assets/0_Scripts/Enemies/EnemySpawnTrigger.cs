@@ -9,6 +9,11 @@ public class EnemySpawnTrigger : GenericObject
     [SerializeField] private List<EnemySpawner> enemySpawners;
     [SerializeField] private bool needsReposition;
     
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (hasTriggered || !other.gameObject.tag.Equals("Player")) return;

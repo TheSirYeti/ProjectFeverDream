@@ -79,6 +79,12 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
 
     public abstract void Attack();
     
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
+    
     #region RAGDOLLS
 
     public void DoRagdoll()

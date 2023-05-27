@@ -22,6 +22,11 @@ public class NodeManager : GenericObject
     [SerializeField] private float escapeViewRadius;
     public static NodeManager instance;
 
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+    
     public override void OnAwake()
     {
         nodesEnemy = nodeEnemyParent.GetComponentsInChildren<Node>().ToList();
