@@ -76,7 +76,8 @@ public class MainMenuManager : GenericObject
         SoundManager.instance.StopAllMusic();
         SoundManager.instance.StopAllSounds();
         EventManager.ResetEventDictionary();
-        SceneLoader.instance.SetupLoadScene(sceneID);
+        
+        GameManager.Instance.ChangeScene(sceneID);
     }
 
     public void QuitGame()

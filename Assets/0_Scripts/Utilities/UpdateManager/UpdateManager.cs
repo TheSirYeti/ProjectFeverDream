@@ -10,9 +10,11 @@ using System.Linq;
 
         private bool _gamePause = false;
 
-        private Dictionary<int, IOnInit> _inits = new Dictionary<int, IOnInit>();
-        private Dictionary<int, IOnUpdate> _pausableUpdates = new Dictionary<int, IOnUpdate>();
-        private Dictionary<int, IOnUpdate> _continousUpdates = new Dictionary<int, IOnUpdate>();
+        private List<GenericObject> _allObjects = new List<GenericObject>();
+
+        private List<IOnInit> _inits = new List<IOnInit>();
+        private List<IOnUpdate> _pausableUpdates = new List<IOnUpdate>();
+        private List<IOnUpdate> _continousUpdates = new List<IOnUpdate>();
 
         private void Awake()
         {
@@ -27,7 +29,7 @@ using System.Linq;
             {
                 foreach (var update in _continousUpdates)
                 {
-                    update.Value.OnUpdate();
+                    update.OnUpdate();
                 }
             }
 
@@ -37,7 +39,7 @@ using System.Linq;
             {
                 foreach (var update in _pausableUpdates)
                 {
-                    update.Value.OnUpdate();
+                    update.OnUpdate();
                 }
             }
         }
@@ -48,7 +50,7 @@ using System.Linq;
 
             foreach (var update in _continousUpdates)
             {
-                update.Value.OnFixedUpdate();
+                update.OnFixedUpdate();
             }
             
             if (_gamePause) return;
@@ -57,7 +59,7 @@ using System.Linq;
             {
                 foreach (var update in _pausableUpdates)
                 {
-                    update.Value.OnFixedUpdate();
+                    update.OnFixedUpdate();
                 }
             }
         }
@@ -69,44 +71,41 @@ using System.Linq;
 
         public void OnSceneUnload()
         {
-            _inits = new Dictionary<int, IOnInit>();
-            _pausableUpdates = new Dictionary<int, IOnUpdate>();
-            _continousUpdates = new Dictionary<int, IOnUpdate>();
+            _inits = new List<IOnInit>();
+            _pausableUpdates = new List<IOnUpdate>();
+            _continousUpdates = new List<IOnUpdate>();
         }
 
-        public void AddObject(GenericObject genericObject, int updatePriority = 0, bool isPausable = true)
+        public void AddObject(GenericObject genericObject)
         {
-            _inits.Add(updatePriority, genericObject as IOnInit);
-            _inits = _inits.OrderBy(x => x.Key)
-                            .ToDictionary(x => x.Key, x => x.Value);
+            _allObjects.Add(genericObject);
+            _allObjects = _allObjects.OrderBy(x => x.priority).ToList();
 
-            if (isPausable)
-                _pausableUpdates.Add(updatePriority, genericObject as IOnUpdate);
-            else
-                _continousUpdates.Add(updatePriority, genericObject as IOnUpdate);
-                
-            
+            _inits = _allObjects.Select(x => x as IOnInit).ToList();
+
+            _pausableUpdates = _allObjects.Where(x => x.isPausable).Select(x => x as IOnUpdate).ToList();
+            _continousUpdates = _allObjects.Where(x => !x.isPausable).Select(x => x as IOnUpdate).ToList();
         }
 
         private IEnumerator InitScene()
         {
             foreach (var init in _inits)
             {
-                init.Value.OnAwake();
+                init.OnAwake();
             }
 
             yield return new WaitForEndOfFrame();
 
             foreach (var init in _inits)
             {
-                init.Value.OnStart();
+                init.OnStart();
             }
 
             yield return new WaitForEndOfFrame();
 
             foreach (var init in _inits)
             {
-                init.Value.OnLateStart();
+                init.OnLateStart();
             }
         }
     }

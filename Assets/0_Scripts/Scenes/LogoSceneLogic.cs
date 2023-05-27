@@ -20,7 +20,7 @@ public class LogoSceneLogic : GenericObject
     
     public override void OnAwake()
     {
-        _canvas.worldCamera = GameManager.Instance.SetCameraParent(_cameraPos, 5, CameraClearFlags.SolidColor);
+        _canvas.worldCamera = GameManager.Instance.SetCameraParent(_cameraPos);
     }
 
     public override void OnStart()

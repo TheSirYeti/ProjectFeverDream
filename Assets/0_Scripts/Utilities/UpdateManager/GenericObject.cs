@@ -5,9 +5,9 @@ using UnityEngine;
 public abstract class GenericObject : MonoBehaviour, IOnInit, IOnUpdate
 {
     //Priority for update
-    protected int priority = 0;
+    public int priority = 0;
     //The object is pausable
-    protected bool isPausable = true;
+    public bool isPausable = true;
 
     #region Init Region
 

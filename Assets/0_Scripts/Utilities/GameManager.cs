@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Camera> _myCameras = new List<Camera>();
     [SerializeField] private bool _isMainScene;
 
+    public InGameSceneManager sceneManager { private get; set; }
+    public SoundManager soundManager { private get; set; }
+    public UpdateManager updateManager { private get; set; }
 
     private int _actualScene = 0;
     private bool _isLoading = false;
@@ -20,7 +23,13 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (Instance != null)
+        {
+            for (int i = 0; i < _myCameras.Count; i++)
+            {
+                Destroy(_myCameras[i]);
+            }
             Destroy(gameObject);
+        }
 
         Instance = this;
     }
@@ -30,17 +39,8 @@ public class GameManager : MonoBehaviour
         if (_isMainScene)
             ChangeScene(0);
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-            ChangeScene(0);
-        if (Input.GetKeyDown(KeyCode.L))
-            ChangeScene(1);
-    }
-
+    
     private Model _player;
-
     public Model Player
     {
         get
@@ -55,7 +55,6 @@ public class GameManager : MonoBehaviour
     }
 
     private Assistant _assistant;
-
     public Assistant Assistant
     {
         get
@@ -139,13 +138,17 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    public Camera SetCameraParent(Transform parent, int newLayer = 0,
-        CameraClearFlags clearFlag = CameraClearFlags.Skybox)
+    public Camera SetCameraParent(Transform parent)
     {
         _myCameras[0].transform.position = parent.position;
         _myCameras[0].transform.rotation = parent.rotation;
-        //_myCameras[0].gameObject.layer = newLayer;
-
+        
+        return _myCameras[0];
+    }
+    
+    public Camera SetCameraPropieties(int newLayer = 0, CameraClearFlags clearFlag = CameraClearFlags.Skybox)
+    {
+        _myCameras[0].gameObject.layer = newLayer;
         _myCameras[0].clearFlags = clearFlag;
 
         return _myCameras[0];
