@@ -340,22 +340,13 @@ public class BaseMeleeEnemy : Enemy
 
     public override void OnUpdate()
     {
+        fsm.Update();
+        
+        if (isDead) return;
+        
         animator.SetFloat("movementSpeed", speed);
         currentAttackCooldown -= Time.deltaTime;
         pathfindingCooldown -= Time.deltaTime;
-        
-        fsm.Update();
-        
-        /*if (isDead) return;
-        
-        if (IsInDistance())
-        {
-            Attack();
-            return;
-        }
-        
-        if(!isAttacking)
-            Move();*/
     }
 
     #region EXTRA VIEW METHODS

@@ -410,11 +410,13 @@ public class RangedEnemy : Enemy
 
     public override void OnUpdate()
     {
+        fsm.Update();
+        
+        if (isDead) return;
+        
         animator.SetFloat("movementSpeed", speed);
         currentAttackCooldown -= Time.deltaTime;
         pathfindingCooldown -= Time.deltaTime;
-        
-        fsm.Update();
     }
 
 
