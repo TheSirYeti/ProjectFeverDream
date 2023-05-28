@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     [SerializeField] private List<Camera> _myCameras = new List<Camera>();
     [SerializeField] private bool _isMainScene;
+    [SerializeField] private Animator _fadeAnimator;
 
     public InGameSceneManager sceneManager { private get; set; }
     public SoundManager soundManager { private get; set; }
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(_myCameras[i]);
             }
+
             Destroy(gameObject);
         }
 
@@ -39,8 +41,9 @@ public class GameManager : MonoBehaviour
         if (_isMainScene)
             ChangeScene(0);
     }
-    
+
     private Model _player;
+
     public Model Player
     {
         get
@@ -55,6 +58,7 @@ public class GameManager : MonoBehaviour
     }
 
     private Assistant _assistant;
+
     public Assistant Assistant
     {
         get
@@ -97,6 +101,12 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SceneLoader()
     {
+        if (!_isMainScene)
+        {
+            _fadeAnimator.Play("FadeIn");
+            yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
+        }
+
         //InGameSceneManager.instace.SetLoadingScreen(true);
 
         UpdateManager._instance.OnSceneUnload();
@@ -107,29 +117,21 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => !InGameSceneManager.instace.corutineIsOn);
         yield return new WaitForEndOfFrame();
 
+        EventManager.ResetEventDictionary();
+        SoundManager.instance.StopAllSounds();
+        SoundManager.instance.StopAllMusic();
+
         InGameSceneManager.instace.LoadScene();
 
         yield return new WaitForEndOfFrame();
         yield return new WaitUntil(() => !InGameSceneManager.instace.corutineIsOn);
         yield return new WaitForEndOfFrame();
 
-        //InGameSceneManager.instace.SetLoadingScreen(false);
-
-        List<Camera> allCameras = Camera.allCameras.ToList();
-
-        foreach (var camera in _myCameras)
-        {
-            allCameras.Remove(camera);
-        }
-
-        foreach (var camera in allCameras)
-        {
-            Destroy(camera.gameObject);
-        }
-
-        yield return new WaitForEndOfFrame();
-
         UpdateManager._instance.OnSceneLoad();
+
+        _fadeAnimator.Play("FadeOut");
+        yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
+        _fadeAnimator.Play("NoFade");
 
         _isLoading = false;
 
@@ -142,10 +144,10 @@ public class GameManager : MonoBehaviour
     {
         _myCameras[0].transform.position = parent.position;
         _myCameras[0].transform.rotation = parent.rotation;
-        
+
         return _myCameras[0];
     }
-    
+
     public Camera SetCameraPropieties(int newLayer = 0, CameraClearFlags clearFlag = CameraClearFlags.Skybox)
     {
         _myCameras[0].gameObject.layer = newLayer;

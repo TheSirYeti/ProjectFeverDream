@@ -43,6 +43,7 @@ public class LogoSceneLogic : GenericObject
     {
         SoundManager.instance.PlayMusic(MusicID.INTRO_JINGLE);
         yield return new WaitForSeconds(firstSongSection);
+        //TODO: Change for game manager fade in
         _animator.Play("FadeInLogo");
         yield return new WaitForSeconds(secondSongSection);
         GameManager.Instance.ChangeScene(nextSceneToLoad);

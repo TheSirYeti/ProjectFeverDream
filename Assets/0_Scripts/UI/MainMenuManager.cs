@@ -73,10 +73,6 @@ public class MainMenuManager : GenericObject
     
     public void LoadScene(int sceneID)
     {
-        SoundManager.instance.StopAllMusic();
-        SoundManager.instance.StopAllSounds();
-        EventManager.ResetEventDictionary();
-        
         GameManager.Instance.ChangeScene(sceneID);
     }
 
