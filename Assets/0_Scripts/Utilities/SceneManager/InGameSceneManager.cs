@@ -18,7 +18,7 @@ public class InGameSceneManager : MonoBehaviour
 
     private Coroutine _actualCoroutine;
 
-    public bool corutineIsOn => _actualCoroutine != null;
+    public bool isLoading = false;
 
     private void Awake()
     {
@@ -47,6 +47,7 @@ public class InGameSceneManager : MonoBehaviour
 
     public void LoadScene()
     {
+        isLoading = true;
         _actualCoroutine = StartCoroutine(IE_LoadScene());
     }
 
@@ -80,12 +81,14 @@ public class InGameSceneManager : MonoBehaviour
             _actualScene.cameraSettings.clearFlag);
         
         _actualCoroutine = null;
+        isLoading = false;
     }
 
     public void UnloadScene()
     {
         if (!_actualScene) return;
-
+        
+        isLoading = true;
         _actualCoroutine = StartCoroutine(IE_UnloadScene());
     }
 
@@ -109,6 +112,7 @@ public class InGameSceneManager : MonoBehaviour
             asincOperations[i].allowSceneActivation = true;
         }
 
+        isLoading = false;
         _actualCoroutine = null;
     }
 }

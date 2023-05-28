@@ -13,6 +13,7 @@ public class Controller
 
     public Controller(Model model, CameraController cameraController, WeaponManager weaponManager)
     {
+        Debug.Log("b");
         _model = model;
         _cameraController = cameraController;
         _weaponManager = weaponManager;

@@ -19,6 +19,7 @@ public class PathfindingTable : GenericObject
     {
         if (instance == null)
         {
+            Debug.Log("here");
             instance = this;
         }
         else

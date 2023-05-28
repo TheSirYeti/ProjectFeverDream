@@ -47,7 +47,7 @@ public class Assistant : GenericObject
     Transform _actualObjective;
     Vector3 _dir;
 
-    Transform _player;
+    [SerializeField] Transform _player;
     IAssistInteract _interactuable;
     public IAssistPickUp _holdingItem { get; private set; }
 
@@ -79,7 +79,7 @@ public class Assistant : GenericObject
     public override void OnAwake()
     {
         EventManager.Subscribe("OnAssistantStart", OnAssistantStart);
-
+        GameManager.Instance.Assistant = this;
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
     }
@@ -87,7 +87,7 @@ public class Assistant : GenericObject
     public override void OnStart()
     {
         EventManager.Trigger("SetAssistant", this);
-        GameManager.Instance.Assistant = this;
+        _player = GameManager.Instance.Player.transform;
         DoFsmSetup();
     }
 

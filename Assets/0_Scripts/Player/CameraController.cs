@@ -10,8 +10,8 @@ public class CameraController : GenericObject
 
     // Cameras & Positions
     Camera _camera;
-    Camera _cameraGetter { get { if (_camera) _camera = Camera.main; return _camera; } set { _camera = value; } }
-    Transform _mainCameraParent;
+    Camera _cameraGetter { get { if (_camera) _camera = GameManager.Instance.GetCamera(); return _camera; } set { _camera = value; } }
+    [SerializeField] Transform _mainCameraParent;
 
     Transform _actualCameraPos;
     List<Transform> _cameraPositions = new List<Transform>();
@@ -77,8 +77,8 @@ public class CameraController : GenericObject
         Cursor.lockState = CursorLockMode.Locked;
 
         // Get Main Camera
-        _cameraGetter = Camera.main;
-        _mainCameraParent = Camera.main.transform.parent;
+        _cameraGetter = GameManager.Instance.GetCamera();
+        GameManager.Instance.SetCameraParent(_mainCameraParent);
 
         // Get all the posible points for the camera
         Transform povParent = transform.Find("POVs");

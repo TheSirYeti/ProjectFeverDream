@@ -80,6 +80,7 @@ public class Model : GenericObject, IPlayerLife
     
     public override void OnAwake()
     {
+        GameManager.Instance.Player = this;
         _view = FindObjectOfType<View>();
         weaponManager = FindObjectOfType<WeaponManager>();
 
@@ -116,8 +117,6 @@ public class Model : GenericObject, IPlayerLife
     {
         EventManager.Trigger("OnAssistantStart", _camera.transform, weaponManager.GetComponent<IAssistInteract>());
         EventManager.Trigger("OnViewStart", this, weaponManager);
-
-        GameManager.Instance.Player = this;
     }
 
     public override void OnUpdate()

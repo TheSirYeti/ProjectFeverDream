@@ -4,108 +4,144 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-    public class UpdateManager : MonoBehaviour, ISceneChanges
+public class UpdateManager : MonoBehaviour, ISceneChanges
+{
+    public static UpdateManager _instance;
+
+    private bool _gamePause = false;
+
+    private List<GenericObject> _allObjects = new List<GenericObject>();
+
+    private List<IOnUpdate> _pausableUpdates = new List<IOnUpdate>();
+    private List<IOnUpdate> _continousUpdates = new List<IOnUpdate>();
+
+    private PriorityQueue<GenericObject> _awakeQueue = new PriorityQueue<GenericObject>();
+    private PriorityQueue<GenericObject> _startQueue = new PriorityQueue<GenericObject>();
+    private PriorityQueue<GenericObject> _lateStartQueue = new PriorityQueue<GenericObject>();
+
+    private Coroutine initCoroutine;
+
+    private bool _isLoading => GameManager.Instance.isLoading;
+
+    private void Awake()
     {
-        public static UpdateManager _instance;
+        if (_instance) Destroy(gameObject);
 
-        private bool _gamePause = false;
+        _instance = this;
+    }
 
-        private List<GenericObject> _allObjects = new List<GenericObject>();
+    private void Update()
+    {
+        if (_isLoading) return;
 
-        private List<IOnInit> _inits = new List<IOnInit>();
-        private List<IOnUpdate> _pausableUpdates = new List<IOnUpdate>();
-        private List<IOnUpdate> _continousUpdates = new List<IOnUpdate>();
-
-        private void Awake()
+        if (_continousUpdates.Any())
         {
-            if (_instance) Destroy(gameObject);
-
-            _instance = this;
-        }
-
-        private void Update()
-        {
-            if (_continousUpdates.Any())
+            foreach (var update in _continousUpdates)
             {
-                foreach (var update in _continousUpdates)
-                {
-                    update.OnUpdate();
-                }
-            }
-
-            if (_gamePause) return;
-
-            if (_pausableUpdates.Any())
-            {
-                foreach (var update in _pausableUpdates)
-                {
-                    update.OnUpdate();
-                }
+                update.OnUpdate();
             }
         }
 
-        private void FixedUpdate()
-        {
-            if (!_continousUpdates.Any()) return;
+        if (_gamePause) return;
 
+        if (_pausableUpdates.Any())
+        {
+            foreach (var update in _pausableUpdates)
+            {
+                update.OnUpdate();
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (_isLoading) return;
+
+        if (_continousUpdates.Any())
+        {
             foreach (var update in _continousUpdates)
             {
                 update.OnFixedUpdate();
             }
-            
-            if (_gamePause) return;
-
-            if (_pausableUpdates.Any())
-            {
-                foreach (var update in _pausableUpdates)
-                {
-                    update.OnFixedUpdate();
-                }
-            }
         }
 
-        public void OnSceneLoad()
+        if (_gamePause) return;
+
+        if (_pausableUpdates.Any())
         {
-            StartCoroutine(InitScene());
-        }
-
-        public void OnSceneUnload()
-        {
-            _inits = new List<IOnInit>();
-            _pausableUpdates = new List<IOnUpdate>();
-            _continousUpdates = new List<IOnUpdate>();
-        }
-
-        public void AddObject(GenericObject genericObject)
-        {
-            _allObjects.Add(genericObject);
-            _allObjects = _allObjects.OrderBy(x => x.priority).ToList();
-
-            _inits = _allObjects.Select(x => x as IOnInit).ToList();
-
-            _pausableUpdates = _allObjects.Where(x => x.isPausable).Select(x => x as IOnUpdate).ToList();
-            _continousUpdates = _allObjects.Where(x => !x.isPausable).Select(x => x as IOnUpdate).ToList();
-        }
-
-        private IEnumerator InitScene()
-        {
-            foreach (var init in _inits)
+            foreach (var update in _pausableUpdates)
             {
-                init.OnAwake();
-            }
-
-            yield return new WaitForEndOfFrame();
-
-            foreach (var init in _inits)
-            {
-                init.OnStart();
-            }
-
-            yield return new WaitForEndOfFrame();
-
-            foreach (var init in _inits)
-            {
-                init.OnLateStart();
+                update.OnFixedUpdate();
             }
         }
     }
+
+    public void OnSceneLoad()
+    {
+        initCoroutine = StartCoroutine(StartObject());
+    }
+
+    public void OnSceneUnload()
+    {
+        _allObjects = new List<GenericObject>();
+        _pausableUpdates = new List<IOnUpdate>();
+        _continousUpdates = new List<IOnUpdate>();
+
+        if (initCoroutine != null) StopCoroutine(initCoroutine);
+    }
+
+    public void AddObject(GenericObject genericObject)
+    {
+        _awakeQueue.Enqueue(genericObject, genericObject.priority);
+    }
+
+    private IEnumerator StartObject()
+    {
+        yield return new WaitForFrames(4);
+        while (true)
+        {
+            while (_awakeQueue.Count() < 1)
+            {
+                yield return null;
+            }
+
+            while (_awakeQueue.Count() > 0)
+            {
+                GenericObject obj = _awakeQueue.Dequeue();
+
+                obj.OnAwake();
+            
+                _startQueue.Enqueue(obj, obj.priority);
+            }
+
+            yield return new WaitForEndOfFrame();
+
+            while (_startQueue.Count() > 0)
+            {
+                GenericObject obj = _startQueue.Dequeue();
+
+                obj.OnStart();
+            
+                _lateStartQueue.Enqueue(obj, obj.priority);
+            }
+
+            yield return new WaitForEndOfFrame();
+
+            while (_lateStartQueue.Count() > 0)
+            {
+                GenericObject obj = _lateStartQueue.Dequeue();
+
+                obj.OnLateStart();
+            
+                _allObjects.Add(obj);
+
+                if (obj.isPausable)
+                    _pausableUpdates = _allObjects.Where(x => x.isPausable).Select(x => x as IOnUpdate).ToList();
+                else
+                    _continousUpdates = _allObjects.Where(x => !x.isPausable).Select(x => x as IOnUpdate).ToList();
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+    }
+}

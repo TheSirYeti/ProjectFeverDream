@@ -6,11 +6,13 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     [SerializeField] private List<Camera> _myCameras = new List<Camera>();
+    [SerializeField] private List<Transform> cameraPos = new List<Transform>();
     [SerializeField] private bool _isMainScene;
     [SerializeField] private Animator _fadeAnimator;
 
@@ -19,7 +21,7 @@ public class GameManager : MonoBehaviour
     public UpdateManager updateManager { private get; set; }
 
     private int _actualScene = 0;
-    private bool _isLoading = false;
+    public bool isLoading = false;
 
     private void Awake()
     {
@@ -72,15 +74,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Camera GetCamera()
+    {
+        return _myCameras[0];
+    }
+
     #region Scenes Funcs
 
     public void ChangeScene(int indexToLoad)
     {
-        if (_isLoading) return;
+        if (isLoading) return;
         if (!InGameSceneManager.instace.HaveTheScene(indexToLoad)) return;
 
         InGameSceneManager.instace.SetNextScene(indexToLoad);
-        _isLoading = true;
+        isLoading = true;
         _actualScene = indexToLoad;
 
         StartCoroutine(SceneLoader());
@@ -88,13 +95,13 @@ public class GameManager : MonoBehaviour
 
     public void NextScene()
     {
-        if (_isLoading) return;
+        if (isLoading) return;
         if (!InGameSceneManager.instace.HaveTheScene(_actualScene + 1)) return;
 
         _actualScene++;
 
         InGameSceneManager.instace.SetNextScene(_actualScene);
-        _isLoading = true;
+        isLoading = true;
 
         StartCoroutine(SceneLoader());
     }
@@ -104,17 +111,18 @@ public class GameManager : MonoBehaviour
         if (!_isMainScene)
         {
             _fadeAnimator.Play("FadeIn");
-            yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
+            yield return new WaitForSeconds(0.2f);
         }
-
+        yield return new WaitForEndOfFrame();
         //InGameSceneManager.instace.SetLoadingScreen(true);
+        _myCameras[0].transform.parent = transform;
 
         UpdateManager._instance.OnSceneUnload();
 
         InGameSceneManager.instace.UnloadScene();
 
         yield return new WaitForEndOfFrame();
-        yield return new WaitUntil(() => !InGameSceneManager.instace.corutineIsOn);
+        yield return new WaitUntil(() => !InGameSceneManager.instace.isLoading);
         yield return new WaitForEndOfFrame();
 
         EventManager.ResetEventDictionary();
@@ -123,17 +131,18 @@ public class GameManager : MonoBehaviour
 
         InGameSceneManager.instace.LoadScene();
 
+        yield return new WaitUntil(() => !InGameSceneManager.instace.isLoading);
         yield return new WaitForEndOfFrame();
-        yield return new WaitUntil(() => !InGameSceneManager.instace.corutineIsOn);
         yield return new WaitForEndOfFrame();
 
         UpdateManager._instance.OnSceneLoad();
+        yield return new WaitForEndOfFrame();
 
         _fadeAnimator.Play("FadeOut");
         yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
         _fadeAnimator.Play("NoFade");
 
-        _isLoading = false;
+        isLoading = false;
 
         //Start
     }
@@ -144,6 +153,7 @@ public class GameManager : MonoBehaviour
     {
         _myCameras[0].transform.position = parent.position;
         _myCameras[0].transform.rotation = parent.rotation;
+        _myCameras[0].transform.parent = parent;
 
         return _myCameras[0];
     }
