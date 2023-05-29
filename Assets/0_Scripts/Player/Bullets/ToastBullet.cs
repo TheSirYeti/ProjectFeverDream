@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class ToastBullet : GenericBullet
 {
-    private void Awake()
-    {
-        UpdateManager._instance.AddObject(this);
-    }
-    
     public override void OnUpdate()
     {
         Movement();

@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
         if (InGameSceneManager.instace.HasLoadingScene(_actualScene))
         {
             InGameSceneManager.instace.SetLoadingScreen(true);
-            yield return new WaitUntil(() => InGameSceneManager.instace.loadingScreenOperation.isDone);
+            yield return new WaitUntil(() => InGameSceneManager.instace.loadingScreenOperation.progress > 0.85f);
             _fadeAnimator.Play("FadeOut");
             yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
             _fadeAnimator.Play("NoFade");
@@ -140,9 +140,9 @@ public class GameManager : MonoBehaviour
 
         InGameSceneManager.instace.LoadScene();
 
+        yield return new WaitForEndOfFrame();
         yield return new WaitUntil(() => !InGameSceneManager.instace.isLoading);
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForFrames(2);
 
         UpdateManager._instance.OnSceneLoad();
         yield return new WaitForEndOfFrame();

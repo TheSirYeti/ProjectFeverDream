@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,13 +19,15 @@ public abstract class GenericBullet : GenericObject
     protected GenericWeapon _actualWeapon;
     [SerializeField] protected bool _canDmg;
 
-    private void Awake()
+    private void OnDisable()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager._instance.RemoveObject(this);
     }
 
-    public void OnStart(Vector3 dir, GenericWeapon actualWeapon, float dmg)
+    public void BulletSetter(Vector3 dir, GenericWeapon actualWeapon, float dmg)
     {
+        UpdateManager._instance.AddObject(this);
+        
         transform.forward = dir;
         _actualWeapon = actualWeapon;
         _dmg = dmg;
@@ -43,7 +46,7 @@ public abstract class GenericBullet : GenericObject
         {
             if (_canDmg)
                 hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg);
-            
+
             _actualWeapon.ReturnBullet(this);
         }
         else if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _collisionMask))

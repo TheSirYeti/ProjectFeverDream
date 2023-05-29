@@ -95,6 +95,16 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
         _awakeQueue.Enqueue(genericObject, genericObject.priority);
     }
 
+    public void RemoveObject(GenericObject genericObject)
+    {
+        _allObjects.Remove(genericObject);
+
+        if (genericObject.isPausable)
+            _pausableUpdates.Remove(genericObject);
+        else
+            _continousUpdates.Remove(genericObject);
+    }
+
     private IEnumerator StartObject()
     {
         yield return new WaitForFrames(4);
@@ -110,29 +120,25 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
                 GenericObject obj = _awakeQueue.Dequeue();
 
                 obj.OnAwake();
-            
+
                 _startQueue.Enqueue(obj, obj.priority);
             }
-
-            yield return new WaitForEndOfFrame();
 
             while (_startQueue.Count() > 0)
             {
                 GenericObject obj = _startQueue.Dequeue();
 
                 obj.OnStart();
-            
+
                 _lateStartQueue.Enqueue(obj, obj.priority);
             }
-
-            yield return new WaitForEndOfFrame();
 
             while (_lateStartQueue.Count() > 0)
             {
                 GenericObject obj = _lateStartQueue.Dequeue();
 
                 obj.OnLateStart();
-            
+
                 _allObjects.Add(obj);
 
                 if (obj.isPausable)
@@ -140,8 +146,6 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
                 else
                     _continousUpdates = _allObjects.Where(x => !x.isPausable).Select(x => x as IOnUpdate).ToList();
             }
-
-            yield return new WaitForEndOfFrame();
         }
     }
 }

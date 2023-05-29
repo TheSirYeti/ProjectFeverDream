@@ -83,7 +83,7 @@ public class Toaster : GenericWeapon
                 Vector3 dir = hit.point - _nozzlePoint.position;
 
                 GenericBullet bullet = GetBullet(_nozzlePoint.position);
-                bullet.OnStart(dir, this, actualDmg);
+                bullet.BulletSetter(dir, this, actualDmg);
             }
         }
 
