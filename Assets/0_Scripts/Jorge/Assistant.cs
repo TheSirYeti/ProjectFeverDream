@@ -509,7 +509,7 @@ public class Assistant : GenericObject
         //if (_interactuable != null) return;
 
         EventManager.Trigger("OnAssistantPing", interactuable);
-        //SoundManager Asistant Ping
+        SoundManager.instance.PlaySound(SoundID.ASSISTANT_PING);
         _actualObjective = interactuable;
         _previousObjective = interactuable;
 

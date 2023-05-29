@@ -121,12 +121,16 @@ public class SoundManager : MonoBehaviour
         sfxChannel[idToPlay].pitch = pitch;  
     }
 
-    public void PlaySoundByID(int id, bool loop = false, float pitch = 1)
+    public void PlaySoundByID(string actualName, bool loop = false, float pitch = 1)
     {
-        sfxChannel[id].Play();
-        sfxChannel[id].loop = loop;
-        sfxChannel[id].volume = volumeSFX;
-        sfxChannel[id].pitch = pitch;
+        if(!_actualSfxNames.Contains(actualName)) return;
+
+        var idToPlay = _actualSfxNames.IndexOf(actualName);
+        
+        sfxChannel[idToPlay].Play();
+        sfxChannel[idToPlay].loop = loop;
+        sfxChannel[idToPlay].volume = volumeSFX;
+        sfxChannel[idToPlay].pitch = pitch;
     }
     
     public void StopSoundByID(int id)
@@ -443,6 +447,8 @@ public enum SoundID
     PLAYER_HURT,
     //13
     ASSISTANT_INTERACT_BUTTON,
+    //14
+    ASSISTANT_PING,
 }
 
 public enum MusicID

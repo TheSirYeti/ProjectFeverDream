@@ -9,7 +9,7 @@ public class SoundPlayer : GenericObject
         UpdateManager._instance.AddObject(this);
     }
     
-    public void PlaySound(int soundID)
+    public void PlaySound(string soundID)
     {
         SoundManager.instance.PlaySoundByID(soundID);
     }
