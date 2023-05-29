@@ -13,11 +13,6 @@ public class RangedBullet : GenericObject
     [SerializeField] private List<GameObject> viewObjects;
     private int rand = 0;
 
-    private void Awake()
-    {
-        UpdateManager._instance.AddObject(this);
-    }
-
     public override void OnStart()
     {
         rand = Random.Range(0, viewObjects.Count);
@@ -28,8 +23,17 @@ public class RangedBullet : GenericObject
 
     public override void OnUpdate()
     {
-        if(gameObject.activeSelf)
-            transform.position += transform.forward * bulletSpeed * Time.fixedDeltaTime;
+        transform.position += transform.forward * bulletSpeed * Time.fixedDeltaTime;
+    }
+
+    public void OnBulletSpawn()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+
+    private void OnDestroy()
+    {
+        UpdateManager._instance.RemoveObject(this);
     }
 
     private void OnTriggerEnter(Collider other)
