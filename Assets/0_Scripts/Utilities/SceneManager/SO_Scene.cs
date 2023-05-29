@@ -17,5 +17,6 @@ public class SO_Scene : ScriptableObject
     {
         public int newLayer;
         public CameraClearFlags clearFlag;
+        public Color cameraColor;
     }
 }

@@ -177,10 +177,11 @@ public class GameManager : MonoBehaviour
         return _myCameras[0];
     }
 
-    public Camera SetCameraPropieties(int newLayer = 0, CameraClearFlags clearFlag = CameraClearFlags.Skybox)
+    public Camera SetCameraPropieties(Color backgroundColor, int newLayer = 0, CameraClearFlags clearFlag = CameraClearFlags.Skybox)
     {
         _myCameras[0].gameObject.layer = newLayer;
         _myCameras[0].clearFlags = clearFlag;
+        _myCameras[0].backgroundColor = backgroundColor;
 
         return _myCameras[0];
     }

@@ -83,7 +83,7 @@ public class InGameSceneManager : MonoBehaviour
 
         SoundManager.instance.SetNewMusicSet(_actualScene.myMusic);
         SoundManager.instance.SetNewSoundSet(_actualScene.mySFX);
-        GameManager.Instance.SetCameraPropieties(_actualScene.cameraSettings.newLayer,
+        GameManager.Instance.SetCameraPropieties(_actualScene.cameraSettings.cameraColor, _actualScene.cameraSettings.newLayer,
             _actualScene.cameraSettings.clearFlag);
 
         _actualCoroutine = null;

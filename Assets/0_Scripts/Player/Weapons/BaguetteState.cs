@@ -34,7 +34,7 @@ public class BaguetteState : GenericObject
         
         if ((int)parameters[0] == endState)
         {
-            EventManager.Trigger("PlayAnimation", "BigBaguetteToDualBaguette");
+            //EventManager.Trigger("PlayAnimation", "BigBaguetteToDualBaguette");
         }
     }
 }
