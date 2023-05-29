@@ -46,7 +46,11 @@ public class InGameSceneManager : MonoBehaviour
     public void SetLoadingScreen(bool state)
     {
         if (state)
+        {
+            GameManager.Instance.SetCameraPropieties(_actualScene.cameraSettings.cameraColor, _actualScene.cameraSettings.newLayer,
+                _actualScene.cameraSettings.clearFlag, _actualScene.cameraSettings.isOrthographic, _actualScene.cameraSettings.orthographicSize);
             loadingScreenOperation = SceneManager.LoadSceneAsync(_loadingScene.unityScenes[0].ScenePath, LoadSceneMode.Additive);
+        }
         else
             loadingScreenOperation = SceneManager.UnloadSceneAsync(_loadingScene.unityScenes[0].ScenePath);
     }
@@ -84,7 +88,7 @@ public class InGameSceneManager : MonoBehaviour
         SoundManager.instance.SetNewMusicSet(_actualScene.myMusic);
         SoundManager.instance.SetNewSoundSet(_actualScene.mySFX);
         GameManager.Instance.SetCameraPropieties(_actualScene.cameraSettings.cameraColor, _actualScene.cameraSettings.newLayer,
-            _actualScene.cameraSettings.clearFlag);
+            _actualScene.cameraSettings.clearFlag, _actualScene.cameraSettings.isOrthographic, _actualScene.cameraSettings.orthographicSize);
 
         _actualCoroutine = null;
         isLoading = false;

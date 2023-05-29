@@ -33,6 +33,7 @@ public class RangedBullet : GenericObject
 
     private void OnDestroy()
     {
+        StopAllCoroutines();
         UpdateManager._instance.RemoveObject(this);
     }
 

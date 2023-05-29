@@ -15,6 +15,8 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
     private List<IOnUpdate> _pausableUpdates = new List<IOnUpdate>();
     private List<IOnUpdate> _continousUpdates = new List<IOnUpdate>();
 
+    private Queue<GenericObject> _removeQueue = new Queue<GenericObject>();
+
     private PriorityQueue<GenericObject> _awakeQueue = new PriorityQueue<GenericObject>();
     private PriorityQueue<GenericObject> _startQueue = new PriorityQueue<GenericObject>();
     private PriorityQueue<GenericObject> _lateStartQueue = new PriorityQueue<GenericObject>();
@@ -76,6 +78,21 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
         }
     }
 
+    private void LateUpdate()
+    {
+        while (_removeQueue.Count > 0)
+        {
+            GenericObject obj = _removeQueue.Dequeue();
+            
+            _allObjects.Remove(obj);
+
+            if (obj.isPausable)
+                _pausableUpdates.Remove(obj);
+            else
+                _continousUpdates.Remove(obj);
+        }
+    }
+
     public void OnSceneLoad()
     {
         initCoroutine = StartCoroutine(StartObject());
@@ -86,6 +103,8 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
         _allObjects = new List<GenericObject>();
         _pausableUpdates = new List<IOnUpdate>();
         _continousUpdates = new List<IOnUpdate>();
+        _removeQueue = new Queue<GenericObject>();
+        _gamePause = false;
 
         if (initCoroutine != null) StopCoroutine(initCoroutine);
     }
@@ -97,12 +116,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     public void RemoveObject(GenericObject genericObject)
     {
-        _allObjects.Remove(genericObject);
-
-        if (genericObject.isPausable)
-            _pausableUpdates.Remove(genericObject);
-        else
-            _continousUpdates.Remove(genericObject);
+        _removeQueue.Enqueue(genericObject);
     }
 
     private IEnumerator StartObject()
@@ -147,5 +161,10 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
                     _continousUpdates = _allObjects.Where(x => !x.isPausable).Select(x => x as IOnUpdate).ToList();
             }
         }
+    }
+
+    public void ChangeGameState(bool state)
+    {
+        _gamePause = state;
     }
 }

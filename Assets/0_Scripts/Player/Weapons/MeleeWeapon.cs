@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class MeleeWeapon : GenericWeapon
 {
@@ -33,13 +35,22 @@ public class MeleeWeapon : GenericWeapon
     {
         _meleeCollider = GetComponent<BoxCollider>();
         _meleeCollider.enabled = false;
+    }
 
-        StartCoroutine(LateStart());
+    public override void OnLateStart()
+    {
+        _weaponManager = GameManager.Instance.Player.weaponManager;
     }
 
     public override void OnUpdate()
     {
         OnDelegateUpdate();
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+        UpdateManager._instance.RemoveObject(this);
     }
 
     public override void Shoot(Transform pointOfShoot, bool isADS)

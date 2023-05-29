@@ -21,6 +21,7 @@ public abstract class GenericBullet : GenericObject
 
     private void OnDisable()
     {
+        StopAllCoroutines();
         UpdateManager._instance.RemoveObject(this);
     }
 

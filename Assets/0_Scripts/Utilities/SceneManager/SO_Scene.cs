@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using System;
+using UnityEditor;
 
 [CreateAssetMenu(fileName = "GenericScene", menuName = "ScriptableObjects/Scene")]
 public class SO_Scene : ScriptableObject
@@ -18,5 +19,7 @@ public class SO_Scene : ScriptableObject
         public int newLayer;
         public CameraClearFlags clearFlag;
         public Color cameraColor;
+        public bool isOrthographic;
+        public float orthographicSize;
     }
 }

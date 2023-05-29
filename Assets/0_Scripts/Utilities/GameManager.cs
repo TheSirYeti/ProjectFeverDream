@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         if (_isMainScene)
-            ChangeScene(0);
+            ChangeScene(0, false);
     }
 
     private Model _player;
@@ -73,14 +73,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public Camera GetCamera()
-    {
-        return _myCameras[0];
-    }
 
     #region Scenes Funcs
 
-    public void ChangeScene(int indexToLoad)
+    public void ChangeScene(int indexToLoad, bool fadeIn = true)
     {
         if (isLoading) return;
         if (!InGameSceneManager.instace.HaveTheScene(indexToLoad)) return;
@@ -89,10 +85,10 @@ public class GameManager : MonoBehaviour
         isLoading = true;
         _actualScene = indexToLoad;
 
-        StartCoroutine(SceneLoader());
+        StartCoroutine(SceneLoader(fadeIn));
     }
 
-    public void NextScene()
+    public void NextScene(bool fadeIn = true)
     {
         if (isLoading) return;
         if (!InGameSceneManager.instace.HaveTheScene(_actualScene + 1)) return;
@@ -102,19 +98,26 @@ public class GameManager : MonoBehaviour
         InGameSceneManager.instace.SetNextScene(_actualScene);
         isLoading = true;
 
-        StartCoroutine(SceneLoader());
+        StartCoroutine(SceneLoader(fadeIn));
     }
 
-    private IEnumerator SceneLoader()
+    public void ReloadScene()
     {
-        if (_actualScene != 0)
+        InGameSceneManager.instace.SetNextScene(_actualScene);
+        StartCoroutine(SceneLoader(true));
+    }
+
+    private IEnumerator SceneLoader(bool needFadeIn)
+    {
+        if (needFadeIn)
         {
             _fadeAnimator.Play("FadeIn");
             yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
             _fadeAnimator.Play("BlackScreen");
         }
+
         yield return new WaitForEndOfFrame();
-        
+
         _myCameras[0].transform.parent = transform;
 
         if (InGameSceneManager.instace.HasLoadingScene(_actualScene))
@@ -127,16 +130,15 @@ public class GameManager : MonoBehaviour
         }
 
         UpdateManager._instance.OnSceneUnload();
+        EventManager.ResetEventDictionary();
+        SoundManager.instance.StopAllSounds();
+        SoundManager.instance.StopAllMusic();
 
         InGameSceneManager.instace.UnloadScene();
 
         yield return new WaitForEndOfFrame();
         yield return new WaitUntil(() => !InGameSceneManager.instace.isLoading);
         yield return new WaitForEndOfFrame();
-
-        EventManager.ResetEventDictionary();
-        SoundManager.instance.StopAllSounds();
-        SoundManager.instance.StopAllMusic();
 
         InGameSceneManager.instace.LoadScene();
 
@@ -146,7 +148,7 @@ public class GameManager : MonoBehaviour
 
         UpdateManager._instance.OnSceneLoad();
         yield return new WaitForEndOfFrame();
-        
+
         if (InGameSceneManager.instace.HasLoadingScene(_actualScene))
         {
             _fadeAnimator.Play("FadeIn");
@@ -166,7 +168,27 @@ public class GameManager : MonoBehaviour
         //Start
     }
 
+    public void FadeIn()
+    {
+        StartCoroutine(IE_FadeIn());
+    }
+
+    IEnumerator IE_FadeIn()
+    {
+        _fadeAnimator.Play("FadeIn");
+        yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
+        _fadeAnimator.Play("BlackScreen");
+    }
+
     #endregion
+
+
+    #region Camera
+
+    public Camera GetCamera()
+    {
+        return _myCameras[0];
+    }
 
     public Camera SetCameraParent(Transform parent)
     {
@@ -177,12 +199,33 @@ public class GameManager : MonoBehaviour
         return _myCameras[0];
     }
 
-    public Camera SetCameraPropieties(Color backgroundColor, int newLayer = 0, CameraClearFlags clearFlag = CameraClearFlags.Skybox)
+    public Camera SetCameraPropieties(Color backgroundColor, int newLayer = 0,
+        CameraClearFlags clearFlag = CameraClearFlags.Skybox, bool isOrthographic = false, float orthographicSize = 0)
     {
         _myCameras[0].gameObject.layer = newLayer;
         _myCameras[0].clearFlags = clearFlag;
         _myCameras[0].backgroundColor = backgroundColor;
 
+        _myCameras[0].orthographic = isOrthographic;
+        if (isOrthographic)
+        {
+            _myCameras[0].orthographicSize = orthographicSize;
+        }
+
         return _myCameras[0];
+    }
+
+    #endregion
+
+    public void PauseGame()
+    {
+        SoundManager.instance.PauseAllSounds();
+        UpdateManager._instance.ChangeGameState(true);
+    }
+
+    public void ResumeGame()
+    {
+        SoundManager.instance.ResumeAllSounds();
+        UpdateManager._instance.ChangeGameState(false);
     }
 }

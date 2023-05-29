@@ -29,13 +29,11 @@ public class Toaster : GenericWeapon
 
         //EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
         //EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
-
-        StartCoroutine(LateStart());
     }
 
     public override void OnLateStart()
     {
-        //TODO: Pasar los late start de las armas a cada una
+        _weaponManager = GameManager.Instance.Player.weaponManager;
     }
 
     public override void OnUpdate()

@@ -439,7 +439,7 @@ public class Model : GenericObject, IPlayerLife
     void Death()
     {
         //TODO: Add death reset
-        SceneLoader.instance.ReloadScene();
+        GameManager.Instance.ReloadScene();
     }
 
     //TODO: Delete when you add the dmg to the enemies
