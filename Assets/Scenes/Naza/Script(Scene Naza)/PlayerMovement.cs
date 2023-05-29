@@ -7,9 +7,6 @@ public class PlayerMovement : MonoBehaviour
     float playerHeight = 2f;
 
     [SerializeField] Transform orientation;
-    [SerializeField] Transform poscamera;
-    public float Crouch;
-    public float NoCrouch;
 
     [Header("Movement")]
     [SerializeField] float moveSpeed = 6f;
