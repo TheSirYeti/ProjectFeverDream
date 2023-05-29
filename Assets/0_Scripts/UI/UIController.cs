@@ -339,7 +339,7 @@ public class UIController : GenericObject
     void SetPingPosition()
     {
         ping.gameObject.SetActive(true);
-        ping.transform.position = Camera.main.WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
+        ping.transform.position = GameManager.Instance.GetCamera().WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
 
         /*if (buttonRenderer.isVisible)
         {

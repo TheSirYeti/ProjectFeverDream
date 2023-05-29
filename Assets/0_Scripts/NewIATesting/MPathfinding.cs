@@ -1,18 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MPathfinding : MonoBehaviour
+public class MPathfinding : GenericObject
 {
-    // Start is called before the first frame update
-    void Start()
+    public static MPathfinding _instance;
+
+    private void Awake()
     {
-        
+        //TODO: Add subscribe to updatemanager
+        _instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

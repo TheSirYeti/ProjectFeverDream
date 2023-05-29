@@ -23,6 +23,7 @@ public class TempCutsceneTrigger : GenericObject
     IEnumerator DoWaiting()
     {
         yield return new WaitForSeconds(timeToWait);
+        EventManager.Trigger("OnNewSceneLoaded");
         GameManager.Instance.ChangeScene(sceneToLoad, false);
         yield return null;
     }

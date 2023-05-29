@@ -58,8 +58,7 @@ public class MenuController : GenericObject
             SoundManager.instance.PauseAllMusic();
             SoundManager.instance.PauseAllSounds();
             SoundManager.instance.PauseAllVoiceLines();
-            //TODO: Change Later
-            Time.timeScale = 0;
+            GameManager.Instance.PauseGame();
         }
         else
         {
@@ -73,8 +72,7 @@ public class MenuController : GenericObject
             SoundManager.instance.ResumeAllMusic();
             SoundManager.instance.ResumeAllSounds();
             SoundManager.instance.ResumeAllVoiceLines();
-            //TODO: Change Later
-            Time.timeScale = 1;
+            GameManager.Instance.ResumeGame();
         }
 
         _tempState = !_tempState;
@@ -131,7 +129,7 @@ public class MenuController : GenericObject
 
     public void BTN_Quit()
     {
-        SceneLoader.instance.SetupLoadScene(3);
+        GameManager.Instance.ChangeScene(2);
     }
 
     public void ChangeSense(float sens)
