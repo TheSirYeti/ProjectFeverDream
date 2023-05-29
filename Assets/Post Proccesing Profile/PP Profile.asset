@@ -1,5 +1,39 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9099460136707699912
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b77c5407dc277943b591ade9e6b18c5, type: 3}
+  m_Name: LensDistortion
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  intensity:
+    overrideState: 1
+    value: 0
+  intensityX:
+    overrideState: 0
+    value: 1
+  intensityY:
+    overrideState: 0
+    value: 1
+  centerX:
+    overrideState: 0
+    value: 0
+  centerY:
+    overrideState: 0
+    value: 0
+  scale:
+    overrideState: 0
+    value: 1
 --- !u!114 &-6507959157862039447
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -21,7 +55,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.18
+    value: 0.3
   color:
     overrideState: 0
     value: {r: 0, g: 0, b: 0, a: 1}
@@ -39,7 +73,7 @@ MonoBehaviour:
     value: -12
   thicknessModifier:
     overrideState: 1
-    value: 1.59
+    value: 3.08
   directLightingStrength:
     overrideState: 0
     value: 0
@@ -139,6 +173,7 @@ MonoBehaviour:
   - {fileID: -6507959157862039447}
   - {fileID: -478078726597545855}
   - {fileID: 5201708494839170604}
+  - {fileID: -9099460136707699912}
 --- !u!114 &1846353530187866418
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -289,13 +324,13 @@ MonoBehaviour:
     overrideState: 0
     value: 100
   lift:
-    overrideState: 0
+    overrideState: 1
     value: {x: 0.9785145, y: 0.99661225, z: 1, w: 0.016116032}
   gamma:
-    overrideState: 0
+    overrideState: 1
     value: {x: 0.9215698, y: 0.9292005, z: 1, w: 0}
   gain:
-    overrideState: 0
+    overrideState: 1
     value: {x: 1, y: 0.93631977, z: 0.97207606, w: 0}
   masterCurve:
     overrideState: 0
