@@ -107,14 +107,24 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SceneLoader()
     {
-        if (!_isMainScene)
+        if (_actualScene != 0)
         {
             _fadeAnimator.Play("FadeIn");
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
+            _fadeAnimator.Play("BlackScreen");
         }
         yield return new WaitForEndOfFrame();
-        //InGameSceneManager.instace.SetLoadingScreen(true);
+        
         _myCameras[0].transform.parent = transform;
+
+        if (InGameSceneManager.instace.HasLoadingScene(_actualScene))
+        {
+            InGameSceneManager.instace.SetLoadingScreen(true);
+            yield return new WaitUntil(() => InGameSceneManager.instace.loadingScreenOperation.isDone);
+            _fadeAnimator.Play("FadeOut");
+            yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
+            _fadeAnimator.Play("NoFade");
+        }
 
         UpdateManager._instance.OnSceneUnload();
 
@@ -136,6 +146,16 @@ public class GameManager : MonoBehaviour
 
         UpdateManager._instance.OnSceneLoad();
         yield return new WaitForEndOfFrame();
+        
+        if (InGameSceneManager.instace.HasLoadingScene(_actualScene))
+        {
+            _fadeAnimator.Play("FadeIn");
+            yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
+            _fadeAnimator.Play("BlackScreen");
+            InGameSceneManager.instace.SetLoadingScreen(false);
+            yield return new WaitUntil(() => InGameSceneManager.instace.loadingScreenOperation.isDone);
+            InGameSceneManager.instace.loadingScreenOperation = null;
+        }
 
         _fadeAnimator.Play("FadeOut");
         yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);

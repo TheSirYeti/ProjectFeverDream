@@ -12,9 +12,10 @@ public class InGameSceneManager : MonoBehaviour
     [SerializeField] private SO_Scene _loadingScene;
 
     private SO_Scene _sceneToLoad;
-    private SO_Scene _actualScene;
+    [SerializeField] private SO_Scene _actualScene;
 
     [SerializeField] private AsyncOperation[] asincOperations;
+    public AsyncOperation loadingScreenOperation;
 
     private Coroutine _actualCoroutine;
 
@@ -32,6 +33,11 @@ public class InGameSceneManager : MonoBehaviour
         return _scenes[index];
     }
 
+    public bool HasLoadingScene(int index)
+    {
+        return _scenes[index].hasLoadingScreen;
+    }
+
     public void SetNextScene(int index)
     {
         _sceneToLoad = _scenes[index];
@@ -40,9 +46,9 @@ public class InGameSceneManager : MonoBehaviour
     public void SetLoadingScreen(bool state)
     {
         if (state)
-            SceneManager.LoadSceneAsync(_loadingScene.unityScenes[0].ScenePath, LoadSceneMode.Additive);
+            loadingScreenOperation = SceneManager.LoadSceneAsync(_loadingScene.unityScenes[0].ScenePath, LoadSceneMode.Additive);
         else
-            SceneManager.UnloadSceneAsync(_loadingScene.unityScenes[0].ScenePath);
+            loadingScreenOperation = SceneManager.UnloadSceneAsync(_loadingScene.unityScenes[0].ScenePath);
     }
 
     public void LoadScene()
