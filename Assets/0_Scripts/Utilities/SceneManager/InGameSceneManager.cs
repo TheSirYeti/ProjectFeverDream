@@ -47,8 +47,8 @@ public class InGameSceneManager : MonoBehaviour
     {
         if (state)
         {
-            GameManager.Instance.SetCameraPropieties(_actualScene.cameraSettings.cameraColor, _actualScene.cameraSettings.newLayer,
-                _actualScene.cameraSettings.clearFlag, _actualScene.cameraSettings.isOrthographic, _actualScene.cameraSettings.orthographicSize);
+            GameManager.Instance.SetCameraPropieties(_loadingScene.cameraSettings.cameraColor, _loadingScene.cameraSettings.newLayer,
+                _loadingScene.cameraSettings.clearFlag, _loadingScene.cameraSettings.isOrthographic, _loadingScene.cameraSettings.orthographicSize);
             loadingScreenOperation = SceneManager.LoadSceneAsync(_loadingScene.unityScenes[0].ScenePath, LoadSceneMode.Additive);
         }
         else

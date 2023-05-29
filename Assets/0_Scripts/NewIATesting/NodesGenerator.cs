@@ -79,36 +79,43 @@ public class NodesGenerator : MonoBehaviour
 
     public void GenerateNeighbours()
     {
-        foreach (var actualNode in _nodeList)
+        for (int i = 0; i < 2; i++)
         {
-            MNode node = actualNode.GetComponent<MNode>();
-            node.ClearNeighbours();
-
-            Collider[] neighbours = Physics.OverlapSphere(node.transform.position, _nodeDistance, LayerManager.LM_NODE);
-
-            foreach (var neighbour in neighbours)
+            Debug.Log(i);
+            foreach (var actualNode in _nodeList)
             {
-                MNode checkingNeightbour = neighbour.gameObject.GetComponent<MNode>();
-                
-                if(checkingNeightbour == node) continue;
+                MNode node = actualNode.GetComponent<MNode>();
+                node.ClearNeighbours();
 
-                if (node.CheckNeighbor(checkingNeightbour)) continue;
+                Collider[] neighbours =
+                    Physics.OverlapSphere(node.transform.position, _nodeDistance, LayerManager.LM_NODE);
 
-                Vector3 dir = neighbour.transform.position - node.transform.position;
-                Ray rayWallChecker = new Ray(node.transform.position, dir);
+                foreach (var neighbour in neighbours)
+                {
+                    MNode checkingNeightbour = neighbour.gameObject.GetComponent<MNode>();
 
-                if (Physics.Raycast(rayWallChecker, _nodeDistance, LayerManager.LM_WALL)) continue;
+                    if (checkingNeightbour == node) continue;
 
-                checkingNeightbour.AddNeighbor(node);
-                node.AddNeighbor(checkingNeightbour);
+                    if (node.CheckNeighbor(checkingNeightbour)) continue;
+
+                    Vector3 dir = neighbour.transform.position - node.transform.position;
+                    Ray rayWallChecker = new Ray(node.transform.position, dir);
+
+                    if (Physics.Raycast(rayWallChecker, _nodeDistance, LayerManager.LM_WALL)) continue;
+
+                    checkingNeightbour.AddNeighbor(node);
+                    node.AddNeighbor(checkingNeightbour);
+                }
             }
+
+            ClearNodes();
         }
     }
 
     public void ClearNodes()
     {
         Queue nodesToDelete = new Queue();
-        
+
         foreach (var node in _nodeList)
         {
             MNode mNode = node.GetComponent<MNode>();
@@ -121,13 +128,8 @@ public class NodesGenerator : MonoBehaviour
         while (nodesToDelete.Count > 0)
         {
             GameObject node = nodesToDelete.Dequeue() as GameObject;
-            MNode mNode = node.GetComponent<MNode>();
-            
-            mNode.DestroyNode();
-            
-            int index = _nodeList.IndexOf(node);
-            _nodeList.RemoveAt(index);
-            
+            _nodeList.Remove(node);
+
             DestroyImmediate(node);
         }
     }

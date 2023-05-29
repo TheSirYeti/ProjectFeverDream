@@ -54,9 +54,9 @@ public class MNode : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, 0.2f);
 
         Gizmos.color = Color.cyan;
-        foreach (var neighbor in _neighbors)
-        {
-            Gizmos.DrawLine(transform.position, neighbor.transform.position);
-        }
+        // foreach (var neighbor in _neighbors)
+        // {
+        //     Gizmos.DrawLine(transform.position, neighbor.transform.position);
+        // }
     }
 }

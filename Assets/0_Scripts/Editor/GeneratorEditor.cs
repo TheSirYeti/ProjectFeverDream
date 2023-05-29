@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEditor.SceneManagement;
+
 [CustomEditor(typeof(NodesGenerator))]
 public class GeneratorEditor : Editor
 {
@@ -19,18 +21,17 @@ public class GeneratorEditor : Editor
         if(GUILayout.Button("Generate Nodes"))
         {
             _nodesGenerator.Generate();
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        }
+        if(GUILayout.Button("Set & Check Nodes"))
+        {
+            _nodesGenerator.GenerateNeighbours();
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
         if(GUILayout.Button("Destroy ALL Nodes"))
         {
             _nodesGenerator.DeleteNodes();
-        }
-        if(GUILayout.Button("Set Neighbours"))
-        {
-            _nodesGenerator.GenerateNeighbours();
-        }
-        if(GUILayout.Button("Clear Unusable Nodes"))
-        {
-            _nodesGenerator.ClearNodes();
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
     }
 }
