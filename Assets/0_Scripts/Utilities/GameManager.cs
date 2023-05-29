@@ -43,6 +43,14 @@ public class GameManager : MonoBehaviour
             ChangeScene(0, false);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            ChangeScene(2);
+        }
+    }
+
     private Model _player;
 
     public Model Player

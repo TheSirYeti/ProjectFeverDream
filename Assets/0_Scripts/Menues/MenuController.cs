@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.PlayerLoop;
 
 public class MenuController : GenericObject
 {
@@ -33,7 +34,7 @@ public class MenuController : GenericObject
     {
         UpdateManager._instance.AddObject(this);
     }
-    
+
     public override void OnStart()
     {
         EventManager.Subscribe("MenuChanger", MenuChanger);
