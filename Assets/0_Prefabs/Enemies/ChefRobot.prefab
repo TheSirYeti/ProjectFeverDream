@@ -324,6 +324,7 @@ GameObject:
   - component: {fileID: 239757362170953687}
   - component: {fileID: 239757362170953705}
   - component: {fileID: 239757362170953685}
+  - component: {fileID: 7056148531285850134}
   m_Layer: 11
   m_Name: ChefRobot
   m_TagString: Untagged
@@ -470,6 +471,20 @@ MonoBehaviour:
   animationPrefix: MeleeRobot
   exclamationSign: {fileID: 0}
   exclamationSignTimer: 4
+--- !u!114 &7056148531285850134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122139428085172919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9bdf10616ff944086554525d3af9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
 --- !u!1 &1280917076294516747
 GameObject:
   m_ObjectHideFlags: 0

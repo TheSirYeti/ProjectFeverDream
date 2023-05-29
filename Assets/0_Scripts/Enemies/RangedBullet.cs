@@ -12,7 +12,7 @@ public class RangedBullet : GenericObject
     public float bulletDmg;
     [SerializeField] private List<GameObject> viewObjects;
     private int rand = 0;
-    
+
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -28,7 +28,8 @@ public class RangedBullet : GenericObject
 
     public override void OnUpdate()
     {
-        transform.position += transform.forward * bulletSpeed * Time.fixedDeltaTime;
+        if(gameObject.activeSelf)
+            transform.position += transform.forward * bulletSpeed * Time.fixedDeltaTime;
     }
 
     private void OnTriggerEnter(Collider other)

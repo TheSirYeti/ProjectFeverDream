@@ -1303,6 +1303,7 @@ GameObject:
   - component: {fileID: 5471815192462616798}
   - component: {fileID: 5471815192462616796}
   - component: {fileID: 5471815192462616827}
+  - component: {fileID: 3616714131607600104}
   m_Layer: 11
   m_Name: WaiterRobot
   m_TagString: Untagged
@@ -1403,6 +1404,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95eaf221a20eb0443b201c54af458052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
   hp: 200
   target: {fileID: 0}
   minChaseDistance: 15
@@ -1452,6 +1455,20 @@ MonoBehaviour:
   detectTime: 4
   scaredRange: 5
   timeScared: 5
+--- !u!114 &3616714131607600104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5129216507261015513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9bdf10616ff944086554525d3af9f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
 --- !u!1 &5328014092668545742
 GameObject:
   m_ObjectHideFlags: 0

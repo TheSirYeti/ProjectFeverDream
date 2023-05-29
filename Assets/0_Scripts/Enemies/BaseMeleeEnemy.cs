@@ -256,6 +256,7 @@ public class BaseMeleeEnemy : Enemy
 
         die.OnEnter += x =>
         {
+            SoundManager.instance.PlaySound(SoundID.ENEMY_GENERIC_DEATH);
             DoFaceTransition(FaceID.DEAD);
         };
 

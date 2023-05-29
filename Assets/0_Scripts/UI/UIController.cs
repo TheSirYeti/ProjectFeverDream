@@ -14,8 +14,10 @@ public class UIController : GenericObject
     [SerializeField] TextMeshProUGUI _primaryBulletUI;
     [SerializeField] TextMeshProUGUI _reserveBulletUI;
     [SerializeField] List<GameObject> _weaponsUI;
+    [Space(20)] 
+    [SerializeField] private List<GameObject> weaponRegion;
+    [SerializeField] private List<GameObject> objectiveRegion;
     int _actualWeapon = 0;
-
 
     [Header("ObjetiveText")]
     [SerializeField] TextMeshProUGUI _titleObjetive;
@@ -37,7 +39,6 @@ public class UIController : GenericObject
     public Renderer buttonRenderer;
     private float fadeInValue = 0.5f;
     private float yBias = 35f;
-    
     
     
     private Camera cam;
@@ -70,10 +71,23 @@ public class UIController : GenericObject
         EventManager.Subscribe("OnSubtitleOn", DoSubtitle);
         EventManager.Subscribe("OnSubtitleOff", DisableSubtitle);
         EventManager.Subscribe("OnAssistantPing", DoPingStart);
+        
+        ShowObjectiveUI(false);
+        ChangeEquipedWeapontUI(-1);
     }
 
-    private void Update()
+    public override void OnUpdate()
     {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ShowObjectiveUI(true);
+        }
+        
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            ShowObjectiveUI(false);
+        }
+        
         if (!isPingEnabled) return;
         
         if(currentPingTarget != null)
@@ -108,7 +122,19 @@ public class UIController : GenericObject
             uiImage.SetActive(false);
         }
 
-        if ((int)parameters[0] == -1) return;
+        if ((int)parameters[0] == -1)
+        {
+            foreach (var obj in weaponRegion)
+            {
+                obj.SetActive(false);
+            }
+            return;
+        }
+        
+        foreach (var obj in weaponRegion)
+        {
+            obj.SetActive(true);
+        }
 
         _actualWeapon = (int)parameters[0];
         _weaponsUI[_actualWeapon].SetActive(true);
@@ -350,5 +376,13 @@ public class UIController : GenericObject
         {
             ping.color = new Color(ping.color.r, ping.color.g, ping.color.b, value);
         });
+    }
+
+    void ShowObjectiveUI(bool status)
+    {
+        foreach (var obj in objectiveRegion)
+        {
+            obj.SetActive(status);
+        }
     }
 }

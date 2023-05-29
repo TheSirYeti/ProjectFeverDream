@@ -400,6 +400,7 @@ public class RangedEnemy : Enemy
         die.OnEnter += x =>
         {
             DoWarningFadeOut();
+            SoundManager.instance.PlaySound(SoundID.ENEMY_GENERIC_DEATH);
             DoFaceTransition(FaceID.DEAD);
         };
 

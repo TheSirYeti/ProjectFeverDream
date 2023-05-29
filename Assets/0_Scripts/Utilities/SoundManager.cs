@@ -449,6 +449,17 @@ public enum SoundID
     ASSISTANT_INTERACT_BUTTON,
     //14
     ASSISTANT_PING,
+    //15
+    ENEMY_GENERIC_DEATH,
+    //16
+    ENEMY_GENERIC_DETECT,
+    //17
+    ENEMY_MELEE_CHARGE,
+    //18
+    DOOR_OPEN,
+    //19
+    VENT_OPEN
+
 }
 
 public enum MusicID
