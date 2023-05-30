@@ -13,4 +13,7 @@ public static class LayerManager
     public static LayerMask LM_FLOOR = 1 << L_FLOOR;
     public static LayerMask LM_WALL = 1 << L_WALL;
     public static LayerMask LM_NODE = 1 << L_NODE;
+    
+    // COMBINE LAYER MASK
+    public static LayerMask LM_Obstacle = LM_WALL | LM_FLOOR;
 }

@@ -7,7 +7,10 @@ using UnityEngine;
 public class MNode : MonoBehaviour
 {
     [SerializeField] private List<MNode> _neighbors = new List<MNode>();
-
+    
+    private float _weigth = 0;
+    public MNode _previouseNode = null;
+    public Color nodeColor;
 
     public void AddNeighbor(MNode neighbor)
     {
@@ -22,7 +25,7 @@ public class MNode : MonoBehaviour
 
     public bool CheckNeighbor(MNode neighbor)
     {
-        if(_neighbors.Contains(neighbor)) return true;
+        if (_neighbors.Contains(neighbor)) return true;
 
         return false;
     }
@@ -40,6 +43,33 @@ public class MNode : MonoBehaviour
         return false;
     }
 
+    public MNode GetNeighbor(int index)
+    {
+        return _neighbors[index];
+    }
+    
+    public int NeighboursCount()
+    {
+        return _neighbors.Count;
+    }
+
+    public void SetWeight(float weitgh)
+    {
+        _weigth = weitgh;
+    }
+
+    public float GetWeight()
+    {
+        return _weigth;
+    }
+
+    public void ResetNode()
+    {
+        _weigth = 0;
+        _previouseNode = null;
+        nodeColor = Color.blue;
+    }
+
     public void DestroyNode()
     {
         for (int i = 0; i < _neighbors.Count; i++)
@@ -47,16 +77,14 @@ public class MNode : MonoBehaviour
             _neighbors[i].RemoveNeighbor(this);
         }
     }
-    
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.blue;
+        Gizmos.color = nodeColor;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
 
-        Gizmos.color = Color.cyan;
-        // foreach (var neighbor in _neighbors)
-        // {
-        //     Gizmos.DrawLine(transform.position, neighbor.transform.position);
-        // }
+        Gizmos.color = Color.yellow;
+        if(_previouseNode)
+            Gizmos.DrawLine(transform.position, _previouseNode.transform.position);
     }
 }

@@ -8,6 +8,9 @@ using System.Linq;
 [ExecuteInEditMode]
 public class NodesGenerator : MonoBehaviour
 {
+    //TEMP
+    public MPathfinding pathfinding;
+    
     [SerializeField] private Vector3 _area;
     [SerializeField] private float _nodeSize;
     private float _nodeDistance => _nodeSize * 2.5f;
@@ -132,6 +135,8 @@ public class NodesGenerator : MonoBehaviour
 
             DestroyImmediate(node);
         }
+
+        //pathfinding.nodes = _nodeList.ToArray();
     }
 
     private void OnDrawGizmos()
