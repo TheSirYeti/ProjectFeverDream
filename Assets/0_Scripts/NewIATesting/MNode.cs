@@ -12,6 +12,27 @@ public class MNode : MonoBehaviour
     public MNode _previouseNode = null;
     public Color nodeColor;
 
+    // private void OnEnable()
+    // {
+    //     
+    //     if (Physics.Raycast(transform.position, Vector3.forward, 1, LayerManager.LM_WALL))
+    //     {
+    //         _weigth += 10;
+    //     }
+    //     else if (Physics.Raycast(transform.position, Vector3.back, 1, LayerManager.LM_WALL))
+    //     {
+    //         _weigth += 10;
+    //     }
+    //     else if (Physics.Raycast(transform.position, Vector3.right, 1, LayerManager.LM_WALL))
+    //     {
+    //         _weigth += 10;
+    //     }
+    //     else if (Physics.Raycast(transform.position, Vector3.left, 1, LayerManager.LM_WALL))
+    //     {
+    //         _weigth += 10;
+    //     }
+    // }
+
     public void AddNeighbor(MNode neighbor)
     {
         _neighbors.Add(neighbor);
@@ -53,9 +74,9 @@ public class MNode : MonoBehaviour
         return _neighbors.Count;
     }
 
-    public void SetWeight(float weitgh)
+    public void SetWeight(float weigth)
     {
-        _weigth = weitgh;
+        _weigth = weigth;
     }
 
     public float GetWeight()

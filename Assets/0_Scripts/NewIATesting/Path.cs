@@ -17,4 +17,9 @@ public class Path
             return pathQueue.Dequeue();
         else return null;
     }
+
+    public int PathCount()
+    {
+        return pathQueue.Count;
+    }
 }

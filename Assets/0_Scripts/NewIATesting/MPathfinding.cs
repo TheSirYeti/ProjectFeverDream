@@ -26,6 +26,8 @@ public class MPathfinding : GenericObject
     private HashSet<MNode> closeNodes = new HashSet<MNode>();
     private HashSet<MNode> openNodes = new HashSet<MNode>();
 
+    public List<MNode> checker = new List<MNode>();
+
     private void Awake()
     {
         //TODO: Add subscribe to updatemanager
@@ -48,17 +50,24 @@ public class MPathfinding : GenericObject
         GetPath(_tempOrigen.position, _tempTarget.position);
     }
 
-    public Path GetPath(Vector3 origen, Vector3 target)
+    void TestCleanUp()
     {
-        foreach (var node in closeNodes)
+        foreach (var node in nodes)
         {
             node.ResetNode();
         }
 
-        foreach (var node in openNodes)
+        for (int i = 0; i < checker.Count; i++)
         {
-            node.ResetNode();
+            checker[i].nodeColor = Color.green;
+            if (i != 0)
+                checker[i]._previouseNode = checker[i - 1];
         }
+    }
+
+    public Path GetPath(Vector3 origen, Vector3 target)
+    {
+        checker = new List<MNode>();
 
         Debug.Log("Path...");
         Stopwatch timer = new Stopwatch();
@@ -68,13 +77,9 @@ public class MPathfinding : GenericObject
         closeNodes = new HashSet<MNode>();
         openNodes = new HashSet<MNode>();
         _nodePath = new Queue<MNode>();
-
-        Stopwatch closestNode = new Stopwatch();
-        closestNode.Start();
+        
         _origenNode = GetClosestNode(origen);
         _targetNode = GetClosestNode(target);
-        closestNode.Stop();
-        Debug.Log("ClosestNode en " + closestNode.ElapsedMilliseconds);
 
         _actualnode = _origenNode;
 
@@ -83,6 +88,8 @@ public class MPathfinding : GenericObject
         timer.Stop();
         long ts = timer.ElapsedMilliseconds;
         Debug.Log("Termine en: " + ts + " milisegundos");
+
+        TestCleanUp();
 
         return actualPath;
     }
@@ -93,15 +100,12 @@ public class MPathfinding : GenericObject
         _actualnode.nodeColor = Color.green;
 
         int watchdog = 10000;
-        
-        Stopwatch whileTimer = new Stopwatch();
-        whileTimer.Start();
+        Queue<MNode> checkingNodes;
         while (_actualnode != _targetNode && watchdog > 0)
         {
             watchdog--;
-            
-            _nodePath.Enqueue(_actualnode);
-            List<MNode> checkingNodes = new List<MNode>();
+            checkingNodes = new Queue<MNode>();
+
 
             for (int i = 0; i < _actualnode.NeighboursCount(); i++)
             {
@@ -111,37 +115,65 @@ public class MPathfinding : GenericObject
                 node._previouseNode = _actualnode;
                 node.SetWeight(_actualnode.GetWeight() + 1 +
                                Vector3.Distance(node.transform.position, _targetNode.transform.position));
-                checkingNodes.Add(node);
+
                 openNodes.Add(node);
-                node.nodeColor = Color.red;
+                checkingNodes.Enqueue(node);
             }
 
-            if (checkingNodes.Count != 0)
+            if (checkingNodes.Count > 0)
             {
-                MNode cheaperNode = checkingNodes[0];
-                for (int i = 1; i < checkingNodes.Count; i++)
+                MNode cheaperNode = checkingNodes.Dequeue();
+                while (checkingNodes.Count > 0)
                 {
-                    if (checkingNodes[i].GetWeight() < cheaperNode.GetWeight())
-                        cheaperNode = checkingNodes[i];
+                    if(cheaperNode == _targetNode) break;
+                    
+                    var actualNode = checkingNodes.Dequeue();
+                
+                    if (actualNode.GetWeight() < cheaperNode.GetWeight())
+                        cheaperNode = actualNode;
+                
+                
                 }
-
                 _actualnode = cheaperNode;
-                _actualnode.nodeColor = Color.green;
-                closeNodes.Add(_actualnode);
+            }
+            
+            
+            closeNodes.Add(_actualnode);
+            
+            if(_actualnode == _targetNode) Debug.Log("llegue");
+        }
+
+        ThetaStar();
+    }
+
+    private void ThetaStar()
+    {
+        Stack stack = new Stack();
+        _actualnode = _targetNode;
+        stack.Push(_actualnode);
+        var previouseNode = _actualnode._previouseNode;
+        
+        if(previouseNode == null) Debug.Log("no existe");
+        
+        while (_actualnode != _origenNode)
+        {
+            if (previouseNode._previouseNode && OnSight(_actualnode.transform.position, previouseNode._previouseNode.transform.position))
+            {
+                previouseNode = previouseNode._previouseNode;
             }
             else
             {
-                Debug.Log("Anti while true execute");
-                break;
+                _actualnode._previouseNode = previouseNode;
+                _actualnode = previouseNode;
+                stack.Push(_actualnode);
             }
         }
 
-        whileTimer.Stop();
-        Debug.Log("while en " + whileTimer.ElapsedMilliseconds);
-    }
 
-    void ThetaStar()
-    {
+        while (stack.Count > 0)
+        {
+            checker.Add(stack.Pop() as MNode);
+        }
     }
 
     public MNode GetClosestNode(Vector3 t, bool isForAssistant = false)
@@ -171,6 +203,17 @@ public class MPathfinding : GenericObject
         }
 
         return node.GetComponent<MNode>();
+    }
+
+    bool OnSight(Vector3 from, Vector3 to)
+    {
+        Vector3 dir = to - from;
+        Ray ray = new Ray(from, dir);
+
+        if (Physics.Raycast(ray, dir.magnitude, LayerManager.LM_WALL))
+            return false;
+
+        return true;
     }
 
     private void OnDrawGizmos()
