@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
 using Random = UnityEngine.Random;
@@ -10,6 +11,8 @@ public class BaseMeleeEnemy : Enemy
 {
     [Space(50)] [Header("-== EXTRA MELEE ENEMY PROPERTIES ==-")] 
     [SerializeField] private string animationPrefix;
+    [SerializeField] private int attackAnimationCount = 4;
+    private bool hasAttacked = false;
     [Space(20)]
     [Header("-== DETECT PROPERTIES ==-")]
     [SerializeField] private GameObject exclamationSign;
@@ -236,7 +239,7 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
-            if (!IsInDistance() && !isAttacking)
+            if (!IsInDistance() && hasAttacked)
             {
                 SendInputToFSM(MeleeEnemyStates.CHASING);
                 return;
@@ -247,7 +250,7 @@ public class BaseMeleeEnemy : Enemy
 
         attack.OnExit += x =>
         {
-            isAttacking = false;
+            hasAttacked = false;
         };
 
         #endregion
@@ -256,6 +259,7 @@ public class BaseMeleeEnemy : Enemy
 
         die.OnEnter += x =>
         {
+            DisableAttackRegion();
             SoundManager.instance.PlaySound(SoundID.ENEMY_GENERIC_DEATH);
             DoFaceTransition(FaceID.DEAD);
         };
@@ -292,10 +296,11 @@ public class BaseMeleeEnemy : Enemy
         transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
 
         if (currentAttackCooldown > 0) return;
-        
+
         currentAttackCooldown = attackCooldown;
-        animator.SetTrigger("punch");
-        isAttacking = true;
+
+        int rand = Random.Range(1, attackAnimationCount + 1);
+        animator.Play("Enemy_Melee_Attack" + rand);
         StopSpeed();
     }
     public override void Death()
@@ -354,7 +359,6 @@ public class BaseMeleeEnemy : Enemy
 
     public void DoWarningFadeIn()
     {
-        isAttacking = true;
         foreach (var renderer in renderers)
         {
             LeanTween.value(0, 1, 0.3f).setOnUpdate((float value) =>
@@ -366,7 +370,6 @@ public class BaseMeleeEnemy : Enemy
     
     public void DoWarningFadeOut()
     {
-        isAttacking = false;
         foreach (var renderer in renderers)
         {
             LeanTween.value(1, 0, 0.3f).setOnUpdate((float value) =>
@@ -379,6 +382,25 @@ public class BaseMeleeEnemy : Enemy
     public override void DoKnockback()
     {
         animator.Play(animationPrefix + "_Knockback");
+    }
+
+    public void EnableAttackRegion()
+    {
+        Debug.Log("ON");
+        attackCollider.enabled = true;
+        isAttacking = true;
+    }
+
+    public void DisableAttackRegion()
+    {
+        Debug.Log("OFF");
+        attackCollider.enabled = false;
+        isAttacking = false;
+    }
+
+    public void StopCurrentAttack()
+    {
+        hasAttacked = true;
     }
 
     #endregion

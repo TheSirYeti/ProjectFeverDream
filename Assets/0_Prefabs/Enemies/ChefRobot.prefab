@@ -320,9 +320,9 @@ GameObject:
   m_Component:
   - component: {fileID: 349437378853228557}
   - component: {fileID: 239757362170953686}
-  - component: {fileID: 239757362170953704}
   - component: {fileID: 239757362170953687}
   - component: {fileID: 239757362170953705}
+  - component: {fileID: 239757362170953704}
   - component: {fileID: 239757362170953685}
   - component: {fileID: 7056148531285850134}
   m_Layer: 11
@@ -368,19 +368,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &239757362170953704
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1122139428085172919}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 2.1034517}
-  m_Center: {x: -0.0000009619708, y: 1.5599909, z: 1.1144822}
 --- !u!65 &239757362170953687
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -413,6 +400,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &239757362170953704
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122139428085172919}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 2.1034517}
+  m_Center: {x: -0.0000009619708, y: 1.5599909, z: 1.1144822}
 --- !u!114 &239757362170953685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,8 +432,8 @@ MonoBehaviour:
   minChaseDistance: 2
   _type: 1
   _interactPoint: {fileID: 6985060687993072258}
-  attackCollider: {fileID: 239757362170953687}
-  attackCooldown: 4
+  attackCollider: {fileID: 239757362170953704}
+  attackCooldown: 2.75
   currentAttackCooldown: 0
   isAttacking: 0
   speed: 9
@@ -469,6 +469,7 @@ MonoBehaviour:
   generalDmg: 1
   isDead: 0
   animationPrefix: MeleeRobot
+  attackAnimationCount: 4
   exclamationSign: {fileID: 0}
   exclamationSignTimer: 4
 --- !u!114 &7056148531285850134
