@@ -12,7 +12,10 @@ public class BaseMeleeEnemy : Enemy
     [Space(50)] [Header("-== EXTRA MELEE ENEMY PROPERTIES ==-")] 
     [SerializeField] private string animationPrefix;
     [SerializeField] private int attackAnimationCount = 4;
+    [Space(15)] 
+    [SerializeField] private List<GameObject> myWeapons;
     private bool hasAttacked = false;
+    private TrailRenderer trailRenderer;
     [Space(20)]
     [Header("-== DETECT PROPERTIES ==-")]
     [SerializeField] private GameObject exclamationSign;
@@ -51,8 +54,16 @@ public class BaseMeleeEnemy : Enemy
 
         ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
         StopRagdoll();
-        
-        
+
+        if (myWeapons.Count > 0)
+        {
+            int rand = Random.Range(0, myWeapons.Count);
+            myWeapons[rand].SetActive(true);
+
+            trailRenderer = myWeapons[rand].GetComponentInChildren<TrailRenderer>();
+            trailRenderer.enabled = false;
+        }
+
         maxHP = hp;
         maxSpeed = speed;
         speed = 0;
@@ -386,15 +397,15 @@ public class BaseMeleeEnemy : Enemy
 
     public void EnableAttackRegion()
     {
-        Debug.Log("ON");
         attackCollider.enabled = true;
+        trailRenderer.enabled = true;
         isAttacking = true;
     }
 
     public void DisableAttackRegion()
     {
-        Debug.Log("OFF");
         attackCollider.enabled = false;
+        trailRenderer.enabled = false;
         isAttacking = false;
     }
 

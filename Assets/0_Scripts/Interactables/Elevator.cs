@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Elevator : GenericObject, IAssistInteract
+public class Elevator : GenericObject, IAssistInteract, IInteractUI
 {
     [SerializeField] Assistant.Interactuables _type;
-    
+
+    [SerializeField] private Transform interactPoint;
+    [SerializeField] private GameObject elevator;
+    [SerializeField] private float elevationTime, holdTime, yDiff;
+    private bool interactable = true;
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -13,12 +17,14 @@ public class Elevator : GenericObject, IAssistInteract
 
     public override void OnStart()
     {
-
+        
     }
 
     public void Interact(GameObject usableItem = null)
     {
-        throw new System.NotImplementedException();
+        StartCoroutine(DoElevatorCycle());
+        interactable = false;
+        Debug.Log("ASCENSOR");
     }
 
     public Assistant.Interactuables GetType()
@@ -33,7 +39,7 @@ public class Elevator : GenericObject, IAssistInteract
 
     public Transform GetInteractPoint()
     {
-        throw new System.NotImplementedException();
+        return interactPoint;
     }
 
     public List<Renderer> GetRenderer()
@@ -43,11 +49,35 @@ public class Elevator : GenericObject, IAssistInteract
 
     public bool CanInteract()
     {
-        throw new System.NotImplementedException();
+        return interactable;
     }
 
     public string AnimationToExecute()
     {
-        throw new System.NotImplementedException();
+        return "door";
+    }
+
+    IEnumerator DoElevatorCycle()
+    {
+        while (true)
+        {
+            LeanTween.moveY(elevator, elevator.transform.position.y + yDiff, elevationTime);
+
+            yield return new WaitForSeconds(elevationTime + holdTime);
+            
+            LeanTween.moveY(elevator, elevator.transform.position.y - yDiff, elevationTime);
+
+            yield return new WaitForSeconds(elevationTime + holdTime);
+        }
+    }
+
+    public string ActionName()
+    {
+        return "enable the Elevator";
+    }
+
+    public bool IsInteractable()
+    {
+        return interactable;
     }
 }

@@ -7,7 +7,8 @@ using Random = UnityEngine.Random;
 public class IntroDancer : GenericObject
 {
     public Animator anim;
-
+    public int animAmount;
+    
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -15,7 +16,7 @@ public class IntroDancer : GenericObject
 
     public override void OnStart()
     {
-        int rand = Random.Range(1, 4);
+        int rand = Random.Range(1, animAmount + 1);
         
         Debug.Log("PLAYING " + "Dance" + rand);
         anim.Play("Dance" + rand);

@@ -55,6 +55,7 @@ public class Assistant : GenericObject
     {
         DOOR,
         ENEMY,
+        ELEVATOR,
         WEAPON,
         WEAPONMANAGER
     }
@@ -306,6 +307,9 @@ public class Assistant : GenericObject
                             render.material.SetVector("_BlackHolePosition", new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z, 0));
                         }
                         ExtraUpdate = ChangeBlackHoleVars;
+                        _animator.SetTrigger(_interactuable.AnimationToExecute());
+                        break;
+                    case Interactuables.ELEVATOR:
                         _animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
                     default:
