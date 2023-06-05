@@ -42,6 +42,11 @@ public class TutorialEnemy : Enemy
         
     }
 
+    public override void SetDetection()
+    {
+        throw new NotImplementedException();
+    }
+
     public override void Death()
     {
         EventManager.Trigger("OnDamageableHit", 3);

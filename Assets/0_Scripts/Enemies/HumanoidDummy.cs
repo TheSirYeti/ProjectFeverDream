@@ -16,6 +16,11 @@ public class HumanoidDummy : Enemy
         //throw new System.NotImplementedException();
     }
 
+    public override void SetDetection()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void Death()
     {
         //throw new System.NotImplementedException();

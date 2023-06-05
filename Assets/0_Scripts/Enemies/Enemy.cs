@@ -8,7 +8,8 @@ using UnityEngine;
 public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInteractUI
 {
     [Header("-== Base Properties ==-")]
-    [SerializeField] protected float hp; 
+    [SerializeField] protected float hp;
+    [SerializeField] protected int enemySet;
     protected float maxHP;
     [Space(20)]
 
@@ -83,8 +84,12 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     {
         UpdateManager._instance.AddObject(this);
     }
-    
-    
+
+    public void SetEnemySetID(int id)
+    {
+        enemySet = id;
+    }
+
     #region RAGDOLLS
 
     public void DoRagdoll()
@@ -268,10 +273,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
         }
         return path;
     }
+    
     protected bool InSight(Vector3 start, Vector3 end)
     {
         Vector3 dir = end - start;
-        if (!Physics.Raycast(start, dir, dir.magnitude, NodeManager.instance.wallMask)) return true;
+        if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_WALL)) return true;
         else return false;
     }
 
@@ -367,6 +373,9 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
 
         return isInView;
     }
+
+    public abstract void SetDetection();
+
 
     #endregion
     

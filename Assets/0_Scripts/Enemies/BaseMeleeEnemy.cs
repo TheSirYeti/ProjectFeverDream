@@ -173,6 +173,7 @@ public class BaseMeleeEnemy : Enemy
 
         detect.OnExit += x =>
         {
+            EventManager.Trigger("OnEnemyDetection", enemySet);
             DoFaceTransition(FaceID.COMBAT);
         };
 
@@ -314,6 +315,12 @@ public class BaseMeleeEnemy : Enemy
         animator.Play("Enemy_Melee_Attack" + rand);
         StopSpeed();
     }
+
+    public override void SetDetection()
+    {
+        SendInputToFSM(MeleeEnemyStates.CHASING);
+    }
+
     public override void Death()
     {
         if (isDead) return;

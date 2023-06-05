@@ -463,6 +463,11 @@ public class RangedEnemy : Enemy
         throw new System.NotImplementedException();
     }
 
+    public override void SetDetection()
+    {
+        SendInputToFSM(RangedEnemyStates.CHASE);
+    }
+
     public override void Death()
     {
         if (isDead) return;
