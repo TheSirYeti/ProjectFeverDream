@@ -41,7 +41,7 @@ public class NodesGenerator : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.LM_FLOOR))
             {
-                if (!Physics.Raycast(ray, (hit.point - actualStartRay).magnitude, LayerManager.LM_WALL))
+                if (!Physics.Raycast(ray, (hit.point - actualStartRay).magnitude, LayerManager.LM_NodeObstacles))
                 {
                     actualNode = PrefabUtility.InstantiatePrefab(_prefab, transform) as MNode;
                     actualNode.gameObject.name = actualNode.gameObject.name + count;
