@@ -23,8 +23,10 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < _myCameras.Count; i++)
             {
-                Destroy(_myCameras[i]);
+                Destroy(_myCameras[i].gameObject);
             }
+            
+            Destroy(_fadeAnimator.gameObject);
 
             Destroy(gameObject);
         }
