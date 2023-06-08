@@ -6,18 +6,18 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 //TODO: Testing, delete later
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class MPathfinding : GenericObject
 {
-    [Header("Testing Vars")] public Transform _tempOrigen;
-    public Transform _tempTarget;
-    public float searchingRange;
+    // [Header("Testing Vars")] public Transform _tempOrigen;
+    // public Transform _tempTarget;
 
     [Header("Real Vars")] public static MPathfinding _instance;
     private Path actualPath;
-    public MNode _origenNode;
-    public MNode _targetNode;
+    private MNode _origenNode;
+    private MNode _targetNode;
     private MNode _actualnode;
+    public float searchingRange;
 
     public MNode[] nodes;
 
@@ -30,40 +30,39 @@ public class MPathfinding : GenericObject
 
     private void Awake()
     {
-        //TODO: Add subscribe to updatemanager
         _instance = this;
     }
 
-    public void ClearNodes()
-    {
-        Debug.Log("limpiando...");
-        foreach (var node in nodes)
-        {
-            node.ResetNode();
-        }
+    // public void ClearNodes()
+    // {
+    //     Debug.Log("limpiando...");
+    //     foreach (var node in nodes)
+    //     {
+    //         node.ResetNode();
+    //     }
+    //
+    //     Debug.Log("termine");
+    // }
 
-        Debug.Log("termine");
-    }
+    // public void TestFunc()
+    // {
+    //     GetPath(_tempOrigen.position, _tempTarget.position);
+    // }
 
-    public void TestFunc()
-    {
-        GetPath(_tempOrigen.position, _tempTarget.position);
-    }
-
-    void TestCleanUp()
-    {
-        foreach (var node in nodes)
-        {
-            node.ResetNode();
-        }
-
-        for (int i = 0; i < checker.Count; i++)
-        {
-            checker[i].nodeColor = Color.green;
-            if (i != 0)
-                checker[i]._previouseNode = checker[i - 1];
-        }
-    }
+    // void TestCleanUp()
+    // {
+    //     foreach (var node in nodes)
+    //     {
+    //         node.ResetNode();
+    //     }
+    //
+    //     for (int i = 0; i < checker.Count; i++)
+    //     {
+    //         checker[i].nodeColor = Color.green;
+    //         if (i != 0)
+    //             checker[i]._previouseNode = checker[i - 1];
+    //     }
+    // }
 
     public Path GetPath(Vector3 origen, Vector3 target)
     {
@@ -89,7 +88,7 @@ public class MPathfinding : GenericObject
         long ts = timer.ElapsedMilliseconds;
         Debug.Log("Termine en: " + ts + " milisegundos");
 
-        TestCleanUp();
+        //TestCleanUp();
 
         return actualPath;
     }
@@ -216,9 +215,9 @@ public class MPathfinding : GenericObject
         return true;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(_tempOrigen.position, searchingRange);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawWireSphere(_tempOrigen.position, searchingRange);
+    // }
 }

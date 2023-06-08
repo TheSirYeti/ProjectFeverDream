@@ -11,15 +11,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     [SerializeField] private List<Camera> _myCameras = new List<Camera>();
-    [SerializeField] private List<Transform> cameraPos = new List<Transform>();
     [SerializeField] private bool _isMainScene;
     [SerializeField] private Animator _fadeAnimator;
 
-    public InGameSceneManager sceneManager { private get; set; }
-    public SoundManager soundManager { private get; set; }
-    public UpdateManager updateManager { private get; set; }
-
-    private int _actualScene = 0;
+    [SerializeField] private int _actualScene = 0;
     public bool isLoading = false;
 
     private void Awake()
@@ -33,14 +28,21 @@ public class GameManager : MonoBehaviour
 
             Destroy(gameObject);
         }
-
-        Instance = this;
+        else
+        {
+            Instance = this;
+        }
     }
 
     private void Start()
     {
         if (_isMainScene)
             ChangeScene(0, false);
+        else
+        {
+            _fadeAnimator.Play("FadeOut");
+            UpdateManager._instance.OnSceneLoad();
+        }
     }
 
     private void Update()
@@ -121,7 +123,6 @@ public class GameManager : MonoBehaviour
         {
             _fadeAnimator.Play("FadeIn");
             yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
-            _fadeAnimator.Play("BlackScreen");
         }
 
         yield return new WaitForEndOfFrame();
@@ -134,7 +135,6 @@ public class GameManager : MonoBehaviour
             yield return new WaitUntil(() => InGameSceneManager.instace.loadingScreenOperation.progress > 0.85f);
             _fadeAnimator.Play("FadeOut");
             yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
-            _fadeAnimator.Play("NoFade");
         }
 
         UpdateManager._instance.OnSceneUnload();
@@ -161,7 +161,6 @@ public class GameManager : MonoBehaviour
         {
             _fadeAnimator.Play("FadeIn");
             yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
-            _fadeAnimator.Play("BlackScreen");
             InGameSceneManager.instace.SetLoadingScreen(false);
             yield return new WaitUntil(() => InGameSceneManager.instace.loadingScreenOperation.isDone);
             InGameSceneManager.instace.loadingScreenOperation = null;
@@ -169,7 +168,6 @@ public class GameManager : MonoBehaviour
 
         _fadeAnimator.Play("FadeOut");
         yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
-        _fadeAnimator.Play("NoFade");
 
         isLoading = false;
 

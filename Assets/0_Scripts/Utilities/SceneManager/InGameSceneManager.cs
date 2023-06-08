@@ -24,8 +24,7 @@ public class InGameSceneManager : MonoBehaviour
     private void Awake()
     {
         if (instace) Destroy(gameObject);
-
-        instace = this;
+        else instace = this;
     }
 
     public bool HaveTheScene(int index)

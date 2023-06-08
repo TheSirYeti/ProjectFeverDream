@@ -23,7 +23,7 @@ public class Assistant : GenericObject
     [SerializeField] float _pickupDistance;
     [SerializeField] float _nodeDistance;
 
-    [SerializeField] List<Node> nodeList = new List<Node>();
+    [SerializeField] Path nodeList;
     JorgeStates _previousState;
     [SerializeField] Transform _previousObjective;
 
@@ -200,25 +200,12 @@ public class Assistant : GenericObject
         pathFinding.OnEnter += x =>
         {
             Debug.Log("path");
-            nodeList = PathfindingTable.instance.ConstructPathThetaStar(NodeManager.instance.GetClosestNode(transform, true) + "," + NodeManager.instance.GetClosestNode(_actualObjective.transform, true) + "," + true);
-            _actualObjective = nodeList[0].transform;
+            nodeList = MPathfinding._instance.GetPath(transform.position, _player.position);
+            _actualObjective = nodeList.GetNextNode().transform;
         };
 
         pathFinding.OnUpdate += () =>
         {
-            int i = 0;
-            while (!nodeList.Any())
-            {
-                nodeList = PathfindingTable.instance.ConstructPathThetaStar(NodeManager.instance.GetClosestNode(transform, true) + "," + NodeManager.instance.GetClosestNode(_actualObjective.transform, true) + "," + true);
-                i++;
-
-                if (i > 10)
-                {
-                    Respawn();
-                    break;
-                }
-            }
-
             _dir = (_actualObjective.position) - transform.position;
 
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
@@ -235,17 +222,14 @@ public class Assistant : GenericObject
                 }
                 else
                 {
-                    nodeList.RemoveAt(0);
-
-                    if (nodeList.Any())
+                    if (nodeList.PathCount() > 0)
                     {
-                        _actualObjective = nodeList[0].transform;
+                        _actualObjective = nodeList.GetNextNode().transform;
                     }
                     else
                     {
-                        string path = NodeManager.instance.GetClosestNode(transform, true) + "," + NodeManager.instance.GetClosestNode(_previousObjective.transform, true) + "," + true;
-                        nodeList = PathfindingTable.instance.ConstructPathThetaStar(path);
-                        _actualObjective = nodeList[0].transform;
+                        nodeList = MPathfinding._instance.GetPath(transform.position, _player.position);
+                        _actualObjective = nodeList.GetNextNode().transform;
                     }
                 }
             }

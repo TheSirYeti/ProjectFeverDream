@@ -27,9 +27,9 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     private void Awake()
     {
+        Debug.Log("Update awake");
         if (_instance) Destroy(gameObject);
-
-        _instance = this;
+        else _instance = this;
     }
 
     private void Update()
@@ -83,7 +83,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
         while (_removeQueue.Count > 0)
         {
             GenericObject obj = _removeQueue.Dequeue();
-            
+
             _allObjects.Remove(obj);
 
             if (obj.isPausable)

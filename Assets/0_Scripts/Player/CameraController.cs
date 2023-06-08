@@ -64,11 +64,13 @@ public class CameraController : GenericObject
 
     private void Awake()
     {
+        Debug.Log("player awake");
         UpdateManager._instance.AddObject(this);
     }
     
     public override void OnAwake()
     {
+        Debug.Log("player awake?");
         EventManager.Subscribe("CameraShake", ShakeState);
         EventManager.Subscribe("CameraBobbing", SetBobbing);
 
