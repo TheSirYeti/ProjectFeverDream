@@ -9,8 +9,8 @@ using Debug = UnityEngine.Debug;
 //[ExecuteInEditMode]
 public class MPathfinding : GenericObject
 {
-    // [Header("Testing Vars")] public Transform _tempOrigen;
-    // public Transform _tempTarget;
+    [Header("Testing Vars")] public Transform _tempOrigen;
+    public Transform _tempTarget;
 
     [Header("Real Vars")] public static MPathfinding _instance;
     private Path actualPath;
@@ -24,7 +24,7 @@ public class MPathfinding : GenericObject
     private Queue<MNode> _nodePath = new Queue<MNode>();
 
     private HashSet<MNode> closeNodes = new HashSet<MNode>();
-    private HashSet<MNode> openNodes = new HashSet<MNode>();
+    private PriorityQueue<MNode> openNodes = new PriorityQueue<MNode>();
 
     public List<MNode> checker = new List<MNode>();
 
@@ -33,36 +33,36 @@ public class MPathfinding : GenericObject
         _instance = this;
     }
 
-    // public void ClearNodes()
-    // {
-    //     Debug.Log("limpiando...");
-    //     foreach (var node in nodes)
-    //     {
-    //         node.ResetNode();
-    //     }
-    //
-    //     Debug.Log("termine");
-    // }
+    public void ClearNodes()
+    {
+        Debug.Log("limpiando...");
+        foreach (var node in nodes)
+        {
+            node.ResetNode();
+        }
+    
+        Debug.Log("termine");
+    }
 
-    // public void TestFunc()
-    // {
-    //     GetPath(_tempOrigen.position, _tempTarget.position);
-    // }
+    public void TestFunc()
+    {
+        GetPath(_tempOrigen.position, _tempTarget.position);
+    }
 
-    // void TestCleanUp()
-    // {
-    //     foreach (var node in nodes)
-    //     {
-    //         node.ResetNode();
-    //     }
-    //
-    //     for (int i = 0; i < checker.Count; i++)
-    //     {
-    //         checker[i].nodeColor = Color.green;
-    //         if (i != 0)
-    //             checker[i]._previouseNode = checker[i - 1];
-    //     }
-    // }
+    void TestCleanUp()
+    {
+        foreach (var node in nodes)
+        {
+            node.ResetNode();
+        }
+    
+        for (int i = 0; i < checker.Count; i++)
+        {
+            checker[i].nodeColor = Color.green;
+            if (i != 0)
+                checker[i]._previouseNode = checker[i - 1];
+        }
+    }
 
     public Path GetPath(Vector3 origen, Vector3 target)
     {
@@ -74,7 +74,7 @@ public class MPathfinding : GenericObject
 
         actualPath = new Path();
         closeNodes = new HashSet<MNode>();
-        openNodes = new HashSet<MNode>();
+        openNodes = new PriorityQueue<MNode>();
         _nodePath = new Queue<MNode>();
         
         _origenNode = GetClosestNode(origen);
@@ -100,22 +100,25 @@ public class MPathfinding : GenericObject
 
         int watchdog = 10000;
         Queue<MNode> checkingNodes;
+
         while (_actualnode != _targetNode && watchdog > 0)
         {
             watchdog--;
+     
             checkingNodes = new Queue<MNode>();
 
 
             for (int i = 0; i < _actualnode.NeighboursCount(); i++)
             {
                 MNode node = _actualnode.GetNeighbor(i);
+                node.nodeColor = Color.magenta;
                 if (closeNodes.Contains(node)) continue;
 
                 node._previouseNode = _actualnode;
                 node.SetWeight(_actualnode.GetWeight() + 1 +
                                Vector3.Distance(node.transform.position, _targetNode.transform.position));
 
-                openNodes.Add(node);
+                openNodes.Enqueue(node, node.GetWeight());
                 checkingNodes.Enqueue(node);
             }
 
@@ -135,13 +138,17 @@ public class MPathfinding : GenericObject
                 }
                 _actualnode = cheaperNode;
             }
+            else
+            {
+                _actualnode = openNodes.Dequeue();
+            }
             
             
             closeNodes.Add(_actualnode);
             
             if(_actualnode == _targetNode) Debug.Log("llegue");
         }
-
+        
         ThetaStar();
     }
 
