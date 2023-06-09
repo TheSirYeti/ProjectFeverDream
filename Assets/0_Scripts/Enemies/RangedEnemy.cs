@@ -276,7 +276,7 @@ public class RangedEnemy : Enemy
                 return;
             }
 
-            if (nodePath.Any() || currentNode < nodePath.Count)
+            if (isPathfinding)
             {
                 SetSpeedValue(Time.deltaTime);
                 DoPathfinding();
@@ -465,6 +465,9 @@ public class RangedEnemy : Enemy
 
     public override void SetDetection()
     {
+        if (wasDetected) return;
+
+        wasDetected = true;
         SendInputToFSM(RangedEnemyStates.CHASE);
     }
 

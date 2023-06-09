@@ -318,6 +318,9 @@ public class BaseMeleeEnemy : Enemy
 
     public override void SetDetection()
     {
+        if (wasDetected) return;
+        
+        wasDetected = true;
         SendInputToFSM(MeleeEnemyStates.CHASING);
     }
 
@@ -345,7 +348,7 @@ public class BaseMeleeEnemy : Enemy
         
         if (!InSight(transform.position, target.transform.position))
         {
-            if (isPathfinding && nodePath.Any())
+            if (isPathfinding)
             {
                 DoPathfinding();
             }
@@ -357,7 +360,7 @@ public class BaseMeleeEnemy : Enemy
         }
         
         isPathfinding = false;
-        nodePath.Clear();
+        //nodePath.Clear();
         
         DoGenericChase();
     }

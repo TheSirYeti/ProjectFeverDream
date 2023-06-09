@@ -38,11 +38,17 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
 
     [Space(20)]
     [Header("-== Pathfinding Properties ==-")] 
-    [SerializeField] protected List<Node> nodePath;
+    //[SerializeField] protected List<Node> nodePath;
+    [SerializeField] Path nodeList;
     protected int currentNode = 0;
+    Vector3 _actualDir;
     [SerializeField] private float minDistanceToNode;
     [SerializeField] protected bool isPathfinding;
     [SerializeField] protected float pathfindingCooldown, pathfindingRate;
+    
+    Transform _actualObjective;
+    Vector3 _dir;
+    [SerializeField] Transform _previousObjective;
 
     [Space(20)]
     [Header("-== Detection / FoV Properties")]
@@ -176,7 +182,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
 
     public void DoPathfinding()
     {
-        Vector3 direction;
+        /*Vector3 direction;
         if (isPathfinding && nodePath != null)
         {
             direction = nodePath[currentNode].transform.position - transform.position;
@@ -195,6 +201,33 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
                     isPathfinding = false;
                 }
             }
+        }*/
+        _dir = (_actualObjective.position) - transform.position;
+
+        if (InSight(transform.position, _previousObjective.position))
+        {
+            isPathfinding = false;
+            return;
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(_dir);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, speed * Time.deltaTime);
+
+        _actualDir = _dir.normalized * speed;
+
+        if (Vector3.Distance(transform.position, (_actualObjective.position)) < minDistanceToNode)
+        {
+            Vector3 tempDir = _previousObjective.position - transform.position;
+
+            if (nodeList.PathCount() > 0)
+            {
+                _actualObjective = nodeList.GetNextNode().transform;
+            }
+            else
+            {
+                nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
+                _actualObjective = nodeList.GetNextNode().transform;
+            }
         }
     }
     
@@ -209,7 +242,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
 
     protected void CalculatePathPreview(bool amEscaping)
     {
-        if ((!isPathfinding
+        /*if ((!isPathfinding
              || nodePath == null
              || nodePath.Count < 1
              || NodeManager.instance.nodesEnemy[NodeManager.instance.GetClosestNode(target.transform)] !=
@@ -250,7 +283,9 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
             
             nodePath = newPath;
             isPathfinding = true;
-        }
+        }*/
+        nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
+        _actualObjective = nodeList.GetNextNode().transform;
     }
     
     public List<Node> ConstructPathThetaStar(Node startingNode, Node goalNode)
@@ -277,7 +312,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     protected bool InSight(Vector3 start, Vector3 end)
     {
         Vector3 dir = end - start;
-        if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_WALL)) return true;
+        if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_NodeObstacles)) return true;
         else return false;
     }
 
