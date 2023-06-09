@@ -208,6 +208,12 @@ public class Assistant : GenericObject
         {
             _dir = (_actualObjective.position) - transform.position;
 
+            if (OnSight(_previousObjective.position))
+            {
+                SendInputToFSM(_previousState);
+                return;
+            }
+
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
@@ -547,6 +553,14 @@ public class Assistant : GenericObject
         transform.position = NodeManager.instance.GetNode(NodeManager.instance.GetClosestNode(_player, true), true).transform.position;
         _interactuable = null;
         SendInputToFSM(JorgeStates.FOLLOW);
+    }
+
+    bool OnSight(Vector3 objective)
+    {
+        var dir = objective - transform.position;
+        var ray = new Ray(transform.position, objective.normalized);
+        
+        return !Physics.Raycast(ray, dir.magnitude, LayerManager.LM_Obstacle);
     }
 
     private void OnDrawGizmos()
