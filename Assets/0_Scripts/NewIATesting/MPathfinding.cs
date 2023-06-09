@@ -6,7 +6,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 //TODO: Testing, delete later
-//[ExecuteInEditMode]
+[ExecuteAlways]
 public class MPathfinding : GenericObject
 {
     [Header("Testing Vars")] public Transform _tempOrigen;
@@ -98,7 +98,7 @@ public class MPathfinding : GenericObject
         closeNodes.Add(_actualnode);
         _actualnode.nodeColor = Color.green;
 
-        int watchdog = 10000;
+        var watchdog = 10000;
         Queue<MNode> checkingNodes;
 
         while (_actualnode != _targetNode && watchdog > 0)
@@ -108,9 +108,9 @@ public class MPathfinding : GenericObject
             checkingNodes = new Queue<MNode>();
 
 
-            for (int i = 0; i < _actualnode.NeighboursCount(); i++)
+            for (var i = 0; i < _actualnode.NeighboursCount(); i++)
             {
-                MNode node = _actualnode.GetNeighbor(i);
+                var node = _actualnode.GetNeighbor(i);
                 node.nodeColor = Color.magenta;
                 if (closeNodes.Contains(node)) continue;
 
@@ -118,7 +118,7 @@ public class MPathfinding : GenericObject
                 node.SetWeight(_actualnode.GetWeight() + 1 +
                                Vector3.Distance(node.transform.position, _targetNode.transform.position));
 
-                openNodes.Enqueue(node, node.GetWeight());
+                openNodes.Enqueue(new TObj<MNode>(){myObj = node, myWeight = node.GetWeight()});
                 checkingNodes.Enqueue(node);
             }
 

@@ -17,13 +17,13 @@ public class PathfindingTester : Editor
     {
         DrawDefaultInspector();
  
-        // if(GUILayout.Button("Test Path"))
-        // {
-        //     pathfinding.TestFunc();
-        // }
-        // if(GUILayout.Button("Clear Nodes"))
-        // {
-        //     pathfinding.ClearNodes();
-        // }
+        if(GUILayout.Button("Test Path"))
+        {
+            pathfinding.TestFunc();
+        }
+        if(GUILayout.Button("Clear Nodes"))
+        {
+            pathfinding.ClearNodes();
+        }
     }
 }

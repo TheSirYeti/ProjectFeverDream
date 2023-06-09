@@ -111,7 +111,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     public void AddObject(GenericObject genericObject)
     {
-        _awakeQueue.Enqueue(genericObject, genericObject.priority);
+        _awakeQueue.Enqueue(new TObj<GenericObject>(){myObj = genericObject, myWeight = genericObject.priority});
     }
 
     public void RemoveObject(GenericObject genericObject)
@@ -135,7 +135,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
                 obj.OnAwake();
 
-                _startQueue.Enqueue(obj, obj.priority);
+                _startQueue.Enqueue(new TObj<GenericObject>(){myObj = obj, myWeight = obj.priority});
             }
 
             while (_startQueue.Count() > 0)
@@ -144,7 +144,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
                 obj.OnStart();
 
-                _lateStartQueue.Enqueue(obj, obj.priority);
+                _lateStartQueue.Enqueue(new TObj<GenericObject>(){myObj = obj, myWeight = obj.priority});
             }
 
             while (_lateStartQueue.Count() > 0)
