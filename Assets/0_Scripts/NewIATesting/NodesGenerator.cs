@@ -8,17 +8,16 @@ using System.Linq;
 [ExecuteInEditMode]
 public class NodesGenerator : MonoBehaviour
 {
-    //TEMP
-    public MPathfinding pathfinding;
-    
     [SerializeField] private Vector3 _area;
     [SerializeField] private float _nodeSize;
     private float _nodeDistance => _nodeSize * 2.5f;
     [SerializeField] private MNode _prefab;
 
     [SerializeField] private List<GameObject> _nodeList = new List<GameObject>();
+    private HashSet<Vector3> _spawnedNodes = new HashSet<Vector3>();
 
     private float maxX => transform.position.x + _area.x / 2;
+    private float minY => transform.position.y - _area.y / 2;
 
     private float minZ => transform.position.z - _area.z / 2;
     private float maxZ => minZ + _area.z;
@@ -27,6 +26,7 @@ public class NodesGenerator : MonoBehaviour
 
     public void Generate()
     {
+        _spawnedNodes = new HashSet<Vector3>();
         Vector3 actualStartRay = transform.position;
         actualStartRay.x -= _area.x / 2;
         actualStartRay.y += _area.y / 2;
@@ -34,36 +34,51 @@ public class NodesGenerator : MonoBehaviour
 
         MNode actualNode;
         int count = 0;
-        while (actualStartRay.x <= maxX)
+        while (actualStartRay.y >= minY)
         {
-            Ray ray = new Ray(actualStartRay, Vector3.down);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.LM_FLOOR))
+            actualStartRay.x = transform.position.x - (_area.x / 2);
+            actualStartRay.z = transform.position.z + _area.z / 2;
+            
+            while (actualStartRay.x <= maxX)
             {
-                if (!Physics.Raycast(ray, (hit.point - actualStartRay).magnitude, LayerManager.LM_NodeObstacles))
+                Ray ray = new Ray(actualStartRay, Vector3.down);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.LM_FLOOR))
                 {
-                    actualNode = PrefabUtility.InstantiatePrefab(_prefab, transform) as MNode;
-                    actualNode.gameObject.name = actualNode.gameObject.name + count;
-                    actualNode.transform.position = hit.point + Vector3.up * 0.2f;
+                    if (!Physics.Raycast(ray, (hit.point - actualStartRay).magnitude, LayerManager.LM_NodeObstacles))
+                    {
+                        if (!_spawnedNodes.Contains(hit.point + Vector3.up * 0.2f))
+                        {                       
+                            actualNode = PrefabUtility.InstantiatePrefab(_prefab, transform) as MNode;
+                            actualNode.gameObject.name += count;
+                            actualNode.transform.position = hit.point + Vector3.up * 0.2f;
+                            _spawnedNodes.Add(hit.point + Vector3.up * 0.2f);
 
-                    _nodeList.Add(actualNode.gameObject);
+                            _nodeList.Add(actualNode.gameObject);
+                        }
+                    }
                 }
+
+                float distance = _nodeDistance;
+                distance *= multiplyDir;
+                actualStartRay.z += distance;
+
+                if (actualStartRay.z > maxZ || actualStartRay.z < minZ)
+                {
+                    actualStartRay.z -= distance;
+                    multiplyDir *= -1;
+                    actualStartRay.x += _nodeDistance;
+                }
+
+                count++;
             }
-
-            float distance = _nodeDistance;
-            distance *= multiplyDir;
-            actualStartRay.z += distance;
-
-            if (actualStartRay.z > maxZ || actualStartRay.z < minZ)
-            {
-                actualStartRay.z -= distance;
-                multiplyDir *= -1;
-                actualStartRay.x += _nodeDistance;
-            }
-
-            count++;
+            
+            multiplyDir = -1;
+            actualStartRay.y -= 1;
+            Debug.Log(actualStartRay);
         }
+       
 
         multiplyDir = -1;
     }

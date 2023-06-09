@@ -99,9 +99,9 @@ public class MNode : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
-        Gizmos.color = nodeColor;
+        Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
 
         Gizmos.color = Color.yellow;
