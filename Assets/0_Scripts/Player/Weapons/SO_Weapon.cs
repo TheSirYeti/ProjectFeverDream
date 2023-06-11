@@ -11,6 +11,7 @@ public class SO_Weapon : ScriptableObject
     [Header("-== BASIC BOOLS ==-")]
     public bool isMelee;
     public bool canADS;
+    public bool hasKnockback;
 
     [Header("-== ATTACK STATS ==-")]
     public float dmg;

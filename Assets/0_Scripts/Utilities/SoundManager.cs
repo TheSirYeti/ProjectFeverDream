@@ -118,8 +118,6 @@ public class SoundManager : MonoBehaviour
         var actualName = id.ToString();
         
         if(!_actualSfxNames.Contains(actualName)) return;
-        
-        Debug.Log("SOUND ENUM" + id);
 
         var idToPlay = _actualSfxNames.IndexOf(actualName);
         
@@ -132,8 +130,6 @@ public class SoundManager : MonoBehaviour
     public void PlaySoundByID(string actualName, bool loop = false, float pitch = 1)
     {
         if(!_actualSfxNames.Contains(actualName)) return;
-        
-        Debug.Log("SOUND ID " + actualName);
 
         var idToPlay = _actualSfxNames.IndexOf(actualName);
         
@@ -249,8 +245,6 @@ public class SoundManager : MonoBehaviour
         var actualName = id.ToString();
         
         if(!_actualMusicNames.Contains(actualName)) return;
-        
-        Debug.Log("MUSIC ID " + actualName);
 
         var idToPlay = _actualMusicNames.IndexOf(actualName);
         

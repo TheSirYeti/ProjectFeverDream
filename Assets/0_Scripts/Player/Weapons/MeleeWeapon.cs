@@ -158,7 +158,7 @@ public class MeleeWeapon : GenericWeapon
             }
 
             _actualEnemiesHit.Add(damagableInterface);
-            damagableInterface.TakeDamage("Body", _weaponSO.dmg, true);
+            damagableInterface.TakeDamage("Body", _weaponSO.dmg, _weaponSO.hasKnockback);
         }
     }
 

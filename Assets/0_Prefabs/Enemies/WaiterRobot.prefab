@@ -1345,7 +1345,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 90
+  m_Constraints: 122
   m_CollisionDetection: 1
 --- !u!65 &5471815192462616797
 BoxCollider:
@@ -1407,6 +1407,7 @@ MonoBehaviour:
   priority: 0
   isPausable: 1
   hp: 200
+  enemySet: 0
   target: {fileID: 0}
   minChaseDistance: 15
   _type: 1
@@ -1417,11 +1418,11 @@ MonoBehaviour:
   isAttacking: 0
   speed: 7
   accelerationValue: 5
-  nodePath: []
   minDistanceToNode: 1.5
   isPathfinding: 0
   pathfindingCooldown: 0
   pathfindingRate: 2
+  _previousObjective: {fileID: 0}
   fovViewRadius: 30
   fovViewAngle: 70
   fovTransformPoint: {fileID: 5471815193241448229}

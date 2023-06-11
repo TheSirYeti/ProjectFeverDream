@@ -173,7 +173,7 @@ public class BaseMeleeEnemy : Enemy
 
         detect.OnExit += x =>
         {
-            EventManager.Trigger("OnEnemyDetection", enemySet);
+            //EventManager.Trigger("OnEnemyDetection", enemySet);
             DoFaceTransition(FaceID.COMBAT);
         };
 

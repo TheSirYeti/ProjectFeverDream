@@ -182,6 +182,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
 
     public void DoPathfinding()
     {
+        Debug.Log("LLEGO AL LOG DE CORRER EL PF");
         /*Vector3 direction;
         if (isPathfinding && nodePath != null)
         {
@@ -204,7 +205,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
         }*/
         _dir = (_actualObjective.position) - transform.position;
 
-        if (InSight(transform.position, _previousObjective.position))
+        if (InSight(transform.position, target.transform.position))
         {
             isPathfinding = false;
             return;
@@ -217,8 +218,6 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
 
         if (Vector3.Distance(transform.position, (_actualObjective.position)) < minDistanceToNode)
         {
-            Vector3 tempDir = _previousObjective.position - transform.position;
-
             if (nodeList.PathCount() > 0)
             {
                 _actualObjective = nodeList.GetNextNode().transform;
@@ -284,8 +283,10 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
             nodePath = newPath;
             isPathfinding = true;
         }*/
+        Debug.Log("QUIERO HACER PF");
         nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
         _actualObjective = nodeList.GetNextNode().transform;
+        Debug.Log("LLEGO A TERMINAR DE CALCULAR EL PF");
     }
     
     public List<Node> ConstructPathThetaStar(Node startingNode, Node goalNode)
