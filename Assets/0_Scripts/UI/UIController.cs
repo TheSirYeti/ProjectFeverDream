@@ -18,6 +18,7 @@ public class UIController : GenericObject
     [SerializeField] private List<GameObject> weaponRegion;
     [SerializeField] private List<GameObject> objectiveRegion;
     int _actualWeapon = 0;
+    [SerializeField] private Animator redScreenAnimator;
 
     [Header("ObjetiveText")]
     [SerializeField] TextMeshProUGUI _titleObjetive;
@@ -71,6 +72,7 @@ public class UIController : GenericObject
         EventManager.Subscribe("OnSubtitleOn", DoSubtitle);
         EventManager.Subscribe("OnSubtitleOff", DisableSubtitle);
         EventManager.Subscribe("OnAssistantPing", DoPingStart);
+        EventManager.Subscribe("OnPlayerTakeDamage", DoRedScreen);
         
         ShowObjectiveUI(false);
         ChangeEquipedWeapontUI(-1);
@@ -384,5 +386,10 @@ public class UIController : GenericObject
         {
             obj.SetActive(status);
         }
+    }
+
+    void DoRedScreen(object[] parameters)
+    {
+        redScreenAnimator.Play("TakeDamage");
     }
 }

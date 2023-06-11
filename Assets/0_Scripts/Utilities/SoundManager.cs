@@ -139,12 +139,25 @@ public class SoundManager : MonoBehaviour
         sfxChannel[idToPlay].pitch = pitch;
     }
     
+    public void PlaySoundByInt(int idToPlay, bool loop = false, float pitch = 1)
+    {
+        sfxChannel[idToPlay].Play();
+        sfxChannel[idToPlay].loop = loop;
+        sfxChannel[idToPlay].volume = volumeSFX;
+        sfxChannel[idToPlay].pitch = pitch;
+    }
+    
     public void StopSoundByID(string actualName)
     {
         if(!_actualSfxNames.Contains(actualName)) return;
 
         var idToPlay = _actualSfxNames.IndexOf(actualName);
         
+        sfxChannel[idToPlay].Stop();
+    }
+    
+    public void StopSoundByInt(int idToPlay, bool loop = false, float pitch = 1)
+    {
         sfxChannel[idToPlay].Stop();
     }
 

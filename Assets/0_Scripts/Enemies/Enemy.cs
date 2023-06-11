@@ -82,7 +82,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     [SerializeField] protected float dmg;
     [Space(10)] 
     [SerializeField] protected float weakDmg, bodyDmg, headDmg, generalDmg;
-    public bool isDead = false; 
+    public bool isDead = false;
+
+    [Space(20)] [Header("-== SFX Properties ==-")] 
+    [SerializeField] protected List<AudioSource> audioSources;
+    protected List<int> audioIDs = new List<int>();
 
     public abstract void Attack();
     

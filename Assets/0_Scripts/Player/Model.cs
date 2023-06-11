@@ -22,6 +22,8 @@ public class Model : GenericObject, IPlayerLife
     [SerializeField] int _maxLife;
     int _life;
     bool _canGetDmg = true;
+    float dmgCooldown = 0.5f;
+    float currentDmgCooldown = -1f;
 
     [Space(20)]
     [Header("-== Physics Properties ==-")]
@@ -127,6 +129,8 @@ public class Model : GenericObject, IPlayerLife
         crouchChecker();
 
         CheckDmg();
+
+        currentDmgCooldown -= Time.deltaTime;
 
         if (_isOnFloor && _physics.HasGravity()) _physics.RemoveAcceleration("gravity");
     }
@@ -437,7 +441,7 @@ public class Model : GenericObject, IPlayerLife
 
     public void GetDamage(int dmg)
     {
-        if (!_canGetDmg) return;
+        if (!_canGetDmg || currentDmgCooldown >= 0) return;
         if (_life <= 0) return;
 
         _life -= dmg;
@@ -449,6 +453,10 @@ public class Model : GenericObject, IPlayerLife
         if(SoundManager.instance != null)
             SoundManager.instance.PlaySound(SoundID.PLAYER_HURT);
 
+        currentDmgCooldown = dmgCooldown;
+        
+        EventManager.Trigger("OnPlayerTakeDamage");
+        
         if(_life <= 0)
         {
             Death();

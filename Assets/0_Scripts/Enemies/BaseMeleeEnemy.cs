@@ -67,6 +67,11 @@ public class BaseMeleeEnemy : Enemy
         maxHP = hp;
         maxSpeed = speed;
         speed = 0;
+
+        foreach (var sfx in audioSources)
+        {
+            audioIDs.Add(SoundManager.instance.AddSFXSource(sfx));
+        }
         
         DoFsmSetup();
     }
@@ -320,6 +325,7 @@ public class BaseMeleeEnemy : Enemy
     {
         if (wasDetected) return;
         
+        DoFaceTransition(FaceID.COMBAT);
         wasDetected = true;
         SendInputToFSM(MeleeEnemyStates.CHASING);
     }
@@ -374,6 +380,22 @@ public class BaseMeleeEnemy : Enemy
         animator.SetFloat("movementSpeed", speed);
         currentAttackCooldown -= Time.deltaTime;
         pathfindingCooldown -= Time.deltaTime;
+    }
+
+    public void PlayRandomSlash()
+    {
+        int rand = Random.Range(0, audioIDs.Count);
+        //PlayAudioSource(audioIDs[rand]);
+    }
+    
+    public void PlayAudioSource(int sourceID)
+    {
+        SoundManager.instance.PlaySoundByInt(audioIDs[sourceID]);
+    }
+    
+    public void StopAudioSource(int sourceID)
+    {
+        SoundManager.instance.StopSoundByInt(audioIDs[sourceID]);
     }
 
     #region EXTRA VIEW METHODS
