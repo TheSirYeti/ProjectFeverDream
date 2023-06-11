@@ -160,9 +160,13 @@ public class MPathfinding : GenericObject
         var previouseNode = _actualnode._previouseNode;
         
         if(previouseNode == null) Debug.Log("no existe");
-        
-        while (_actualnode != _origenNode)
+        int watchdog = 10000;
+        while (_actualnode != _origenNode && watchdog > 0)
         {
+            watchdog--;
+            
+            if(watchdog <= 0)Debug.Log("Primer while theta");
+            
             if (previouseNode._previouseNode && OnSight(_actualnode.transform.position, previouseNode._previouseNode.transform.position))
             {
                 previouseNode = previouseNode._previouseNode;
@@ -175,9 +179,13 @@ public class MPathfinding : GenericObject
             }
         }
 
-
-        while (stack.Count > 0)
+        watchdog = 10000;
+        while (stack.Count > 0 && watchdog > 0)
         {
+            watchdog--;
+            
+            if(watchdog <= 0)Debug.Log("Segundo while theta");
+            
             MNode nextNode = stack.Pop() as MNode;
             checker.Add(nextNode);
             actualPath.AddNode(nextNode);
