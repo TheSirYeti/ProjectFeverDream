@@ -139,9 +139,26 @@ public class Model : GenericObject, IPlayerLife
     public void Move(float hAxie, float vAxie)
     {
         if (_isOnFloor && (hAxie != 0 || vAxie != 0))
+        {
             EventManager.Trigger("CameraBobbing", true);
+
+            if (isRunning)
+            {
+                _view.PlayLoopingSound(SoundID.RUN);
+                SoundManager.instance.StopSoundByID("WALK");
+            }
+            else
+            {
+                _view.PlayLoopingSound(SoundID.WALK);
+                SoundManager.instance.StopSoundByID("RUN");
+            }
+        }
         else
+        {
             EventManager.Trigger("CameraBobbing", false);
+            SoundManager.instance.StopSoundByID("RUN");
+            SoundManager.instance.StopSoundByID("WALK");
+        }
 
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
@@ -389,6 +406,8 @@ public class Model : GenericObject, IPlayerLife
             _jumpCounter = 0;
 
             _isOnFloor = true;
+            
+            SoundManager.instance.PlaySound(SoundID.JUMP_LANDING);
 
             if (isSlide)
                 _slideCoroutine = StartCoroutine(SlideTime());

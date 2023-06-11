@@ -104,7 +104,13 @@ public class SoundManager : MonoBehaviour
 
     public bool isSoundPlaying(SoundID id)
     {
-        return sfxChannel[(int)id].isPlaying;
+        var actualName = id.ToString();
+        
+        if(!_actualSfxNames.Contains(actualName)) return false;
+        
+        var idToCheck = _actualSfxNames.IndexOf(actualName);
+        
+        return sfxChannel[idToCheck].isPlaying;
     }
 
     public void PlaySound(SoundID id, bool loop = false, float pitch = 1)
@@ -112,6 +118,8 @@ public class SoundManager : MonoBehaviour
         var actualName = id.ToString();
         
         if(!_actualSfxNames.Contains(actualName)) return;
+        
+        Debug.Log("SOUND ENUM" + id);
 
         var idToPlay = _actualSfxNames.IndexOf(actualName);
         
@@ -124,6 +132,8 @@ public class SoundManager : MonoBehaviour
     public void PlaySoundByID(string actualName, bool loop = false, float pitch = 1)
     {
         if(!_actualSfxNames.Contains(actualName)) return;
+        
+        Debug.Log("SOUND ID " + actualName);
 
         var idToPlay = _actualSfxNames.IndexOf(actualName);
         
@@ -133,9 +143,13 @@ public class SoundManager : MonoBehaviour
         sfxChannel[idToPlay].pitch = pitch;
     }
     
-    public void StopSoundByID(int id)
+    public void StopSoundByID(string actualName)
     {
-        sfxChannel[id].Stop();
+        if(!_actualSfxNames.Contains(actualName)) return;
+
+        var idToPlay = _actualSfxNames.IndexOf(actualName);
+        
+        sfxChannel[idToPlay].Stop();
     }
 
     public void StopAllSounds()
@@ -235,6 +249,8 @@ public class SoundManager : MonoBehaviour
         var actualName = id.ToString();
         
         if(!_actualMusicNames.Contains(actualName)) return;
+        
+        Debug.Log("MUSIC ID " + actualName);
 
         var idToPlay = _actualMusicNames.IndexOf(actualName);
         
@@ -458,7 +474,13 @@ public enum SoundID
     //18
     DOOR_OPEN,
     //19
-    VENT_OPEN
+    VENT_OPEN,
+    //20
+    WALK,
+    //21
+    RUN,
+    //22
+    JUMP_LANDING
 
 }
 

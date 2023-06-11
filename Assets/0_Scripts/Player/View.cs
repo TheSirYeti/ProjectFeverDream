@@ -82,4 +82,14 @@ public class View : GenericObject
     {
         EventManager.Trigger("VFX_FullSlice", attack);
     }
+
+    public void PlayLoopingSound(SoundID soundID)
+    {
+        if (SoundManager.instance == null) return;
+
+        if (!SoundManager.instance.isSoundPlaying(soundID))
+        {
+            SoundManager.instance.PlaySound(soundID, true);
+        }
+    }
 }
