@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
-
-//TODO: Testing, delete later
-[ExecuteAlways]
+//
+// //TODO: Testing, delete later
+// [ExecuteAlways]
 public class MPathfinding : GenericObject
 {
     [Header("Testing Vars")] public Transform _tempOrigen;
@@ -178,8 +178,11 @@ public class MPathfinding : GenericObject
 
         while (stack.Count > 0)
         {
-            checker.Add(stack.Pop() as MNode);
+            MNode nextNode = stack.Pop() as MNode;
+            checker.Add(nextNode);
+            actualPath.AddNode(nextNode);
         }
+        Debug.Log(actualPath.PathCount());
     }
 
     public MNode GetClosestNode(Vector3 t, bool isForAssistant = false)

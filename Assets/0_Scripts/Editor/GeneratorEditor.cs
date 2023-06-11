@@ -33,5 +33,10 @@ public class GeneratorEditor : Editor
             _nodesGenerator.DeleteNodes();
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
+        if(GUILayout.Button("Clear nulls"))
+        {
+            _nodesGenerator.RemoveNulls();
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        }
     }
 }

@@ -7,6 +7,7 @@ public class TempEnemyForPF : MonoBehaviour
 {
     // TODO: Delte this script when i finish pf
 
+    public Transform objective;
     private Vector3 _target;
     private Path _actualPath;
     private MNode _actualNode;
@@ -14,35 +15,46 @@ public class TempEnemyForPF : MonoBehaviour
 
     public LayerMask obstacleMask;
 
-    private Action onUpdate = delegate {  };
-    
+    private Action onUpdate = delegate { };
+
     void Start()
     {
         GetNewPath();
-        onUpdate = State_Path;
+        _actualNode = _actualPath.GetNextNode();
+        Debug.Log(_actualNode.name);
+        //onUpdate = State_Path;
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            GetNewPath();
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            onUpdate = State_Path;
+        }
+
         onUpdate();
     }
 
     void State_Path()
     {
-        Vector3 dir = _actualNode.transform.position - transform.position;
+        Vector3 dir = (_actualNode.transform.position - transform.position).normalized;
         transform.position += dir * (speed * Time.deltaTime);
 
         if (Vector3.Distance(transform.position, _actualNode.transform.position) < 0.5f)
         {
-            if (OnSight()) onUpdate = State_Chase;
+            MNode node = _actualPath.GetNextNode();
+
+            if (node)
+                _actualNode = node;
             else
             {
-                MNode node = _actualPath.GetNextNode();
-
-                if (node)
-                    _actualNode = node;
-                else
-                    GetNewPath();
+                Debug.Log("llegue");
+                onUpdate = delegate { };
             }
         }
     }
@@ -51,17 +63,17 @@ public class TempEnemyForPF : MonoBehaviour
     {
         Vector3 dir = _target - transform.position;
         transform.position += dir * (speed * Time.deltaTime);
-        
+
         if (Vector3.Distance(transform.position, _target) < 0.5f)
         {
             Debug.Log("llegue");
-            onUpdate = delegate {  };
+            onUpdate = delegate { };
         }
     }
 
     void GetNewPath()
     {
-        _actualPath = MPathfinding._instance.GetPath(transform.position, _target);
+        _actualPath = MPathfinding._instance.GetPath(transform.position, objective.position);
         _actualNode = _actualPath.GetNextNode();
     }
 
@@ -69,7 +81,7 @@ public class TempEnemyForPF : MonoBehaviour
     {
         Vector3 dir = _target - transform.position;
         Ray ray = new Ray(transform.position, dir);
-        
+
         if (!Physics.Raycast(ray, dir.magnitude, obstacleMask))
         {
             return true;

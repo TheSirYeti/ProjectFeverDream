@@ -7,7 +7,7 @@ using UnityEngine;
 public class MNode : MonoBehaviour
 {
     [SerializeField] private List<MNode> _neighbors = new List<MNode>();
-    
+
     private float _weigth = 0;
     public MNode _previouseNode = null;
     public Color nodeColor;
@@ -35,7 +35,11 @@ public class MNode : MonoBehaviour
 
     public void AddNeighbor(MNode neighbor)
     {
-        _neighbors.Add(neighbor);
+        if (neighbor && !_neighbors.Contains(neighbor))
+        {
+            
+            _neighbors.Add(neighbor);
+        }
     }
 
     public void RemoveNeighbor(MNode neighbor)
@@ -68,7 +72,7 @@ public class MNode : MonoBehaviour
     {
         return _neighbors[index];
     }
-    
+
     public int NeighboursCount()
     {
         return _neighbors.Count;
@@ -104,8 +108,18 @@ public class MNode : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
 
+        Gizmos.color = Color.red;
+        if (_neighbors.Any())
+        {
+            foreach (var neighbor in _neighbors)
+            {
+                Gizmos.DrawLine(transform.position, neighbor.transform.position);
+            }
+        }
+
+
         Gizmos.color = Color.yellow;
-        if(_previouseNode)
+        if (_previouseNode)
             Gizmos.DrawLine(transform.position, _previouseNode.transform.position);
     }
 }

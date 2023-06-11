@@ -76,7 +76,6 @@ public class NodesGenerator : MonoBehaviour
             
             multiplyDir = -1;
             actualStartRay.y -= 1;
-            Debug.Log(actualStartRay);
         }
        
 
@@ -99,10 +98,10 @@ public class NodesGenerator : MonoBehaviour
     {
         for (int i = 0; i < 2; i++)
         {
-            Debug.Log(i);
             foreach (var actualNode in _nodeList)
             {
                 MNode node = actualNode.GetComponent<MNode>();
+                Undo.RecordObject(node, "SetNeighbours");
                 node.ClearNeighbours();
 
                 Collider[] neighbours =
@@ -124,6 +123,7 @@ public class NodesGenerator : MonoBehaviour
                     checkingNeightbour.AddNeighbor(node);
                     node.AddNeighbor(checkingNeightbour);
                 }
+                PrefabUtility.RecordPrefabInstancePropertyModifications(node);
             }
 
             ClearNodes();
@@ -136,8 +136,13 @@ public class NodesGenerator : MonoBehaviour
 
         foreach (var node in _nodeList)
         {
+            Collider[] colliders =
+                Physics.OverlapSphere(node.transform.position, _nodeSize, LayerManager.LM_NODE);
+            List<GameObject> closestNodes = colliders.Select(x => x.gameObject).ToList();
+            closestNodes.Remove(node);
+            
             MNode mNode = node.GetComponent<MNode>();
-            if (Physics.CheckSphere(node.transform.position, _nodeSize, LayerManager.LM_WALL) || !mNode.HasNeighbours())
+            if (Physics.CheckSphere(node.transform.position, _nodeSize, LayerManager.LM_NodeObstacles) || !mNode.HasNeighbours() || closestNodes.Any())
             {
                 nodesToDelete.Enqueue(node);
             }
@@ -152,6 +157,11 @@ public class NodesGenerator : MonoBehaviour
         }
 
         //pathfinding.nodes = _nodeList.ToArray();
+    }
+
+    public void RemoveNulls()
+    {
+        _nodeList = _nodeList.Where(x => x != null).ToList();
     }
 
     private void OnDrawGizmos()
