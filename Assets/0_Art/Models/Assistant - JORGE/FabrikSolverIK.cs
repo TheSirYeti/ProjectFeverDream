@@ -52,7 +52,8 @@ public class FabrikSolverIK : MonoBehaviour
             //Aplicamos rotaciones
             if (i != bones.Length - 1)
                 bones[i].rotation = Quaternion.LookRotation(finalBonesPosition[i + 1] - bones[i].position);
-
+            else
+                bones[i].rotation = Quaternion.LookRotation(targetIK.position - bones[i].position);
         }
     }
 
