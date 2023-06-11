@@ -146,15 +146,23 @@ public class Model : GenericObject, IPlayerLife
         {
             EventManager.Trigger("CameraBobbing", true);
 
-            if (isRunning)
+            if (!isCrouch)
             {
-                _view.PlayLoopingSound(SoundID.RUN);
-                SoundManager.instance.StopSoundByID("WALK");
+                if (isRunning)
+                {
+                    _view.PlayLoopingSound(SoundID.RUN);
+                    SoundManager.instance.StopSoundByID("WALK");
+                }
+                else
+                {
+                    _view.PlayLoopingSound(SoundID.WALK);
+                    SoundManager.instance.StopSoundByID("RUN");
+                }
             }
             else
             {
-                _view.PlayLoopingSound(SoundID.WALK);
                 SoundManager.instance.StopSoundByID("RUN");
+                SoundManager.instance.StopSoundByID("WALK");
             }
         }
         else
@@ -337,6 +345,7 @@ public class Model : GenericObject, IPlayerLife
 
     IEnumerator SlideTime()
     {
+        SoundManager.instance.PlaySound(SoundID.SLIDE);
         yield return new WaitForSeconds(_slideDuration / 2);
 
         LeanTween.cancel(gameObject);
