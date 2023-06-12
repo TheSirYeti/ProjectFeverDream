@@ -5,9 +5,12 @@ using System.Linq;
 using UnityEngine;
 
 public class EnemyManager : GenericObject
-{
-    public Dictionary<int, List<Enemy>> enemySets = new Dictionary<int, List<Enemy>>();
-    public List<GameObject> sets;
+{ 
+    Dictionary<int, List<Enemy>> enemySets = new Dictionary<int, List<Enemy>>();
+    [SerializeField] private List<GameObject> sets;
+
+    [SerializeField] private float detectDialogueCooldown;
+    private float currentDetectDialogueCooldown = 0;
 
     private void Awake()
     {
@@ -31,6 +34,11 @@ public class EnemyManager : GenericObject
             enemySets.Add(counter, enemyList);
             counter++;
         }
+    }
+
+    public override void OnLateUpdate()
+    {
+        currentDetectDialogueCooldown -= Time.deltaTime;
     }
 
     public void EnableEnemies(object[] parameters)

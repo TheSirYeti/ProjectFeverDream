@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Networking.Types;
 using UnityEngine.ProBuilder.MeshOperations;
 using Random = UnityEngine.Random;
 
@@ -71,6 +72,11 @@ public class BaseMeleeEnemy : Enemy
         foreach (var sfx in audioSources)
         {
             audioIDs.Add(SoundManager.instance.AddSFXSource(sfx));
+        }
+        
+        foreach (var sfx in detectSFX)
+        {
+            audioDetectIDs.Add(SoundManager.instance.AddSFXSource(sfx));
         }
         
         DoFsmSetup();
@@ -168,6 +174,7 @@ public class BaseMeleeEnemy : Enemy
             animator.Play(animationPrefix + "_Detect");
             StopCoroutine(DoDetectSign());
             StartCoroutine(DoDetectSign());
+            PlayRandomDetectGreet();
         };
         
         detect.OnUpdate += () =>
@@ -178,7 +185,7 @@ public class BaseMeleeEnemy : Enemy
 
         detect.OnExit += x =>
         {
-            //EventManager.Trigger("OnEnemyDetection", enemySet);
+            EventManager.Trigger("OnEnemyDetection", enemySet);
             DoFaceTransition(FaceID.COMBAT);
         };
 
@@ -387,7 +394,13 @@ public class BaseMeleeEnemy : Enemy
         int rand = Random.Range(0, audioIDs.Count);
         PlayAudioSource(audioIDs[rand]);
     }
-    
+
+    public void PlayRandomDetectGreet()
+    {
+        int rand = Random.Range(0, audioDetectIDs.Count);
+        PlayAudioSource(audioDetectIDs[rand]);
+    }
+
     public void PlayAudioSource(int sourceID)
     {
         SoundManager.instance.PlaySoundByInt(sourceID);

@@ -87,6 +87,9 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     [Space(20)] [Header("-== SFX Properties ==-")] 
     [SerializeField] protected List<AudioSource> audioSources;
     protected List<int> audioIDs = new List<int>();
+    
+    [SerializeField] protected List<AudioSource> detectSFX;
+    protected List<int> audioDetectIDs = new List<int>();
 
     public abstract void Attack();
     
@@ -186,39 +189,12 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
 
     public void DoPathfinding()
     {
-        Debug.Log("LLEGO AL LOG DE CORRER EL PF");
-        /*Vector3 direction;
-        if (isPathfinding && nodePath != null)
-        {
-            direction = nodePath[currentNode].transform.position - transform.position;
-            
-            transform.forward = direction;
-            transform.position += transform.forward * speed * Time.deltaTime;
-            
-            transform.LookAt(new Vector3(nodePath[currentNode].transform.position.x, transform.position.y, nodePath[currentNode].transform.position.z));
-            
-            if (direction.magnitude <= minDistanceToNode)
-            {
-                currentNode++;
-                if (currentNode >= nodePath.Count)
-                {
-                    currentNode = 0;
-                    isPathfinding = false;
-                }
-            }
-        }*/
         _dir = (_actualObjective.position) - transform.position;
-
-        if (InSight(transform.position, target.transform.position))
-        {
-            isPathfinding = false;
-            return;
-        }
 
         Quaternion targetRotation = Quaternion.LookRotation(_dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, speed * Time.deltaTime);
 
-        _actualDir = _dir.normalized * speed;
+        transform.position += _dir.normalized * speed * Time.deltaTime;
 
         if (Vector3.Distance(transform.position, (_actualObjective.position)) < minDistanceToNode)
         {
@@ -231,6 +207,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
                 nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
                 _actualObjective = nodeList.GetNextNode().transform;
             }
+        }
+        
+        if (InSight(transform.position, target.transform.position))
+        {
+            isPathfinding = false;
         }
     }
     
@@ -288,8 +269,41 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
             isPathfinding = true;
         }*/
         Debug.Log("QUIERO HACER PF");
-        nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
-        _actualObjective = nodeList.GetNextNode().transform;
+
+        if (amEscaping)
+        {
+            Collider[] nodeCollisions = Physics.OverlapSphere(transform.position, 40f, LayerManager.LM_NODE);
+
+            if (!nodeCollisions.Any()) return;
+            Debug.Log("TENGO QUE ESCAPAR AAAAAAAAAAA");
+
+            int furthestNode = 0;
+            float maxDistance = -1f;
+
+            for (int i = 0; i < nodeCollisions.Length; i++)
+            {
+                var distance = Vector3.Distance(transform.position, nodeCollisions[i].transform.position);
+                if (distance > maxDistance)
+                {
+                    furthestNode = i;
+                    maxDistance = distance;
+                }
+            }
+            
+            Debug.Log(furthestNode + " - Node to go to");
+            
+            nodeList = MPathfinding._instance.GetPath(transform.position, 
+                nodeCollisions[furthestNode].transform.position);
+            
+            Debug.Log(furthestNode + " - Node to go to - " + nodeList.PathCount() + " - noed count");
+            
+            _actualObjective = nodeList.GetNextNode().transform;
+        }
+        else
+        {
+            nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
+            _actualObjective = nodeList.GetNextNode().transform;
+        }
         Debug.Log("LLEGO A TERMINAR DE CALCULAR EL PF");
     }
     

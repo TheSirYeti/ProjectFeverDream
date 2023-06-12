@@ -71,6 +71,16 @@ public class RangedEnemy : Enemy
         maxSpeed = speed;
         speed = 0;
         
+        foreach (var sfx in audioSources)
+        {
+            audioIDs.Add(SoundManager.instance.AddSFXSource(sfx));
+        }
+        
+        foreach (var sfx in detectSFX)
+        {
+            audioDetectIDs.Add(SoundManager.instance.AddSFXSource(sfx));
+        }
+        
         DoFsmSetup();
         rb.isKinematic = false;
         DoFaceTransition(FaceID.IDLE);
@@ -194,6 +204,8 @@ public class RangedEnemy : Enemy
             animator.Play(animationPrefix + "_Detect");
             DoFaceTransition(FaceID.DETECT);
             StartCoroutine(DoDetectSign());
+            
+            PlayRandomDetectGreet();
         };
         
         detect.OnUpdate += () =>
@@ -364,6 +376,7 @@ public class RangedEnemy : Enemy
         {
             DoWarningFadeOut();
             CalculatePathPreview(true);
+            isPathfinding = true;
             currentScare = timeScared;
             animator.Play("ScaredMovement");
         };
@@ -523,5 +536,21 @@ public class RangedEnemy : Enemy
 
         SendInputToFSM(RangedEnemyStates.CHASE);
         yield return null;
+    }
+    
+    public void PlayRandomDetectGreet()
+    {
+        int rand = UnityEngine.Random.Range(0, audioDetectIDs.Count);
+        PlayAudioSource(audioDetectIDs[rand]);
+    }
+    
+    public void PlayAudioSource(int sourceID)
+    {
+        SoundManager.instance.PlaySoundByInt(sourceID);
+    }
+    
+    public void StopAudioSource(int sourceID)
+    {
+        SoundManager.instance.StopSoundByInt(sourceID);
     }
 }
