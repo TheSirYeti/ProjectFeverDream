@@ -95,7 +95,7 @@ public class WeaponManager : GenericObject, IAssistUsable
         _actualWeapon.Reload();
     }
 
-    public void EquipWeapon(GenericWeapon newWeapon, bool turnOffPrevious = true, bool isFromTheFloor = false)
+    public void EquipWeapon(GenericWeapon newWeapon, bool turnOffPrevious = true, bool isFromTheFloor = false, bool changeRenderer = true)
     {
         if (_actualWeapon != null && turnOffPrevious)
         {
@@ -107,22 +107,28 @@ public class WeaponManager : GenericObject, IAssistUsable
             //}
         }
 
-        foreach (WeaponRenderer weaponStruct in _weaponsRenderer)
+        if (changeRenderer)
         {
-            foreach (Renderer render in weaponStruct._myRenders)
+            foreach (WeaponRenderer weaponStruct in _weaponsRenderer)
             {
-                render.enabled = false;
+                foreach (Renderer render in weaponStruct._myRenders)
+                {
+                    render.enabled = false;
+                }
             }
         }
 
-
         _actualWeapon = newWeapon;
-        _actualWeapon.OnWeaponEquip(transform, this, _nozzlePoint);
 
-        foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+        if (changeRenderer)
         {
-            item.enabled = true;
+            foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+            {
+                item.enabled = true;
+            }
         }
+        
+        _actualWeapon.OnWeaponEquip(transform, this, _nozzlePoint);
 
         _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
 
@@ -149,6 +155,25 @@ public class WeaponManager : GenericObject, IAssistUsable
         EventManager.Trigger("ChangeEquipedWeapontUI", -1);
         EventManager.Trigger("ChangeBulletUI", 0, 0);
         Destroy(_actualWeapon.gameObject);
+    }
+
+    public void ChangeRenderer()
+    { 
+        Debug.Log("cambiando rendererer");
+        foreach (var weaponStruct in _weaponsRenderer)
+        {
+            foreach (var render in weaponStruct._myRenders)
+            {
+                Debug.Log(render.name + " apagado");
+                render.enabled = false;
+            }
+        }
+        
+        foreach (var item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+        {
+            Debug.Log(item.name + " prendido?");
+            item.enabled = true;
+        }
     }
 
     public void UseItem(IAssistPickUp usable)

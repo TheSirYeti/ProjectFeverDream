@@ -101,17 +101,16 @@ public class MeleeWeapon : GenericWeapon
         {
             float actualPercent = usageAmmount * 100 / 10;
 
-            if (actualPercent > 75) return;
-
-            if (actualPercent > 50) EventManager.Trigger("OnBaguetteChangeState", 1);
+            if (actualPercent > 75) EventManager.Trigger("OnBaguetteChangeState", 0);
+            else if (actualPercent > 50) EventManager.Trigger("OnBaguetteChangeState", 1);
             else if (actualPercent > 25) EventManager.Trigger("OnBaguetteChangeState", 2);
             else if (actualPercent > 0) EventManager.Trigger("OnBaguetteChangeState", 3);
             else if (actualPercent <= 0)
             {
                 EventManager.Trigger("OnBaguetteChangeState", 4);
-                GameObject broken = Instantiate(brokenBagguete, transform.parent);
+                var broken = Instantiate(brokenBagguete, transform.parent);
 
-                _weaponManager.EquipWeapon(broken.GetComponent<GenericWeapon>(), false);
+                _weaponManager.EquipWeapon(broken.GetComponent<GenericWeapon>(), false, false, false);
                 Destroy(gameObject);
             }
         }

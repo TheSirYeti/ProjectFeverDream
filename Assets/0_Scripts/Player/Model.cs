@@ -400,7 +400,7 @@ public class Model : GenericObject, IPlayerLife
     void CheckOnFloor()
     {
         if (_physics.HasGravity()) _physics.RemoveAcceleration("gravity");
-        Debug.Log("Estoy chequeando si salgo del piso");
+        //Debug.Log("Estoy chequeando si salgo del piso");
         
         // if (_jumpCoroutine == null) Debug.Log("Hay corutina");
         // if (!Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
@@ -429,7 +429,7 @@ public class Model : GenericObject, IPlayerLife
     {
         if (!_physics.HasGravity()) _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
         
-        Debug.Log("Viendo si vuelvo al piso");
+        //Debug.Log("Viendo si vuelvo al piso");
         if (Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f), transform.rotation,
                 _floorMask))
         {

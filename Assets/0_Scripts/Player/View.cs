@@ -139,5 +139,11 @@ public class View : GenericObject
         }
     }
 
+    public void AEvent_ChangeRenderer()
+    {
+        Debug.Log("evento");
+        _weaponManager.ChangeRenderer();
+    }
+
     #endregion
 }

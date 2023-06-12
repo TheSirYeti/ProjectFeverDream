@@ -17,6 +17,7 @@ public class BaguetteState : GenericObject
     
     public override void OnStart()
     {
+        lastState = -1;
         endState = allBaguetteStates.Count - 1;
         EventManager.Subscribe("OnBaguetteChangeState", SetCurrentState);
     }
@@ -34,6 +35,7 @@ public class BaguetteState : GenericObject
         
         if ((int)parameters[0] == endState)
         {
+            lastState = -1;
             //EventManager.Trigger("PlayAnimation", "BigBaguetteToDualBaguette");
         }
     }
