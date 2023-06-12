@@ -18,20 +18,20 @@ public class Model : GenericObject, IPlayerLife
     Rigidbody _rb;
     Camera _camera;
 
-    [Header("-== Life Properties ==-")]
-    [SerializeField] int _maxLife;
+    [Header("-== Life Properties ==-")] [SerializeField]
+    int _maxLife;
+
     int _life;
     bool _canGetDmg = true;
     float dmgCooldown = 0.5f;
     float currentDmgCooldown = -1f;
 
-    [Space(20)]
-    [Header("-== Physics Properties ==-")]
-    [SerializeField] float _gravity = -10f;
+    [Space(20)] [Header("-== Physics Properties ==-")] [SerializeField]
+    float _gravity = -10f;
 
-    [Space(20)]
-    [Header("-== Movement Properties ==-")]
+    [Space(20)] [Header("-== Movement Properties ==-")]
     float _actualSpeed;
+
     [SerializeField] float _walkingSpeed;
     [SerializeField] float _runningSpeed;
     [SerializeField] float _slideSpeed;
@@ -39,9 +39,9 @@ public class Model : GenericObject, IPlayerLife
     [SerializeField] float _slideDuration;
     Action crouchChecker = delegate { };
 
-    [Space(20)]
-    [Header("-== Jump Properties ==-")]
-    [SerializeField] float _jumpDuration;
+    [Space(20)] [Header("-== Jump Properties ==-")] [SerializeField]
+    float _jumpDuration;
+
     [SerializeField] float _jumpForce;
     [SerializeField] float _walljumpDuration;
     [SerializeField] float _walljumpForce;
@@ -79,7 +79,7 @@ public class Model : GenericObject, IPlayerLife
     {
         UpdateManager._instance.AddObject(this);
     }
-    
+
     public override void OnAwake()
     {
         GameManager.Instance.Player = this;
@@ -94,9 +94,9 @@ public class Model : GenericObject, IPlayerLife
         _rb = GetComponent<Rigidbody>();
         _physics = new PhysicsSystem(_rb);
 
-        Transform povParent = transform.Find("Colliders");
+        Transform collidersParent = transform.Find("Colliders");
 
-        foreach (Transform child in povParent)
+        foreach (Transform child in collidersParent)
         {
             _posibleColliders.Add(child.gameObject);
             child.gameObject.SetActive(false);
@@ -174,8 +174,7 @@ public class Model : GenericObject, IPlayerLife
 
         _dir = (transform.right * hAxie + transform.forward * vAxie);
 
-        if (_jumpCoroutine == null)
-            _dir = AlignDir();
+        _dir = AlignDir();
 
         if (_dir.magnitude > 1)
             _dir.Normalize();
@@ -217,7 +216,6 @@ public class Model : GenericObject, IPlayerLife
 
             _physics.RemoveAcceleration("gravity");
 
-
             _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
 
             _canJump = false;
@@ -238,13 +236,16 @@ public class Model : GenericObject, IPlayerLife
             _jumpCoroutine = StartCoroutine(JumpDuration());
             _walljumpCoroutine = StartCoroutine(WallJumpDuration());
 
-            Collider[] orderCollisions = collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
+            Collider[] orderCollisions =
+                collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
             Collider closeCollider = orderCollisions.First();
 
 
             _physics.RemoveAcceleration("gravity");
 
-            _physics.ApplyImpulse("walljump", (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _walljumpForce, _wallJumpDesacceleration);
+            _physics.ApplyImpulse("walljump",
+                (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _walljumpForce,
+                _wallJumpDesacceleration);
             _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
 
             _canJump = false;
@@ -265,8 +266,7 @@ public class Model : GenericObject, IPlayerLife
         if (_slideCoroutine != null)
             StopCoroutine(_slideCoroutine);
 
-        if (_isOnFloor)
-            _slideCoroutine = StartCoroutine(SlideTime());
+        _slideCoroutine = StartCoroutine(SlideTime());
     }
 
     public void Crouch(int state)
@@ -279,13 +279,13 @@ public class Model : GenericObject, IPlayerLife
             _actualCollider = _posibleColliders[state];
             _actualCollider.SetActive(true);
 
-            Run(0);
+            isCrouch = true;
 
             if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
                 _actualSpeed = _crunchSpeed;
 
+            Run(0);
 
-            isCrouch = true;
         }
         else
         {
@@ -296,9 +296,7 @@ public class Model : GenericObject, IPlayerLife
             else
             {
                 crouchChecker = delegate { };
-
-                _cameraController.StartTranslate(0);
-
+                
                 _actualCollider.SetActive(false);
                 _actualCollider = _posibleColliders[state];
                 _actualCollider.SetActive(true);
@@ -388,7 +386,8 @@ public class Model : GenericObject, IPlayerLife
 
     void CheckOnFloor()
     {
-        if (_jumpCoroutine == null && !Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f), transform.rotation, _floorMask))
+        if (_jumpCoroutine == null && !Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
+                transform.rotation, _floorMask))
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
@@ -400,14 +399,16 @@ public class Model : GenericObject, IPlayerLife
 
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
 
-            _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity); ;
+            _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
+            ;
             floorChecker = CheckOffFloor;
         }
     }
 
     void CheckOffFloor()
     {
-        if (Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f), transform.rotation, _floorMask))
+        if (Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f), transform.rotation,
+                _floorMask))
         {
             if (_coyoteTimeCoroutine != null)
                 StopCoroutine(_coyoteTimeCoroutine);
@@ -419,7 +420,7 @@ public class Model : GenericObject, IPlayerLife
             _jumpCounter = 0;
 
             _isOnFloor = true;
-            
+
             SoundManager.instance.PlaySound(SoundID.JUMP_LANDING);
 
             if (isSlide)
@@ -459,14 +460,14 @@ public class Model : GenericObject, IPlayerLife
         EventManager.Trigger("ChangeHealthUI", _life);
 
         //TODO: Add SFX and VFX for player dmg
-        if(SoundManager.instance != null)
+        if (SoundManager.instance != null)
             SoundManager.instance.PlaySound(SoundID.PLAYER_HURT);
 
         currentDmgCooldown = dmgCooldown;
-        
+
         EventManager.Trigger("OnPlayerTakeDamage");
-        
-        if(_life <= 0)
+
+        if (_life <= 0)
         {
             Death();
         }
