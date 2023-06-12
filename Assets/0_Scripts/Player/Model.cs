@@ -132,8 +132,6 @@ public class Model : GenericObject, IPlayerLife
         CheckDmg();
 
         currentDmgCooldown -= Time.deltaTime;
-
-        if (_isOnFloor && _physics.HasGravity()) _physics.RemoveAcceleration("gravity");
     }
 
     public override void OnFixedUpdate()
@@ -211,7 +209,10 @@ public class Model : GenericObject, IPlayerLife
         if (_canJump)
         {
             if (_jumpCoroutine != null)
+            {
                 StopCoroutine(_jumpCoroutine);
+                _jumpCoroutine = null;
+            }
 
             _jumpCoroutine = StartCoroutine(JumpDuration());
 
@@ -224,12 +225,15 @@ public class Model : GenericObject, IPlayerLife
         }
         else
         {
-            Collider[] collisions = Physics.OverlapSphere(transform.position, 1, _wallMask);
+            var collisions = Physics.OverlapSphere(transform.position, 1, _wallMask);
 
             if (!collisions.Any()) return;
 
             if (_jumpCoroutine != null)
+            {
                 StopCoroutine(_jumpCoroutine);
+                _jumpCoroutine = null;
+            }
 
             if (_walljumpCoroutine != null)
                 StopCoroutine(_walljumpCoroutine);
@@ -237,9 +241,9 @@ public class Model : GenericObject, IPlayerLife
             _jumpCoroutine = StartCoroutine(JumpDuration());
             _walljumpCoroutine = StartCoroutine(WallJumpDuration());
 
-            Collider[] orderCollisions =
+            var orderCollisions =
                 collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
-            Collider closeCollider = orderCollisions.First();
+            var closeCollider = orderCollisions.First();
 
 
             _physics.RemoveAcceleration("gravity");
@@ -384,7 +388,6 @@ public class Model : GenericObject, IPlayerLife
         yield return new WaitForSeconds(_jumpDuration);
 
         _physics.RemoveImpulse("jump");
-        _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
         _jumpCoroutine = null;
     }
 
@@ -398,6 +401,13 @@ public class Model : GenericObject, IPlayerLife
 
     void CheckOnFloor()
     {
+        if (_physics.HasGravity()) _physics.RemoveAcceleration("gravity");
+        Debug.Log("Estoy chequeando si salgo del piso");
+        
+        // if (_jumpCoroutine == null) Debug.Log("Hay corutina");
+        // if (!Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
+        //         transform.rotation, _floorMask)) Debug.Log("No hay piso");
+        
         if (_jumpCoroutine == null && !Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
                 transform.rotation, _floorMask))
         {
@@ -419,6 +429,9 @@ public class Model : GenericObject, IPlayerLife
 
     void CheckOffFloor()
     {
+        if (!_physics.HasGravity()) _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
+        
+        Debug.Log("Viendo si vuelvo al piso");
         if (Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f), transform.rotation,
                 _floorMask))
         {
@@ -426,7 +439,10 @@ public class Model : GenericObject, IPlayerLife
                 StopCoroutine(_coyoteTimeCoroutine);
 
             if (_jumpCoroutine != null)
+            {
                 StopCoroutine(_jumpCoroutine);
+                _jumpCoroutine = null;
+            }
 
             _canJump = true;
             _jumpCounter = 0;
