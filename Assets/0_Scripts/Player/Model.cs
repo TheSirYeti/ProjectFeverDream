@@ -333,13 +333,11 @@ public class Model : GenericObject, IPlayerLife
         {
             if (state == 1)
             {
-                if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
-                    _actualSpeed = _runningSpeed;
+                _actualSpeed = _runningSpeed;
             }
             else
             {
-                if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
-                    _actualSpeed = _walkingSpeed;
+                _actualSpeed = _walkingSpeed;
             }
         }
     }

@@ -9,6 +9,7 @@ public class CheckpointManager : GenericObject
     private int currentCheckpoint;
     [SerializeField] private List<CheckpointTrigger> checkpoints;
     [SerializeField] private Transform playerPos;
+    [SerializeField] private Transform jorgePos;
     
     private void Awake()
     {
@@ -48,6 +49,7 @@ public class CheckpointManager : GenericObject
     void DoPlayerSpawn()
     {
         playerPos.position = checkpoints[currentCheckpoint].GetSpawnpoint().position;
+        jorgePos.position = playerPos.position + playerPos.forward * 2;
     }
 
     void ResetCheckpoints(object[] parameters)
