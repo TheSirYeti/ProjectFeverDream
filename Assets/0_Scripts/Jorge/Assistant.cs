@@ -266,19 +266,22 @@ public class Assistant : GenericObject
         {
             _dir = (_actualObjective.position) - transform.position;
 
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
+            {
+                SendInputToFSM(JorgeStates.PATHFINDING);
+            }
+            
             _dir.Normalize();
 
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
-            if (_isInteracting) return;
-
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, _dir, out hit, _dir.magnitude, _collisionMask))
+            if (_isInteracting)
             {
-                SendInputToFSM(JorgeStates.PATHFINDING);
+                Debug.Log("no puedo pasar");
+                return;
             }
-
+            
             if (Vector3.Distance(transform.position, (_actualObjective.position)) < _interactDistance)
             {
                 _actualDir = Vector3.zero;
