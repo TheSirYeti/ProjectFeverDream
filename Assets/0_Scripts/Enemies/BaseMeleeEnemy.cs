@@ -385,17 +385,17 @@ public class BaseMeleeEnemy : Enemy
     public void PlayRandomSlash()
     {
         int rand = Random.Range(0, audioIDs.Count);
-        //PlayAudioSource(audioIDs[rand]);
+        PlayAudioSource(audioIDs[rand]);
     }
     
     public void PlayAudioSource(int sourceID)
     {
-        SoundManager.instance.PlaySoundByInt(audioIDs[sourceID]);
+        SoundManager.instance.PlaySoundByInt(sourceID);
     }
     
     public void StopAudioSource(int sourceID)
     {
-        SoundManager.instance.StopSoundByInt(audioIDs[sourceID]);
+        SoundManager.instance.StopSoundByInt(sourceID);
     }
 
     #region EXTRA VIEW METHODS

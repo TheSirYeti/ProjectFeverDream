@@ -11,6 +11,9 @@ public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
     bool _isClose = true;
     [SerializeField] Animator _door;
     [SerializeField] Transform _interactPoint;
+    [Space(20)] 
+    [SerializeField] private List<AudioSource> audioSources;
+    private List<int> audioIDs = new List<int>();
 
     [Header("TEMP")] [SerializeField] 
     private Material activatedMat;
@@ -25,6 +28,11 @@ public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
     {
         if(renderers == null)
             renderers = GetComponentsInChildren<Renderer>().ToList();
+        
+        foreach (var sfx in audioSources)
+        {
+            audioIDs.Add(SoundManager.instance.AddSFXSource(sfx));
+        }
     }
 
     public Transform GetTransform()
@@ -40,6 +48,7 @@ public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
         }
         
         _door.SetBool("open", true);
+        SoundManager.instance.PlaySoundByInt(audioIDs[0]);
         _isClose = false;
     }
 
