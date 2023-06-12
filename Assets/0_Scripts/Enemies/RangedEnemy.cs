@@ -204,8 +204,9 @@ public class RangedEnemy : Enemy
             animator.Play(animationPrefix + "_Detect");
             DoFaceTransition(FaceID.DETECT);
             StartCoroutine(DoDetectSign());
+            EventManager.Trigger("OnFirstDetection");
             
-            PlayRandomDetectGreet();
+            //PlayRandomDetectGreet();
         };
         
         detect.OnUpdate += () =>

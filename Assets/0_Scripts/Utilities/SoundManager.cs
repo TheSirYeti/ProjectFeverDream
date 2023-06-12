@@ -487,7 +487,14 @@ public enum SoundID
     //21
     RUN,
     //22
-    JUMP_LANDING
+    JUMP_LANDING,
+    ENEMY_DETECT_1,
+    ENEMY_DETECT_2,
+    ENEMY_DETECT_3,
+    ENEMY_DETECT_4,
+    ENEMY_DETECT_5,
+    ENEMY_DETECT_6,
+    ENEMY_DETECT_7,
 
 }
 

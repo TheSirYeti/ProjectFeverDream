@@ -174,7 +174,8 @@ public class BaseMeleeEnemy : Enemy
             animator.Play(animationPrefix + "_Detect");
             StopCoroutine(DoDetectSign());
             StartCoroutine(DoDetectSign());
-            PlayRandomDetectGreet();
+            EventManager.Trigger("OnFirstDetection");
+            //PlayRandomDetectGreet();
         };
         
         detect.OnUpdate += () =>

@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyManager : GenericObject
 { 
     Dictionary<int, List<Enemy>> enemySets = new Dictionary<int, List<Enemy>>();
     [SerializeField] private List<GameObject> sets;
 
-    [SerializeField] private float detectDialogueCooldown;
-    private float currentDetectDialogueCooldown = 0;
+    [SerializeField] private int detectGreetsCount = 7;
+    [SerializeField] private float detectDialogueCooldown = 5f;
+    [SerializeField] private float currentDetectDialogueCooldown = 0;
 
     private void Awake()
     {
@@ -20,6 +22,7 @@ public class EnemyManager : GenericObject
     public override void OnStart()
     {
         EventManager.Subscribe("OnEnemyDetection", EnableEnemies);
+        EventManager.Subscribe("OnFirstDetection", DoEnemyDetectDialogue);
         
         int counter = 0;
         foreach (var set in sets)
@@ -36,7 +39,7 @@ public class EnemyManager : GenericObject
         }
     }
 
-    public override void OnLateUpdate()
+    public override void OnUpdate()
     {
         currentDetectDialogueCooldown -= Time.deltaTime;
     }
@@ -53,6 +56,15 @@ public class EnemyManager : GenericObject
             {
                 enemy.SetDetection();
             }
+        }
+    }
+
+    void DoEnemyDetectDialogue(object[] parameters)
+    {
+        if (currentDetectDialogueCooldown <= 0)
+        {
+            currentDetectDialogueCooldown = detectDialogueCooldown;
+            SoundManager.instance.PlaySoundByID("ENEMY_DETECT_" + Random.Range(1, detectGreetsCount + 1));
         }
     }
 }
