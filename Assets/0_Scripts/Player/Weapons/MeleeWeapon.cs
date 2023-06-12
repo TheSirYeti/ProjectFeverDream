@@ -12,6 +12,8 @@ public class MeleeWeapon : GenericWeapon
 
 
     [SerializeField] bool _isBroken = false;
+    [SerializeField] private Transform[] hitPoints;
+    private int _indexHitPoint = 0;
 
     [SerializeField] GameObject brokenBagguete;
 
@@ -30,7 +32,7 @@ public class MeleeWeapon : GenericWeapon
     {
         UpdateManager._instance.AddObject(this);
     }
-    
+
     public override void OnStart()
     {
         _meleeCollider = GetComponent<BoxCollider>();
@@ -100,7 +102,8 @@ public class MeleeWeapon : GenericWeapon
             float actualPercent = usageAmmount * 100 / 10;
 
             if (actualPercent > 75) return;
-            else if (actualPercent > 50) EventManager.Trigger("OnBaguetteChangeState", 1);
+
+            if (actualPercent > 50) EventManager.Trigger("OnBaguetteChangeState", 1);
             else if (actualPercent > 25) EventManager.Trigger("OnBaguetteChangeState", 2);
             else if (actualPercent > 0) EventManager.Trigger("OnBaguetteChangeState", 3);
             else if (actualPercent <= 0)
@@ -148,21 +151,28 @@ public class MeleeWeapon : GenericWeapon
 
             EventManager.Trigger("CameraShake", true);
 
-            if (!_actualEnemiesHit.Any())
+            EventManager.Trigger("VFX_BaggueteHit", _indexHitPoint);
+
+            if (_isBroken)
             {
-                usageAmmount--;
-
-                usageAmmount = Mathf.Clamp(usageAmmount, 0, _maxUsageAmmount);
-
-                CheckUsage();
+                _indexHitPoint++;
+                if (_indexHitPoint > 1)
+                    _indexHitPoint = 0;
             }
 
-            _actualEnemiesHit.Add(damagableInterface);
             damagableInterface.TakeDamage("Body", _weaponSO.dmg, _weaponSO.hasKnockback);
+
+            if (_actualEnemiesHit.Any()) return;
+
+            _actualEnemiesHit.Add(damagableInterface);
+            
+            usageAmmount--;
+            usageAmmount = Mathf.Clamp(usageAmmount, 0, _maxUsageAmmount);
+
+            CheckUsage();
         }
     }
 
-    //solucionar despues
     public override void OnClick()
     {
         _weaponManager._view.SetInt("actualAttack", _actualAttack);

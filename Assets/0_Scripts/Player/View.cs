@@ -7,7 +7,15 @@ public class View : GenericObject
     Model _model;
     Animator _animator;
     WeaponManager _weaponManager;
+
+    [SerializeField] private Transform[] _hands;
     
+    [SerializeField] List<ParticleSystem> _fullBaggeteSlice;
+    [SerializeField] List<ParticleSystem> _brokenBaggeteSlice;
+
+    [SerializeField] List<ParticleSystem> _toasterParticles;
+
+    [SerializeField] ParticleSystem _bagguetHit;
     
     private void Awake()
     {
@@ -18,28 +26,32 @@ public class View : GenericObject
     {
         EventManager.Subscribe("OnViewStart", OnViewStart);
         EventManager.Subscribe("PlayAnimation", PlayAnimation);
+        EventManager.Subscribe("VFX_FullSlice", FullSlice);
+        EventManager.Subscribe("VFX_BrokenSlice", BrokenSlice);
+        EventManager.Subscribe("VFX_BaggueteHit", BagguetsHitEffect);
+        EventManager.Subscribe("VFX_ToasterON", ToasterVFX_ON);
+        EventManager.Subscribe("VFX_ToasterOFF", ToasterVFX_OFF);
+
+        _bagguetHit.transform.parent = null;
         _animator = GetComponent<Animator>();
     }
-
-    public void SetAnimatorController(RuntimeAnimatorController animCont)
-    {
-        _animator.runtimeAnimatorController = animCont;
-    }
-
-    public void OnViewStart(params object[] parameters)
+    
+    private void OnViewStart(params object[] parameters)
     {
         _model = (Model)parameters[0];
         _weaponManager = (WeaponManager)parameters[1];
     }
 
-    void PlayAnimation(params object[] parameters)
+    #region Animator
+    
+    public void SetAnimatorController(RuntimeAnimatorController animCont)
+    {
+        _animator.runtimeAnimatorController = animCont;
+    }
+    
+    public void PlayAnimation(params object[] parameters)
     {
         _animator.Play((string)parameters[0]);
-    }
-
-    void ChangeAnimationSpeed(params object[] parameters)
-    {
-        //_animator.GetCurrentAnimatorClipInfo(0).
     }
 
     public void SetTrigger(string triggerName)
@@ -61,26 +73,60 @@ public class View : GenericObject
     {
         _animator.SetInteger(intName, value);
     }
+    
+    #endregion
 
-    public void PlayAnimation(string animationName)
+
+    #region Weapons VFX
+
+    void FullSlice(params object[] parameters)
     {
-        _animator.Play(animationName);
+        _fullBaggeteSlice[(int)parameters[0]].Play();
     }
 
-    //Seccion de Eventos
+    void BrokenSlice(params object[] parameters)
+    {
+        _brokenBaggeteSlice[(int)parameters[0]].Play();
+    }
+
+    void BagguetsHitEffect(params object[] parameters)
+    {
+        
+        Transform newParticlePos = _hands[(int)parameters[0]];
+        _bagguetHit.transform.position = newParticlePos.position;
+        _bagguetHit.transform.rotation = newParticlePos.rotation;
+
+        _bagguetHit.Play();
+    }
+
+    void ToasterVFX_ON(params object[] parameters)
+    {
+        _toasterParticles[(int)parameters[0]].Play();
+    }
+
+    void ToasterVFX_OFF(params object[] parameters)
+    {
+        _toasterParticles[(int)parameters[0]].Stop();
+    }
+
+    #endregion
+
+
+    #region Events
+
     public void ShootEvent()
     {
         _weaponManager.ExecuteShoot();
     }
 
-    public void BrokenBaggueteVFX(int attack)
+    public void AEvent_FullBaggueteVFX(int attack)
     {
-        EventManager.Trigger("VFX_BrokenSlice", attack);
+        FullSlice(attack);
     }
-
-    public void FullBaggueteVFX(int attack)
+    
+    public void AEvent_BrokenBaggueteVFX(int attack)
     {
-        EventManager.Trigger("VFX_FullSlice", attack);
+        BrokenSlice(attack);
     }
 
     public void PlayLoopingSound(SoundID soundID)
@@ -92,4 +138,6 @@ public class View : GenericObject
             SoundManager.instance.PlaySound(soundID, true);
         }
     }
+
+    #endregion
 }
