@@ -481,6 +481,7 @@ public class RangedEnemy : Enemy
     {
         if (wasDetected) return;
 
+        DoFaceTransition(FaceID.COMBAT);
         wasDetected = true;
         SendInputToFSM(RangedEnemyStates.CHASE);
     }

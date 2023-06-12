@@ -502,7 +502,8 @@ public enum MusicID
 {
     TEST_JIGGY,
     INTRO_JINGLE,
-    MAINMENU
+    MAINMENU,
+    BATTLE_MUSIC
 }
 
 public enum VoiceLineID
