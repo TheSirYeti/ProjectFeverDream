@@ -20,6 +20,7 @@ public class MainMenuManager : GenericObject
     
     public override void OnStart()
     {
+        PlayerPrefs.SetFloat("CurrentCheckpoint", 0);
         SoundManager.instance.StopAllMusic();
         SoundManager.instance.StopAllSounds();
         SoundManager.instance.PlayMusic(MusicID.MAINMENU, true);

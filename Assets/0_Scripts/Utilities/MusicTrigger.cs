@@ -7,6 +7,8 @@ public class MusicTrigger : GenericObject
 {
     private bool hasBeenTriggered = false;
     [SerializeField] private MusicID musicID;
+    [SerializeField] private bool loop;
+    
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -17,7 +19,7 @@ public class MusicTrigger : GenericObject
         if (other.gameObject.tag == "Player" && !hasBeenTriggered)
         {
             hasBeenTriggered = true;
-            SoundManager.instance.PlayMusic(musicID);
+            SoundManager.instance.PlayMusic(musicID, loop);
         }
         
     }
