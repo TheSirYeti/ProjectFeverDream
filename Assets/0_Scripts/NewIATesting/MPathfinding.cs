@@ -68,9 +68,8 @@ public class MPathfinding : GenericObject
     {
         checker = new List<MNode>();
 
-        Debug.Log("Path...");
-        Stopwatch timer = new Stopwatch();
-        timer.Start();
+        // Stopwatch timer = new Stopwatch();
+        // timer.Start();
 
         actualPath = new Path();
         closeNodes = new HashSet<MNode>();
@@ -84,9 +83,9 @@ public class MPathfinding : GenericObject
 
         AStar();
 
-        timer.Stop();
-        long ts = timer.ElapsedMilliseconds;
-        Debug.Log("Termine en: " + ts + " milisegundos");
+        // timer.Stop();
+        // long ts = timer.ElapsedMilliseconds;
+        // Debug.Log("Termine en: " + ts + " milisegundos");
 
         //TestCleanUp();
 

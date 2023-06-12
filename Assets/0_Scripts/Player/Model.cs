@@ -59,9 +59,10 @@ public class Model : GenericObject, IPlayerLife
     public bool isRunning { get; private set; } = false;
     public bool isSlide { get; private set; } = false;
 
-    int _jumpCounter = 0;
-    bool _canJump = false;
-    bool _isOnFloor = false;
+    private int _jumpCounter = 0;
+    private bool _canJump = false;
+    private bool _isOnFloor = false;
+    private bool _slideSoundChecker = false;
 
     // Coroutines
     Coroutine _slideCoroutine;
@@ -281,29 +282,32 @@ public class Model : GenericObject, IPlayerLife
 
             isCrouch = true;
 
-            if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+            if (_isOnFloor)
                 _actualSpeed = _crunchSpeed;
 
             Run(0);
-
         }
         else
         {
-            if (Physics.Raycast(transform.position - Vector3.up, Vector3.up, 2f, _floorMask))
+            if (Physics.CheckBox(transform.position, new Vector3(0.5f, 0.2f, 0.5f), transform.rotation, LayerManager.LM_FLOOR))
             {
                 crouchChecker = CheckRoof;
             }
             else
             {
+                isCrouch = false;
                 crouchChecker = delegate { };
-                
+
                 _actualCollider.SetActive(false);
                 _actualCollider = _posibleColliders[state];
                 _actualCollider.SetActive(true);
+                
+                _cameraController.StartTranslate(0);
 
-                if (Physics.Raycast(transform.position, transform.up * -1, 1.5f, _floorMask))
+                if (_isOnFloor && !isRunning)
                     _actualSpeed = _walkingSpeed;
-                isCrouch = false;
+                else if (_isOnFloor && isRunning)
+                    Run(1);
             }
         }
     }
@@ -343,7 +347,12 @@ public class Model : GenericObject, IPlayerLife
 
     IEnumerator SlideTime()
     {
-        SoundManager.instance.PlaySound(SoundID.SLIDE);
+        if (!_slideSoundChecker)
+        {
+            SoundManager.instance.PlaySound(SoundID.SLIDE);
+            _slideSoundChecker = true;
+        }
+        
         yield return new WaitForSeconds(_slideDuration / 2);
 
         LeanTween.cancel(gameObject);
@@ -356,9 +365,12 @@ public class Model : GenericObject, IPlayerLife
         yield return new WaitForSeconds(_slideDuration / 2);
 
         _cameraController.ChangeRunningFOV(0);
+        isSlide = false;
+        _slideSoundChecker = false;
 
         if (isCrouch) _actualSpeed = _crunchSpeed;
         else if (!isRunning) _actualSpeed = _walkingSpeed;
+        else _actualSpeed = _runningSpeed;
     }
 
     IEnumerator CoyoteTime()
@@ -400,7 +412,7 @@ public class Model : GenericObject, IPlayerLife
             _coyoteTimeCoroutine = StartCoroutine(CoyoteTime());
 
             _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
-            ;
+
             floorChecker = CheckOffFloor;
         }
     }
@@ -423,8 +435,10 @@ public class Model : GenericObject, IPlayerLife
 
             SoundManager.instance.PlaySound(SoundID.JUMP_LANDING);
 
-            if (isSlide)
+            if (isSlide && isCrouch)
                 _slideCoroutine = StartCoroutine(SlideTime());
+            else
+                isSlide = false;
 
             _physics.RemoveAcceleration("gravity");
 
@@ -434,7 +448,7 @@ public class Model : GenericObject, IPlayerLife
 
     void CheckRoof()
     {
-        if (!Physics.Raycast(transform.position - transform.up, Vector3.up, 1.1f, _floorMask))
+        if (!Physics.CheckBox(transform.position, new Vector3(0.5f, 0.2f, 0.5f), transform.rotation, LayerManager.LM_FLOOR))
         {
             Crouch(0);
         }

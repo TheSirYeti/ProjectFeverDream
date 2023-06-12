@@ -155,7 +155,7 @@ public class Assistant : GenericObject
 
         follow.OnEnter += x =>
         {
-            Debug.Log("follow");
+            //Debug.Log("follow");
             _actualObjective = _player;
         };
 
@@ -199,7 +199,7 @@ public class Assistant : GenericObject
 
         pathFinding.OnEnter += x =>
         {
-            Debug.Log("path");
+            //Debug.Log("path");
             nodeList = MPathfinding._instance.GetPath(transform.position, _player.position);
             _actualObjective = nodeList.GetNextNode().transform;
         };
@@ -253,7 +253,7 @@ public class Assistant : GenericObject
 
         interact.OnEnter += x =>
         {
-            Debug.Log("interact");
+            //Debug.Log("interact");
 
             _interactuable = _actualObjective.gameObject.GetComponent<IAssistInteract>();
             if (_interactuable == null)
@@ -328,7 +328,7 @@ public class Assistant : GenericObject
 
         pickup.OnEnter += x =>
         {
-            Debug.Log("Pick Up");
+            //Debug.Log("Pick Up");
         };
 
         pickup.OnUpdate += () =>
@@ -375,7 +375,7 @@ public class Assistant : GenericObject
         useit.OnEnter += x =>
         {
             _actualObjective = _holdingItem.GetTarget();
-            Debug.Log(_actualObjective.name);
+            //Debug.Log(_actualObjective.name);
         };
 
         useit.OnUpdate += () =>
@@ -423,7 +423,7 @@ public class Assistant : GenericObject
 
         hide.OnEnter += x =>
         {
-            Debug.Log("hide");
+            //Debug.Log("hide");
 
             Collider[] hidingSpots = Physics.OverlapSphere(_player.position, _hidingSpotsDetectionDistance, _hidingSpotsMask);
 
