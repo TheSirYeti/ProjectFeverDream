@@ -526,11 +526,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.18
+      value: -13.52
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.09
+      value: 3.11
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
       propertyPath: m_LocalPosition.z
@@ -566,10 +566,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
       propertyPath: m_Name
-      value: DoorScreen (1)
+      value: DoorScreen
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
+--- !u!1 &300202495 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
+  m_PrefabInstance: {fileID: 300202494}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &300202496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300202495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271c580db5fd384429cdac899152e9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+  _outlineSettings:
+    _outlineSettings: {fileID: 0}
+    _outlineColor: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 1}
+    _outlineWidth: 10
+    _outlineIntensity: 3.1
+    _outlineAlphaCutoff: 0.9
+    _outlineMode: 0
+  _ignoreLayerMask: 0
+  _cameraEvent: 15
+  _targetCamera: {fileID: 0}
+  _updateRenderers: 0
 --- !u!1 &306695993 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ea57949420af01245a9a925f63c64e41, type: 3}
@@ -12513,6 +12542,7 @@ GameObject:
   - component: {fileID: 885405561289675098}
   - component: {fileID: 1435910703154976296}
   - component: {fileID: 4700183196292257220}
+  - component: {fileID: 6775857392837469594}
   m_Layer: 0
   m_Name: OfficialCamSystem
   m_TagString: MainCamera
@@ -12520,6 +12550,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &6775857392837469594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6775857392837469593}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270d3185d159bf54fb4cddbb42235437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+  _outlineLayers: {fileID: 0}
+  _cameraEvent: 15
 --- !u!1 &6809594544085709735
 GameObject:
   m_ObjectHideFlags: 0
@@ -13064,6 +13109,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
+  _hands: []
+  _fullBaggeteSlice: []
+  _brokenBaggeteSlice: []
+  _toasterParticles: []
+  _bagguetHit: {fileID: 0}
 --- !u!4 &7495445716861842093
 Transform:
   m_ObjectHideFlags: 0
