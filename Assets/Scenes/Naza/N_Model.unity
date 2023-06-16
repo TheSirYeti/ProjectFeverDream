@@ -479,6 +479,7 @@ MonoBehaviour:
   - {fileID: 333315272}
   - {fileID: 133969721}
   - {fileID: 1029464452}
+  bonesleghts: []
   solverInterations: 4
   targetIK: {fileID: 1225826857}
 --- !u!4 &296276327
@@ -7735,8 +7736,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1280359523}
-  - component: {fileID: 1280359522}
   - component: {fileID: 1280359524}
+  - component: {fileID: 1280359522}
   m_Layer: 0
   m_Name: Assistant_model
   m_TagString: Untagged
@@ -7759,7 +7760,7 @@ MonoBehaviour:
   fanObject:
   - {fileID: 132933377}
   - {fileID: 1503201105}
-  fanSpeed: 5
+  fanSpeed: 7
 --- !u!4 &1280359523
 Transform:
   m_ObjectHideFlags: 0
@@ -7792,8 +7793,8 @@ MonoBehaviour:
   talking: 0
   neutral: 0
   angry: 0
-  _controlFace: 0
-  _speedTalking: 0.205
+  _controlFace: 2
+  _speedTalking: 0.308
   _typeMouth: 1
   _noMesh: 1
 --- !u!1 &1300168842
@@ -8334,7 +8335,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: a5cc4a846b826564fa4a579fce16cec5, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a5cc4a846b826564fa4a579fce16cec5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8464,6 +8465,10 @@ PrefabInstance:
       propertyPath: m_BlendShapeWeights.Array.data[2]
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: a5cc4a846b826564fa4a579fce16cec5, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 63591011680ba114596febf2bc1f441e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a5cc4a846b826564fa4a579fce16cec5, type: 3}
 --- !u!4 &1503201105 stripped
@@ -11165,6 +11170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1332317103120079419}
+  - component: {fileID: 2346124828431175990}
   m_Layer: 0
   m_Name: NewOfficialHands
   m_TagString: Untagged
@@ -11172,6 +11178,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2346124828431175990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346124828431175989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac0b490b4543c54f805c34f14bcaaea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  _controlFace: 0
 --- !u!4 &2354812817213085069
 Transform:
   m_ObjectHideFlags: 0
