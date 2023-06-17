@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class View : GenericObject
 {
@@ -8,7 +9,7 @@ public class View : GenericObject
     Animator _animator;
     WeaponManager _weaponManager;
 
-    [SerializeField] private Transform[] _hands;
+    [SerializeField] private Transform _hitParticlesPoint;
     
     [SerializeField] List<ParticleSystem> _fullBaggeteSlice;
     [SerializeField] List<ParticleSystem> _brokenBaggeteSlice;
@@ -91,10 +92,9 @@ public class View : GenericObject
 
     void BagguetsHitEffect(params object[] parameters)
     {
-        
-        Transform newParticlePos = _hands[(int)parameters[0]];
-        _bagguetHit.transform.position = newParticlePos.position;
-        _bagguetHit.transform.rotation = newParticlePos.rotation;
+        Debug.Log("a");
+        _bagguetHit.transform.position = _hitParticlesPoint.position;
+        _bagguetHit.transform.rotation = _hitParticlesPoint.rotation;
 
         _bagguetHit.Play();
     }
@@ -141,7 +141,6 @@ public class View : GenericObject
 
     public void AEvent_ChangeRenderer()
     {
-        Debug.Log("evento");
         _weaponManager.ChangeRenderer();
     }
 

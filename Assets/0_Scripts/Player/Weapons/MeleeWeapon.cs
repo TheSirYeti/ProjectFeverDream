@@ -13,7 +13,6 @@ public class MeleeWeapon : GenericWeapon
 
     [SerializeField] bool _isBroken = false;
     [SerializeField] private Transform[] hitPoints;
-    private int _indexHitPoint = 0;
 
     [SerializeField] GameObject brokenBagguete;
 
@@ -150,14 +149,7 @@ public class MeleeWeapon : GenericWeapon
 
             EventManager.Trigger("CameraShake", true);
 
-            EventManager.Trigger("VFX_BaggueteHit", _indexHitPoint);
-
-            if (_isBroken)
-            {
-                _indexHitPoint++;
-                if (_indexHitPoint > 1)
-                    _indexHitPoint = 0;
-            }
+            EventManager.Trigger("VFX_BaggueteHit");
 
             damagableInterface.TakeDamage("Body", _weaponSO.dmg, _weaponSO.hasKnockback);
 
