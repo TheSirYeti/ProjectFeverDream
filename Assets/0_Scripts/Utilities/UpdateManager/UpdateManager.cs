@@ -12,10 +12,19 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     private List<GenericObject> _allObjects = new List<GenericObject>();
 
-    private List<IOnUpdate> _pausableUpdates = new List<IOnUpdate>();
-    private List<IOnUpdate> _continousUpdates = new List<IOnUpdate>();
+    // private List<IOnUpdate> _pausableUpdates = new List<IOnUpdate>();
+    // private List<IOnUpdate> _continousUpdates = new List<IOnUpdate>();
 
-    private Queue<GenericObject> _removeQueue = new Queue<GenericObject>();
+    private Action _pausableUpdates = delegate {  };
+    private Action _continuousUpdates = delegate {  };
+    
+    private Action _pausableFixedUpdates = delegate {  };
+    private Action _continuousFixedUpdates = delegate {  };
+    
+    private Action _pausableLateUpdates = delegate {  };
+    private Action _continuousLateUpdates = delegate {  };
+
+    //private Queue<GenericObject> _removeQueue = new Queue<GenericObject>();
 
     private PriorityQueue<GenericObject> _awakeQueue = new PriorityQueue<GenericObject>();
     private PriorityQueue<GenericObject> _startQueue = new PriorityQueue<GenericObject>();
@@ -36,61 +45,31 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
     {
         if (_isLoading) return;
 
-        if (_continousUpdates.Any())
-        {
-            foreach (var update in _continousUpdates)
-            {
-                update.OnUpdate();
-            }
-        }
+        _continuousUpdates();
 
         if (_gamePause) return;
 
-        if (_pausableUpdates.Any())
-        {
-            foreach (var update in _pausableUpdates)
-            {
-                update.OnUpdate();
-            }
-        }
+        _pausableUpdates();
     }
 
     private void FixedUpdate()
     {
         if (_isLoading) return;
 
-        if (_continousUpdates.Any())
-        {
-            foreach (var update in _continousUpdates)
-            {
-                update.OnFixedUpdate();
-            }
-        }
+        _continuousFixedUpdates();
 
         if (_gamePause) return;
 
-        if (_pausableUpdates.Any())
-        {
-            foreach (var update in _pausableUpdates)
-            {
-                update.OnFixedUpdate();
-            }
-        }
+        _pausableFixedUpdates();
     }
 
     private void LateUpdate()
     {
-        while (_removeQueue.Count > 0)
-        {
-            GenericObject obj = _removeQueue.Dequeue();
-
-            _allObjects.Remove(obj);
-
-            if (obj.isPausable)
-                _pausableUpdates.Remove(obj);
-            else
-                _continousUpdates.Remove(obj);
-        }
+        if (_isLoading) return;
+        _continuousLateUpdates();
+        
+        if (_gamePause) return;
+        _pausableLateUpdates();
     }
 
     public void OnSceneLoad()
@@ -101,9 +80,8 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
     public void OnSceneUnload()
     {
         _allObjects = new List<GenericObject>();
-        _pausableUpdates = new List<IOnUpdate>();
-        _continousUpdates = new List<IOnUpdate>();
-        _removeQueue = new Queue<GenericObject>();
+        _pausableUpdates = delegate {  };
+        _continuousUpdates = delegate {  };
         _gamePause = false;
 
         if (initCoroutine != null) StopCoroutine(initCoroutine);
@@ -116,7 +94,20 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     public void RemoveObject(GenericObject genericObject)
     {
-        _removeQueue.Enqueue(genericObject);
+        IOnUpdate updateObject = genericObject;
+
+        if (genericObject.isPausable)
+        {
+            _pausableUpdates -= updateObject.OnUpdate;
+            _pausableFixedUpdates -= updateObject.OnFixedUpdate;
+            _pausableLateUpdates -= updateObject.OnLateUpdate;
+        }
+        else
+        {
+            _continuousUpdates -= updateObject.OnUpdate;
+            _continuousFixedUpdates -= updateObject.OnFixedUpdate;
+            _pausableLateUpdates -= updateObject.OnLateUpdate;
+        }
     }
 
     private IEnumerator StartObject()
@@ -156,9 +147,17 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
                 _allObjects.Add(obj);
 
                 if (obj.isPausable)
-                    _pausableUpdates = _allObjects.Where(x => x.isPausable).Select(x => x as IOnUpdate).ToList();
+                {
+                    _pausableUpdates += obj.OnUpdate;
+                    _pausableFixedUpdates += obj.OnFixedUpdate;
+                    _pausableLateUpdates += obj.OnLateUpdate;
+                }
                 else
-                    _continousUpdates = _allObjects.Where(x => !x.isPausable).Select(x => x as IOnUpdate).ToList();
+                {
+                    _continuousUpdates += obj.OnUpdate;
+                    _continuousFixedUpdates += obj.OnFixedUpdate;
+                    _continuousLateUpdates += obj.OnLateUpdate;
+                }
             }
         }
     }
