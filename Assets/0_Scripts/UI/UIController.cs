@@ -18,6 +18,7 @@ public class UIController : GenericObject
     [SerializeField] private List<GameObject> weaponRegion;
     [SerializeField] private List<GameObject> objectiveRegion;
     int _actualWeapon = 0;
+    [Space(20)]
     [SerializeField] private Animator redScreenAnimator;
 
     [Header("ObjetiveText")]
@@ -25,8 +26,11 @@ public class UIController : GenericObject
     [SerializeField] TextMeshProUGUI _descriptionObjetive;
     [SerializeField] TextMeshProUGUI _progressObjective;
 
-    [Header("GameObjects")]
-    [SerializeField] GameObject hitmarker, hitmarkerDead, hitmarkerWeak, hitmarkerHeadshot;
+    [Header("Hitmarkers")] 
+    [SerializeField] GameObject hitmarker; 
+    [SerializeField] GameObject hitmarkerDead, hitmarkerWeak, hitmarkerHeadshot;
+    
+    [Space(10)] 
     [SerializeField] GameObject playerDamageMarker;
     [SerializeField] GameObject crosshair;
 
@@ -44,13 +48,10 @@ public class UIController : GenericObject
     
     private Camera cam;
 
+    [Header("Interactable")]
     [SerializeField] private TextMeshProUGUI _interactuableUI;
 
-    [SerializeField] Color _baseTextColor;
 
-    [SerializeField] TextMeshProUGUI fpsCounter;
-
-    
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -58,21 +59,7 @@ public class UIController : GenericObject
     
     public override void OnStart()
     {
-        EventManager.Subscribe("ChangeHealthUI", ChangeHealthUI);
-        EventManager.Subscribe("ChangeBulletUI", ChangeBulletUI);
-        EventManager.Subscribe("ChangeReserveBulletUI", ChangeReserveBulletUI);
-        EventManager.Subscribe("ChangeEquipedWeapontUI", ChangeEquipedWeapontUI);
-        EventManager.Subscribe("OnDamageableHit", TriggerHitmarker);
-        EventManager.Subscribe("PlayerDamage", TriggerPlayerDamage);
-        EventManager.Subscribe("OnADSEnabled", EnableADS);
-        EventManager.Subscribe("OnADSDisabled", DisableADS);
-        EventManager.Subscribe("ChangeObjetive", ChangesObjective);
-        EventManager.Subscribe("ChangeObjectiveProgress", ChangeObjectiveProgress);
-        EventManager.Subscribe("InteractUI", InteractUI);
-        EventManager.Subscribe("OnSubtitleOn", DoSubtitle);
-        EventManager.Subscribe("OnSubtitleOff", DisableSubtitle);
-        EventManager.Subscribe("OnAssistantPing", DoPingStart);
-        EventManager.Subscribe("OnPlayerTakeDamage", DoRedScreen);
+        SetUpEvents();
         
         ShowObjectiveUI(false);
         ChangeEquipedWeapontUI(-1);
@@ -95,7 +82,32 @@ public class UIController : GenericObject
         if(currentPingTarget != null)
             SetPingPosition();
     }
+ 
+    #region EVENTS
 
+    void SetUpEvents()
+    {
+        EventManager.Subscribe("ChangeHealthUI", ChangeHealthUI);
+        EventManager.Subscribe("ChangeBulletUI", ChangeBulletUI);
+        EventManager.Subscribe("ChangeReserveBulletUI", ChangeReserveBulletUI);
+        EventManager.Subscribe("ChangeEquipedWeapontUI", ChangeEquipedWeapontUI);
+        EventManager.Subscribe("OnDamageableHit", TriggerHitmarker);
+        EventManager.Subscribe("PlayerDamage", TriggerPlayerDamage);
+        EventManager.Subscribe("OnADSEnabled", EnableADS);
+        EventManager.Subscribe("OnADSDisabled", DisableADS);
+        EventManager.Subscribe("ChangeObjetive", ChangesObjective);
+        EventManager.Subscribe("ChangeObjectiveProgress", ChangeObjectiveProgress);
+        EventManager.Subscribe("InteractUI", InteractUI);
+        EventManager.Subscribe("OnSubtitleOn", DoSubtitle);
+        EventManager.Subscribe("OnSubtitleOff", DisableSubtitle);
+        EventManager.Subscribe("OnAssistantPing", DoPingStart);
+        EventManager.Subscribe("OnPlayerTakeDamage", DoRedScreen);
+    }
+
+    #endregion
+
+    #region PLAYER STATS
+    
     void ChangeHealthUI(params object[] parameters)
     {
         _healthUI.text = parameters[0].ToString();
@@ -142,33 +154,6 @@ public class UIController : GenericObject
         _weaponsUI[_actualWeapon].SetActive(true);
     }
 
-    //void ChangeCoinsUI(params object[] parameters)
-    //{
-    //    _coinsUI.text = parameters[0].ToString();
-    //}
-
-    //void ShopUI(params object[] parameters)
-    //{
-    //    if ((bool)parameters[0])
-    //    {
-    //        _interactuableUI.gameObject.SetActive(true);
-    //        _interactuableUI.text = "Weapon Cost = " + parameters[1].ToString() + ". Bullet Cost = " + parameters[2].ToString();
-    //    }
-    //    else
-    //        _interactuableUI.gameObject.SetActive(false);
-    //}
-
-    //void DoorUI(params object[] parameters)
-    //{
-    //    if ((bool)parameters[0])
-    //    {
-    //        _interactuableUI.gameObject.SetActive(true);
-    //        _interactuableUI.text = "Door Cost = " + parameters[1].ToString();
-    //    }
-    //    else
-    //        _interactuableUI.gameObject.SetActive(false);
-    //}
-
     void InteractUI(params object[] parameters)
     {
         if ((bool)parameters[0])
@@ -179,21 +164,12 @@ public class UIController : GenericObject
         else
             _interactuableUI.gameObject.SetActive(false);
     }
+    
+    
+    #endregion
 
-    //void BuyItem(params object[] parameters)
-    //{
-    //    CancelInvoke();
-    //    _interactuableUI.color = Color.yellow;
-    //    Invoke("BackToBaseColor", 0.5f);
-    //}
-
-    //void RefuseItem(params object[] parameters)
-    //{
-    //    CancelInvoke();
-    //    _interactuableUI.color = Color.red;
-    //    Invoke("BackToBaseColor", 0.5f);
-    //}
-
+    #region DAMAGE FEEDBACK
+    
     void TriggerHitmarker(params object[] parameters)
     {
         int value = (int)parameters[0];
@@ -229,6 +205,30 @@ public class UIController : GenericObject
         playerDamageMarker.GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, (float)parameters[0]) * -1);
         StartCoroutine(TurnOffDmgMarker());
     }
+    
+    IEnumerator DoHitmarker(GameObject hit)
+    {
+        hit.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        hit.SetActive(false);
+        yield return new WaitForEndOfFrame();
+    }
+
+    IEnumerator TurnOffDmgMarker()
+    {
+        yield return new WaitForSeconds(1f);
+        playerDamageMarker.SetActive(false);
+    }
+    
+    
+    void DoRedScreen(object[] parameters)
+    {
+        redScreenAnimator.Play("TakeDamage");
+    }
+    
+    #endregion
+
+    #region ADS / CROSSHAIR
 
     void DisableADS(params object[] parameters)
     {
@@ -240,36 +240,9 @@ public class UIController : GenericObject
         crosshair.SetActive(false);
     }
 
-    //void BackToBaseColor()
-    //{
-    //    _interactuableUI.color = _baseTextColor;
-    //}
+    #endregion
 
-    //void OnPhaseEnd(params object[] parameters)
-    //{
-    //    _enemiesCounterUI.gameObject.SetActive(false);
-    //    _waveClearUI.gameObject.SetActive(true);
-    //    _waveTimerUI.gameObject.SetActive(true);
-    //}
-
-    //void ChangeTimer(params object[] parameters)
-    //{
-    //    _waveTimerUI.text = "Next phase starts in " + parameters[0].ToString() + " seconds";
-    //}
-
-    //void OnPhaseStart(params object[] parameters)
-    //{
-    //    _waveClearUI.gameObject.SetActive(false);
-    //    _waveTimerUI.gameObject.SetActive(false);
-    //    _enemiesCounterUI.gameObject.SetActive(true);
-    //}
-
-    //void ChangeActualObjectiveState(params object[] parameters)
-    //{
-    //    //SoundManager.instance.PlaySound(SoundID.TASK_DONE);
-    //    _stateObjetive.color = Color.green;
-    //    _stateObjetive.text = "Status - Finished.";
-    //}
+    #region OBJECTIVES
 
     void ChangesObjective(params object[] parameters)
     {
@@ -285,46 +258,17 @@ public class UIController : GenericObject
         _progressObjective.text = (string)parameters[0] + "%";
     }
 
-    //void HookUI(params object[] parameters)
-    //{
-    //    /*if ((bool)parameters[0])
-    //        _hookUI.SetActive(true);
-    //    else
-    //        _hookUI.SetActive(false);*/
-    //        StopCoroutine(DoHookUI());
-    //    StartCoroutine(DoHookUI());
-    //}
-
-    //IEnumerator DoHookUI()
-    //{
-    //    _hookUI.SetActive(true);
-    //    yield return new WaitForSeconds(1f);
-    //    _hookUI.SetActive(false);
-    //    yield return null;
-    //}
-    
-
-    IEnumerator DoHitmarker(GameObject hit)
+    void ShowObjectiveUI(bool status)
     {
-        hit.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        hit.SetActive(false);
-        yield return new WaitForEndOfFrame();
+        foreach (var obj in objectiveRegion)
+        {
+            obj.SetActive(status);
+        }
     }
 
-    IEnumerator TurnOffDmgMarker()
-    {
-        yield return new WaitForSeconds(1f);
-        playerDamageMarker.SetActive(false);
-    }
+    #endregion
 
-    //IEnumerator DoRoundCounterCycle(int currentRound)
-    //{
-    //    _waveCounterAnimator.SetTrigger("ChangeRound");
-    //    yield return new WaitForSeconds(0.3f);
-    //    _waveCounterUI.text = currentRound.ToString();
-    //    yield return new WaitForSeconds(0.001f);
-    //}
+    #region SUBTITLES
 
     void DoSubtitle(object[] parameters)
     {
@@ -337,7 +281,11 @@ public class UIController : GenericObject
         subtitleText.text = "";
         subtitleText.enabled = false;
     }
-    
+
+    #endregion
+
+    #region PING
+
     void SetPingPosition()
     {
         ping.gameObject.SetActive(true);
@@ -380,16 +328,5 @@ public class UIController : GenericObject
         });
     }
 
-    void ShowObjectiveUI(bool status)
-    {
-        foreach (var obj in objectiveRegion)
-        {
-            obj.SetActive(status);
-        }
-    }
-
-    void DoRedScreen(object[] parameters)
-    {
-        redScreenAnimator.Play("TakeDamage");
-    }
+    #endregion
 }
