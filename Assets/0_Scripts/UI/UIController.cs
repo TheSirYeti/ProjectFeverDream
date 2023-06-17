@@ -21,10 +21,11 @@ public class UIController : GenericObject
     [Space(20)]
     [SerializeField] private Animator redScreenAnimator;
 
-    [Header("ObjetiveText")]
+    [Header("Objetives")]
     [SerializeField] TextMeshProUGUI _titleObjetive;
     [SerializeField] TextMeshProUGUI _descriptionObjetive;
     [SerializeField] TextMeshProUGUI _progressObjective;
+    [SerializeField] float timeToShow;
 
     [Header("Hitmarkers")] 
     [SerializeField] GameObject hitmarker; 
@@ -248,9 +249,9 @@ public class UIController : GenericObject
     {
         _titleObjetive.text = (string)parameters[0];
         _descriptionObjetive.text = (string)parameters[1];
-        //_stateObjetive.color = Color.white;
-        //_stateObjetive.text = "Status - In Progress.";
         _progressObjective.text = "0%";
+
+        StartCoroutine(ShowObjectiveChange());
     }
 
     void ChangeObjectiveProgress(params object[] parameters)
@@ -264,6 +265,14 @@ public class UIController : GenericObject
         {
             obj.SetActive(status);
         }
+    }
+
+    IEnumerator ShowObjectiveChange()
+    {
+        ShowObjectiveUI(true);
+        yield return new WaitForSeconds(timeToShow);
+        ShowObjectiveUI(false);
+        yield return null;
     }
 
     #endregion
