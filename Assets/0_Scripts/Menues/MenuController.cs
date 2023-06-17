@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.PlayerLoop;
+using UnityEngine.Serialization;
 
 public class MenuController : GenericObject
 {
     public GameObject pauseMenu;
 
-    public GameObject _primaryMenu;
-    public GameObject _secondaryMenu;
+    public GameObject primaryMenu;
+    public GameObject secondaryMenu;
 
     public GameObject landingMenu;
     public GameObject options;
@@ -18,7 +19,7 @@ public class MenuController : GenericObject
     public GameObject controlsOptions;
     public GameObject graphicOptions;
 
-    public List<GameObject> selectedButtons;
+    public GameObject[] selectedButtons;
 
     public Slider sensSlider;
     public Slider musicSlider;
@@ -28,7 +29,7 @@ public class MenuController : GenericObject
     public TextMeshProUGUI musicText;
     public TextMeshProUGUI sfxText;
 
-    bool _tempState = false;
+    private bool _menuState = false;
 
     private void Awake()
     {
@@ -48,14 +49,22 @@ public class MenuController : GenericObject
             sensSlider.value = 500;
     }
 
-    void MenuChanger(params object[] parameter)
+    public override void OnUpdate()
     {
-        if (!_tempState)
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            EventManager.Trigger("MenuChanger");
+        }
+    }
+
+    private void MenuChanger(params object[] parameter)
+    {
+        if (!_menuState)
         {
             pauseMenu.SetActive(true);
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-            _primaryMenu = landingMenu;
+            primaryMenu = landingMenu;
             SoundManager.instance.PauseAllMusic();
             SoundManager.instance.PauseAllSounds();
             SoundManager.instance.PauseAllVoiceLines();
@@ -63,10 +72,19 @@ public class MenuController : GenericObject
         }
         else
         {
-            _primaryMenu.SetActive(false);
-            _secondaryMenu?.SetActive(false);
-            _primaryMenu = landingMenu;
-            _primaryMenu.SetActive(true);
+            foreach (var button in selectedButtons)
+            {
+                button.SetActive(false);
+            }
+
+            selectedButtons[0].SetActive(true);
+
+            primaryMenu.SetActive(false);
+
+            if (secondaryMenu) secondaryMenu.SetActive(false);
+            
+            primaryMenu = landingMenu;
+            primaryMenu.SetActive(true);
             pauseMenu.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -76,13 +94,7 @@ public class MenuController : GenericObject
             GameManager.Instance.ResumeGame();
         }
 
-        _tempState = !_tempState;
-    }
-
-    public void ReturnToMainMenu()
-    {
-        //EventManager.Trigger("OnReturnToMainMenu");
-        SceneLoader.instance.SetupLoadScene(3);
+        _menuState = !_menuState;
     }
 
     public void BTN_ResumeGame()
@@ -92,40 +104,47 @@ public class MenuController : GenericObject
 
     public void BTN_Options()
     {
-        _primaryMenu.SetActive(false);
-        _primaryMenu = options;
-        _secondaryMenu = audioOptions;
-        _secondaryMenu.SetActive(true);
-        _primaryMenu.SetActive(true);
+        primaryMenu.SetActive(false);
+        primaryMenu = options;
+        secondaryMenu = audioOptions;
+        secondaryMenu.SetActive(true);
+        primaryMenu.SetActive(true);
     }
 
     public void BTN_AudioOptions()
     {
-        _secondaryMenu?.SetActive(false);
-        _secondaryMenu = audioOptions;
-        _secondaryMenu.SetActive(true);
+        secondaryMenu?.SetActive(false);
+        secondaryMenu = audioOptions;
+        secondaryMenu.SetActive(true);
     }
 
     public void BTN_ControlOptions()
     {
-        _secondaryMenu?.SetActive(false);
-        _secondaryMenu = controlsOptions;
-        _secondaryMenu.SetActive(true);
+        secondaryMenu?.SetActive(false);
+        secondaryMenu = controlsOptions;
+        secondaryMenu.SetActive(true);
     }
 
     public void BTN_GraphicOptions()
     {
-        _secondaryMenu?.SetActive(false);
-        _secondaryMenu = graphicOptions;
-        _secondaryMenu.SetActive(true);
+        secondaryMenu?.SetActive(false);
+        secondaryMenu = graphicOptions;
+        secondaryMenu.SetActive(true);
     }
 
     public void BTN_Return()
     {
-        _primaryMenu.SetActive(false);
-        _secondaryMenu?.SetActive(false);
-        _primaryMenu = landingMenu;
-        _primaryMenu.SetActive(true);
+        foreach (var button in selectedButtons)
+        {
+            button.SetActive(false);
+        }
+
+        selectedButtons[0].SetActive(true);
+        
+        primaryMenu.SetActive(false);
+        secondaryMenu?.SetActive(false);
+        primaryMenu = landingMenu;
+        primaryMenu.SetActive(true);
     }
 
     public void BTN_Quit()

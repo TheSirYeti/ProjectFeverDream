@@ -27,7 +27,6 @@ public class Controller
         onUpdate += GetCrunchInput;
         onUpdate += GetRunInput;
         onUpdate += GetInteractInput;
-        onUpdate += GetEscape;
     }
 
     void GetMouse()
@@ -147,14 +146,6 @@ public class Controller
         if (Input.GetKeyDown(KeyCode.F))
         {
             _cameraController.cameraAim.Interact();
-        }
-    }
-
-    void GetEscape()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            EventManager.Trigger("MenuChanger");
         }
     }
 }
