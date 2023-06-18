@@ -15,6 +15,10 @@ public class ScreenControllerShader : MonoBehaviour
     [Range(0.0f, 1.0f)]
     [SerializeField] private int _interactive;
 
+    [Header("Color")]
+    [SerializeField] private Color _unlock;
+    [SerializeField] private Color _lock;
+
     void Start()
     {
         VariableInitiation();
@@ -30,5 +34,8 @@ public class ScreenControllerShader : MonoBehaviour
         _screenMAT.SetFloat("_Controlcolor", controlColor);
         _screenMAT.SetFloat("_Controlring", lockValue);
         _screenMAT.SetFloat("_NoInteractive", _interactive);
+
+        _screenMAT.SetColor("_Colorunlock", _unlock);
+        _screenMAT.SetColor("_Colorlock", _lock);
     }
 }
