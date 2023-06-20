@@ -343,6 +343,11 @@ public class BaseMeleeEnemy : Enemy
         if (isDead) return;
         
         DoWarningFadeOut();
+
+        foreach (var particle in deathShockParticles)
+        {
+            particle.Play();
+        }
         
         EventManager.Trigger("OnDamageableHit", 3);
 

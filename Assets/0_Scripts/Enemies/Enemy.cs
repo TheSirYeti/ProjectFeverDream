@@ -51,7 +51,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     [SerializeField] Transform _previousObjective;
 
     [Space(20)]
-    [Header("-== Detection / FoV Properties")]
+    [Header("-== Detection / FoV Properties ==-")]
     [SerializeField] protected float fovViewRadius;
     [SerializeField] protected float fovViewAngle;
     [SerializeField] protected Transform fovTransformPoint;
@@ -90,6 +90,9 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     
     [SerializeField] protected List<AudioSource> detectSFX;
     protected List<int> audioDetectIDs = new List<int>();
+
+    [Space(20)] [Header("-== VFX Properties ==-")]
+    [SerializeField] protected List<ParticleSystem> deathShockParticles;
 
     public abstract void Attack();
     
