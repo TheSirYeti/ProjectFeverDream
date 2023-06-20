@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityFx.Outline;
 
-public abstract class GenericWeapon : GenericObject, IAssistPickUp, IInteractUI
+public abstract class GenericWeapon : GenericObject, IAssistInteract
 {
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
@@ -22,6 +23,7 @@ public abstract class GenericWeapon : GenericObject, IAssistPickUp, IInteractUI
     [SerializeField] protected LayerMask _shooteableMask;
 
     [SerializeField] int _pickUpID;
+    [SerializeField] private OutlineBehaviour _outline;
     bool _isEquiped = false;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
@@ -172,24 +174,11 @@ public abstract class GenericWeapon : GenericObject, IAssistPickUp, IInteractUI
     #endregion
 
     #region Usable Interface
-    public void Use(IAssistUsable actionable)
-    {
-        throw new NotImplementedException();
-    }
+    //TODO: Set Interfaces
 
-    public GameObject GetGameObject()
+    public void ChangeOutlineState(bool state)
     {
-        return gameObject;
-    }
-
-    public bool IsAutoUsable()
-    {
-        return true;
-    }
-
-    public Transform GetTarget()
-    {
-        return _weaponManager.transform;
+        _outline.OutlineWidth = state ? 3 : 0;
     }
 
     public int InteractID()
@@ -197,14 +186,59 @@ public abstract class GenericWeapon : GenericObject, IAssistPickUp, IInteractUI
         return _pickUpID;
     }
 
+    public bool isAutoUsable()
+    {
+        return true;
+    }
+
+    public Transform UsablePoint()
+    {
+        return _weaponManager.transform;
+    }
+
+    public void Interact(IAssistInteract usableItem = null)
+    {
+        Debug.Log("Here?");
+    }
+
+    public Assistant.Interactuables GetType()
+    {
+        return Assistant.Interactuables.WEAPON;
+    }
+
+    public Assistant.JorgeStates GetState()
+    {
+       return Assistant.JorgeStates.PICKUP;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public Transform GetInteractPoint()
+    {
+        return transform;
+    }
+
+    public List<Renderer> GetRenderer()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool CanInteract()
+    {
+        return !_isEquiped;
+    }
+
     public string ActionName()
     {
         return "Pick up the weapon";
     }
 
-    public bool IsInteractable()
+    public string AnimationToExecute()
     {
-        return !_isEquiped;
+        throw new NotImplementedException();
     }
     #endregion
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class WeaponManager : GenericObject, IAssistUsable
+public class WeaponManager : GenericObject, IAssistInteract
 {
     Model _model;
     [HideInInspector] public View _view;
@@ -26,9 +26,6 @@ public class WeaponManager : GenericObject, IAssistUsable
     Transform _pointOfShoot;
     bool _isADS;
 
-    public Action OnClick = delegate { };
-    public Action OnRelease = delegate { };
-
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -44,9 +41,7 @@ public class WeaponManager : GenericObject, IAssistUsable
             }
 
             _actualWeapon.OnWeaponEquip(transform, this, _nozzlePoint);
-
-            OnClick = _actualWeapon.OnClick;
-            OnRelease = _actualWeapon.OnRelease;
+            
             _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
         }
     }
@@ -136,16 +131,10 @@ public class WeaponManager : GenericObject, IAssistUsable
         {
             _view.PlayAnimation("ANIM_Player_BaguetteDUAL_Idle");
         }
-
-        OnClick = _actualWeapon.OnClick;
-        OnRelease = _actualWeapon.OnRelease;
     }
 
     public void DestroyWeapon()
     {
-        OnClick = delegate { };
-        OnRelease = delegate { };
-
         foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
         {
             item.enabled = false;
@@ -176,18 +165,68 @@ public class WeaponManager : GenericObject, IAssistUsable
         }
     }
 
-    public void UseItem(IAssistPickUp usable)
+    public void Interact(IAssistInteract usableItem = null)
     {
-        EquipWeapon(usable.GetGameObject().GetComponent<GenericWeapon>(), true, true);
+        EquipWeapon(usableItem.GetTransform().gameObject.GetComponent<GenericWeapon>(), true, true);
     }
 
-    public GameObject GetGameObject()
+    public Assistant.Interactuables GetType()
     {
-        return gameObject;
+        return Assistant.Interactuables.WEAPONMANAGER;
+    }
+
+    public Assistant.JorgeStates GetState()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public Transform GetInteractPoint()
+    {
+        return transform;
+    }
+
+    public List<Renderer> GetRenderer()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool CanInteract()
+    {
+        return true;
+    }
+
+    public string ActionName()
+    {
+        return "Equip";
+    }
+
+    public string AnimationToExecute()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ChangeOutlineState(bool state)
+    {
+        throw new NotImplementedException();
     }
 
     public int InteractID()
     {
-        return _usableID;
+        return 0;
+    }
+
+    public bool isAutoUsable()
+    {
+        return false;
+    }
+
+    public Transform UsablePoint()
+    {
+        throw new NotImplementedException();
     }
 }

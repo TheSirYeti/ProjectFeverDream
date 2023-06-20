@@ -1,102 +1,105 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityFx.Outline;
 
 public class CameraAim
 {
-    Camera _camera;
-    Assistant _assistant;
-    float _interactDistance;
-    LayerMask _collisionMask;
-    LayerMask _fullLayerMask;
-    LayerMask _interactMask;
-    LayerMask _usableMask;
-    LayerMask _pickupMask;
+    private Camera _camera;
+    private Assistant _assistant;
+    private float _interactDistance;
 
-    IInteractUI _actualUI;
+    private IAssistInteract _actualInteract;
 
-    public CameraAim(Camera camera, Assistant assistant, float interactDistance, LayerMask collisionMask, LayerMask interactMask, LayerMask usableMask, LayerMask pickupMask)
+    public CameraAim(Camera camera, Assistant assistant, float interactDistance)
     {
         _camera = camera;
         _assistant = assistant;
 
-        _collisionMask = collisionMask;
-
-        _fullLayerMask = interactMask + usableMask + pickupMask;
         _interactDistance = interactDistance;
-        _interactMask = interactMask;
-        _usableMask = usableMask;
-        _pickupMask = pickupMask;
     }
 
     public void CheckActualAim()
     {
-        RaycastHit hit;
-        IInteractUI tempUI;
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _fullLayerMask) &&
-            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask))
+        var colliders =
+            Physics.OverlapSphere(_camera.transform.position, _interactDistance, LayerManager.LM_ALLINTERACTS);
+
+        if (!colliders.Any())
         {
-            tempUI = hit.collider.GetComponent<IInteractUI>();
+            if (_actualInteract == null) return;
 
-            if (tempUI == null) tempUI = hit.collider.GetComponentInParent<IInteractUI>();
-            
-            if (tempUI == null || !tempUI.IsInteractable())
-            {
-                EventManager.Trigger("InteractUI", false);
-                _actualUI = null;
-                return;
-            }
-
-            if (tempUI == _actualUI) return;
-
-            _actualUI = tempUI;
-            EventManager.Trigger("InteractUI", true, _actualUI.ActionName());
-        }
-        else if(_actualUI != null)
-        {
+            _actualInteract.ChangeOutlineState(false);
+            _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
-            _actualUI = null;
+
+            return;
         }
+
+        var objectInView = colliders.Where(x =>
+        {
+            var maxDistance = new Vector3(0.5f,0.5f,0);
+            var dir = x.transform.position - _camera.transform.position;
+            Vector3 position;
+            return !Physics.Raycast(_camera.transform.position, dir, dir.magnitude, LayerManager.LM_OBSTACLE) 
+                   && Mathf.Abs((_camera.WorldToViewportPoint((position = x.transform.position)) - maxDistance).x) < 0.2f
+                   && Mathf.Abs((_camera.WorldToViewportPoint(position) - maxDistance).y) < 0.2f;
+        });
+
+        if (!objectInView.Any())
+        {
+            if (_actualInteract == null) return;
+
+            _actualInteract.ChangeOutlineState(false);
+            _actualInteract = null;
+            EventManager.Trigger("InteractUI", false);
+
+            return;
+        }
+
+        var closeObj = objectInView.OrderBy(x =>
+            {
+                var maxDistance = new Vector2(0.5f,0.5f);
+                var vector2 = new Vector2(_camera.WorldToViewportPoint(x.transform.position).x,
+                    _camera.WorldToViewportPoint(x.transform.position).y) - maxDistance;
+                return vector2.magnitude;
+            })
+            .First().gameObject
+            .GetComponent<IAssistInteract>();
+
+        if (closeObj == null) return;
+
+        if (_actualInteract != null && !_actualInteract.CanInteract())
+        {
+            _actualInteract.ChangeOutlineState(false);
+            _actualInteract = null;
+            EventManager.Trigger("InteractUI", false);
+
+            return;
+        }
+
+        if (closeObj == _actualInteract) return;
+
+        _actualInteract?.ChangeOutlineState(false);
+        _actualInteract = closeObj;
+        _actualInteract.ChangeOutlineState(true);
+        EventManager.Trigger("InteractUI", true, _actualInteract.ActionName());
     }
 
     public void Interact()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _interactMask) &&
-            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask))
+        if (_actualInteract == null) return;
+
+
+        if (_actualInteract.GetState() == Assistant.JorgeStates.USEIT &&
+            _actualInteract.InteractID() == _assistant._holdingItem.InteractID())
         {
-            Debug.Log(hit.collider.gameObject.name);
-            IAssistInteract iInteract = hit.collider.gameObject.GetComponent<IAssistInteract>();
-
-            if (iInteract == null) iInteract = hit.collider.gameObject.GetComponentInParent<IAssistInteract>();
-
-            if (iInteract == null || !iInteract.CanInteract()) return;
-
-            _assistant.SetObjective(iInteract.GetInteractPoint(), Assistant.JorgeStates.INTERACT);
+            _assistant.SetObjective(_actualInteract.GetInteractPoint(), _actualInteract.GetState());
         }
-        else if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _pickupMask) &&
-            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask))
+        else if (_actualInteract.GetState() != Assistant.JorgeStates.USEIT)
         {
-            IAssistPickUp iPickUp = hit.collider.gameObject.GetComponent<IAssistPickUp>();
-
-            if (iPickUp == null) iPickUp = hit.collider.gameObject.GetComponentInParent<IAssistPickUp>();
-
-            if (iPickUp == null) return;
-
-            _assistant.SetObjective(iPickUp.GetGameObject().transform, Assistant.JorgeStates.PICKUP);
-        }
-        else if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _interactDistance, _usableMask) &&
-            !Physics.Raycast(_camera.transform.position, _camera.transform.forward, (hit.point - _camera.transform.position).magnitude, _collisionMask))
-        {
-            IAssistUsable iPickUp = hit.collider.gameObject.GetComponent<IAssistUsable>();
-
-            if (iPickUp == null) iPickUp = hit.collider.gameObject.GetComponentInParent<IAssistUsable>();
-
-            if (iPickUp == null) return;
-
-            if (iPickUp.InteractID() != _assistant._holdingItem.InteractID()) return;
-
-            _assistant.SetObjective(iPickUp.GetGameObject().transform, Assistant.JorgeStates.USEIT);
+            _assistant.SetObjective(_actualInteract.GetInteractPoint(), _actualInteract.GetState());
         }
     }
 }

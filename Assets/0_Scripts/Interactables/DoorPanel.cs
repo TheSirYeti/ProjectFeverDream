@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityFx.Outline;
 
-public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
+public class DoorPanel : GenericObject, IAssistInteract
 {
+    [SerializeField] private OutlineBehaviour _outline;
     [SerializeField] Assistant.Interactuables _type;
 
     bool _isClose = true;
@@ -35,12 +37,17 @@ public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
         }
     }
 
+    public Assistant.JorgeStates GetState()
+    {
+        return Assistant.JorgeStates.INTERACT;
+    }
+
     public Transform GetTransform()
     {
         return transform;
     }
 
-    public void Interact(GameObject usableItem = null)
+    public void Interact(IAssistInteract usableItem = null)
     {
         foreach (var rend in renderers)
         {
@@ -62,6 +69,27 @@ public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
         return "door";
     }
 
+    //TODO: Set Interfaces
+    public void ChangeOutlineState(bool state)
+    {
+        _outline.OutlineWidth = state ? 4 : 0;;
+    }
+
+    public int InteractID()
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool isAutoUsable()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Transform UsablePoint()
+    {
+        throw new NotImplementedException();
+    }
+
     public Transform GetInteractPoint()
     {
         return _interactPoint;
@@ -80,10 +108,5 @@ public class DoorPanel : GenericObject, IAssistInteract, IInteractUI
     public string ActionName()
     {
         return "Open the door";
-    }
-
-    public bool IsInteractable()
-    {
-        return _isClose;
     }
 }

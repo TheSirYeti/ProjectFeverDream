@@ -46,7 +46,7 @@ public class NodesGenerator : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.LM_FLOOR))
                 {
-                    if (!Physics.Raycast(ray, (hit.point - actualStartRay).magnitude, LayerManager.LM_NodeObstacles))
+                    if (!Physics.Raycast(ray, (hit.point - actualStartRay).magnitude, LayerManager.LM_NODEOBSTACLE))
                     {
                         if (!_spawnedNodes.Contains(hit.point + Vector3.up * 0.2f))
                         {                       
@@ -142,7 +142,7 @@ public class NodesGenerator : MonoBehaviour
             closestNodes.Remove(node);
             
             MNode mNode = node.GetComponent<MNode>();
-            if (Physics.CheckSphere(node.transform.position, _nodeSize, LayerManager.LM_NodeObstacles) || !mNode.HasNeighbours() || closestNodes.Any())
+            if (Physics.CheckSphere(node.transform.position, _nodeSize, LayerManager.LM_NODEOBSTACLE) || !mNode.HasNeighbours() || closestNodes.Any())
             {
                 nodesToDelete.Enqueue(node);
             }

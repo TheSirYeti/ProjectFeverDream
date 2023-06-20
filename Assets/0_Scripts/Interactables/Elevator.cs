@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Elevator : GenericObject, IAssistInteract, IInteractUI
+public class Elevator : GenericObject, IAssistInteract
 {
     [SerializeField] Assistant.Interactuables _type;
 
@@ -26,10 +26,20 @@ public class Elevator : GenericObject, IAssistInteract, IInteractUI
         interactable = false;
         Debug.Log("ASCENSOR");
     }
+    //TODO: Set Interfaces
+    public void Interact(IAssistInteract usableItem = null)
+    {
+        throw new System.NotImplementedException();
+    }
 
     public Assistant.Interactuables GetType()
     {
         return _type;
+    }
+
+    public Assistant.JorgeStates GetState()
+    {
+        throw new System.NotImplementedException();
     }
 
     public Transform GetTransform()
@@ -55,6 +65,26 @@ public class Elevator : GenericObject, IAssistInteract, IInteractUI
     public string AnimationToExecute()
     {
         return "door";
+    }
+
+    public void ChangeOutlineState(bool state)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public int InteractID()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public bool isAutoUsable()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public Transform UsablePoint()
+    {
+        throw new System.NotImplementedException();
     }
 
     IEnumerator DoElevatorCycle()

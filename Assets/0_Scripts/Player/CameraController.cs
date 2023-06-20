@@ -24,23 +24,23 @@ public class CameraController : GenericObject
     [Header("-== FOV Properties ==-")]
     [SerializeField] float _walkingFOV;
     [SerializeField] float _runningFOV;
-    float _actualFOV;
-    bool _isLargeFOV = false;
+    private float _actualFOV;
+    private bool _isLargeFOV = false;
 
     [Space(20)]
     [Header("-== Shake Properties ==-")]
-    Vector3 _initialCamPos;
-    bool _isShaking = false;
-    float _shakeDuration = 0f;
+    private Vector3 _initialCamPos;
+    private bool _isShaking = false;
+    private float _shakeDuration = 0f;
     [SerializeField] float _shakeMagnitude = 0.7f;
     [SerializeField] float _dampingSpeed = 1.0f;
 
     [Space(20)]
     [Header("-== Bobbing Properties ==-")]
-    bool _isBobbing = false;
+    private bool _isBobbing = false;
     [SerializeField] float _bobbingSpeed = 0.18f;
     [SerializeField] float _bobbingAmount = 0.2f;
-    float _timer = 0.0f;
+    private float _timer = 0.0f;
 
     [Space(20)]
     [Header("-== Camera Clamp Properties ==-")]
@@ -52,11 +52,7 @@ public class CameraController : GenericObject
     [Space(20)]
     [Header("-== Interact Properties ==-")]
     [SerializeField] float _interactDistance;
-    [SerializeField] LayerMask _collisionMask;
-    [SerializeField] LayerMask _interactMask;
-    [SerializeField] LayerMask _pickupMask;
-    [SerializeField] LayerMask _usableMask;
-    [HideInInspector] public CameraAim cameraAim { get; private set; }
+    public CameraAim cameraAim { get; private set; }
 
     Action cameraMovement = delegate { };
     Action cameraEffects = delegate { };
@@ -64,13 +60,11 @@ public class CameraController : GenericObject
 
     private void Awake()
     {
-        Debug.Log("player awake");
         UpdateManager._instance.AddObject(this);
     }
     
     public override void OnAwake()
     {
-        Debug.Log("player awake?");
         EventManager.Subscribe("CameraShake", ShakeState);
         EventManager.Subscribe("CameraBobbing", SetBobbing);
 
@@ -107,8 +101,12 @@ public class CameraController : GenericObject
 
         if (PlayerPrefs.HasKey("Sensibilidad"))
             _cameraSens = PlayerPrefs.GetFloat("Sensibilidad");
+    }
 
-        StartCoroutine(LateStart());
+    public override void OnLateStart()
+    {
+        cameraAim = new CameraAim(_cameraGetter, GameManager.Instance.Assistant, _interactDistance);
+        interactChecker = cameraAim.CheckActualAim;
     }
 
     public override void OnUpdate()
@@ -273,12 +271,5 @@ public class CameraController : GenericObject
             pos.y = _initialCamPos.y;
             _cameraGetter.transform.localPosition = pos;
         }
-    }
-
-    IEnumerator LateStart()
-    {
-        yield return new WaitForEndOfFrame();
-        cameraAim = new CameraAim(_cameraGetter, GameManager.Instance.Assistant, _interactDistance, _collisionMask ,_interactMask, _usableMask, _pickupMask);
-        interactChecker = cameraAim.CheckActualAim;
     }
 }

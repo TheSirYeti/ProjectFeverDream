@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 4636703204955318236}
   - component: {fileID: 4636703204955318237}
   - component: {fileID: 4636703204955318225}
+  - component: {fileID: 7779336764284660519}
   m_Layer: 10
   m_Name: DoorPanel
   m_TagString: Untagged
@@ -192,10 +193,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03edef9ecffd61f42aaf35bc468ddf78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
+  _outline: {fileID: 7779336764284660519}
   _type: 0
   _door: {fileID: 4636703204391953610}
   _interactPoint: {fileID: 3816813745480828509}
+  audioSources: []
   activatedMat: {fileID: 2100000, guid: aeae8e2182a973c49ae11f48a3f39d4c, type: 2}
+  renderers: []
+--- !u!114 &7779336764284660519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4636703204955318238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271c580db5fd384429cdac899152e9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+  _outlineSettings:
+    _outlineSettings: {fileID: 0}
+    _outlineColor: {r: 1, g: 1, b: 1, a: 1}
+    _outlineWidth: 1
+    _outlineIntensity: 2
+    _outlineAlphaCutoff: 0.9
+    _outlineMode: 0
+  _ignoreLayerMask: 0
+  _cameraEvent: 15
+  _targetCamera: {fileID: 0}
+  _updateRenderers: 0
 --- !u!1 &4636703205575948731
 GameObject:
   m_ObjectHideFlags: 0

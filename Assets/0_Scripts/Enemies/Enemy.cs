@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using UnityEngine;
+using UnityFx.Outline;
 
-public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInteractUI
+public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 {
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp;
@@ -22,6 +23,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     //Quizas sea TEMP, quizas no
     [SerializeField] Assistant.Interactuables _type;
     [SerializeField] Transform _interactPoint;
+    [SerializeField] private OutlineBehaviour _outline;
     [Space(20)]
 
     [Space(20)] [Header("-== Attack Properties ==-")] 
@@ -51,7 +53,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     [SerializeField] Transform _previousObjective;
 
     [Space(20)]
-    [Header("-== Detection / FoV Properties ==-")]
+    [Header("-== Detection / FoV Properties")]
     [SerializeField] protected float fovViewRadius;
     [SerializeField] protected float fovViewAngle;
     [SerializeField] protected Transform fovTransformPoint;
@@ -90,9 +92,6 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     
     [SerializeField] protected List<AudioSource> detectSFX;
     protected List<int> audioDetectIDs = new List<int>();
-
-    [Space(20)] [Header("-== VFX Properties ==-")]
-    [SerializeField] protected List<ParticleSystem> deathShockParticles;
 
     public abstract void Attack();
     
@@ -334,7 +333,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     protected bool InSight(Vector3 start, Vector3 end)
     {
         Vector3 dir = end - start;
-        if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_NodeObstacles)) return true;
+        if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_NODEOBSTACLE)) return true;
         else return false;
     }
 
@@ -504,9 +503,10 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     #endregion
 
     #region INTERACTIONS
-    public void Interact(GameObject usableItem = null)
+
+    public Assistant.JorgeStates GetState()
     {
-        Destroy(gameObject);
+        return Assistant.JorgeStates.INTERACT;
     }
 
     public Transform GetTransform()
@@ -524,6 +524,26 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
         return "vacuum";
     }
 
+    public void ChangeOutlineState(bool state)
+    {
+        _outline.OutlineWidth = state ? 4 : 0;
+    }
+
+    public int InteractID()
+    {
+        return 1;
+    }
+
+    public bool isAutoUsable()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Transform UsablePoint()
+    {
+        throw new NotImplementedException();
+    }
+
     public Transform GetInteractPoint()
     {
         return _interactPoint;
@@ -534,6 +554,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
         return renderers;
     }
 
+    public void Interact(IAssistInteract usableItem = null)
+    {
+        Destroy(gameObject);
+    }
+
     Assistant.Interactuables IAssistInteract.GetType()
     {
         return _type;
@@ -542,11 +567,6 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract, IInte
     public string ActionName()
     {
         return "Eat the Robot";
-    }
-
-    public bool IsInteractable()
-    {
-        return isDead;
     }
     #endregion
 
