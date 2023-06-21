@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2216139546459174359}
   - component: {fileID: 2216139546459174356}
-  - component: {fileID: 8282463572660892470}
   - component: {fileID: 3051743638370247909}
   - component: {fileID: 8718188787302933048}
   - component: {fileID: 4011259398120768338}
@@ -34,6 +33,7 @@ Transform:
   m_Children:
   - {fileID: 1611888999015435311}
   - {fileID: 4904768746111781690}
+  - {fileID: 7514033917911201139}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,7 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
-  _rb: {fileID: 0}
+  _animator: {fileID: 135281850236933768}
+  _rb: {fileID: 3051743638370247909}
   _collisionMask:
     serializedVersion: 2
     m_Bits: 192
@@ -72,32 +73,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   _interactDetectionDistance: 0
-  _vacuumPoint: {fileID: 0}
-  _vacuumVFX: {fileID: 0}
+  _vacuumPoint: {fileID: 7514033917911201139}
+  _vacuumVFX: {fileID: 4904768746111781701}
   _blackholeMat: {fileID: 2100000, guid: 4f52e4c12922b5e45b353e1a7eeaf501, type: 2}
   _loadingAmmount: 0
   _loadingSpeed: 2
   _player: {fileID: 0}
-  testingClosePoint: {fileID: 0}
---- !u!95 &8282463572660892470
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2216139546459174358}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 5304fa6c241929f4da33989b33b282db, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7611e3e69d6a9fd439f9a72b343bafb0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!54 &3051743638370247909
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -141,6 +122,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
+--- !u!1 &7779624548114735197
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7514033917911201139}
+  m_Layer: 0
+  m_Name: VacuumPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7514033917911201139
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7779624548114735197}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2216139546459174359}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6858424813648415633
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -206,6 +217,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b8ecafd48a090546818a86a7003acdf, type: 3}
+--- !u!1 &4904768746111781701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1963349775479947476, guid: 3b8ecafd48a090546818a86a7003acdf, type: 3}
+  m_PrefabInstance: {fileID: 6858424813648415633}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4904768746111781690 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1963349775479947435, guid: 3b8ecafd48a090546818a86a7003acdf, type: 3}
@@ -287,8 +303,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1611888999015435309}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 5304fa6c241929f4da33989b33b282db, type: 3}
+  m_Controller: {fileID: 9100000, guid: 7611e3e69d6a9fd439f9a72b343bafb0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

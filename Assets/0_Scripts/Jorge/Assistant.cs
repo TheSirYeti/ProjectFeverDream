@@ -9,20 +9,20 @@ public class Assistant : GenericObject
 {
     Action ExtraUpdate = delegate { };
 
-    private Animator _animator;
-    public Rigidbody _rb;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private Rigidbody _rb;
 
     private Vector3 _actualDir;
 
-    [SerializeField] LayerMask _collisionMask;
+    [SerializeField] private LayerMask _collisionMask;
 
-    [SerializeField] float _followSpeed;
-    [SerializeField] float _interactSpeed;
-
-    [SerializeField] float _followingDistance;
-    [SerializeField] float _interactDistance;
-    [SerializeField] float _pickupDistance;
-    [SerializeField] float _nodeDistance;
+    [SerializeField] private float _followSpeed;
+    [SerializeField] private float _interactSpeed;
+                     
+    [SerializeField] private float _followingDistance;
+    [SerializeField] private float _interactDistance;
+    [SerializeField] private float _pickupDistance;
+    [SerializeField] private float _nodeDistance;
 
     private Path nodeList;
     private JorgeStates _previousState;
@@ -54,8 +54,6 @@ public class Assistant : GenericObject
     [SerializeField] Transform _player;
     public IAssistInteract _holdingItem { get; private set; }
 
-    public Transform testingClosePoint;
-
     public enum Interactuables
     {
         DOOR,
@@ -69,7 +67,7 @@ public class Assistant : GenericObject
     {
         FOLLOW,
         PATHFINDING,
-        WAITFORINTERACT,
+        //WAITFORINTERACT,
         INTERACT,
         PICKUP,
         USEIT,
@@ -87,8 +85,6 @@ public class Assistant : GenericObject
     {
         EventManager.Subscribe("OnAssistantStart", OnAssistantStart);
         GameManager.Instance.Assistant = this;
-        _rb = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
     }
 
     public override void OnStart()
@@ -104,7 +100,7 @@ public class Assistant : GenericObject
 
         var follow = new State<JorgeStates>("FOLLOW");
         var pathFinding = new State<JorgeStates>("PATHFINDING");
-        var waitForInteract = new State<JorgeStates>("WAITFORINTERACT");
+        //var waitForInteract = new State<JorgeStates>("WAITFORINTERACT");
         var interact = new State<JorgeStates>("INTERACT");
         var pickup = new State<JorgeStates>("PICKUP");
         var useit = new State<JorgeStates>("USEIT");
@@ -112,7 +108,7 @@ public class Assistant : GenericObject
 
         StateConfigurer.Create(follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            .SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
+            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.HIDE, hide)
@@ -120,25 +116,25 @@ public class Assistant : GenericObject
 
         StateConfigurer.Create(pathFinding)
             .SetTransition(JorgeStates.FOLLOW, follow)
-            .SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
+            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.USEIT, useit)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
         
-        StateConfigurer.Create(waitForInteract)
-            .SetTransition(JorgeStates.FOLLOW, follow)
-            .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            .SetTransition(JorgeStates.INTERACT, interact)
-            .SetTransition(JorgeStates.PICKUP, pickup)
-            .SetTransition(JorgeStates.USEIT, useit)
-            .Done();
+        // StateConfigurer.Create(waitForInteract)
+        //     .SetTransition(JorgeStates.FOLLOW, follow)
+        //     .SetTransition(JorgeStates.PATHFINDING, pathFinding)
+        //     .SetTransition(JorgeStates.INTERACT, interact)
+        //     .SetTransition(JorgeStates.PICKUP, pickup)
+        //     .SetTransition(JorgeStates.USEIT, useit)
+        //     .Done();
 
         StateConfigurer.Create(interact)
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            .SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
+            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
@@ -146,7 +142,7 @@ public class Assistant : GenericObject
         StateConfigurer.Create(pickup)
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            .SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
+            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.USEIT, useit)
             .SetTransition(JorgeStates.HIDE, hide)
@@ -155,7 +151,7 @@ public class Assistant : GenericObject
         StateConfigurer.Create(useit)
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            .SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
+            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.HIDE, hide)
@@ -164,7 +160,7 @@ public class Assistant : GenericObject
         StateConfigurer.Create(hide)
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            .SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
+            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.USEIT, useit)
@@ -272,45 +268,45 @@ public class Assistant : GenericObject
 
         #region WaitForInteract
 
-        waitForInteract.OnEnter += x =>
-        {
-            //Debug.Log("follow");
-            _actualObjective = _player;
-        };
-
-        waitForInteract.OnUpdate += () =>
-        {
-            _dir = (_player.position) - transform.position;
-
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
-            {
-                SendInputToFSM(JorgeStates.PATHFINDING);
-            }
-
-            Quaternion targetRotation = Quaternion.LookRotation(_dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-
-            Vector3 targetMovement = _player.position + (_dir.normalized * -1 * _followingDistance);
-            //Collider[] collisions = Physics.OverlapSphere(transform.position, _closeRadiousDetection, _playerMask);
-
-            //if (!collisions.Any())
-            //    targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
-            //else
-            //    targetMovement = _actualObjective.position + (_dir.normalized * -1 * _closeDistanceSpeed);
-
-
-            Vector3 newDir = targetMovement - transform.position;
-            _actualDir = newDir * _followingDistance;
-
-
-            if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
-        };
-
-        waitForInteract.OnExit += x =>
-        {
-            _previousState = JorgeStates.FOLLOW;
-            _previousObjective = _actualObjective;
-        };
+        // waitForInteract.OnEnter += x =>
+        // {
+        //     //Debug.Log("follow");
+        //     _actualObjective = _player;
+        // };
+        //
+        // waitForInteract.OnUpdate += () =>
+        // {
+        //     _dir = (_player.position) - transform.position;
+        //
+        //     if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
+        //     {
+        //         SendInputToFSM(JorgeStates.PATHFINDING);
+        //     }
+        //
+        //     Quaternion targetRotation = Quaternion.LookRotation(_dir);
+        //     transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+        //
+        //     Vector3 targetMovement = _player.position + (_dir.normalized * -1 * _followingDistance);
+        //     //Collider[] collisions = Physics.OverlapSphere(transform.position, _closeRadiousDetection, _playerMask);
+        //
+        //     //if (!collisions.Any())
+        //     //    targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
+        //     //else
+        //     //    targetMovement = _actualObjective.position + (_dir.normalized * -1 * _closeDistanceSpeed);
+        //
+        //
+        //     Vector3 newDir = targetMovement - transform.position;
+        //     _actualDir = newDir * _followingDistance;
+        //
+        //
+        //     if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
+        // };
+        //
+        // waitForInteract.OnExit += x =>
+        // {
+        //     _previousState = JorgeStates.FOLLOW;
+        //     _previousObjective = _actualObjective;
+        // };
 
         #endregion
 
