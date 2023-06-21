@@ -266,6 +266,18 @@ public class SoundManager : MonoBehaviour
         musicChannel[idToPlay].volume = volumeMusic;
         musicChannel[idToPlay].pitch = pitch;  
     }
+    
+    public void PlayMusicByID(string id, bool loop = false, float pitch = 1)
+    {
+        if(!_actualMusicNames.Contains(id)) return;
+
+        var idToPlay = _actualMusicNames.IndexOf(id);
+        
+        musicChannel[idToPlay].Play();
+        musicChannel[idToPlay].loop = loop;
+        musicChannel[idToPlay].volume = volumeMusic;
+        musicChannel[idToPlay].pitch = pitch;  
+    }
 
     public void StopAllMusic()
     {
@@ -503,7 +515,8 @@ public enum MusicID
     TEST_JIGGY,
     INTRO_JINGLE,
     MAINMENU,
-    BATTLE_MUSIC
+    BATTLE_MUSIC,
+    OUTRO_LOGO
 }
 
 public enum VoiceLineID
