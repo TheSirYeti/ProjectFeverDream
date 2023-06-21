@@ -32,6 +32,8 @@ public class Model : GenericObject, IPlayerLife
     [Space(20)] [Header("-== Movement Properties ==-")]
     float _actualSpeed;
 
+    private bool _canMove = true;
+
     [SerializeField] float _walkingSpeed;
     [SerializeField] float _runningSpeed;
     [SerializeField] float _slideSpeed;
@@ -112,6 +114,7 @@ public class Model : GenericObject, IPlayerLife
         _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
 
         EventManager.Subscribe("SetAssistant", SetAssistant);
+        EventManager.Subscribe("ChangeMovementState", ChangeMovementState);
 
         floorChecker = CheckOffFloor;
     }
@@ -124,7 +127,8 @@ public class Model : GenericObject, IPlayerLife
 
     public override void OnUpdate()
     {
-        _controller.onUpdate();
+        if (_canJump)
+            _controller.onUpdate();
 
         floorChecker();
         crouchChecker();
@@ -137,6 +141,11 @@ public class Model : GenericObject, IPlayerLife
     public override void OnFixedUpdate()
     {
         _physics.PhysicsFixedUpdate();
+    }
+
+    private void ChangeMovementState(params object[] parameters)
+    {
+        _canJump = (bool)parameters[0];
     }
 
     public void Move(float hAxie, float vAxie)
@@ -293,7 +302,8 @@ public class Model : GenericObject, IPlayerLife
         }
         else
         {
-            if (Physics.CheckBox(transform.position, new Vector3(0.5f, 0.2f, 0.5f), transform.rotation, LayerManager.LM_FLOOR))
+            if (Physics.CheckBox(transform.position, new Vector3(0.5f, 0.2f, 0.5f), transform.rotation,
+                    LayerManager.LM_FLOOR))
             {
                 crouchChecker = CheckRoof;
             }
@@ -305,7 +315,7 @@ public class Model : GenericObject, IPlayerLife
                 _actualCollider.SetActive(false);
                 _actualCollider = _posibleColliders[state];
                 _actualCollider.SetActive(true);
-                
+
                 _cameraController.StartTranslate(0);
 
                 if (_isOnFloor && !isRunning)
@@ -354,7 +364,7 @@ public class Model : GenericObject, IPlayerLife
             SoundManager.instance.PlaySound(SoundID.SLIDE);
             _slideSoundChecker = true;
         }
-        
+
         yield return new WaitForSeconds(_slideDuration / 2);
 
         LeanTween.cancel(gameObject);
@@ -401,11 +411,11 @@ public class Model : GenericObject, IPlayerLife
     {
         if (_physics.HasGravity()) _physics.RemoveAcceleration("gravity");
         //Debug.Log("Estoy chequeando si salgo del piso");
-        
+
         // if (_jumpCoroutine == null) Debug.Log("Hay corutina");
         // if (!Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
         //         transform.rotation, _floorMask)) Debug.Log("No hay piso");
-        
+
         if (_jumpCoroutine == null && !Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
                 transform.rotation, _floorMask))
         {
@@ -428,7 +438,7 @@ public class Model : GenericObject, IPlayerLife
     void CheckOffFloor()
     {
         if (!_physics.HasGravity()) _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
-        
+
         //Debug.Log("Viendo si vuelvo al piso");
         if (Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f), transform.rotation,
                 _floorMask))
@@ -462,7 +472,8 @@ public class Model : GenericObject, IPlayerLife
 
     void CheckRoof()
     {
-        if (!Physics.CheckBox(transform.position, new Vector3(0.5f, 0.2f, 0.5f), transform.rotation, LayerManager.LM_FLOOR))
+        if (!Physics.CheckBox(transform.position, new Vector3(0.5f, 0.2f, 0.5f), transform.rotation,
+                LayerManager.LM_FLOOR))
         {
             Crouch(0);
         }
