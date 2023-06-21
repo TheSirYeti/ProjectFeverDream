@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using UnityFx.Outline;
+using Random = UnityEngine.Random;
 
 public class Assistant : GenericObject
 {
@@ -53,6 +54,9 @@ public class Assistant : GenericObject
 
     [SerializeField] Transform _player;
     public IAssistInteract _holdingItem { get; private set; }
+
+    [SerializeField] private float interactDialogueCount, eatDialogueCount;
+    [SerializeField] [Range(0, 100)] private float dialogueChance;
 
     public enum Interactuables
     {
@@ -319,6 +323,13 @@ public class Assistant : GenericObject
             _interactuable = _actualObjective.gameObject.GetComponent<IAssistInteract>();
             if (_interactuable == null)
                 _interactuable = _actualObjective.gameObject.GetComponentInParent<IAssistInteract>();
+
+            var rand = Random.Range(0f, 100f);
+            if (rand <= dialogueChance)
+            {
+                var randDialogue = Random.Range(1, interactDialogueCount + 1);
+                SoundManager.instance.PlaySoundByID("ASSISTANT_INTERACT_0" + randDialogue);
+            }
         };
 
         interact.OnUpdate += () =>
@@ -352,6 +363,13 @@ public class Assistant : GenericObject
                         _animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
                     case Interactuables.ENEMY:
+                        var rand = Random.Range(0f, 100f);
+                        if (rand <= dialogueChance)
+                        {
+                            var randDialogue = Random.Range(1, eatDialogueCount + 1);
+                            SoundManager.instance.PlaySoundByID("ASSISTANT_EAT_0" + randDialogue);
+                        }
+                        
                         _actualRenders = _interactuable.GetRenderer();
                         foreach (Renderer render in _actualRenders)
                         {

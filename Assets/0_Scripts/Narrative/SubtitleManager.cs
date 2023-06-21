@@ -25,6 +25,11 @@ public class SubtitleManager : GenericObject
         EventManager.Subscribe("OnVoicelineSetTriggered", SetCurrentVoicelines);
     }
 
+    public void StopVoicelines()
+    {
+        SoundManager.instance.StopAllVoiceLines();
+    }
+    
     public void SetCurrentVoicelines(object[] parameters)
     {
         SubtitleSet newSet = (SubtitleSet)parameters[0];
@@ -36,7 +41,7 @@ public class SubtitleManager : GenericObject
         var allSfx = currentSubtitleSet.allVoicelines.Select(x => x.sfx).ToArray();
         SoundManager.instance.SetNewVoiceSet(allSfx);
         
-        //temp?
+        
         StopCoroutine(PlayVoiceline());
         StartCoroutine(PlayVoiceline());
     }

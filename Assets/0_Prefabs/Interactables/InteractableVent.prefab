@@ -253,11 +253,40 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
+--- !u!1 &354401092515956147 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
+  m_PrefabInstance: {fileID: 588419296844167394}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1126116815070355209 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
   m_PrefabInstance: {fileID: 588419296844167394}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6874257178472358826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354401092515956147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271c580db5fd384429cdac899152e9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+  _outlineSettings:
+    _outlineSettings: {fileID: 0}
+    _outlineColor: {r: 1, g: 1, b: 1, a: 1}
+    _outlineWidth: 4
+    _outlineIntensity: 2
+    _outlineAlphaCutoff: 0.9
+    _outlineMode: 0
+  _ignoreLayerMask: 0
+  _cameraEvent: 15
+  _targetCamera: {fileID: 0}
+  _updateRenderers: 0
 --- !u!1001 &6596516625878447310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -347,11 +376,40 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
+--- !u!1 &6290087468875925919 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
+  m_PrefabInstance: {fileID: 6596516625878447310}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6629634649445110565 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
   m_PrefabInstance: {fileID: 6596516625878447310}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2199534755426706054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6290087468875925919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271c580db5fd384429cdac899152e9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+  _outlineSettings:
+    _outlineSettings: {fileID: 0}
+    _outlineColor: {r: 1, g: 1, b: 1, a: 1}
+    _outlineWidth: 4
+    _outlineIntensity: 2
+    _outlineAlphaCutoff: 0.9
+    _outlineMode: 0
+  _ignoreLayerMask: 0
+  _cameraEvent: 15
+  _targetCamera: {fileID: 0}
+  _updateRenderers: 0
 --- !u!1001 &6642384575575728476
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -484,8 +542,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 0.5187305, z: 1}
+  m_Center: {x: 7.123963e-15, y: 0.24063474, z: -2.3321405e-15}
 --- !u!82 &3300264889246632702
 AudioSource:
   m_ObjectHideFlags: 0
@@ -596,6 +654,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
+  _outline: {fileID: 6874257178472358826}
   _type: 0
   _door: {fileID: 429532700128031993}
   _interactPoint: {fileID: 5842393174781493930}
