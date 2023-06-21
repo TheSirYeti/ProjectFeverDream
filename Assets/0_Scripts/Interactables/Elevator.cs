@@ -19,17 +19,13 @@ public class Elevator : GenericObject, IAssistInteract
     {
         
     }
-
-    public void Interact(GameObject usableItem = null)
+    
+    //TODO: Set Interfaces
+    public void Interact(IAssistInteract usableItem = null)
     {
         StartCoroutine(DoElevatorCycle());
         interactable = false;
         Debug.Log("ASCENSOR");
-    }
-    //TODO: Set Interfaces
-    public void Interact(IAssistInteract usableItem = null)
-    {
-        throw new System.NotImplementedException();
     }
 
     public Assistant.Interactuables GetType()
@@ -39,7 +35,7 @@ public class Elevator : GenericObject, IAssistInteract
 
     public Assistant.JorgeStates GetState()
     {
-        throw new System.NotImplementedException();
+        return Assistant.JorgeStates.INTERACT;
     }
 
     public Transform GetTransform()
@@ -49,7 +45,7 @@ public class Elevator : GenericObject, IAssistInteract
 
     public Transform GetInteractPoint()
     {
-        return interactPoint;
+        return transform;
     }
 
     public List<Renderer> GetRenderer()
@@ -79,7 +75,7 @@ public class Elevator : GenericObject, IAssistInteract
 
     public bool isAutoUsable()
     {
-        throw new System.NotImplementedException();
+        return false;
     }
 
     public Transform UsablePoint()
@@ -104,10 +100,5 @@ public class Elevator : GenericObject, IAssistInteract
     public string ActionName()
     {
         return "enable the Elevator";
-    }
-
-    public bool IsInteractable()
-    {
-        return interactable;
     }
 }
