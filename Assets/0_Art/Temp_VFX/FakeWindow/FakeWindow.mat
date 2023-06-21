@@ -10,7 +10,7 @@ Material:
   m_Name: FakeWindow
   m_Shader: {fileID: 4800000, guid: 1794d8e29e07e954baef2a8caadb9bf8, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -64,6 +64,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - __dirty: 1
-    m_Colors: []
+    - _ParallaxScale: 1
+    - _PixelsX: 100
+    - _PixelsY: 100
+    - __dirty: 0
+    m_Colors:
+    - _Tiling: {r: 0.01, g: 0.01, b: 0, a: 0}
+    - _TilingRGB: {r: 3, g: 3, b: 0, a: 0}
   m_BuildTextureStacks: []
