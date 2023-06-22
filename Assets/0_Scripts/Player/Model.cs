@@ -127,7 +127,7 @@ public class Model : GenericObject, IPlayerLife
 
     public override void OnUpdate()
     {
-        if (_canJump)
+        if (_canMove)
             _controller.onUpdate();
 
         floorChecker();
