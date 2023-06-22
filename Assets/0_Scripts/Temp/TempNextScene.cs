@@ -12,10 +12,10 @@ public class TempNextScene : GenericObject
         UpdateManager._instance.AddObject(this);
     }
 
-    public override void OnStart()
+    /*public override void OnStart()
     {
         TriggerNextScene(nextScene);
-    }
+    }*/
 
     public void TriggerNextScene(int nextScene)
     {
@@ -27,8 +27,8 @@ public class TempNextScene : GenericObject
         GameManager.Instance.ChangeScene(2);
     }
 
-    /*private void OnEnable()
+    private void OnEnable()
     {
-        TriggerMenu();
-    }*/
+        GameManager.Instance.ChangeScene(9);
+    }
 }

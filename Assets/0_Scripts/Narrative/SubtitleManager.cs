@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SubtitleManager : GenericObject
 {
@@ -15,6 +16,10 @@ public class SubtitleManager : GenericObject
     [Header("SUBTITLE UI PROPERTIES")] 
     [SerializeField] private TextMeshProUGUI subtitles, speaker;
 
+    [Header("ASSISTANT SUBS")] 
+    [SerializeField] private List<SubtitleSet> interactSubs;
+    [SerializeField] private List<SubtitleSet> eatSubs;
+
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -23,6 +28,8 @@ public class SubtitleManager : GenericObject
     public override void OnStart()
     {
         EventManager.Subscribe("OnVoicelineSetTriggered", SetCurrentVoicelines);
+        EventManager.Subscribe("OnAssistantInteractDialogueTriggered", PlayInteractSound);
+        EventManager.Subscribe("OnAssistantEatDialogueTriggered", PlayEatSound);
     }
 
     public void StopVoicelines()
@@ -32,6 +39,8 @@ public class SubtitleManager : GenericObject
     
     public void SetCurrentVoicelines(object[] parameters)
     {
+        StopVoicelines();
+        
         SubtitleSet newSet = (SubtitleSet)parameters[0];
 
         if (newSet == null) return;
@@ -61,4 +70,22 @@ public class SubtitleManager : GenericObject
         animator.SetBool("isSub", false);
         yield return null;
     }
+
+    #region ASSISTANT FUNCS
+
+    void PlayInteractSound(object[] parameters)
+    {
+        int randID = Random.Range(0, interactSubs.Count);
+
+        EventManager.Trigger("OnVoicelineSetTriggered", interactSubs[randID]);
+    }
+    
+    void PlayEatSound(object[] parameters)
+    {
+        int randID = Random.Range(0, eatSubs.Count);
+
+        EventManager.Trigger("OnVoicelineSetTriggered", eatSubs[randID]);
+    }
+
+    #endregion
 }

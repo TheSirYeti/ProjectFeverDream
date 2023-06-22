@@ -7,6 +7,8 @@ public class VoicelineTrigger : GenericObject
 {
     public SubtitleSet mySet;
     private bool hasBeenTriggered = false;
+
+    public bool doOnEnable = false;
     
     private void Awake()
     {
@@ -16,6 +18,15 @@ public class VoicelineTrigger : GenericObject
     private void OnTriggerEnter(Collider other)
     {
         if (!hasBeenTriggered && other.gameObject.tag == "Player")
+        {
+            EventManager.Trigger("OnVoicelineSetTriggered", mySet);
+            hasBeenTriggered = true;
+        }
+    }
+
+    public void OnEnable()
+    {
+        if (doOnEnable)
         {
             EventManager.Trigger("OnVoicelineSetTriggered", mySet);
             hasBeenTriggered = true;

@@ -327,8 +327,7 @@ public class Assistant : GenericObject
             var rand = Random.Range(0f, 100f);
             if (rand <= dialogueChance)
             {
-                var randDialogue = Random.Range(1, interactDialogueCount + 1);
-                SoundManager.instance.PlaySoundByID("ASSISTANT_INTERACT_0" + randDialogue);
+                EventManager.Trigger("OnAssistantInteractDialogueTriggered");
             }
         };
 
@@ -366,8 +365,7 @@ public class Assistant : GenericObject
                         var rand = Random.Range(0f, 100f);
                         if (rand <= dialogueChance)
                         {
-                            var randDialogue = Random.Range(1, eatDialogueCount + 1);
-                            SoundManager.instance.PlaySoundByID("ASSISTANT_EAT_0" + randDialogue);
+                            EventManager.Trigger("OnAssistantEatDialogueTriggered");
                         }
                         
                         _actualRenders = _interactuable.GetRenderer();
@@ -502,10 +500,10 @@ public class Assistant : GenericObject
 
         hide.OnEnter += x =>
         {
-            //Debug.Log("hide");
-
             Collider[] hidingSpots =
                 Physics.OverlapSphere(_player.position, _hidingSpotsDetectionDistance, _hidingSpotsMask);
+
+            if (!hidingSpots.Any()) return;
 
             List<Collider> colliders = hidingSpots
                 .OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
