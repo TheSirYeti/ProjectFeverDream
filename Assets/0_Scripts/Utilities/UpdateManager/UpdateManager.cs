@@ -15,14 +15,14 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
     // private List<IOnUpdate> _pausableUpdates = new List<IOnUpdate>();
     // private List<IOnUpdate> _continousUpdates = new List<IOnUpdate>();
 
-    private Action _pausableUpdates = delegate {  };
-    private Action _continuousUpdates = delegate {  };
-    
-    private Action _pausableFixedUpdates = delegate {  };
-    private Action _continuousFixedUpdates = delegate {  };
-    
-    private Action _pausableLateUpdates = delegate {  };
-    private Action _continuousLateUpdates = delegate {  };
+    private Action _pausableUpdates = delegate { };
+    private Action _continuousUpdates = delegate { };
+
+    private Action _pausableFixedUpdates = delegate { };
+    private Action _continuousFixedUpdates = delegate { };
+
+    private Action _pausableLateUpdates = delegate { };
+    private Action _continuousLateUpdates = delegate { };
 
     //private Queue<GenericObject> _removeQueue = new Queue<GenericObject>();
 
@@ -67,7 +67,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
     {
         if (_isLoading) return;
         _continuousLateUpdates();
-        
+
         if (_gamePause) return;
         _pausableLateUpdates();
     }
@@ -80,8 +80,16 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
     public void OnSceneUnload()
     {
         _allObjects = new List<GenericObject>();
-        _pausableUpdates = delegate {  };
-        _continuousUpdates = delegate {  };
+
+        _pausableUpdates = delegate { };
+        _continuousUpdates = delegate { };
+
+        _pausableFixedUpdates = delegate { };
+        _continuousFixedUpdates = delegate { };
+        
+        _pausableLateUpdates = delegate {  };
+        _continuousLateUpdates = delegate {  };
+        
         _gamePause = false;
 
         if (initCoroutine != null) StopCoroutine(initCoroutine);
@@ -89,7 +97,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     public void AddObject(GenericObject genericObject)
     {
-        _awakeQueue.Enqueue(new TObj<GenericObject>(){myObj = genericObject, myWeight = genericObject.priority});
+        _awakeQueue.Enqueue(new TObj<GenericObject>() { myObj = genericObject, myWeight = genericObject.priority });
     }
 
     public void RemoveObject(GenericObject genericObject)
@@ -126,7 +134,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
                 obj.OnAwake();
 
-                _startQueue.Enqueue(new TObj<GenericObject>(){myObj = obj, myWeight = obj.priority});
+                _startQueue.Enqueue(new TObj<GenericObject>() { myObj = obj, myWeight = obj.priority });
             }
 
             while (_startQueue.Count() > 0)
@@ -135,7 +143,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
                 obj.OnStart();
 
-                _lateStartQueue.Enqueue(new TObj<GenericObject>(){myObj = obj, myWeight = obj.priority});
+                _lateStartQueue.Enqueue(new TObj<GenericObject>() { myObj = obj, myWeight = obj.priority });
             }
 
             while (_lateStartQueue.Count() > 0)
