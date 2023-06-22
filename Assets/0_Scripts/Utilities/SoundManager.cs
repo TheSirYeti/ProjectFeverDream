@@ -343,8 +343,17 @@ public class SoundManager : MonoBehaviour
     public void SetNewVoiceSet(AudioClip[] newVoiceLines)
     {
         voiceLine = newVoiceLines;
+        voiceLineChannel = new AudioSource[voiceLine.Length];
 
-        if (voiceLineChannel.Length < voiceLine.Length)
+        for (int i = 0; i < voiceLineChannel.Length; i++)
+        {
+            AudioSource actualAudioSource = gameObject.AddComponent<AudioSource>();
+            actualAudioSource.playOnAwake = false;
+            voiceLineChannel[i] = actualAudioSource;
+            //AddVoiceLineSource(actualAudioSource);
+        }
+        
+        /*if (voiceLineChannel.Length < voiceLine.Length)
         {
             int actualIndex = voiceLineChannel.Length;
 
@@ -354,7 +363,7 @@ public class SoundManager : MonoBehaviour
                 actualAudioSource.playOnAwake = false;
                 AddVoiceLineSource(actualAudioSource);
             }
-        }
+        }*/
 
         for (int i = 0; i < voiceLineChannel.Length; i++)
         {

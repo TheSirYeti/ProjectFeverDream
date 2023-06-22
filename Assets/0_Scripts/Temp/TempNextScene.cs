@@ -29,6 +29,14 @@ public class TempNextScene : GenericObject
 
     private void OnEnable()
     {
-        GameManager.Instance.ChangeScene(9);
+        GameManager.Instance.ChangeScene(nextScene);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            GameManager.Instance.ChangeScene(nextScene);
+        }
     }
 }

@@ -29,6 +29,6 @@ public class SoundPlayer : GenericObject
     
     public void PlayMusic(string musicID)
     {
-        SoundManager.instance.PlayMusicByID(soundID);
+        SoundManager.instance.PlayMusicByID(musicID);
     }
 }
