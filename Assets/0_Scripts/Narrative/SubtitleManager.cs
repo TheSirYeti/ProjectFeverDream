@@ -11,7 +11,9 @@ public class SubtitleManager : GenericObject
     [Header("SUBTITLE SETTINGS")]
     public SubtitleSet currentSubtitleSet;
     [SerializeField] private Animator animator;
+    private int currentVoicelineID;
     private bool isLinePlaying = false;
+    private float currentSubtitleLength;
 
     [Header("SUBTITLE UI PROPERTIES")] 
     [SerializeField] private TextMeshProUGUI subtitles, speaker;
@@ -32,9 +34,25 @@ public class SubtitleManager : GenericObject
         EventManager.Subscribe("OnAssistantEatDialogueTriggered", PlayEatSound);
     }
 
+    public override void OnUpdate()
+    {
+        if (isLinePlaying)
+        {
+            currentSubtitleLength -= Time.deltaTime;
+            if (currentSubtitleLength <= 0)
+            {
+                PlayNextVoiceline();
+            }
+        }
+    }
+
     public void StopVoicelines()
     {
         SoundManager.instance.StopAllVoiceLines();
+        currentSubtitleSet = new SubtitleSet();
+        currentSubtitleLength = 0;
+        currentVoicelineID = -1;
+        isLinePlaying = false;
     }
     
     public void SetCurrentVoicelines(object[] parameters)
@@ -49,10 +67,11 @@ public class SubtitleManager : GenericObject
 
         var allSfx = currentSubtitleSet.allVoicelines.Select(x => x.sfx).ToArray();
         SoundManager.instance.SetNewVoiceSet(allSfx);
+
+        animator.SetBool("isSub", true);
+        PlayNextVoiceline();
         
-        
-        StopCoroutine(PlayVoiceline());
-        StartCoroutine(PlayVoiceline());
+        isLinePlaying = true;
     }
 
     IEnumerator PlayVoiceline()
@@ -71,6 +90,26 @@ public class SubtitleManager : GenericObject
 
         animator.SetBool("isSub", false);
         yield return null;
+    }
+
+    void PlayNextVoiceline()
+    {
+        currentVoicelineID++;
+
+        if (currentVoicelineID >= currentSubtitleSet.allVoicelines.Count)
+        {
+            animator.SetBool("isSub", false);
+            isLinePlaying = false;
+            return;
+        }
+        
+        SubtitleSet.VoicelineStruct voiceline = currentSubtitleSet.allVoicelines[currentVoicelineID];
+        
+        SoundManager.instance.PlayVoiceLineByID(voiceline.id - 1);
+        speaker.text = voiceline.speaker;
+        subtitles.text = voiceline.subtitle;
+        EventManager.Trigger("OnVoiceLineStarted", voiceline.speaker, voiceline.subtitle);
+        currentSubtitleLength = voiceline.duration;
     }
 
     #region ASSISTANT FUNCS
