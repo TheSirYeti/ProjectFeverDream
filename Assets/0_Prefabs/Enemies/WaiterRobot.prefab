@@ -49926,7 +49926,8 @@ GameObject:
   - component: {fileID: -8144407655409778236}
   - component: {fileID: -4155930746238806908}
   - component: {fileID: -5507409118450891783}
-  m_Layer: 11
+  - component: {fileID: 3495739721304002617}
+  m_Layer: 10
   m_Name: WaiterRobot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50036,6 +50037,7 @@ MonoBehaviour:
   minChaseDistance: 15
   _type: 1
   _interactPoint: {fileID: 494355910516912856}
+  _outline: {fileID: 3495739721304002617}
   attackCollider: {fileID: 5471815192462616798}
   attackCooldown: 5
   currentAttackCooldown: 0
@@ -50114,6 +50116,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
+  soundID: 
+  musicID: 
+  playSoundOnStart: 0
+  playMusicOnStart: 0
+  playSoundOnEnable: 0
+  playMusicOnEnable: 0
 --- !u!82 &9150521736765861348
 AudioSource:
   m_ObjectHideFlags: 0
@@ -50786,6 +50794,30 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3495739721304002617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5129216507261015513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 271c580db5fd384429cdac899152e9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
+  _outlineSettings:
+    _outlineSettings: {fileID: 0}
+    _outlineColor: {r: 1, g: 1, b: 1, a: 1}
+    _outlineWidth: 4
+    _outlineIntensity: 2
+    _outlineAlphaCutoff: 0.9
+    _outlineMode: 0
+  _ignoreLayerMask: 0
+  _cameraEvent: 15
+  _targetCamera: {fileID: 0}
+  _updateRenderers: 0
 --- !u!1 &5328014092668545742
 GameObject:
   m_ObjectHideFlags: 0

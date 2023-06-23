@@ -49,10 +49,7 @@ public class DoorPanel : GenericObject, IAssistInteract
 
     public void Interact(IAssistInteract usableItem = null)
     {
-        foreach (var rend in renderers)
-        {
-            rend.material = activatedMat;
-        }
+        
         
         _door.SetBool("open", true);
         SoundManager.instance.PlaySoundByInt(audioIDs[0]);
