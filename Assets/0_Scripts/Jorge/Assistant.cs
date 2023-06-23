@@ -359,7 +359,8 @@ public class Assistant : GenericObject
                 switch (_interactuable.GetType())
                 {
                     case Interactuables.DOOR:
-                        _animator.SetTrigger(_interactuable.AnimationToExecute());
+                        _animator.SetBool("pluggingWire", true);
+                        StartCoroutine(WaitAction());
                         break;
                     case Interactuables.ENEMY:
                         var rand = Random.Range(0f, 100f);
@@ -659,6 +660,22 @@ public class Assistant : GenericObject
         var ray = new Ray(transform.position, objective.normalized);
 
         return !Physics.Raycast(ray, dir.magnitude, LayerManager.LM_OBSTACLE);
+    }
+
+    //Temp
+    IEnumerator WaitAction()
+    {
+        yield return new WaitForSeconds(0.5f);
+        
+        _animator.SetBool("pluggingWire", false);
+        _interactuable.Interact();
+        _interactuable = null;
+        _actualObjective = _player;
+        _loadingAmmount = 0;
+        ExtraUpdate = delegate { };
+
+        SendInputToFSM(JorgeStates.FOLLOW);
+        
     }
 
     private void OnDrawGizmos()

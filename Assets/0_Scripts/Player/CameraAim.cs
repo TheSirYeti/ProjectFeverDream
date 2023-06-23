@@ -25,7 +25,7 @@ public class CameraAim
     {
         var colliders =
             Physics.OverlapSphere(_camera.transform.position, _interactDistance, LayerManager.LM_ALLINTERACTS);
-
+        Debug.Log(1);
         if (!colliders.Any())
         {
             if (_actualInteract == null) return;
@@ -37,13 +37,15 @@ public class CameraAim
             return;
         }
 
+        Debug.Log(2);
         var objectInView = colliders.Where(x =>
         {
-            var maxDistance = new Vector3(0.5f,0.5f,0);
+            var maxDistance = new Vector3(0.5f, 0.5f, 0);
             var dir = x.transform.position - _camera.transform.position;
             Vector3 position;
-            return !Physics.Raycast(_camera.transform.position, dir, dir.magnitude, LayerManager.LM_OBSTACLE) 
-                   && Mathf.Abs((_camera.WorldToViewportPoint((position = x.transform.position)) - maxDistance).x) < 0.2f
+            return !Physics.Raycast(_camera.transform.position, dir, dir.magnitude * 0.85f, LayerManager.LM_OBSTACLE)
+                   && Mathf.Abs((_camera.WorldToViewportPoint((position = x.transform.position)) - maxDistance).x) <
+                   0.2f
                    && Mathf.Abs((_camera.WorldToViewportPoint(position) - maxDistance).y) < 0.2f;
         });
 
@@ -58,9 +60,11 @@ public class CameraAim
             return;
         }
 
+        Debug.Log(3);
+
         var closeObj = objectInView.OrderBy(x =>
             {
-                var maxDistance = new Vector2(0.5f,0.5f);
+                var maxDistance = new Vector2(0.5f, 0.5f);
                 var vector2 = new Vector2(_camera.WorldToViewportPoint(x.transform.position).x,
                     _camera.WorldToViewportPoint(x.transform.position).y) - maxDistance;
                 return vector2.magnitude;
@@ -69,7 +73,7 @@ public class CameraAim
             .GetComponent<IAssistInteract>();
 
         if (closeObj == null) return;
-
+        Debug.Log(4);
         if (_actualInteract != null && !_actualInteract.CanInteract())
         {
             _actualInteract.ChangeOutlineState(false);
@@ -78,7 +82,7 @@ public class CameraAim
 
             return;
         }
-
+        Debug.Log(5);
         if (closeObj == _actualInteract) return;
 
         _actualInteract?.ChangeOutlineState(false);
