@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class SoundPlayer : GenericObject
 {
     public string soundID, musicID;
     public bool playSoundOnStart, playMusicOnStart;
+    public bool playSoundOnEnable, playMusicOnEnable;
     
     
     private void Awake()
@@ -30,5 +32,14 @@ public class SoundPlayer : GenericObject
     public void PlayMusic(string musicID)
     {
         SoundManager.instance.PlayMusicByID(musicID);
+    }
+
+    private void OnEnable()
+    {
+        if(playMusicOnEnable)
+            PlayMusic(musicID);
+
+        if (playSoundOnEnable)
+            PlaySound(soundID);
     }
 }

@@ -29,7 +29,7 @@ public class TempNextScene : GenericObject
 
     private void OnEnable()
     {
-        GameManager.Instance.ChangeScene(nextScene);
+        //GameManager.Instance.ChangeScene(nextScene);
     }
 
     private void OnTriggerEnter(Collider other)

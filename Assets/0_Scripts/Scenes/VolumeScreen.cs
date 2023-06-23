@@ -16,6 +16,10 @@ public class VolumeScreen : GenericObject
     
     public override void OnStart()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        
+        
         if (PlayerPrefs.HasKey("SFX_VOLUME_VALUE"))
         {
             sfxSlider.value = PlayerPrefs.GetFloat("SFX_VOLUME_VALUE");

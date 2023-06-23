@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
- 
+
+#if UNITY_EDITOR
 [CustomEditor(typeof(CopyAnimationPos))]
+
 public class CopyTransBuilderEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -16,3 +18,4 @@ public class CopyTransBuilderEditor : Editor
         }
     }
 }
+#endif
