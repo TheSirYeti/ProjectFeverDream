@@ -63,7 +63,7 @@ public class DoorPanel : GenericObject, IAssistInteract
 
     public string AnimationToExecute()
     {
-        return "door";
+        return "pluggingWire";
     }
 
     //TODO: Set Interfaces

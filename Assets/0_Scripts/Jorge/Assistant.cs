@@ -19,7 +19,7 @@ public class Assistant : GenericObject
 
     [SerializeField] private float _followSpeed;
     [SerializeField] private float _interactSpeed;
-                     
+
     [SerializeField] private float _followingDistance;
     [SerializeField] private float _interactDistance;
     [SerializeField] private float _pickupDistance;
@@ -71,6 +71,7 @@ public class Assistant : GenericObject
     {
         FOLLOW,
         PATHFINDING,
+
         //WAITFORINTERACT,
         INTERACT,
         PICKUP,
@@ -83,7 +84,7 @@ public class Assistant : GenericObject
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
-        UpdateManager._instance.AddComponents(new PausableObject(){anim = _animator, rb = _rb});
+        UpdateManager._instance.AddComponents(new PausableObject() { anim = _animator, rb = _rb });
     }
 
     public override void OnAwake()
@@ -127,7 +128,7 @@ public class Assistant : GenericObject
             .SetTransition(JorgeStates.USEIT, useit)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
-        
+
         // StateConfigurer.Create(waitForInteract)
         //     .SetTransition(JorgeStates.FOLLOW, follow)
         //     .SetTransition(JorgeStates.PATHFINDING, pathFinding)
@@ -360,8 +361,8 @@ public class Assistant : GenericObject
                 switch (_interactuable.GetType())
                 {
                     case Interactuables.DOOR:
-                        _animator.SetBool("pluggingWire", true);
-                        StartCoroutine(WaitAction());
+                        _animator.SetBool(_interactuable.AnimationToExecute(), true);
+                        StartCoroutine(WaitAction(1, false));
                         break;
                     case Interactuables.ENEMY:
                         var rand = Random.Range(0f, 100f);
@@ -369,7 +370,7 @@ public class Assistant : GenericObject
                         {
                             EventManager.Trigger("OnAssistantEatDialogueTriggered");
                         }
-                        
+
                         _actualRenders = _interactuable.GetRenderer();
                         foreach (Renderer render in _actualRenders)
                         {
@@ -383,8 +384,8 @@ public class Assistant : GenericObject
                         _animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
                     case Interactuables.ELEVATOR:
-                        _animator.SetBool("pluggingWire", true);
-                        StartCoroutine(WaitAction());
+                        _animator.SetBool(_interactuable.AnimationToExecute(), true);
+                        StartCoroutine(WaitAction(1, false));
                         break;
                     default:
                         break;
@@ -665,11 +666,15 @@ public class Assistant : GenericObject
     }
 
     //Temp
-    IEnumerator WaitAction()
+    IEnumerator WaitAction(float time, bool isTrigger)
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(time);
+
+        if (isTrigger)
+            _animator.SetTrigger(_interactuable.AnimationToExecute());
+        else
+            _animator.SetBool(_interactuable.AnimationToExecute(), false);
         
-        _animator.SetBool("pluggingWire", false);
         _interactuable.Interact();
         _interactuable = null;
         _actualObjective = _player;
@@ -677,7 +682,6 @@ public class Assistant : GenericObject
         ExtraUpdate = delegate { };
 
         SendInputToFSM(JorgeStates.FOLLOW);
-        
     }
 
     private void OnDrawGizmos()

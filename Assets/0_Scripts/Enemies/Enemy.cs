@@ -526,7 +526,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
     public string AnimationToExecute()
     {
-        return "vacuum";
+        return "absorbing";
     }
 
     public void ChangeOutlineState(bool state)

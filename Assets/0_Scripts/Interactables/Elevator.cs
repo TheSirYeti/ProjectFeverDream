@@ -62,7 +62,7 @@ public class Elevator : GenericObject, IAssistInteract
 
     public string AnimationToExecute()
     {
-        return "door";
+        return "pluggingWire";
     }
 
     public void ChangeOutlineState(bool state)
