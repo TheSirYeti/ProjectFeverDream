@@ -102,6 +102,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
+        UpdateManager._instance.AddComponents(new PausableObject(){anim = animator, rb = rb});
     }
 
     public void SetEnemySetID(int id)

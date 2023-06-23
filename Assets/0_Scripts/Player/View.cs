@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 public class View : GenericObject
 {
     Model _model;
-    Animator _animator;
+    public Animator _animator;
     WeaponManager _weaponManager;
 
     [SerializeField] private Transform _hitParticlesPoint;

@@ -118,6 +118,8 @@ public class Model : GenericObject, IPlayerLife
         EventManager.Subscribe("ChangeMovementState", ChangeMovementState);
 
         floorChecker = CheckOffFloor;
+        
+        UpdateManager._instance.AddComponents(new PausableObject(){anim = _view._animator, rb = _rb});
     }
 
     public override void OnStart()

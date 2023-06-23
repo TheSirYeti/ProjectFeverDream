@@ -83,6 +83,7 @@ public class Assistant : GenericObject
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
+        UpdateManager._instance.AddComponents(new PausableObject(){anim = _animator, rb = _rb});
     }
 
     public override void OnAwake()

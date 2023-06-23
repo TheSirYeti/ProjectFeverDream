@@ -10,7 +10,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     private bool _gamePause = false;
 
-    private List<GenericObject> _allObjects = new List<GenericObject>();
+    private List<PausableObject> _pausableObjects = new List<PausableObject>();
 
     // private List<IOnUpdate> _pausableUpdates = new List<IOnUpdate>();
     // private List<IOnUpdate> _continousUpdates = new List<IOnUpdate>();
@@ -79,20 +79,25 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     public void OnSceneUnload()
     {
-        _allObjects = new List<GenericObject>();
+        _pausableObjects = new List<PausableObject>();
 
         _pausableUpdates = delegate { };
         _continuousUpdates = delegate { };
 
         _pausableFixedUpdates = delegate { };
         _continuousFixedUpdates = delegate { };
-        
-        _pausableLateUpdates = delegate {  };
-        _continuousLateUpdates = delegate {  };
-        
+
+        _pausableLateUpdates = delegate { };
+        _continuousLateUpdates = delegate { };
+
         _gamePause = false;
 
         if (initCoroutine != null) StopCoroutine(initCoroutine);
+    }
+
+    public void AddComponents(PausableObject obj)
+    {
+        _pausableObjects.Add(obj);
     }
 
     public void AddObject(GenericObject genericObject)
@@ -152,8 +157,6 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
                 obj.OnLateStart();
 
-                _allObjects.Add(obj);
-
                 if (obj.isPausable)
                 {
                     _pausableUpdates += obj.OnUpdate;
@@ -173,5 +176,40 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
     public void ChangeGameState(bool state)
     {
         _gamePause = state;
+
+        if (_gamePause)
+        {
+            foreach (var obj in _pausableObjects)
+            {
+                if (obj.anim)
+                    obj.anim.speed = 0;
+
+                if (obj.rb)
+                {
+                    obj.actualSpeed = obj.rb.velocity;
+                    obj.rb.velocity = Vector3.zero;
+                }
+            }
+        }
+        else
+        {
+            foreach (var obj in _pausableObjects)
+            {
+                if (obj.anim)
+                    obj.anim.speed = 1;
+
+                if (obj.rb)
+                {
+                    obj.rb.velocity = obj.actualSpeed;
+                }
+            }
+        }
     }
+}
+
+public class PausableObject
+{
+    public Animator anim;
+    public Rigidbody rb;
+    public Vector3 actualSpeed;
 }
