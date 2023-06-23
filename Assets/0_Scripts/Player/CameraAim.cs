@@ -43,10 +43,11 @@ public class CameraAim
             var maxDistance = new Vector3(0.5f, 0.5f, 0);
             var dir = x.transform.position - _camera.transform.position;
             Vector3 position;
-            return !Physics.Raycast(_camera.transform.position, dir, dir.magnitude * 0.85f, LayerManager.LM_OBSTACLE)
+            return !Physics.Raycast(_camera.transform.position, dir, dir.magnitude * 0.95f, LayerManager.LM_OBSTACLE)
                    && Mathf.Abs((_camera.WorldToViewportPoint((position = x.transform.position)) - maxDistance).x) <
                    0.2f
-                   && Mathf.Abs((_camera.WorldToViewportPoint(position) - maxDistance).y) < 0.2f;
+                   && Mathf.Abs((_camera.WorldToViewportPoint(position) - maxDistance).y) < 0.2f
+                   && Vector3.Angle(_camera.transform.forward, dir) < 90;
         });
 
         if (!objectInView.Any())
@@ -71,12 +72,11 @@ public class CameraAim
             })
             .First().gameObject
             .GetComponent<IAssistInteract>();
-
-        if (closeObj == null) return;
+        
         Debug.Log(4);
-        if (_actualInteract != null && !_actualInteract.CanInteract())
+        if (closeObj == null || !closeObj.CanInteract())
         {
-            _actualInteract.ChangeOutlineState(false);
+            _actualInteract?.ChangeOutlineState(false);
             _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
 
