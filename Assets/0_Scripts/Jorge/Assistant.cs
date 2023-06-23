@@ -327,7 +327,7 @@ public class Assistant : GenericObject
                 _interactuable = _actualObjective.gameObject.GetComponentInParent<IAssistInteract>();
 
             var rand = Random.Range(0f, 100f);
-            if (rand <= dialogueChance)
+            if (rand <= dialogueChance && _interactuable.GetType() != Interactuables.ENEMY)
             {
                 EventManager.Trigger("OnAssistantInteractDialogueTriggered");
             }
@@ -365,6 +365,9 @@ public class Assistant : GenericObject
                         StartCoroutine(WaitAction(1, false));
                         break;
                     case Interactuables.ENEMY:
+                        _animator.SetBool(_interactuable.AnimationToExecute(), true);
+                        StartCoroutine(WaitAction(1, false));
+                        
                         var rand = Random.Range(0f, 100f);
                         if (rand <= dialogueChance)
                         {

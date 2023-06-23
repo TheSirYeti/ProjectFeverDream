@@ -9,6 +9,7 @@ public class VoicelineTrigger : GenericObject
     private bool hasBeenTriggered = false;
 
     public bool doOnEnable = false;
+    public bool isForStopping = false;
     
     private void Awake()
     {
@@ -19,17 +20,26 @@ public class VoicelineTrigger : GenericObject
     {
         if (!hasBeenTriggered && other.gameObject.tag == "Player")
         {
-            EventManager.Trigger("OnVoicelineSetTriggered", mySet);
             hasBeenTriggered = true;
+            DoVoicelineFunc();
         }
     }
 
     public void OnEnable()
     {
-        if (doOnEnable)
+        if(doOnEnable)
+            DoVoicelineFunc();
+    }
+
+    void DoVoicelineFunc()
+    {
+        if (!isForStopping)
         {
             EventManager.Trigger("OnVoicelineSetTriggered", mySet);
             hasBeenTriggered = true;
+            return;
         }
+        
+        EventManager.Trigger("OnVoicelineStopTriggered");
     }
 }

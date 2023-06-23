@@ -32,6 +32,7 @@ public class SubtitleManager : GenericObject
     {
         currentSubtitleSet = defaultSet;
         EventManager.Subscribe("OnVoicelineSetTriggered", SetCurrentVoicelines);
+        EventManager.Subscribe("OnVoicelineStopTriggered", StopCurrentVoiceline);
         EventManager.Subscribe("OnAssistantInteractDialogueTriggered", PlayInteractSound);
         EventManager.Subscribe("OnAssistantEatDialogueTriggered", PlayEatSound);
     }
@@ -79,6 +80,11 @@ public class SubtitleManager : GenericObject
         isLinePlaying = true;
     }
 
+    public void StopCurrentVoiceline(object[] parameters)
+    {
+        StopVoicelines();
+    }
+    
     IEnumerator PlayVoiceline()
     {
         
