@@ -10,6 +10,7 @@ public class CutsceneManager : GenericObject
     
     [SerializeField] private List<TimelineAsset> allTimelines;
     [SerializeField] private PlayableDirector director;
+    [SerializeField] private bool playFirstCutscene = true;
     
     private void Awake()
     {
@@ -24,7 +25,7 @@ public class CutsceneManager : GenericObject
 
     public override void OnStart()
     {
-        if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0)
+        if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0 && playFirstCutscene)
         {
             director.playableAsset = allTimelines[0];
             director.Play();
