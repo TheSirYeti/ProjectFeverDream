@@ -383,7 +383,8 @@ public class Assistant : GenericObject
                         _animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
                     case Interactuables.ELEVATOR:
-                        _animator.SetTrigger(_interactuable.AnimationToExecute());
+                        _animator.SetBool("pluggingWire", true);
+                        StartCoroutine(WaitAction());
                         break;
                     default:
                         break;
@@ -666,7 +667,7 @@ public class Assistant : GenericObject
     //Temp
     IEnumerator WaitAction()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         
         _animator.SetBool("pluggingWire", false);
         _interactuable.Interact();
