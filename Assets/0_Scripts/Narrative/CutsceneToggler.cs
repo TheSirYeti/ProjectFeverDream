@@ -6,7 +6,7 @@ using UnityEngine;
 public class CutsceneToggler : GenericObject
 {
     public GameObject cameraGO;
-    private bool isInCutscene = true;
+    private bool isInCutscene = false;
     private GameObject player;
     private void Awake()
     {
