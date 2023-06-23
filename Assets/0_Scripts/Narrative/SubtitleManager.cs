@@ -10,6 +10,7 @@ public class SubtitleManager : GenericObject
 {
     [Header("SUBTITLE SETTINGS")]
     public SubtitleSet currentSubtitleSet;
+    public SubtitleSet defaultSet;
     [SerializeField] private Animator animator;
     private int currentVoicelineID;
     private bool isLinePlaying = false;
@@ -29,6 +30,7 @@ public class SubtitleManager : GenericObject
     
     public override void OnStart()
     {
+        currentSubtitleSet = defaultSet;
         EventManager.Subscribe("OnVoicelineSetTriggered", SetCurrentVoicelines);
         EventManager.Subscribe("OnAssistantInteractDialogueTriggered", PlayInteractSound);
         EventManager.Subscribe("OnAssistantEatDialogueTriggered", PlayEatSound);
@@ -49,7 +51,8 @@ public class SubtitleManager : GenericObject
     public void StopVoicelines()
     {
         SoundManager.instance.StopAllVoiceLines();
-        currentSubtitleSet = new SubtitleSet();
+        animator.SetBool("isSub", false);
+        currentSubtitleSet = defaultSet;
         currentSubtitleLength = 0;
         currentVoicelineID = -1;
         isLinePlaying = false;
@@ -57,12 +60,14 @@ public class SubtitleManager : GenericObject
     
     public void SetCurrentVoicelines(object[] parameters)
     {
-        StopVoicelines();
-        
         SubtitleSet newSet = (SubtitleSet)parameters[0];
 
-        if (newSet == null) return;
-            
+        if (newSet == null || 
+            (currentSubtitleSet != null && !currentSubtitleSet.isInterruptible)) 
+            return;
+
+        StopVoicelines();
+
         currentSubtitleSet = newSet;
 
         var allSfx = currentSubtitleSet.allVoicelines.Select(x => x.sfx).ToArray();
@@ -98,8 +103,7 @@ public class SubtitleManager : GenericObject
 
         if (currentVoicelineID >= currentSubtitleSet.allVoicelines.Count)
         {
-            animator.SetBool("isSub", false);
-            isLinePlaying = false;
+            StopVoicelines();
             return;
         }
         

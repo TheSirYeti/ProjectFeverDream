@@ -6,8 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SubtitleSet", menuName = "ScriptableObjects/SubtitleSet", order = 1)]
 public class SubtitleSet : ScriptableObject
 {
+    public bool isInterruptible = true;
     public List<VoicelineStruct> allVoicelines;
-    
+
+
     [Serializable] public struct VoicelineStruct
     {
         public int id;
