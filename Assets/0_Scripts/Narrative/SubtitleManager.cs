@@ -57,6 +57,8 @@ public class SubtitleManager : GenericObject
 
     IEnumerator PlayVoiceline()
     {
+        
+        
         animator.SetBool("isSub", true);
         foreach (var voiceline in currentSubtitleSet.allVoicelines)
         {

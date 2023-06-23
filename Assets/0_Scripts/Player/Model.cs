@@ -89,7 +89,8 @@ public class Model : GenericObject, IPlayerLife
         _view = FindObjectOfType<View>();
         weaponManager = FindObjectOfType<WeaponManager>();
 
-        _camera = Camera.main;
+        //_camera = Camera.main;
+        _camera = GameManager.Instance.GetCamera();
 
         weaponManager.SetRef(this, _camera.transform, _view);
         _cameraController = GetComponent<CameraController>();
@@ -145,7 +146,7 @@ public class Model : GenericObject, IPlayerLife
 
     private void ChangeMovementState(params object[] parameters)
     {
-        _canJump = (bool)parameters[0];
+        _canMove = (bool)parameters[0];
     }
 
     public void Move(float hAxie, float vAxie)

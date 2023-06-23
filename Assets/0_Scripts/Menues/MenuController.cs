@@ -69,6 +69,7 @@ public class MenuController : GenericObject
             SoundManager.instance.PauseAllSounds();
             SoundManager.instance.PauseAllVoiceLines();
             GameManager.Instance.PauseGame();
+            CutsceneManager.instance.PauseTimeline();
         }
         else
         {
@@ -92,6 +93,7 @@ public class MenuController : GenericObject
             SoundManager.instance.ResumeAllSounds();
             SoundManager.instance.ResumeAllVoiceLines();
             GameManager.Instance.ResumeGame();
+            CutsceneManager.instance.ResumeTimeline();
         }
 
         _menuState = !_menuState;

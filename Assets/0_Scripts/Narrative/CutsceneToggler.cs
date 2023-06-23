@@ -5,18 +5,62 @@ using UnityEngine;
 
 public class CutsceneToggler : GenericObject
 {
+    public GameObject cameraGO;
+    private bool isInCutscene = true;
+    private GameObject player;
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
     }
 
-    private void OnEnable()
+    public override void OnStart()
     {
-        EventManager.Trigger("ChangeMovementState", false);
+        player = GameManager.Instance.Player.gameObject;
+    }
+
+    /*private void OnEnable()
+    {
+        StartCutscene();
     }
     
     private void OnDisable()
     {
+        StopCutscene();
+    }*/
+
+    public override void OnUpdate()
+    {
+        if (isInCutscene)
+        {
+            DoPlayerPos();
+        }
+    }
+
+    public void StartCutscene()
+    {
+        EventManager.Trigger("ChangeMovementState", false);
+        
+        GameManager.Instance.GetCamera().gameObject.SetActive(false);
+
+        cameraGO.gameObject.SetActive(true);
+
+        isInCutscene = true;
+    }
+    
+    public void StopCutscene()
+    {
         EventManager.Trigger("ChangeMovementState", true);
+
+        cameraGO.gameObject.SetActive(false);
+        
+        GameManager.Instance.GetCamera().gameObject.SetActive(true);
+
+        isInCutscene = false;
+    }
+
+    public void DoPlayerPos()
+    {
+        player.transform.position = cameraGO.transform.position;
+        player.transform.rotation = cameraGO.transform.rotation;
     }
 }
