@@ -320,8 +320,6 @@ public class Assistant : GenericObject
 
         interact.OnEnter += x =>
         {
-            //Debug.Log("interact");
-
             _interactuable = _actualObjective.gameObject.GetComponent<IAssistInteract>();
             if (_interactuable == null)
                 _interactuable = _actualObjective.gameObject.GetComponentInParent<IAssistInteract>();
