@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using System.Linq;
 
-public class EasyIK : MonoBehaviour
+
+/*public class EasyIK : MonoBehaviour
 {
     [Header("IK properties")]
     public int numberOfJoints = 2;
@@ -292,4 +293,4 @@ public class EasyIK : MonoBehaviour
             Handles.DrawWireDisc(Vector3.down * pointOffset, Vector3.up, _radius);
          }
      }
-}
+}*/
