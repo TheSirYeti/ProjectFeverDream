@@ -53,11 +53,15 @@ public class Assistant : GenericObject
     private Vector3 _dir;
     
     private Vector3 _obstacleDir = Vector3.zero;
-    private float _obstacleDistance = 2;
+    private float _obstacleDistance = 5;
 
     private Vector3[] _dirs => new Vector3[]
     {
         transform.forward,
+        transform.forward + transform.right,
+        transform.forward + transform.right * -1,
+        transform.forward * -1 + transform.right,
+        transform.forward * -1 + transform.right * -1,
         transform.forward * -1,
         transform.right,
         transform.right * -1,
@@ -602,12 +606,12 @@ public class Assistant : GenericObject
     private void CheckObstacles()
     {
         RaycastHit hit;
-        
-        for (var i = 0; i < _dirs.Length; i++)
+
+        foreach (var dir in _dirs)
         {
-            if (Physics.Raycast(transform.position, _dirs[i], out hit, 5, LayerManager.LM_OBSTACLE))
+            if (Physics.Raycast(transform.position, dir, out hit, _obstacleDistance, LayerManager.LM_OBSTACLE))
             {
-                var negativeDir = (_dirs[i] * -1) * (Vector3.Distance(transform.position, hit.point) / 5);
+                var negativeDir = (dir * -1) * (Vector3.Distance(transform.position, hit.point) / _obstacleDistance);
                 _obstacleDir += negativeDir;
             }
         }
