@@ -26,4 +26,5 @@ public static class LayerManager
     public static LayerMask LM_ALLINTERACTS = LM_INTERACT | LM_PICKUP | LM_USABLE;
     public static LayerMask LM_OBSTACLE = LM_WALL | LM_FLOOR;
     public static LayerMask LM_NODEOBSTACLE = (LM_PROP | LM_WALL);
+    public static LayerMask LM_ALLOBSTACLE = (LM_PROP | LM_WALL | LM_FLOOR);
 }

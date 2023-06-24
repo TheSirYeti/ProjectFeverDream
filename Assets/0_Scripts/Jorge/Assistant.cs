@@ -49,8 +49,21 @@ public class Assistant : GenericObject
     [SerializeField] float _loadingSpeed;
     List<Renderer> _actualRenders;
 
-    Transform _actualObjective;
-    Vector3 _dir;
+    private Transform _actualObjective;
+    private Vector3 _dir;
+    
+    private Vector3 _obstacleDir = Vector3.zero;
+    private float _obstacleDistance = 2;
+
+    private Vector3[] _dirs => new Vector3[]
+    {
+        transform.forward,
+        transform.forward * -1,
+        transform.right,
+        transform.right * -1,
+        transform.up,
+        transform.up * -1,
+    };
 
     [SerializeField] Transform _player;
     public IAssistInteract _holdingItem { get; private set; }
@@ -269,50 +282,6 @@ public class Assistant : GenericObject
             _actualObjective = _previousObjective;
             _previousObjective = null;
         };
-
-        #endregion
-
-        #region WaitForInteract
-
-        // waitForInteract.OnEnter += x =>
-        // {
-        //     //Debug.Log("follow");
-        //     _actualObjective = _player;
-        // };
-        //
-        // waitForInteract.OnUpdate += () =>
-        // {
-        //     _dir = (_player.position) - transform.position;
-        //
-        //     if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
-        //     {
-        //         SendInputToFSM(JorgeStates.PATHFINDING);
-        //     }
-        //
-        //     Quaternion targetRotation = Quaternion.LookRotation(_dir);
-        //     transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-        //
-        //     Vector3 targetMovement = _player.position + (_dir.normalized * -1 * _followingDistance);
-        //     //Collider[] collisions = Physics.OverlapSphere(transform.position, _closeRadiousDetection, _playerMask);
-        //
-        //     //if (!collisions.Any())
-        //     //    targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
-        //     //else
-        //     //    targetMovement = _actualObjective.position + (_dir.normalized * -1 * _closeDistanceSpeed);
-        //
-        //
-        //     Vector3 newDir = targetMovement - transform.position;
-        //     _actualDir = newDir * _followingDistance;
-        //
-        //
-        //     if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
-        // };
-        //
-        // waitForInteract.OnExit += x =>
-        // {
-        //     _previousState = JorgeStates.FOLLOW;
-        //     _previousObjective = _actualObjective;
-        // };
 
         #endregion
 
@@ -566,6 +535,9 @@ public class Assistant : GenericObject
     {
         fsm.Update();
         ExtraUpdate();
+        _obstacleDir = Vector3.zero;
+        CheckObstacles();
+        _actualDir += _obstacleDir;
     }
 
     public override void OnFixedUpdate()
@@ -627,18 +599,19 @@ public class Assistant : GenericObject
         return true;
     }
 
-    // private bool CheckNearInteracts()
-    // {
-    //     var interactables =
-    //         Physics.OverlapSphere(_player.position, _interactDetectionDistance, LayerManager.LM_INTERACT);
-    //
-    //     foreach (var interactable in interactables)
-    //     {
-    //         if (interactable.gameObject.GetComponent<Renderer>().isVisible)
-    //         {
-    //         }
-    //     }
-    // }
+    private void CheckObstacles()
+    {
+        RaycastHit hit;
+        
+        for (var i = 0; i < _dirs.Length; i++)
+        {
+            if (Physics.Raycast(transform.position, _dirs[i], out hit, 5, LayerManager.LM_OBSTACLE))
+            {
+                var negativeDir = (_dirs[i] * -1) * (Vector3.Distance(transform.position, hit.point) / 5);
+                _obstacleDir += negativeDir;
+            }
+        }
+    }
 
     void ChangeBlackHoleVars()
     {
