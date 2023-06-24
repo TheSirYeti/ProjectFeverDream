@@ -53,7 +53,7 @@ public class Assistant : GenericObject
     private Vector3 _dir;
     
     private Vector3 _obstacleDir = Vector3.zero;
-    private float _obstacleDistance = 5;
+    private float _obstacleDistance = 2;
 
     private Vector3[] _dirs => new Vector3[]
     {
@@ -225,6 +225,9 @@ public class Assistant : GenericObject
 
 
             if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
+            
+            _obstacleDir = Vector3.zero;
+            CheckObstacles();
         };
 
         follow.OnExit += x =>
@@ -279,6 +282,9 @@ public class Assistant : GenericObject
                     }
                 }
             }
+            
+            _obstacleDir = Vector3.zero;
+            CheckObstacles();
         };
 
         pathFinding.OnExit += x =>
@@ -539,8 +545,6 @@ public class Assistant : GenericObject
     {
         fsm.Update();
         ExtraUpdate();
-        _obstacleDir = Vector3.zero;
-        CheckObstacles();
         _actualDir += _obstacleDir;
     }
 
