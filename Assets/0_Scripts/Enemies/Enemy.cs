@@ -218,6 +218,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         
         if (InSight(transform.position, target.transform.position))
         {
+            Debug.Log("In sight?");
             isPathfinding = false;
         }
     }
@@ -233,53 +234,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
     protected void CalculatePathPreview(bool amEscaping)
     {
-        /*if ((!isPathfinding
-             || nodePath == null
-             || nodePath.Count < 1
-             || NodeManager.instance.nodesEnemy[NodeManager.instance.GetClosestNode(target.transform)] !=
-             nodePath[nodePath.Count - 1]) && pathfindingCooldown <= 0)
-        {
-            nodePath = new List<Node>();
-            int closeNode, endNode;
-
-            if (amEscaping)
-            {
-                closeNode = NodeManager.instance.GetClosestNode(transform);
-                endNode = NodeManager.instance.GetEscapeNode(target.transform);
-            }
-            else
-            {
-                closeNode = NodeManager.instance.GetClosestNode(transform);
-                endNode = NodeManager.instance.GetClosestNode(target.transform);
-            }
-
-            string myNodes = closeNode + "," + endNode + "," + false;
-
-            List<Node> newPath = PathfindingTable.instance.ConstructPathThetaStar(myNodes);
-            if (!newPath.Any())
-                return;
-
-            if (!nodePath.Any() || newPath[currentNode] != nodePath[currentNode] || currentNode > nodePath.Count - 1)
-                currentNode = 0;
-
-            int nodeCounter = 0;
-            foreach (var node in newPath)
-            {
-                if (InSight(transform.position, node.transform.position))
-                {
-                    currentNode = nodeCounter;
-                }
-                nodeCounter++;
-            }
-            
-            nodePath = newPath;
-            isPathfinding = true;
-        }*/
         Debug.Log("QUIERO HACER PF");
 
         if (amEscaping)
         {
-            Collider[] nodeCollisions = Physics.OverlapSphere(transform.position, 40f, LayerManager.LM_NODE);
+            Collider[] nodeCollisions = Physics.OverlapSphere(transform.position, 20f, LayerManager.LM_NODE);
 
             if (!nodeCollisions.Any()) return;
             Debug.Log("TENGO QUE ESCAPAR AAAAAAAAAAA");
@@ -290,7 +249,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
             for (int i = 0; i < nodeCollisions.Length; i++)
             {
                 var distance = Vector3.Distance(transform.position, nodeCollisions[i].transform.position);
-                if (distance > maxDistance)
+                if (distance > maxDistance && InSight(nodeCollisions[i].transform.position, fovTransformPoint.position))
                 {
                     furthestNode = i;
                     maxDistance = distance;

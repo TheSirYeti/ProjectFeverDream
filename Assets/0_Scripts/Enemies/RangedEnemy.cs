@@ -23,11 +23,10 @@ public class RangedEnemy : Enemy
     [Header("-== DETECTION PROPERTIES ==-")]
     [SerializeField] private string animationPrefix;
     [SerializeField] private float detectTime;
-    
-    [Space(20)] 
-    [Header("-== SCARED PROPERTIES ==-")] 
-    [SerializeField] private float scaredRange;
 
+    [Space(20)] [Header("-== SCARED PROPERTIES ==-")] 
+    [SerializeField] private float searchRange = 30;
+    [SerializeField] private float scaredRange;
     [SerializeField] private float timeScared;
     private float currentScare = 0f;
 
@@ -213,6 +212,8 @@ public class RangedEnemy : Enemy
         {
             transform.LookAt(
                 new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+            
+            Debug.Log("DETECT");
         };
 
         detect.OnExit += x =>
@@ -226,6 +227,7 @@ public class RangedEnemy : Enemy
 
         chasing.OnUpdate += () =>
         {
+            Debug.Log("CHASING");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
@@ -237,16 +239,16 @@ public class RangedEnemy : Enemy
                 SendInputToFSM(RangedEnemyStates.SCARED);
                 return;
             }
+           
+            if (!InSight(transform.position, target.transform.position))
+            {
+                SendInputToFSM(RangedEnemyStates.PATHFIND);
+                return;
+            }
             
             if (IsInDistance())
             {
                 SendInputToFSM(RangedEnemyStates.SHOOT);
-                return;
-            }
-
-            if (!InSight(transform.position, target.transform.position))
-            {
-                SendInputToFSM(RangedEnemyStates.PATHFIND);
                 return;
             }
 
@@ -261,10 +263,12 @@ public class RangedEnemy : Enemy
         pathfind.OnEnter += x =>
         {
             CalculatePathPreview(false);
+            isPathfinding = true;
         };
 
         pathfind.OnUpdate += () =>
         {
+            Debug.Log("PF");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
@@ -291,10 +295,16 @@ public class RangedEnemy : Enemy
 
             if (isPathfinding)
             {
+                Debug.Log("PF2");
                 SetSpeedValue(Time.deltaTime);
                 DoPathfinding();
             }
             else StopSpeed();
+        };
+
+        pathfind.OnEnter += x =>
+        {
+            isPathfinding = false;
         };
 
         #endregion
@@ -303,6 +313,7 @@ public class RangedEnemy : Enemy
 
         shoot.OnUpdate += () =>
         {
+            Debug.Log("SHOOT");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
@@ -340,6 +351,7 @@ public class RangedEnemy : Enemy
 
         reload.OnUpdate += () =>
         {
+            Debug.Log("RELOAD");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
@@ -384,6 +396,7 @@ public class RangedEnemy : Enemy
 
         scared.OnUpdate += () =>
         {
+            Debug.Log("SCARED");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
@@ -404,6 +417,7 @@ public class RangedEnemy : Enemy
 
         scared.OnExit += x =>
         {
+            isPathfinding = false;
             animator.Play("Movement");
         };
 
@@ -426,7 +440,7 @@ public class RangedEnemy : Enemy
     public override void OnUpdate()
     {
         fsm.Update();
-        
+
         if (isDead) return;
         
         animator.SetFloat("movementSpeed", speed);
