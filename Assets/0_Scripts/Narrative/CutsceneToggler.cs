@@ -63,4 +63,14 @@ public class CutsceneToggler : GenericObject
         player.transform.position = cameraGO.transform.position;
         player.transform.rotation = cameraGO.transform.rotation;
     }
+
+    public void OnLevelOver()
+    {
+        GameManager.Instance.NextScene();
+    }
+    
+    public void FinalCutscene()
+    {
+        EventManager.Trigger("OnLevelFinished");
+    }
 }

@@ -534,6 +534,8 @@ public enum SoundID
     ASSISTANT_EAT_08,
     ASSISTANT_EAT_09,
     PROJECTOR,
+    HEAVY_DOOR,
+    DRAW_SWORD
 
 }
 
