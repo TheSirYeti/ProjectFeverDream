@@ -74,16 +74,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444b8c8c8d9d5da4a86a58c76aa72715, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
   _weaponSO: {fileID: 11400000, guid: 13f658a1a88937b48bd0cbb0c8c0805c, type: 2}
   _actualMagazineBullets: 0
+  _maxUsageAmmount: 0
+  usageAmmount: 0
   _muzzle: {fileID: 0}
+  _rigidbody: {fileID: 0}
+  _collider: {fileID: 0}
+  _shooteableMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _pickUpID: 0
+  _outline: {fileID: 0}
   _meleeCollider: {fileID: 186731800773498785}
   _colliderDuration: 0.3
-  _usageAmmount: 12
   _isBroken: 0
-  animator: {fileID: 6680333565220918490}
-  animController: {fileID: 9100000, guid: 1f610e5ec133f0448a5b5dab3e5be6b0, type: 2}
-  brokenBagguete: {fileID: 186731801285590995}
+  hitPoints: []
+  brokenBagguete: {fileID: 0}
+  _maxCombo: 0
+  _comboDuration: 0
+  _holdSpeed: 0
 --- !u!65 &186731800773498785
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -141,16 +153,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444b8c8c8d9d5da4a86a58c76aa72715, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
   _weaponSO: {fileID: 11400000, guid: c051b46193acd534495ab03df5b1c189, type: 2}
   _actualMagazineBullets: 0
+  _maxUsageAmmount: 0
+  usageAmmount: 0
   _muzzle: {fileID: 0}
+  _rigidbody: {fileID: 0}
+  _collider: {fileID: 0}
+  _shooteableMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _pickUpID: 0
+  _outline: {fileID: 0}
   _meleeCollider: {fileID: 186731801285590994}
   _colliderDuration: 0.1
-  _usageAmmount: 24
   _isBroken: 0
-  animator: {fileID: 6680333565220918490}
-  animController: {fileID: 9100000, guid: 946d6133ae1b8df40a0b0349788754da, type: 2}
+  hitPoints: []
   brokenBagguete: {fileID: 0}
+  _maxCombo: 0
+  _comboDuration: 0
+  _holdSpeed: 0
 --- !u!65 &186731801285590994
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -229,7 +253,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2147487223
+    m_Bits: 2147618295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -353,6 +377,10 @@ PrefabInstance:
     - target: {fileID: 423987976734169692, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 456546694234965309, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 514191365636002391, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -606,6 +634,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 21.383701
       objectReference: {fileID: 0}
+    - target: {fileID: 3546043224793817203, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 3797761869265433567, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -641,6 +673,10 @@ PrefabInstance:
     - target: {fileID: 4926110665291012273, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5228960057130519418, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
+      propertyPath: m_RootOrder
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5271855313531425686, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -737,6 +773,10 @@ PrefabInstance:
     - target: {fileID: 6640330547052591280, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_Layer
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691153553961009454, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
+      propertyPath: m_RootOrder
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6723552770342514107, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -846,6 +886,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -78.9603
       objectReference: {fileID: 0}
+    - target: {fileID: 8373807953719490490, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8480996396606948204, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -1.5985447
@@ -922,11 +966,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3260165812086920278, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
   m_PrefabInstance: {fileID: 2840377902043831030}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &6680333565220918490 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 8925645578057911852, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
-  m_PrefabInstance: {fileID: 2840377902043831030}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6994439349490478503 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5078425545911695185, guid: 445445a167cf44541ba1f35b86caf29a, type: 3}
@@ -959,6 +998,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b82d1ab1fa3556e47aa7b0b8ce5f3c93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
+  _animator: {fileID: 0}
+  _hitParticlesPoint: {fileID: 0}
+  _fullBaggeteSlice: []
+  _brokenBaggeteSlice: []
+  _toasterParticles: []
+  _bagguetHit: {fileID: 0}
 --- !u!114 &5466232684384540136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -971,10 +1018,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d3da4d9c641b2e4bbdafa77111a5dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
+  _view: {fileID: 0}
+  _noWeaponAnimator: {fileID: 0}
+  _usableID: 0
+  _weaponsRenderer: []
   _actualWeapon: {fileID: 186731800773498786}
-  _equipedWeapons:
-  - {fileID: 186731800773498786}
-  - {fileID: 186731801285590995}
+  _nozzlePoint: {fileID: 0}
 --- !u!114 &6160567590193938440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -987,6 +1038,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b97f13838a9fb43af22298c61951fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  priority: 0
+  isPausable: 1
   allBaguetteStates:
   - {fileID: 80699220957547835}
   - {fileID: 80699221011346764}
