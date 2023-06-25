@@ -54,6 +54,7 @@ public class Assistant : GenericObject
 
     private Vector3 _obstacleDir = Vector3.zero;
     private float _obstacleDistance = 2;
+    [SerializeField] private float _obstacleSpeed = 2;
 
     private bool _canMove = true;
 
@@ -337,6 +338,7 @@ public class Assistant : GenericObject
             {
                 _actualDir = Vector3.zero;
                 _isInteracting = true;
+                _obstacleDir = Vector3.zero;
 
                 switch (_interactuable.GetType())
                 {
@@ -550,7 +552,7 @@ public class Assistant : GenericObject
 
         fsm.Update();
         ExtraUpdate();
-        _actualDir += _obstacleDir;
+        _actualDir += _obstacleDir.normalized * _obstacleSpeed;
     }
 
     public override void OnFixedUpdate()
