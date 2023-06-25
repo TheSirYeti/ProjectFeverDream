@@ -51,9 +51,11 @@ public class Assistant : GenericObject
 
     private Transform _actualObjective;
     private Vector3 _dir;
-    
+
     private Vector3 _obstacleDir = Vector3.zero;
     private float _obstacleDistance = 2;
+
+    private bool _canMove = true;
 
     private Vector3[] _dirs => new Vector3[]
     {
@@ -107,6 +109,8 @@ public class Assistant : GenericObject
     public override void OnAwake()
     {
         EventManager.Subscribe("OnAssistantStart", OnAssistantStart);
+
+        EventManager.Subscribe("ChangeMovementState", ChangeCinematicMode);
         GameManager.Instance.Assistant = this;
     }
 
@@ -225,7 +229,7 @@ public class Assistant : GenericObject
 
 
             if (CheckNearEnemies()) SendInputToFSM(JorgeStates.HIDE);
-            
+
             _obstacleDir = Vector3.zero;
             CheckObstacles();
         };
@@ -282,7 +286,7 @@ public class Assistant : GenericObject
                     }
                 }
             }
-            
+
             _obstacleDir = Vector3.zero;
             CheckObstacles();
         };
@@ -314,11 +318,6 @@ public class Assistant : GenericObject
         {
             _dir = (_actualObjective.position) - transform.position;
 
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
-            {
-                SendInputToFSM(JorgeStates.PATHFINDING);
-            }
-
             _dir.Normalize();
 
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
@@ -326,8 +325,12 @@ public class Assistant : GenericObject
 
             if (_isInteracting)
             {
-                Debug.Log("no puedo pasar");
                 return;
+            }
+            
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
+            {
+                SendInputToFSM(JorgeStates.PATHFINDING);
             }
 
             if (Vector3.Distance(transform.position, (_actualObjective.position)) < _interactDistance)
@@ -344,7 +347,7 @@ public class Assistant : GenericObject
                     case Interactuables.ENEMY:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
                         StartCoroutine(WaitAction(1, false));
-                        
+
                         var rand = Random.Range(0f, 100f);
                         if (rand <= dialogueChance)
                         {
@@ -543,6 +546,8 @@ public class Assistant : GenericObject
 
     public override void OnUpdate()
     {
+        if (!_canMove) return;
+
         fsm.Update();
         ExtraUpdate();
         _actualDir += _obstacleDir;
@@ -550,7 +555,16 @@ public class Assistant : GenericObject
 
     public override void OnFixedUpdate()
     {
+        if (!_canMove) return;
+
         _rb.velocity = _actualDir;
+    }
+
+    private void ChangeCinematicMode(params object[] parameters)
+    {
+        _canMove = (bool)parameters[0];
+
+        if (!_canMove) _rb.velocity = Vector3.zero;
     }
 
     public void Interact()
@@ -656,7 +670,7 @@ public class Assistant : GenericObject
             _animator.SetTrigger(_interactuable.AnimationToExecute());
         else
             _animator.SetBool(_interactuable.AnimationToExecute(), false);
-        
+
         _interactuable.Interact();
         _interactuable = null;
         _actualObjective = _player;

@@ -13,16 +13,35 @@ public class CameraAim
 
     private IAssistInteract _actualInteract;
 
+    private bool _isActive = true;
+
     public CameraAim(Camera camera, Assistant assistant, float interactDistance)
     {
         _camera = camera;
         _assistant = assistant;
 
         _interactDistance = interactDistance;
+        
+        EventManager.Subscribe("ChangeMovementState", ChangeCinematicState);
+    }
+
+    void ChangeCinematicState(params object[] parameters)
+    {
+        _isActive = (bool)parameters[0];
+
+        if (_actualInteract != null)
+        {
+            _actualInteract.ChangeOutlineState(false);
+        }
     }
 
     public void CheckActualAim()
     {
+        if (!_isActive)
+        {
+            return;
+        }
+        
         var colliders =
             Physics.OverlapSphere(_camera.transform.position, _interactDistance, LayerManager.LM_ALLINTERACTS);
         //Debug.Log(1);
