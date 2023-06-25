@@ -249,7 +249,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
             for (int i = 0; i < nodeCollisions.Length; i++)
             {
                 var distance = Vector3.Distance(transform.position, nodeCollisions[i].transform.position);
-                if (distance > maxDistance && InSight(nodeCollisions[i].transform.position, fovTransformPoint.position))
+                if (distance > maxDistance && InSight(nodeCollisions[i].transform.position, transform.position))
                 {
                     furthestNode = i;
                     maxDistance = distance;
