@@ -22,6 +22,7 @@ public class EnemyManager : GenericObject
     public override void OnStart()
     {
         EventManager.Subscribe("OnEnemyDetection", EnableEnemies);
+        EventManager.Subscribe("OnLevelFinished", DisableAllEnemies);
         EventManager.Subscribe("OnFirstDetection", DoEnemyDetectDialogue);
         
         int counter = 0;
@@ -56,6 +57,14 @@ public class EnemyManager : GenericObject
             {
                 enemy.SetDetection();
             }
+        }
+    }
+
+    public void DisableAllEnemies(object[] parameters)
+    {
+        foreach (var enemies in sets)
+        {
+            enemies.SetActive(false);
         }
     }
 

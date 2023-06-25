@@ -47,4 +47,9 @@ public class CutsceneManager : GenericObject
     {
         director.Resume();
     }
+
+    public void FinalCutscene()
+    {
+        EventManager.Trigger("OnLevelFinished");
+    }
 }
