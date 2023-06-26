@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviour
         if (isLoading) return;
         if (!InGameSceneManager.instace.HaveTheScene(indexToLoad)) return;
 
+        EventManager.Trigger("OnResetTriggerLevel");
         InGameSceneManager.instace.SetNextScene(indexToLoad);
         isLoading = true;
         _actualScene = indexToLoad;
@@ -105,6 +106,7 @@ public class GameManager : MonoBehaviour
         if (isLoading) return;
         if (!InGameSceneManager.instace.HaveTheScene(_actualScene + 1)) return;
 
+        EventManager.Trigger("OnResetTriggerLevel");
         _actualScene++;
 
         InGameSceneManager.instace.SetNextScene(_actualScene);

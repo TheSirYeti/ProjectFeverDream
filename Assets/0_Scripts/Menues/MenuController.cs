@@ -151,6 +151,7 @@ public class MenuController : GenericObject
 
     public void BTN_Quit()
     {
+        EventManager.Trigger("OnResetTriggerLevel");
         GameManager.Instance.ChangeScene(2);
     }
 
