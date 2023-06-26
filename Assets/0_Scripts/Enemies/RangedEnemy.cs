@@ -511,6 +511,7 @@ public class RangedEnemy : Enemy
         EventManager.Trigger("OnDamageableHit", 3);
 
         DoRagdoll();
+        StartCoroutine(FreezeAllRigidbodies());
         isDead = true;
     }
 

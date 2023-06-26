@@ -154,6 +154,23 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         animator.enabled = true;
     }
 
+    protected IEnumerator FreezeAllRigidbodies()
+    {
+        yield return new WaitForSeconds(3);
+        isInRagdollMode = false;
+
+        foreach (var rigidbody in ragdollRigidbodies)
+        {
+            if(rigidbody != rb)
+                rigidbody.isKinematic = true;
+        }
+        
+        //collider.enabled = true;
+        rb.isKinematic = true;
+        animator.enabled = false;
+        yield return null;
+    }
+
     #endregion
 
     #region MOVEMENT
