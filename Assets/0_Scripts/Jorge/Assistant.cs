@@ -310,7 +310,7 @@ public class Assistant : GenericObject
 
         interact.OnUpdate += () =>
         {
-_dir = (_actualObjective.position) - transform.position;
+            _dir = (_actualObjective.position) - transform.position;
 
             _dir.Normalize();
 
@@ -321,7 +321,7 @@ _dir = (_actualObjective.position) - transform.position;
             {
                 return;
             }
-            
+
             if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
@@ -342,8 +342,7 @@ _dir = (_actualObjective.position) - transform.position;
                     case Interactuables.ENEMY:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
                         StartCoroutine(WaitAction(3, false));
-                        
-                        
+
 
                         var rand = Random.Range(0f, 100f);
                         if (rand <= dialogueChance)
@@ -359,11 +358,8 @@ _dir = (_actualObjective.position) - transform.position;
                                 new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
                                     0));
                         }
-                        
-                        LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) =>
-                        {
-                            _vacuumVFX._opacity = value;
-                        });
+
+                        LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
 
                         ExtraUpdate = ChangeBlackHoleVars;
                         //_animator.SetTrigger(_interactuable.AnimationToExecute());
@@ -500,7 +496,8 @@ _dir = (_actualObjective.position) - transform.position;
             _actualObjective = colliders[0].transform;
 
             var dir = _actualObjective.position - transform.position;
-            if (Physics.Raycast(transform.position, dir, dir.magnitude * 0.9f, LayerManager.LM_ALLOBSTACLE)) SendInputToFSM(JorgeStates.PATHFINDING);
+            if (Physics.Raycast(transform.position, dir, dir.magnitude * 0.9f, LayerManager.LM_ALLOBSTACLE))
+                SendInputToFSM(JorgeStates.PATHFINDING);
         };
 
         hide.OnUpdate += () =>
@@ -509,28 +506,19 @@ _dir = (_actualObjective.position) - transform.position;
 
             _dir = _actualObjective.position - transform.position;
 
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
-            {
-                SendInputToFSM(JorgeStates.PATHFINDING);
-            }
-
-            if (Vector3.Distance(transform.position, _actualObjective.position) < 0.1f)
+            if (Vector3.Distance(transform.position, _actualObjective.position) < 0.2f)
             {
                 _actualDir = Vector3.zero;
                 _dir = _player.position - transform.position;
-
-                Quaternion targetRotation = Quaternion.LookRotation(_dir);
-                transform.rotation =
-                    Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
             }
             else
             {
-                Quaternion targetRotation = Quaternion.LookRotation(_dir);
-                transform.rotation =
-                    Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-
                 _actualDir = _dir * _followSpeed;
             }
+
+            Quaternion targetRotation = Quaternion.LookRotation(_dir);
+            transform.rotation =
+                Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
         };
 
         hide.OnExit += x =>
@@ -587,7 +575,8 @@ _dir = (_actualObjective.position) - transform.position;
 
     public void SetObjective(Transform interactuable, JorgeStates goToState)
     {
-        if (_interactuable != null && (goToState == JorgeStates.INTERACT || goToState == JorgeStates.USEIT || goToState == JorgeStates.PICKUP)) return;
+        if (_interactuable != null && (goToState == JorgeStates.INTERACT || goToState == JorgeStates.USEIT ||
+                                       goToState == JorgeStates.PICKUP)) return;
 
         EventManager.Trigger("OnAssistantPing", interactuable);
         SoundManager.instance.PlaySound(SoundID.ASSISTANT_PING);
@@ -681,13 +670,10 @@ _dir = (_actualObjective.position) - transform.position;
         _actualObjective = _player;
         _loadingAmmount = 0;
         ExtraUpdate = delegate { };
-        
+
         if (_vacuumVFX._opacity > 0)
         {
-            LeanTween.value(0.81f, 0, 0.3f).setOnUpdate((float value) =>
-            {
-                _vacuumVFX._opacity = value;
-            });
+            LeanTween.value(0.81f, 0, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
         }
 
         SendInputToFSM(JorgeStates.FOLLOW);

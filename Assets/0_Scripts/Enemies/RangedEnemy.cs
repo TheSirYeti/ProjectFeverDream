@@ -439,6 +439,8 @@ public class RangedEnemy : Enemy
 
     public override void OnUpdate()
     {
+        if (!_canMove) return;
+        
         fsm.Update();
 
         if (isDead) return;

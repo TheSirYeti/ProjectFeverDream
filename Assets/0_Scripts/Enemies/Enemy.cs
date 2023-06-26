@@ -32,7 +32,8 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     [SerializeField] protected bool isAttacking;
     
     [Space(20)]
-    [Header("-== Movement Properties ==-")] 
+    [Header("-== Movement Properties ==-")]
+    protected bool _canMove = true;
     [SerializeField] protected float speed;
     protected float maxSpeed;
     [SerializeField] private float accelerationValue;
@@ -102,6 +103,12 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     {
         UpdateManager._instance.AddObject(this);
         UpdateManager._instance.AddComponents(new PausableObject(){anim = animator, rb = rb});
+        EventManager.Subscribe("ChangeMovementState", ChangeCinematicMode);
+    }
+    
+    private void ChangeCinematicMode(params object[] parameters)
+    {
+        _canMove = (bool)parameters[0];
     }
 
     public void SetEnemySetID(int id)
