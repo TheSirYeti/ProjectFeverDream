@@ -303,7 +303,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     protected bool InSight(Vector3 start, Vector3 end)
     {
         Vector3 dir = end - start;
-        if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_ALLOBSTACLE)) return true;
+        if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_ENEMYSIGHT)) return true;
         else return false;
     }
 

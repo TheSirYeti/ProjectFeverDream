@@ -13,6 +13,7 @@ public static class LayerManager
     public static int L_PICKUP = 14;
     public static int L_USABLE = 15;
     public static int L_PROP = 17;
+    public static int L_PATHFINDINGOBSTACLE = 13;
     
     // SIGLE LAYER MASK
     public static LayerMask LM_PLAYER = 1 << L_PLAYER;
@@ -23,10 +24,12 @@ public static class LayerManager
     public static LayerMask LM_PICKUP = 1 << L_PICKUP;
     public static LayerMask LM_USABLE = 1 << L_USABLE;
     public static LayerMask LM_PROP = 1 << L_PROP;
+    public static LayerMask LM_PATHFINDINGOBSTACLE = (1 << L_PATHFINDINGOBSTACLE);
     
     // COMBINE LAYER MASK
     public static LayerMask LM_ALLINTERACTS = LM_INTERACT | LM_PICKUP | LM_USABLE;
     public static LayerMask LM_OBSTACLE = LM_WALL | LM_FLOOR;
     public static LayerMask LM_NODEOBSTACLE = (LM_PROP | LM_WALL);
     public static LayerMask LM_ALLOBSTACLE = (LM_PROP | LM_WALL | LM_FLOOR );
+    public static LayerMask LM_ENEMYSIGHT = (LM_PROP | LM_WALL | LM_FLOOR | LM_PATHFINDINGOBSTACLE);
 }
