@@ -491,6 +491,9 @@ public class Assistant : GenericObject
                 .OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
 
             _actualObjective = colliders[0].transform;
+
+            var dir = _actualObjective.position - transform.position;
+            if (Physics.Raycast(transform.position, dir, dir.magnitude * 0.9f, LayerManager.LM_ALLOBSTACLE)) SendInputToFSM(JorgeStates.PATHFINDING);
         };
 
         hide.OnUpdate += () =>
@@ -577,7 +580,7 @@ public class Assistant : GenericObject
 
     public void SetObjective(Transform interactuable, JorgeStates goToState)
     {
-        //if (_interactuable != null) return;
+        if (_interactuable != null && (goToState == JorgeStates.INTERACT || goToState == JorgeStates.USEIT || goToState == JorgeStates.PICKUP)) return;
 
         EventManager.Trigger("OnAssistantPing", interactuable);
         SoundManager.instance.PlaySound(SoundID.ASSISTANT_PING);
