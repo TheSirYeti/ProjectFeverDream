@@ -43,7 +43,7 @@ public class Assistant : GenericObject
     bool _isInteracting = false;
 
     [SerializeField] Transform _vacuumPoint;
-    [SerializeField] GameObject _vacuumVFX;
+    [SerializeField] VaccumControllerShader _vacuumVFX;
     [SerializeField] Material _blackholeMat;
     [SerializeField] float _loadingAmmount;
     [SerializeField] float _loadingSpeed;
@@ -310,7 +310,7 @@ public class Assistant : GenericObject
 
         interact.OnUpdate += () =>
         {
-            _dir = (_actualObjective.position) - transform.position;
+_dir = (_actualObjective.position) - transform.position;
 
             _dir.Normalize();
 
@@ -341,7 +341,9 @@ public class Assistant : GenericObject
                         break;
                     case Interactuables.ENEMY:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
-                        StartCoroutine(WaitAction(1, false));
+                        StartCoroutine(WaitAction(3, false));
+                        
+                        
 
                         var rand = Random.Range(0f, 100f);
                         if (rand <= dialogueChance)
@@ -357,9 +359,14 @@ public class Assistant : GenericObject
                                 new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
                                     0));
                         }
+                        
+                        LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) =>
+                        {
+                            _vacuumVFX._opacity = value;
+                        });
 
                         ExtraUpdate = ChangeBlackHoleVars;
-                        _animator.SetTrigger(_interactuable.AnimationToExecute());
+                        //_animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
                     case Interactuables.ELEVATOR:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
@@ -592,7 +599,7 @@ public class Assistant : GenericObject
 
     public void StartAction()
     {
-        _vacuumVFX.SetActive(true);
+        _vacuumVFX.gameObject.SetActive(true);
         _vacuumVFX.transform.position = _vacuumPoint.position;
         _vacuumVFX.transform.up = _vacuumPoint.position - _interactuable.GetTransform().position;
     }
@@ -600,7 +607,7 @@ public class Assistant : GenericObject
     public void FinishAction()
     {
         _animator.ResetTrigger(_interactuable.AnimationToExecute());
-        _vacuumVFX.SetActive(false);
+        _vacuumVFX.gameObject.SetActive(false);
         _interactuable = null;
         _actualObjective = _player;
         _loadingAmmount = 0;
@@ -674,6 +681,14 @@ public class Assistant : GenericObject
         _actualObjective = _player;
         _loadingAmmount = 0;
         ExtraUpdate = delegate { };
+        
+        if (_vacuumVFX._opacity > 0)
+        {
+            LeanTween.value(0.81f, 0, 0.3f).setOnUpdate((float value) =>
+            {
+                _vacuumVFX._opacity = value;
+            });
+        }
 
         SendInputToFSM(JorgeStates.FOLLOW);
     }

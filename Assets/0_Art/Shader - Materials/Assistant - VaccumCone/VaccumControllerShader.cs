@@ -10,7 +10,7 @@ public class VaccumControllerShader : MonoBehaviour
 
     [Header("Variables")]
     [Range(0.0f, 0.81f)]
-    [SerializeField] private float _opacity;
+    public float _opacity;
     [SerializeField] private ParticleSystem _PS_WindInternal;
 
     [Header("Color")]
