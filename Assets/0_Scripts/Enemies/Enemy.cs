@@ -77,6 +77,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     [SerializeField] protected Renderer faceRenderer;
     [SerializeField] protected float faceTransitionTime;
     [SerializeField] protected float minTransitionValue = 0f, maxTransitionValue = 10f;
+    [SerializeField] private ParticleSystem _hitParticle;
     
     protected Dictionary<string, float> _damageRecive = new Dictionary<string, float>();
     [Space(20)] 
@@ -442,6 +443,8 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     {
         if (!_damageRecive.ContainsKey(partDamaged) || isInRagdollMode || isDead)
             return;
+        
+        _hitParticle.Play();
 
         float totalDmg = dmg * _damageRecive[partDamaged];
 
