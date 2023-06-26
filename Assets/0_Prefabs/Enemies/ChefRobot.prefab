@@ -336,7 +336,6 @@ GameObject:
   - component: {fileID: 529435665564174569}
   - component: {fileID: 894496608927229309}
   - component: {fileID: 3055812626318986805}
-  - component: {fileID: 2855665969767406903}
   m_Layer: 10
   m_Name: ChefRobot
   m_TagString: Untagged
@@ -447,7 +446,6 @@ MonoBehaviour:
   minChaseDistance: 2
   _type: 1
   _interactPoint: {fileID: 6985060687993072258}
-  _outline: {fileID: 2855665969767406903}
   attackCollider: {fileID: 239757362170953704}
   attackCooldown: 4
   currentAttackCooldown: 0
@@ -1497,30 +1495,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2855665969767406903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1122139428085172919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 271c580db5fd384429cdac899152e9e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
-  _outlineSettings:
-    _outlineSettings: {fileID: 0}
-    _outlineColor: {r: 1, g: 1, b: 1, a: 1}
-    _outlineWidth: 1
-    _outlineIntensity: 2
-    _outlineAlphaCutoff: 0.9
-    _outlineMode: 0
-  _ignoreLayerMask: 524288
-  _cameraEvent: 15
-  _targetCamera: {fileID: 0}
-  _updateRenderers: 0
 --- !u!1 &1280917076294516747
 GameObject:
   m_ObjectHideFlags: 0

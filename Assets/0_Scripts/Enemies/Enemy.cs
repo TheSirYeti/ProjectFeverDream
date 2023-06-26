@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using UnityEngine;
-using UnityFx.Outline;
 
 public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 {
@@ -23,7 +22,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     //Quizas sea TEMP, quizas no
     [SerializeField] Assistant.Interactuables _type;
     [SerializeField] Transform _interactPoint;
-    [SerializeField] private OutlineBehaviour _outline;
+    //[SerializeField] private OutlineBehaviour _outline;
     [Space(20)]
 
     [Space(20)] [Header("-== Attack Properties ==-")] 
@@ -490,7 +489,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
     public void ChangeOutlineState(bool state)
     {
-        _outline.OutlineWidth = state ? 4 : 0;
+        //_outline.OutlineWidth = state ? 4 : 0;
     }
 
     public int InteractID()

@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityFx.Outline;
+//using UnityFx.Outline;
 
 public class Elevator : GenericObject, IAssistInteract
 {
-    [SerializeField] private OutlineBehaviour _outline;
+    //[SerializeField] private OutlineBehaviour _outline;
     [SerializeField] Assistant.Interactuables _type;
 
     [SerializeField] private Transform interactPoint;
@@ -67,7 +67,7 @@ public class Elevator : GenericObject, IAssistInteract
 
     public void ChangeOutlineState(bool state)
     {
-        _outline.OutlineWidth = state ? 4 : 0;;
+        //_outline.OutlineWidth = state ? 4 : 0;;
     }
 
     public int InteractID()

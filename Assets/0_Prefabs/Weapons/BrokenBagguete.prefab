@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2908720009875150881}
   - component: {fileID: 6944131159214997261}
   - component: {fileID: 6552387713201666549}
-  - component: {fileID: 5489167266465139704}
   m_Layer: 14
   m_Name: BrokenBagguete
   m_TagString: Untagged
@@ -104,7 +103,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   _pickUpID: 0
-  _outline: {fileID: 5489167266465139704}
   _meleeCollider: {fileID: 2908720009875150881}
   _colliderDuration: 0.2
   _isBroken: 1
@@ -113,30 +111,6 @@ MonoBehaviour:
   _maxCombo: 3
   _comboDuration: 1
   _holdSpeed: 2
---- !u!114 &5489167266465139704
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3805262004713893292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 271c580db5fd384429cdac899152e9e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _outlineResources: {fileID: 11400000, guid: d28e70f030b1a634db9a6a6d5478ef19, type: 2}
-  _outlineSettings:
-    _outlineSettings: {fileID: 0}
-    _outlineColor: {r: 1, g: 1, b: 1, a: 1}
-    _outlineWidth: 1
-    _outlineIntensity: 2
-    _outlineAlphaCutoff: 0.9
-    _outlineMode: 0
-  _ignoreLayerMask: 0
-  _cameraEvent: 15
-  _targetCamera: {fileID: 0}
-  _updateRenderers: 0
 --- !u!1001 &8069648419571811906
 PrefabInstance:
   m_ObjectHideFlags: 0

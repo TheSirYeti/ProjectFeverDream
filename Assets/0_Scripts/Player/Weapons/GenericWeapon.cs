@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityFx.Outline;
+//using UnityFx.Outline;
 
 public abstract class GenericWeapon : GenericObject, IAssistInteract
 {
@@ -23,7 +23,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     [SerializeField] protected LayerMask _shooteableMask;
 
     [SerializeField] int _pickUpID;
-    [SerializeField] private OutlineBehaviour _outline;
+    //[SerializeField] private OutlineBehaviour _outline;
     bool _isEquiped = false;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
@@ -178,7 +178,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 
     public void ChangeOutlineState(bool state)
     {
-        _outline.OutlineWidth = state ? 3 : 0;
+        //_outline.OutlineWidth = state ? 3 : 0;
     }
 
     public int InteractID()

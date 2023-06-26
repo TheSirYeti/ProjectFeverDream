@@ -149,6 +149,9 @@ public class Model : GenericObject, IPlayerLife
     private void ChangeMovementState(params object[] parameters)
     {
         _canMove = (bool)parameters[0];
+        
+        if(_physics.HasGravity())
+            _physics.RemoveAcceleration("gravity");
     }
 
     public void Move(float hAxie, float vAxie)

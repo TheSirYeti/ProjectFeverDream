@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
-using UnityFx.Outline;
+//using UnityFx.Outline;
 using Random = UnityEngine.Random;
 
 public class Assistant : GenericObject
