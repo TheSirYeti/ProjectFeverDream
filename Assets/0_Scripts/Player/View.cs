@@ -101,12 +101,25 @@ public class View : GenericObject
 
     void ToasterVFX_ON(params object[] parameters)
     {
+        if ((int)parameters[0] == 0)
+        {
+            _toasterParticles[(int)parameters[1]].gameObject.SetActive(true);
+            _toasterParticles[(int)parameters[2]].gameObject.SetActive(true);
+            _toasterParticles[(int)parameters[3]].gameObject.SetActive(true);
+        }
         _toasterParticles[(int)parameters[0]].Play();
     }
 
     void ToasterVFX_OFF(params object[] parameters)
     {
         _toasterParticles[(int)parameters[0]].Stop();
+        
+        if ((int)parameters[0] == 0)
+        {
+            _toasterParticles[(int)parameters[1]].gameObject.SetActive(false);
+            _toasterParticles[(int)parameters[2]].gameObject.SetActive(false);
+            _toasterParticles[(int)parameters[3]].gameObject.SetActive(false);
+        }
     }
 
     #endregion

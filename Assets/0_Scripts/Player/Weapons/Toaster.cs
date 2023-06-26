@@ -157,7 +157,7 @@ public class Toaster : GenericWeapon
 
         if (!_particleIsActive && _actualLoading > 0.2f)
         {
-            EventManager.Trigger("VFX_ToasterON", 0);
+            EventManager.Trigger("VFX_ToasterON", 0, 2, 3, 4);
             _particleIsActive = true;
         }
     }
@@ -166,7 +166,7 @@ public class Toaster : GenericWeapon
     {
         _weaponManager._view.SetBool(GetOnClickName(), false);
         OnDelegateUpdate = delegate { };
-        EventManager.Trigger("VFX_ToasterOFF", 0);
+        EventManager.Trigger("VFX_ToasterOFF", 0, 2, 3, 4);
         _particleIsActive = false;
     }
 

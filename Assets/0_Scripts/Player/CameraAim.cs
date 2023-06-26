@@ -31,7 +31,7 @@ public class CameraAim
 
         if (_actualInteract != null)
         {
-            _actualInteract.ChangeOutlineState(false);
+            //_actualInteract.ChangeOutlineState(false);
         }
     }
 
@@ -49,7 +49,7 @@ public class CameraAim
         {
             if (_actualInteract == null) return;
 
-            _actualInteract.ChangeOutlineState(false);
+            //_actualInteract.ChangeOutlineState(false);
             _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
 
@@ -73,7 +73,7 @@ public class CameraAim
         {
             if (_actualInteract == null) return;
 
-            _actualInteract.ChangeOutlineState(false);
+            //.ChangeOutlineState(false);
             _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
 
@@ -95,7 +95,7 @@ public class CameraAim
         //Debug.Log(4);
         if (closeObj == null || !closeObj.CanInteract())
         {
-            _actualInteract?.ChangeOutlineState(false);
+            //_actualInteract?.ChangeOutlineState(false);
             _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
 
@@ -104,9 +104,9 @@ public class CameraAim
         //Debug.Log(5);
         if (closeObj == _actualInteract) return;
 
-        _actualInteract?.ChangeOutlineState(false);
+        //_actualInteract?.ChangeOutlineState(false);
         _actualInteract = closeObj;
-        _actualInteract.ChangeOutlineState(true);
+        //_actualInteract.ChangeOutlineState(true);
         EventManager.Trigger("InteractUI", true, _actualInteract.ActionName());
     }
 
