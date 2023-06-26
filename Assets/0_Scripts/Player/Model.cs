@@ -152,6 +152,9 @@ public class Model : GenericObject, IPlayerLife
         
         if(_physics.HasGravity())
             _physics.RemoveAcceleration("gravity");
+        
+        SoundManager.instance.StopSoundByID("RUN");
+        SoundManager.instance.StopSoundByID("WALK");
     }
 
     public void Move(float hAxie, float vAxie)

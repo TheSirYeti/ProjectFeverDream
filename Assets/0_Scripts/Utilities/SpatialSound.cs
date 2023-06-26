@@ -12,6 +12,7 @@ public class SpatialSound : GenericObject
     [Space(10)] 
     [Header("Properties")] 
     [SerializeField] private bool playOnStart;
+    [SerializeField] private bool playOnEnable;
     [SerializeField] private bool loop;
     
  
@@ -31,6 +32,12 @@ public class SpatialSound : GenericObject
     public void PlaySound()
     {
         SoundManager.instance.PlaySoundByInt(audioID, loop);
+    }
+
+    private void OnEnable()
+    {
+        if(playOnEnable)
+            PlaySound();
     }
 
     private void OnDrawGizmos()
