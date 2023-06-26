@@ -9,8 +9,8 @@ using Cursor = UnityEngine.Cursor;
 
 public class MainMenuManager : GenericObject
 {
-    [SerializeField] private Slider sfxSlider, musicSlider;
-    [SerializeField] private TextMeshProUGUI sfxVolumeNumber, musicVolumeNumber;
+    [SerializeField] private Slider sfxSlider, musicSlider, sensSlider;
+    [SerializeField] private TextMeshProUGUI sfxVolumeNumber, musicVolumeNumber, sensText;
     [SerializeField] private GameObject mainMenu, generalMenu, audioMenu, controllerMenu, graphicsMenu;
     
     private void Awake()
@@ -45,30 +45,46 @@ public class MainMenuManager : GenericObject
         graphicsMenu.SetActive(false);
     }
 
-    public void SetSFXVolume()
+    public void SetSFXVolume(float volume)
     {
-        SoundManager.instance.ChangeVolumeSound(sfxSlider.value);
-        PlayerPrefs.SetFloat("SFX_VOLUME_VALUE", sfxSlider.value);
-        float value = sfxSlider.value * 100f;
+        SoundManager.instance.ChangeVolumeSound(volume);
+        PlayerPrefs.SetFloat("SFX_VOLUME_VALUE", volume);
+        float value = volume * 100f;
         sfxVolumeNumber.text = Convert.ToInt32(value).ToString();
     }
     
-    public void SetMusicVolume()
+    public void SetMusicVolume(float volume)
     {
-        SoundManager.instance.ChangeVolumeMusic(musicSlider.value);
-        PlayerPrefs.SetFloat("MUSIC_VOLUME_VALUE", musicSlider.value);
-        float value = musicSlider.value * 100f;
+        SoundManager.instance.ChangeVolumeMusic(volume);
+        PlayerPrefs.SetFloat("MUSIC_VOLUME_VALUE", volume);
+        float value = volume * 100f;
         musicVolumeNumber.text = Convert.ToInt32(value).ToString();
+    }
+    
+    public void ChangeSense(float sens)
+    {
+        PlayerPrefs.SetFloat("Sensibilidad", sens);
+        sensText.text = ((sens / 1000) * 100).ToString("000");
     }
 
     public void GetNewValues()
     {
         if (PlayerPrefs.HasKey("SFX_VOLUME_VALUE"))
         {
-            musicSlider.value = SoundManager.instance.volumeMusic;
-            sfxSlider.value = SoundManager.instance.volumeSFX;
-            musicVolumeNumber.text = Convert.ToInt32(musicSlider.value * 100f).ToString();
+            sfxSlider.value = PlayerPrefs.GetFloat("SFX_VOLUME_VALUE");;
             sfxVolumeNumber.text = Convert.ToInt32(sfxSlider.value * 100f).ToString();
+        }
+
+        if (PlayerPrefs.HasKey("MUSIC_VOLUME_VALUE"))
+        {
+            musicSlider.value = PlayerPrefs.GetFloat("MUSIC_VOLUME_VALUE");
+            musicVolumeNumber.text = Convert.ToInt32(musicSlider.value * 100f).ToString();
+        }
+        
+        if (PlayerPrefs.HasKey("Sensibilidad"))
+        {
+            sensSlider.value = PlayerPrefs.GetFloat("Sensibilidad");;
+            sensText.text = Convert.ToInt32(sensSlider.value * 100f).ToString();
         }
     }
     
