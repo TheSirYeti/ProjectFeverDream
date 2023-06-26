@@ -13,6 +13,7 @@ public class ResetTrigger : GenericObject
     {
         if (other.gameObject.tag == "Player")
         {
+            EventManager.Trigger("OnResetTriggerLevel");
             GameManager.Instance.ReloadScene();
         }
         

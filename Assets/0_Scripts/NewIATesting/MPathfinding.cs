@@ -164,7 +164,7 @@ public class MPathfinding : GenericObject
         {
             watchdog--;
             
-            if(watchdog <= 0)Debug.Log("Primer while theta");
+            //if(watchdog <= 0)Debug.Log("Primer while theta");
             
             if (previouseNode._previouseNode && OnSight(_actualnode.transform.position, previouseNode._previouseNode.transform.position))
             {
@@ -183,13 +183,13 @@ public class MPathfinding : GenericObject
         {
             watchdog--;
             
-            if(watchdog <= 0)Debug.Log("Segundo while theta");
+            //if(watchdog <= 0)Debug.Log("Segundo while theta");
             
             MNode nextNode = stack.Pop() as MNode;
             checker.Add(nextNode);
             actualPath.AddNode(nextNode);
         }
-        Debug.Log(actualPath.PathCount());
+        //Debug.Log(actualPath.PathCount());
     }
 
     public MNode GetClosestNode(Vector3 t, bool isForAssistant = false)

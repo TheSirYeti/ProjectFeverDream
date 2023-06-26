@@ -18,6 +18,7 @@ public class CutsceneToggler : GenericObject
     public override void OnStart()
     {
         player = GameManager.Instance.Player.gameObject;
+        EventManager.Subscribe("OnResetTriggerLevel", StopCutsceneEvent);
     }
 
     /*private void OnEnable()
@@ -61,6 +62,11 @@ public class CutsceneToggler : GenericObject
         GameManager.Instance.GetCamera().gameObject.SetActive(true);
 
         isInCutscene = false;
+    }
+    
+    public void StopCutsceneEvent(object[] parameters)
+    {
+        StopCutscene();
     }
 
     public void DoPlayerPos()

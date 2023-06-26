@@ -526,6 +526,8 @@ public class RangedEnemy : Enemy
     
     public void DoWarningFadeIn()
     {
+        LeanTween.cancel(gameObject);
+        
         isAttacking = true;
         foreach (var renderer in renderers)
         {
@@ -538,6 +540,8 @@ public class RangedEnemy : Enemy
     
     public void DoWarningFadeOut()
     {
+        LeanTween.cancel(gameObject);
+        
         isAttacking = false;
         foreach (var renderer in renderers)
         {
