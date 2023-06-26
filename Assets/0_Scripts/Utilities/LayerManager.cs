@@ -5,6 +5,7 @@ using UnityEngine;
 public static class LayerManager
 {
     // LAYERS
+    public static int L_PLAYER = 3;
     public static int L_FLOOR = 6;
     public static int L_WALL = 7;
     public static int L_NODE = 8;
@@ -14,6 +15,7 @@ public static class LayerManager
     public static int L_PROP = 17;
     
     // SIGLE LAYER MASK
+    public static LayerMask LM_PLAYER = 1 << L_PLAYER;
     public static LayerMask LM_FLOOR = 1 << L_FLOOR;
     public static LayerMask LM_WALL = 1 << L_WALL;
     public static LayerMask LM_NODE = 1 << L_NODE;
@@ -26,5 +28,5 @@ public static class LayerManager
     public static LayerMask LM_ALLINTERACTS = LM_INTERACT | LM_PICKUP | LM_USABLE;
     public static LayerMask LM_OBSTACLE = LM_WALL | LM_FLOOR;
     public static LayerMask LM_NODEOBSTACLE = (LM_PROP | LM_WALL);
-    public static LayerMask LM_ALLOBSTACLE = (LM_PROP | LM_WALL | LM_FLOOR);
+    public static LayerMask LM_ALLOBSTACLE = (LM_PROP | LM_WALL | LM_FLOOR | LM_PLAYER);
 }

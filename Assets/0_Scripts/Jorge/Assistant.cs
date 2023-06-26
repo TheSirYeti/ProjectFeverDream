@@ -217,13 +217,6 @@ public class Assistant : GenericObject
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
             Vector3 targetMovement = _player.position + (_dir.normalized * -1 * _followingDistance);
-            //Collider[] collisions = Physics.OverlapSphere(transform.position, _closeRadiousDetection, _playerMask);
-
-            //if (!collisions.Any())
-            //    targetMovement = _actualObjective.position + (_dir.normalized * -1 * _followingDistance);
-            //else
-            //    targetMovement = _actualObjective.position + (_dir.normalized * -1 * _closeDistanceSpeed);
-
 
             Vector3 newDir = targetMovement - transform.position;
             _actualDir = newDir * _followingDistance;
@@ -629,7 +622,7 @@ public class Assistant : GenericObject
 
         foreach (var dir in _dirs)
         {
-            if (Physics.Raycast(transform.position, dir, out hit, _obstacleDistance, LayerManager.LM_OBSTACLE))
+            if (Physics.Raycast(transform.position, dir, out hit, _obstacleDistance, LayerManager.LM_ALLOBSTACLE))
             {
                 var negativeDir = (dir * -1) * (Vector3.Distance(transform.position, hit.point) / _obstacleDistance);
                 _obstacleDir += negativeDir;
