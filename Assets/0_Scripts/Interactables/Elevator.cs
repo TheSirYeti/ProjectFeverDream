@@ -47,7 +47,7 @@ public class Elevator : GenericObject, IAssistInteract
 
     public Transform GetInteractPoint()
     {
-        return transform;
+        return interactPoint;
     }
 
     public List<Renderer> GetRenderer()

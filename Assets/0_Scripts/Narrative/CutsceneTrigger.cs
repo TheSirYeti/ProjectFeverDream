@@ -22,8 +22,8 @@ public class CutsceneTrigger : GenericObject
         if (other.gameObject.tag == "Player" && !hasTriggered)
         {
             hasTriggered = true;
-            SoundManager.instance.StopAllSounds();
-            SoundManager.instance.StopAllMusic();
+            //SoundManager.instance.StopAllSounds();
+            //SoundManager.instance.StopAllMusic();
             SoundManager.instance.StopAllVoiceLines();
             CutsceneManager.instance.PlayTimeline(timelineID);
         }
