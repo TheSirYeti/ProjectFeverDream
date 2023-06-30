@@ -16,6 +16,11 @@ public class ResetTrigger : GenericObject
             EventManager.Trigger("OnResetTriggerLevel");
             GameManager.Instance.ReloadScene();
         }
+
+        if (other.gameObject.tag == "Robot")
+        {
+            gameObject.SetActive(false);
+        }
         
     }
 }

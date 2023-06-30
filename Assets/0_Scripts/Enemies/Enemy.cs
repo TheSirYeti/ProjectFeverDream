@@ -198,7 +198,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     {
         transform.forward = target.transform.position - transform.position;
         
-        transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+        //transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
         transform.position += transform.forward * speed * Time.deltaTime;
     }
 
@@ -211,16 +211,16 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
         transform.forward = desired;
 
-        Vector3 lookAtValue =
-            new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+        //Vector3 lookAtValue = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
         
-        transform.LookAt(transform.position - (lookAtValue - transform.position));
+        //transform.LookAt(transform.position - (lookAtValue - transform.position));
         transform.position += desired * speed * Time.deltaTime;
     }
 
     public void DoPathfinding()
     {
         _dir = (_actualObjective.position) - transform.position;
+        _dir.y = 0;
 
         Quaternion targetRotation = Quaternion.LookRotation(_dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, speed * Time.deltaTime);

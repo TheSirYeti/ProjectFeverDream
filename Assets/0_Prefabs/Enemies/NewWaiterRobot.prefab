@@ -2853,7 +2853,7 @@ GameObject:
   - component: {fileID: 643089006540210318}
   m_Layer: 10
   m_Name: NewWaiterRobot
-  m_TagString: Untagged
+  m_TagString: Robot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3635,12 +3635,12 @@ MonoBehaviour:
   _type: 1
   _interactPoint: {fileID: 643089005455145185}
   attackCollider: {fileID: 643089006540211064}
-  attackCooldown: 5
+  attackCooldown: 2
   currentAttackCooldown: 0
   isAttacking: 0
   speed: 7
   accelerationValue: 5
-  minDistanceToNode: 1.5
+  minDistanceToNode: 0.2
   isPathfinding: 0
   pathfindingCooldown: 0
   pathfindingRate: 2
@@ -3693,9 +3693,9 @@ MonoBehaviour:
   extraAttackRange: 5
   bulletPrefab: {fileID: 8367643210429595219, guid: 4ec71405edd5eb04f8225c97edbf218c, type: 3}
   spawnPoint: {fileID: 643089007092312886}
-  reloadTime: 3
+  reloadTime: 0.5
   animationPrefix: RangedRobot
-  detectTime: 1
+  detectTime: 0.2
   searchRange: 30
   scaredRange: 5
   timeScared: 5
