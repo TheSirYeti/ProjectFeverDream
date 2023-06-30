@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 //
@@ -194,13 +195,30 @@ public class MPathfinding : GenericObject
 
     public MNode GetClosestNode(Vector3 t, bool isForAssistant = false)
     {
-        float actualSearchingRange = searchingRange;
-        Collider[] _closestNodes = Physics.OverlapSphere(t, searchingRange, LayerManager.LM_NODE);
+        var actualSearchingRange = searchingRange;
+        var _closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
+            .Where(x =>
+            {
+                var dir = x.transform.position - t;
+                return !Physics.Raycast(t, dir, dir.magnitude * 0.9f, LayerManager.LM_OBSTACLE);
+            }).ToArray();
 
+        var watchdog = 10000;
         while (_closestNodes.Length <= 0)
         {
+            watchdog--;
+            if (watchdog > 0)
+            {
+                return null;
+            }
+            
             actualSearchingRange += searchingRange;
-            _closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE);
+            _closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
+                .Where(x =>
+                {
+                    var dir = x.transform.position - t;
+                    return !Physics.Raycast(t, dir, dir.magnitude * 0.9f, LayerManager.LM_OBSTACLE);
+                }).ToArray();
         }
         
         GameObject node = null;
@@ -209,9 +227,7 @@ public class MPathfinding : GenericObject
         for (int i = 0; i < _closestNodes.Length; i++)
         {
             float distance = Vector3.Distance(t, _closestNodes[i].transform.position);
-            Vector3 dirToTarget = _closestNodes[i].transform.position - t;
-            if (distance <= minDistance &&
-                !Physics.Raycast(t, dirToTarget, dirToTarget.magnitude, LayerManager.LM_WALL))
+            if (distance <= minDistance)
             {
                 node = _closestNodes[i].gameObject;
                 minDistance = distance;
@@ -226,7 +242,7 @@ public class MPathfinding : GenericObject
         Vector3 dir = to - from;
         Ray ray = new Ray(from, dir);
 
-        if (Physics.Raycast(ray, dir.magnitude, LayerManager.LM_WALL))
+        if (Physics.Raycast(ray, dir.magnitude, LayerManager.LM_ALLOBSTACLE))
             return false;
 
         return true;

@@ -241,7 +241,7 @@ public class Assistant : GenericObject
         pathFinding.OnEnter += x =>
         {
             //Debug.Log("path");
-            nodeList = MPathfinding._instance.GetPath(transform.position, _player.position);
+            nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
             _actualObjective = nodeList.GetNextNode().transform;
         };
 
@@ -275,7 +275,7 @@ public class Assistant : GenericObject
                     }
                     else
                     {
-                        nodeList = MPathfinding._instance.GetPath(transform.position, _player.position);
+                        nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
                         _actualObjective = nodeList.GetNextNode().transform;
                     }
                 }
@@ -650,7 +650,7 @@ public class Assistant : GenericObject
     bool OnSight(Vector3 objective)
     {
         var dir = objective - transform.position;
-        var ray = new Ray(transform.position, objective.normalized);
+        var ray = new Ray(transform.position, dir.normalized);
 
         return !Physics.Raycast(ray, dir.magnitude, LayerManager.LM_OBSTACLE);
     }

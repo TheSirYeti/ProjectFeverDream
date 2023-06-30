@@ -379,19 +379,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 695856101721528826, guid: 3bb92fdb268ef05449bae2d25c73b6d4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3bb92fdb268ef05449bae2d25c73b6d4, type: 3}
---- !u!114 &4142164462468025734 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 695856101721528826, guid: 3bb92fdb268ef05449bae2d25c73b6d4, type: 3}
-  m_PrefabInstance: {fileID: 3518368841178616956}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 271c580db5fd384429cdac899152e9e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &4075710199981893313 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 602379560609804989, guid: 3bb92fdb268ef05449bae2d25c73b6d4, type: 3}
@@ -628,7 +618,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
-  _outline: {fileID: 4142164462468025734}
   _type: 0
   _door: {fileID: 799147311337882592}
   _interactPoint: {fileID: 4786341315557219238}
