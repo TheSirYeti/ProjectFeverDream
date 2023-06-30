@@ -117,9 +117,9 @@ public class Model : GenericObject, IPlayerLife
         EventManager.Subscribe("SetAssistant", SetAssistant);
         EventManager.Subscribe("ChangeMovementState", ChangeMovementState);
 
-        floorChecker = CheckOffFloor;
-        
-        UpdateManager._instance.AddComponents(new PausableObject(){anim = _view._animator, rb = _rb});
+        floorChecker = OnAir_Checker;
+
+        UpdateManager._instance.AddComponents(new PausableObject() { anim = _view._animator, rb = _rb });
     }
 
     public override void OnStart()
@@ -149,10 +149,10 @@ public class Model : GenericObject, IPlayerLife
     private void ChangeMovementState(params object[] parameters)
     {
         _canMove = (bool)parameters[0];
-        
-        if(_physics.HasGravity())
+
+        if (_physics.HasGravity())
             _physics.RemoveAcceleration("gravity");
-        
+
         SoundManager.instance.StopSoundByID("RUN");
         SoundManager.instance.StopSoundByID("WALK");
     }
@@ -241,39 +241,39 @@ public class Model : GenericObject, IPlayerLife
             _canJump = false;
             _jumpCounter++;
         }
-        else
-        {
-            var collisions = Physics.OverlapSphere(transform.position, 1, _wallMask);
-
-            if (!collisions.Any()) return;
-
-            if (_jumpCoroutine != null)
-            {
-                StopCoroutine(_jumpCoroutine);
-                _jumpCoroutine = null;
-            }
-
-            if (_walljumpCoroutine != null)
-                StopCoroutine(_walljumpCoroutine);
-
-            _jumpCoroutine = StartCoroutine(JumpDuration());
-            _walljumpCoroutine = StartCoroutine(WallJumpDuration());
-
-            var orderCollisions =
-                collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
-            var closeCollider = orderCollisions.First();
-
-
-            _physics.RemoveAcceleration("gravity");
-
-            _physics.ApplyImpulse("walljump",
-                (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _walljumpForce,
-                _wallJumpDesacceleration);
-            _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
-
-            _canJump = false;
-            _jumpCounter++;
-        }
+        // else
+        // {
+        //     var collisions = Physics.OverlapSphere(transform.position, 1, _wallMask);
+        //
+        //     if (!collisions.Any()) return;
+        //
+        //     if (_jumpCoroutine != null)
+        //     {
+        //         StopCoroutine(_jumpCoroutine);
+        //         _jumpCoroutine = null;
+        //     }
+        //
+        //     if (_walljumpCoroutine != null)
+        //         StopCoroutine(_walljumpCoroutine);
+        //
+        //     _jumpCoroutine = StartCoroutine(JumpDuration());
+        //     _walljumpCoroutine = StartCoroutine(WallJumpDuration());
+        //
+        //     var orderCollisions =
+        //         collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
+        //     var closeCollider = orderCollisions.First();
+        //
+        //
+        //     _physics.RemoveAcceleration("gravity");
+        //
+        //     _physics.ApplyImpulse("walljump",
+        //         (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _walljumpForce,
+        //         _wallJumpDesacceleration);
+        //     _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
+        //
+        //     _canJump = false;
+        //     _jumpCounter++;
+        // }
     }
 
     public void Slide()
@@ -416,16 +416,21 @@ public class Model : GenericObject, IPlayerLife
         _walljumpCoroutine = null;
     }
 
-    void CheckOnFloor()
+    void OnFloor_Checker()
     {
         if (_physics.HasGravity()) _physics.RemoveAcceleration("gravity");
+        if (!_canJump && _jumpCoroutine == null)
+        {
+            _canJump = true;
+            _jumpCounter = 0;
+        }
         //Debug.Log("Estoy chequeando si salgo del piso");
 
         // if (_jumpCoroutine == null) Debug.Log("Hay corutina");
         // if (!Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
         //         transform.rotation, _floorMask)) Debug.Log("No hay piso");
 
-        if (_jumpCoroutine == null && !Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
+        if (!Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
                 transform.rotation, _floorMask))
         {
             if (_coyoteTimeCoroutine != null)
@@ -440,11 +445,11 @@ public class Model : GenericObject, IPlayerLife
 
             _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
 
-            floorChecker = CheckOffFloor;
+            floorChecker = OnAir_Checker;
         }
     }
 
-    void CheckOffFloor()
+    void OnAir_Checker()
     {
         if (!_physics.HasGravity()) _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
 
@@ -475,7 +480,7 @@ public class Model : GenericObject, IPlayerLife
 
             _physics.RemoveAcceleration("gravity");
 
-            floorChecker = CheckOnFloor;
+            floorChecker = OnFloor_Checker;
         }
     }
 
