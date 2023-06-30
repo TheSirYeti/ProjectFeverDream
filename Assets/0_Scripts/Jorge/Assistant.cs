@@ -613,7 +613,8 @@ public class Assistant : GenericObject
 
     bool CheckNearEnemies()
     {
-        var enemies = Physics.OverlapSphere(_player.position, _enemiesDetectionDistance, _enemiesMask);
+        var enemies = Physics.OverlapSphere(_player.position, _enemiesDetectionDistance, _enemiesMask)
+            .Where(x => OnSight(x.transform.position));
         var aliveEnemies = enemies.Select(x => x.GetComponentInParent<Enemy>()).Where(x => !x.isDead).ToList();
 
         if (!aliveEnemies.Any()) return false;
