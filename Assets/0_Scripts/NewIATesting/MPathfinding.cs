@@ -201,14 +201,14 @@ public class MPathfinding : GenericObject
             .Where(x =>
             {
                 var dir = x.transform.position - t;
-                return !Physics.Raycast(t, dir, dir.magnitude * 0.9f, LayerManager.LM_OBSTACLE);
+                return !Physics.Raycast(t, dir, dir.magnitude * 1, LayerManager.LM_OBSTACLE);
             }).ToArray();
 
         var watchdog = 10000;
         while (_closestNodes.Length <= 0)
         {
             watchdog--;
-            if (watchdog < 0)
+            if (watchdog <= 0)
             {
                 return null;
             }
@@ -218,7 +218,7 @@ public class MPathfinding : GenericObject
                 .Where(x =>
                 {
                     var dir = x.transform.position - t;
-                    return !Physics.Raycast(t, dir, dir.magnitude * 0.9f, LayerManager.LM_OBSTACLE);
+                    return !Physics.Raycast(t, dir, dir.magnitude * 1, LayerManager.LM_OBSTACLE);
                 }).ToArray();
         }
 
@@ -232,12 +232,9 @@ public class MPathfinding : GenericObject
             {
                 var tempNode = _closestNodes[i].gameObject.GetComponent<MNode>();
 
-                if (tempNode != null)
-                {
-                    mNode = tempNode;
-                }
-
-                //node = _closestNodes[i].gameObject;
+                if (tempNode == null) continue;
+                
+                mNode = tempNode;
                 minDistance = distance;
             }
         }

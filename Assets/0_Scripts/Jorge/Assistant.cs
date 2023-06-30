@@ -408,6 +408,14 @@ public class Assistant : GenericObject
             {
                 _actualObjective.transform.parent = transform;
                 _holdingItem = _actualObjective.gameObject.GetComponent<IAssistInteract>();
+                
+                Debug.Log(_holdingItem.InteractID());
+
+                if (_holdingItem == null)
+                {
+                    SendInputToFSM(JorgeStates.FOLLOW);
+                    return;
+                }
 
 
                 if (_holdingItem.isAutoUsable())
