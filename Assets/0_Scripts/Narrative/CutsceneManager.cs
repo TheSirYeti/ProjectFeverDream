@@ -35,6 +35,7 @@ public class CutsceneManager : GenericObject
     public void PlayTimeline(int timelineID)
     {
         director.playableAsset = allTimelines[timelineID];
+        director.Stop();
         director.Play();
     }
 

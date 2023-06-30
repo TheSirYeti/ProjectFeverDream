@@ -15,8 +15,6 @@ public class Assistant : GenericObject
 
     private Vector3 _actualDir;
 
-    [SerializeField] private LayerMask _collisionMask;
-
     [SerializeField] private float _followSpeed;
     [SerializeField] private float _interactSpeed;
 
@@ -208,7 +206,7 @@ public class Assistant : GenericObject
         {
             _dir = (_player.position) - transform.position;
 
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude, _collisionMask))
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude, LayerManager.LM_ENEMYSIGHT))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
@@ -263,7 +261,7 @@ public class Assistant : GenericObject
             if (Vector3.Distance(transform.position, (_actualObjective.position)) < _nodeDistance)
             {
                 Vector3 tempDir = _previousObjective.position - transform.position;
-                if (!Physics.Raycast(transform.position, tempDir, tempDir.magnitude, _collisionMask))
+                if (!Physics.Raycast(transform.position, tempDir, tempDir.magnitude, LayerManager.LM_ENEMYSIGHT))
                 {
                     SendInputToFSM(_previousState);
                 }
@@ -322,7 +320,7 @@ public class Assistant : GenericObject
                 return;
             }
 
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, LayerManager.LM_ENEMYSIGHT))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
@@ -401,7 +399,7 @@ public class Assistant : GenericObject
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, LayerManager.LM_ENEMYSIGHT))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }
@@ -448,7 +446,7 @@ public class Assistant : GenericObject
             Quaternion targetRotation = Quaternion.LookRotation(_dir);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
-            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, _collisionMask))
+            if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, LayerManager.LM_ENEMYSIGHT))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
             }

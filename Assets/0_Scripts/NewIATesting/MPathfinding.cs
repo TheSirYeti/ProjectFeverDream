@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+
 //
 // //TODO: Testing, delete later
 // [ExecuteAlways]
@@ -41,7 +42,7 @@ public class MPathfinding : GenericObject
         {
             node.ResetNode();
         }
-    
+
         Debug.Log("termine");
     }
 
@@ -56,7 +57,7 @@ public class MPathfinding : GenericObject
         {
             node.ResetNode();
         }
-    
+
         for (int i = 0; i < checker.Count; i++)
         {
             checker[i].nodeColor = Color.green;
@@ -76,7 +77,7 @@ public class MPathfinding : GenericObject
         closeNodes = new HashSet<MNode>();
         openNodes = new PriorityQueue<MNode>();
         _nodePath = new Queue<MNode>();
-        
+
         _origenNode = GetClosestNode(origen);
         _targetNode = GetClosestNode(target);
 
@@ -104,7 +105,7 @@ public class MPathfinding : GenericObject
         while (_actualnode != _targetNode && watchdog > 0)
         {
             watchdog--;
-     
+
             checkingNodes = new Queue<MNode>();
 
 
@@ -118,7 +119,7 @@ public class MPathfinding : GenericObject
                 node.SetWeight(_actualnode.GetWeight() + 1 +
                                Vector3.Distance(node.transform.position, _targetNode.transform.position));
 
-                openNodes.Enqueue(new TObj<MNode>(){myObj = node, myWeight = node.GetWeight()});
+                openNodes.Enqueue(new TObj<MNode>() { myObj = node, myWeight = node.GetWeight() });
                 checkingNodes.Enqueue(node);
             }
 
@@ -127,28 +128,27 @@ public class MPathfinding : GenericObject
                 MNode cheaperNode = checkingNodes.Dequeue();
                 while (checkingNodes.Count > 0)
                 {
-                    if(cheaperNode == _targetNode) break;
-                    
+                    if (cheaperNode == _targetNode) break;
+
                     var actualNode = checkingNodes.Dequeue();
-                
+
                     if (actualNode.GetWeight() < cheaperNode.GetWeight())
                         cheaperNode = actualNode;
-                
-                
                 }
+
                 _actualnode = cheaperNode;
             }
             else
             {
                 _actualnode = openNodes.Dequeue();
             }
-            
-            
+
+
             closeNodes.Add(_actualnode);
-            
-            if(_actualnode == _targetNode) Debug.Log("llegue");
+
+            if (_actualnode == _targetNode) Debug.Log("llegue");
         }
-        
+
         ThetaStar();
     }
 
@@ -158,16 +158,17 @@ public class MPathfinding : GenericObject
         _actualnode = _targetNode;
         stack.Push(_actualnode);
         var previouseNode = _actualnode._previouseNode;
-        
-        if(previouseNode == null) Debug.Log("no existe");
+
+        if (previouseNode == null) Debug.Log("no existe");
         int watchdog = 10000;
         while (_actualnode != _origenNode && watchdog > 0)
         {
             watchdog--;
-            
+
             //if(watchdog <= 0)Debug.Log("Primer while theta");
-            
-            if (previouseNode._previouseNode && OnSight(_actualnode.transform.position, previouseNode._previouseNode.transform.position))
+
+            if (previouseNode._previouseNode && OnSight(_actualnode.transform.position,
+                    previouseNode._previouseNode.transform.position))
             {
                 previouseNode = previouseNode._previouseNode;
             }
@@ -183,9 +184,9 @@ public class MPathfinding : GenericObject
         while (stack.Count > 0 && watchdog > 0)
         {
             watchdog--;
-            
+
             //if(watchdog <= 0)Debug.Log("Segundo while theta");
-            
+
             MNode nextNode = stack.Pop() as MNode;
             checker.Add(nextNode);
             actualPath.AddNode(nextNode);
@@ -207,11 +208,11 @@ public class MPathfinding : GenericObject
         while (_closestNodes.Length <= 0)
         {
             watchdog--;
-            if (watchdog > 0)
+            if (watchdog < 0)
             {
                 return null;
             }
-            
+
             actualSearchingRange += searchingRange;
             _closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
                 .Where(x =>
@@ -220,8 +221,8 @@ public class MPathfinding : GenericObject
                     return !Physics.Raycast(t, dir, dir.magnitude * 0.9f, LayerManager.LM_OBSTACLE);
                 }).ToArray();
         }
-        
-        GameObject node = null;
+
+        MNode mNode = null;
 
         float minDistance = Mathf.Infinity;
         for (int i = 0; i < _closestNodes.Length; i++)
@@ -229,12 +230,19 @@ public class MPathfinding : GenericObject
             float distance = Vector3.Distance(t, _closestNodes[i].transform.position);
             if (distance <= minDistance)
             {
-                node = _closestNodes[i].gameObject;
+                var tempNode = _closestNodes[i].gameObject.GetComponent<MNode>();
+
+                if (tempNode != null)
+                {
+                    mNode = tempNode;
+                }
+
+                //node = _closestNodes[i].gameObject;
                 minDistance = distance;
             }
         }
 
-        return node.GetComponent<MNode>();
+        return mNode;
     }
 
     bool OnSight(Vector3 from, Vector3 to)
