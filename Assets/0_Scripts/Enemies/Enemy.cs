@@ -455,6 +455,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         if (playerLife != null)
         {
             playerLife.GetDamage((int)dmg);
+            attackCollider.enabled = false;
         }
     }
     

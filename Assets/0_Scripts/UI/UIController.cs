@@ -48,7 +48,7 @@ public class UIController : GenericObject
     private float yBias = 35f;
     
     
-    private Camera cam;
+    private Camera cam => GameManager.Instance.GetCamera();
 
     [Header("Interactable")]
     [SerializeField] private TextMeshProUGUI _interactuableUI;
@@ -316,15 +316,16 @@ public class UIController : GenericObject
 
     void SetPingPosition()
     {
-        ping.gameObject.SetActive(true);
-        ping.transform.position = GameManager.Instance.GetCamera().WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
-
-        /*if (buttonRenderer.isVisible)
+        var dir = currentPingTarget.position - cam.transform.position;
+        if (Vector3.Angle(cam.transform.forward, dir) < 90)
         {
             ping.gameObject.SetActive(true);
-            ping.transform.position = Camera.main.WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
+            ping.transform.position = cam.WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
         }
-        else ping.gameObject.SetActive(false);*/
+        else
+        {
+            ping.gameObject.SetActive(false);
+        }
     }
     
     void DoPingStart(object[] parameters)

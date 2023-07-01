@@ -38,7 +38,7 @@ public class PingSystem : GenericObject
 
     public void SetPingPosition()
     {
-        var dir = buttonRenderer.transform.position - cam.transform.position;
+        var dir = currentTarget.position - cam.transform.position;
         if (buttonRenderer.isVisible && Vector3.Angle(cam.transform.forward, dir) < 90)
         {
             ping.gameObject.SetActive(true);

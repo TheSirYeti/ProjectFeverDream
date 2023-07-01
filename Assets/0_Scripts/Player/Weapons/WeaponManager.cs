@@ -124,7 +124,8 @@ public class WeaponManager : GenericObject, IAssistInteract
         }
         
         _actualWeapon.OnWeaponEquip(transform, this, _nozzlePoint);
-
+        
+        _view.SetAnimatorController(_noWeaponAnimator);
         _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
 
         if(isFromTheFloor && _actualWeapon.GetID() == 1)
