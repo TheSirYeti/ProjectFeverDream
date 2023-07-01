@@ -41,7 +41,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     [Space(20)]
     [Header("-== Pathfinding Properties ==-")] 
     //[SerializeField] protected List<Node> nodePath;
-    [SerializeField] Path nodeList;
+    protected Path nodeList;
     protected int currentNode = 0;
     Vector3 _actualDir;
     [SerializeField] private float minDistanceToNode;
@@ -133,8 +133,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
         foreach (var rigidbody in ragdollRigidbodies)
         {
-            if(rigidbody != rb)
+            if (rigidbody != rb)
+            {
                 rigidbody.isKinematic = false;
+                rigidbody.detectCollisions = true;
+            }
         }
         
         //collider.enabled = false;
@@ -151,8 +154,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
         foreach (var rigidbody in ragdollRigidbodies)
         {
-            if(rigidbody != rb)
+            if (rigidbody != rb)
+            {
                 rigidbody.isKinematic = true;
+                //rigidbody.detectCollisions = false;
+            }
         }
         
         //collider.enabled = true;
@@ -167,10 +173,14 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
         foreach (var rigidbody in ragdollRigidbodies)
         {
-            if(rigidbody != rb)
+            if (rigidbody != rb)
+            {
+                rigidbody.detectCollisions = false;
                 rigidbody.isKinematic = true;
+            }
         }
-        
+
+        ragdollRigidbodies = new[] { rb };
         //collider.enabled = true;
         rb.isKinematic = true;
         animator.enabled = false;
@@ -202,6 +212,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     protected void DoGenericChase()
     {
         transform.forward = target.transform.position - transform.position;
+        transform.forward = new Vector3(transform.forward.x, 0, transform.forward.z);
         
         //transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
         transform.position += transform.forward * speed * Time.deltaTime;
@@ -210,7 +221,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     protected void DoGenericRunAway()
     {
         Vector3 desired = target.transform.position - transform.position;
-        desired = new Vector3(desired.x, transform.position.y, desired.z);
+        desired = new Vector3(desired.x, 0, desired.z);
         desired.Normalize();
         desired *= -1;
 
@@ -247,7 +258,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         
         if (InSight(transform.position, target.transform.position))
         {
-            Debug.Log("In sight?");
+            //Debug.Log("In sight?");
             isPathfinding = false;
         }
     }
@@ -263,7 +274,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
     protected void CalculatePathPreview(bool amEscaping)
     {
-        Debug.Log("QUIERO HACER PF");
+        //Debug.Log("QUIERO HACER PF");
 
         if (amEscaping)
         {
@@ -285,6 +296,8 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
                 }
             }
             
+            
+            
             Debug.Log(furthestNode + " - Node to go to");
             
             nodeList = MPathfinding._instance.GetPath(transform.position, 
@@ -297,7 +310,8 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         else
         {
             nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
-            _actualObjective = nodeList.GetNextNode().transform;
+            if(nodeList != null && nodeList.CheckNextNode() != null)
+                _actualObjective = nodeList.GetNextNode().transform;
         }
         Debug.Log("LLEGO A TERMINAR DE CALCULAR EL PF");
     }
@@ -521,8 +535,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
     public void ChangeOutlineState(bool state)
     {
-        _outline.enabled = state;
-        _outline.OutlineWidth = 10;
+        if (_outline != null)
+        {
+            _outline.enabled = state;
+            _outline.OutlineWidth = 10;
+        }
     }
 
     public int InteractID()

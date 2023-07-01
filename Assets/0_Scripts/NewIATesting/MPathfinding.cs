@@ -96,6 +96,12 @@ public class MPathfinding : GenericObject
 
     void AStar()
     {
+        if (_actualnode == null)
+        {
+            Debug.Log("ACA DEBERIA CRASHEAR!");
+            return;
+        }
+        
         closeNodes.Add(_actualnode);
         _actualnode.nodeColor = Color.green;
 
@@ -146,7 +152,7 @@ public class MPathfinding : GenericObject
 
             closeNodes.Add(_actualnode);
 
-            if (_actualnode == _targetNode) Debug.Log("llegue");
+            //if (_actualnode == _targetNode) Debug.Log("llegue");
         }
 
         ThetaStar();

@@ -26,6 +26,7 @@ public class Elevator : GenericObject, IAssistInteract
     //TODO: Set Interfaces
     public void Interact(IAssistInteract usableItem = null)
     {
+        StopCoroutine(DoElevatorCycle());
         StartCoroutine(DoElevatorCycle());
         interactable = false;
         Debug.Log("ASCENSOR");
@@ -68,8 +69,11 @@ public class Elevator : GenericObject, IAssistInteract
 
     public void ChangeOutlineState(bool state)
     {
-        _outline.enabled = state;
-        _outline.OutlineWidth = 10;
+        if (_outline != null)
+        {
+            _outline.enabled = state;
+            _outline.OutlineWidth = 10;
+        }
     }
 
     public int InteractID()
@@ -90,6 +94,7 @@ public class Elevator : GenericObject, IAssistInteract
     IEnumerator DoElevatorCycle()
     {
         LeanTween.reset();
+        elevator.transform.position = startPoint.transform.position;
         
         while (true)
         {

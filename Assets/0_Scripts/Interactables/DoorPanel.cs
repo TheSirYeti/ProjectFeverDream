@@ -67,8 +67,11 @@ public class DoorPanel : GenericObject, IAssistInteract
     //TODO: Set Interfaces
     public void ChangeOutlineState(bool state)
     {
-        _outline.enabled = state;
-        _outline.OutlineWidth = 10;
+        if (_outline != null)
+        {
+            _outline.enabled = state;
+            _outline.OutlineWidth = 10;
+        }
     }
 
     public int InteractID()

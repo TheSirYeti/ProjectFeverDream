@@ -336,6 +336,7 @@ GameObject:
   - component: {fileID: 529435665564174569}
   - component: {fileID: 894496608927229309}
   - component: {fileID: 3055812626318986805}
+  - component: {fileID: 3484283195069951558}
   m_Layer: 10
   m_Name: ChefRobot
   m_TagString: Robot
@@ -447,6 +448,7 @@ MonoBehaviour:
   minChaseDistance: 2
   _type: 1
   _interactPoint: {fileID: 6985060687993072258}
+  _outline: {fileID: 3484283195069951558}
   attackCollider: {fileID: 239757362170953704}
   attackCooldown: 4
   currentAttackCooldown: 0
@@ -1497,6 +1499,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3484283195069951558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1122139428085172919}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1280917076294516747
 GameObject:
   m_ObjectHideFlags: 0
