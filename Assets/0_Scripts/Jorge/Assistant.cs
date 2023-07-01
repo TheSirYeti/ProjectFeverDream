@@ -462,6 +462,7 @@ public class Assistant : GenericObject
             if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, LayerManager.LM_ENEMYSIGHT))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
+                return;
             }
 
             if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
@@ -472,10 +473,12 @@ public class Assistant : GenericObject
                 {
                     _holdingItem.GetTransform().transform.parent = null;
                     tempItemAction.Interact(_holdingItem);
+                    _holdingItem = null;
                 }
                 else
                 {
                     Destroy(_holdingItem.GetTransform().gameObject);
+                    _holdingItem = null;
                 }
 
                 SendInputToFSM(JorgeStates.FOLLOW);
@@ -602,7 +605,7 @@ public class Assistant : GenericObject
 
     public void SetObjective(Transform interactuable, JorgeStates goToState)
     {
-        if (_interactuable != null && (goToState == JorgeStates.INTERACT || goToState == JorgeStates.USEIT ||
+        if ((_interactuable != null || _holdingItem != null) && (goToState == JorgeStates.INTERACT || goToState == JorgeStates.USEIT ||
                                        goToState == JorgeStates.PICKUP)) return;
 
         EventManager.Trigger("OnAssistantPing", interactuable);
