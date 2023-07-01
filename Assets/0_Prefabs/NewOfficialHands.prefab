@@ -247,7 +247,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883068806828737838}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -2646,6 +2646,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
+  soundID: 
+  musicID: 
+  playSoundOnStart: 0
+  playMusicOnStart: 0
+  playSoundOnEnable: 0
+  playMusicOnEnable: 0
 --- !u!114 &749622745109125523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2732,7 +2738,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
-  _hands: []
+  _animator: {fileID: 0}
+  _hitParticlesPoint: {fileID: 0}
   _fullBaggeteSlice: []
   _brokenBaggeteSlice: []
   _toasterParticles: []

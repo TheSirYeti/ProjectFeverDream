@@ -409,13 +409,13 @@ public class Assistant : GenericObject
                 _actualObjective.transform.parent = transform;
                 _holdingItem = _actualObjective.gameObject.GetComponent<IAssistInteract>();
                 
-                Debug.Log(_holdingItem.InteractID());
-
                 if (_holdingItem == null)
                 {
                     SendInputToFSM(JorgeStates.FOLLOW);
                     return;
                 }
+                
+                Debug.Log(_holdingItem.InteractID());
 
 
                 if (_holdingItem.isAutoUsable())
@@ -550,6 +550,22 @@ public class Assistant : GenericObject
         fsm.Update();
         ExtraUpdate();
         _actualDir += _obstacleDir.normalized * _obstacleSpeed;
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            transform.position = _player.transform.position;
+            ResetGeorge();
+            SendInputToFSM(JorgeStates.FOLLOW);
+        }
+    }
+
+    public void ResetGeorge()
+    {
+        _interactuable = null;
+        if(_holdingItem != null && _holdingItem.GetTransform() != null && _holdingItem.GetTransform().parent != null)
+            _holdingItem.GetTransform().parent = null;
+        _holdingItem = null;
+        _isInteracting = false;
     }
 
     public override void OnFixedUpdate()
@@ -666,13 +682,22 @@ public class Assistant : GenericObject
     IEnumerator WaitAction(float time, bool isTrigger)
     {
         yield return new WaitForSeconds(time);
-
+        
         if (isTrigger)
-            _animator.SetTrigger(_interactuable.AnimationToExecute());
+        {
+            if(_interactuable != null)
+                _animator.SetTrigger(_interactuable.AnimationToExecute());
+        }
         else
-            _animator.SetBool(_interactuable.AnimationToExecute(), false);
+        {
+            if(_interactuable != null)
+                _animator.SetBool(_interactuable.AnimationToExecute(), false);
+        }
 
-        _interactuable.Interact();
+        
+        if(_interactuable != null)
+            _interactuable.Interact();
+        
         _interactuable = null;
         _actualObjective = _player;
         _loadingAmmount = 0;

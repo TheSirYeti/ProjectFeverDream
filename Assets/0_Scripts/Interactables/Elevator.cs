@@ -10,7 +10,8 @@ public class Elevator : GenericObject, IAssistInteract
 
     [SerializeField] private Transform interactPoint;
     [SerializeField] private GameObject elevator;
-    [SerializeField] private float elevationTime, holdTime, yDiff;
+    [SerializeField] private Transform startPoint, endPoint;
+    [SerializeField] private float elevationTime, holdTime;
     private bool interactable = true;
     private void Awake()
     {
@@ -89,11 +90,11 @@ public class Elevator : GenericObject, IAssistInteract
     {
         while (true)
         {
-            LeanTween.moveY(elevator, elevator.transform.position.y + yDiff, elevationTime);
+            LeanTween.moveY(elevator, endPoint.position.y, elevationTime);
 
             yield return new WaitForSeconds(elevationTime + holdTime);
             
-            LeanTween.moveY(elevator, elevator.transform.position.y - yDiff, elevationTime);
+            LeanTween.moveY(elevator, startPoint.position.y, elevationTime);
 
             yield return new WaitForSeconds(elevationTime + holdTime);
         }

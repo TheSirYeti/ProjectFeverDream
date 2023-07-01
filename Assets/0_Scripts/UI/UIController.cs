@@ -17,6 +17,7 @@ public class UIController : GenericObject
     [Space(20)] 
     [SerializeField] private List<GameObject> weaponRegion;
     [SerializeField] private List<GameObject> objectiveRegion;
+    [SerializeField] private List<GameObject> controlsRegion;
     int _actualWeapon = 0;
     [Space(20)]
     [SerializeField] private Animator redScreenAnimator;
@@ -76,6 +77,16 @@ public class UIController : GenericObject
         if (Input.GetKeyUp(KeyCode.Tab))
         {
             ShowObjectiveUI(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            ShowControlsUI(true);
+        }
+        
+        if (Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            ShowControlsUI(false);
         }
         
         if (!isPingEnabled) return;
@@ -262,6 +273,14 @@ public class UIController : GenericObject
     void ShowObjectiveUI(bool status)
     {
         foreach (var obj in objectiveRegion)
+        {
+            obj.SetActive(status);
+        }
+    }
+
+    void ShowControlsUI(bool status)
+    {
+        foreach (var obj in controlsRegion)
         {
             obj.SetActive(status);
         }
