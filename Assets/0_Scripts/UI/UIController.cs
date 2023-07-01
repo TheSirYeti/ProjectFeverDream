@@ -331,6 +331,8 @@ public class UIController : GenericObject
     
     void DoPingEnd(object[] parameters)
     {
+        LeanTween.reset();
+        
         LeanTween.value(1, 0, fadeInValue).setOnUpdate((float value) =>
         {
             ping.color = new Color(ping.color.r, ping.color.g, ping.color.b, value);
