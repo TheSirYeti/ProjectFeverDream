@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Elevator : GenericObject, IAssistInteract
 {
-    //[SerializeField] private OutlineBehaviour _outline;
+    [SerializeField] private Outline _outline;
     [SerializeField] Assistant.Interactuables _type;
 
     [SerializeField] private Transform interactPoint;
@@ -68,7 +68,8 @@ public class Elevator : GenericObject, IAssistInteract
 
     public void ChangeOutlineState(bool state)
     {
-        //_outline.OutlineWidth = state ? 4 : 0;;
+        _outline.enabled = state;
+        _outline.OutlineWidth = 10;
     }
 
     public int InteractID()

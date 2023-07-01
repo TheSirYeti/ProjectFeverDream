@@ -2851,6 +2851,7 @@ GameObject:
   - component: {fileID: 643089006540210307}
   - component: {fileID: 643089006540210304}
   - component: {fileID: 643089006540210318}
+  - component: {fileID: 6974961084995423424}
   m_Layer: 10
   m_Name: NewWaiterRobot
   m_TagString: Robot
@@ -3634,6 +3635,7 @@ MonoBehaviour:
   minChaseDistance: 15
   _type: 1
   _interactPoint: {fileID: 643089005455145185}
+  _outline: {fileID: 6974961084995423424}
   attackCollider: {fileID: 643089006540211064}
   attackCooldown: 2
   currentAttackCooldown: 0
@@ -3699,6 +3701,24 @@ MonoBehaviour:
   searchRange: 30
   scaredRange: 5
   timeScared: 5
+--- !u!114 &6974961084995423424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9043821534065177203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &3407211616859845266
 PrefabInstance:
   m_ObjectHideFlags: 0

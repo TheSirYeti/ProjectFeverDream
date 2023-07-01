@@ -23,7 +23,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     [SerializeField] protected LayerMask _shooteableMask;
 
     [SerializeField] int _pickUpID;
-    //[SerializeField] private OutlineBehaviour _outline;
+    [SerializeField] private Outline _outline;
     public bool _isEquiped = false;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
@@ -178,7 +178,8 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 
     public void ChangeOutlineState(bool state)
     {
-        //_outline.OutlineWidth = state ? 3 : 0;
+        _outline.enabled = state;
+        _outline.OutlineWidth = 8;
     }
 
     public int InteractID()

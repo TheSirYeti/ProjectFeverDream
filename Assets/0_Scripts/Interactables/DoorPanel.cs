@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class DoorPanel : GenericObject, IAssistInteract
 {
-    //[SerializeField] private OutlineBehaviour _outline;
+    [SerializeField] private Outline _outline;
     [SerializeField] Assistant.Interactuables _type;
 
     bool _isClose = true;
@@ -49,8 +49,6 @@ public class DoorPanel : GenericObject, IAssistInteract
 
     public void Interact(IAssistInteract usableItem = null)
     {
-        
-        
         _door.SetBool("open", true);
         SoundManager.instance.PlaySoundByInt(audioIDs[0]);
         _isClose = false;
@@ -69,7 +67,8 @@ public class DoorPanel : GenericObject, IAssistInteract
     //TODO: Set Interfaces
     public void ChangeOutlineState(bool state)
     {
-        //_outline.OutlineWidth = state ? 4 : 0;;
+        _outline.enabled = state;
+        _outline.OutlineWidth = 10;
     }
 
     public int InteractID()
