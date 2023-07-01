@@ -186,7 +186,7 @@ public class RangedEnemy : Enemy
                 return;
             }
             
-            if (IsInDistance())
+            if (IsInDistance() && InSight(fovTransformPoint.position, transform.position))
             {
                 isAttacking = true;
                 SendInputToFSM(RangedEnemyStates.SHOOT);
@@ -283,7 +283,7 @@ public class RangedEnemy : Enemy
                 return;
             }
             
-            if (IsInDistance())
+            if (IsInDistance() && InSight(fovTransformPoint.position, transform.position))
             {
                 SendInputToFSM(RangedEnemyStates.SHOOT);
                 return;
