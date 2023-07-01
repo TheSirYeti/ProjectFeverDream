@@ -79,6 +79,8 @@ public class BaseMeleeEnemy : Enemy
             audioDetectIDs.Add(SoundManager.instance.AddSFXSource(sfx));
         }
         
+        EventManager.Subscribe("OnResetTriggerLevel", OnResetScene);
+        
         DoFsmSetup();
     }
 

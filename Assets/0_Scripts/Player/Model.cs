@@ -139,10 +139,7 @@ public class Model : GenericObject, IPlayerLife
         CheckDmg();
 
         currentDmgCooldown -= Time.deltaTime;
-    }
-
-    public override void OnFixedUpdate()
-    {
+        
         _physics.PhysicsFixedUpdate();
     }
 

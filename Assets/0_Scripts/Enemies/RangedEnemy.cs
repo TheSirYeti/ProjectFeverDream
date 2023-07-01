@@ -80,6 +80,8 @@ public class RangedEnemy : Enemy
             audioDetectIDs.Add(SoundManager.instance.AddSFXSource(sfx));
         }
         
+        EventManager.Subscribe("OnResetTriggerLevel", OnResetScene);
+        
         DoFsmSetup();
         rb.isKinematic = false;
         DoFaceTransition(FaceID.IDLE);
