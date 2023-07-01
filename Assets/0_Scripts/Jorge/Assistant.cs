@@ -22,8 +22,10 @@ public class Assistant : GenericObject
     [SerializeField] private float _interactDistance;
     [SerializeField] private float _pickupDistance;
     [SerializeField] private float _nodeDistance;
+    [SerializeField] private Transform _pickUpPoint;
 
     private Path nodeList;
+    private JorgeStates _actualState;
     private JorgeStates _previousState;
     [SerializeField] Transform _previousObjective;
 
@@ -161,7 +163,7 @@ public class Assistant : GenericObject
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            .SetTransition(JorgeStates.PICKUP, pickup)
+            //.SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
@@ -169,7 +171,7 @@ public class Assistant : GenericObject
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            .SetTransition(JorgeStates.INTERACT, interact)
+            //.SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.USEIT, useit)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
@@ -178,7 +180,7 @@ public class Assistant : GenericObject
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            .SetTransition(JorgeStates.INTERACT, interact)
+            //.SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
@@ -199,6 +201,7 @@ public class Assistant : GenericObject
         follow.OnEnter += x =>
         {
             //Debug.Log("follow");
+            _actualState = JorgeStates.FOLLOW;
             _actualObjective = _player;
         };
 
@@ -238,7 +241,7 @@ public class Assistant : GenericObject
 
         pathFinding.OnEnter += x =>
         {
-            //Debug.Log("path");
+            _actualState = JorgeStates.PATHFINDING;
             nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
             _actualObjective = nodeList.GetNextNode().transform;
         };
@@ -295,6 +298,8 @@ public class Assistant : GenericObject
 
         interact.OnEnter += x =>
         {
+            _actualState = JorgeStates.INTERACT;
+            
             _interactuable = _actualObjective.gameObject.GetComponent<IAssistInteract>();
             if (_interactuable == null)
                 _interactuable = _actualObjective.gameObject.GetComponentInParent<IAssistInteract>();
@@ -389,7 +394,7 @@ public class Assistant : GenericObject
 
         pickup.OnEnter += x =>
         {
-            //Debug.Log("Pick Up");
+            _actualState = JorgeStates.PICKUP;
         };
 
         pickup.OnUpdate += () =>
@@ -406,7 +411,9 @@ public class Assistant : GenericObject
 
             if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
             {
-                _actualObjective.transform.parent = transform;
+                _actualObjective.transform.rotation = _pickUpPoint.rotation;
+                _actualObjective.transform.parent = _pickUpPoint;
+                _actualObjective.transform.localPosition = Vector3.zero;
                 _holdingItem = _actualObjective.gameObject.GetComponent<IAssistInteract>();
 
                 if (_holdingItem == null)
@@ -417,8 +424,11 @@ public class Assistant : GenericObject
                 
                 //TODO lol
                 var weapon = _holdingItem.GetTransform().gameObject.GetComponent<GenericWeapon>();
-                if(weapon != null)
+                if (weapon != null)
+                {
                     weapon._isEquiped = true;
+                    weapon.ChangeCollisions(false);
+                }
                 
                 Debug.Log(_holdingItem.InteractID());
 
@@ -449,7 +459,7 @@ public class Assistant : GenericObject
         useit.OnEnter += x =>
         {
             _actualObjective = _holdingItem.UsablePoint();
-            //Debug.Log(_actualObjective.name);
+            _actualState = JorgeStates.USEIT;
         };
 
         useit.OnUpdate += () =>
@@ -499,6 +509,8 @@ public class Assistant : GenericObject
 
         hide.OnEnter += x =>
         {
+            _actualState = JorgeStates.HIDE;
+            
             Collider[] hidingSpots =
                 Physics.OverlapSphere(_player.position, _hidingSpotsDetectionDistance, _hidingSpotsMask);
 
@@ -511,7 +523,10 @@ public class Assistant : GenericObject
 
             var dir = _actualObjective.position - transform.position;
             if (Physics.Raycast(transform.position, dir, dir.magnitude * 0.9f, LayerManager.LM_ALLOBSTACLE))
+            {
                 SendInputToFSM(JorgeStates.PATHFINDING);
+                return;
+            }
         };
 
         hide.OnUpdate += () =>
@@ -605,8 +620,13 @@ public class Assistant : GenericObject
 
     public void SetObjective(Transform interactuable, JorgeStates goToState)
     {
-        if ((_interactuable != null || _holdingItem != null) && (goToState == JorgeStates.INTERACT || goToState == JorgeStates.USEIT ||
-                                       goToState == JorgeStates.PICKUP)) return;
+        if (_actualState == JorgeStates.INTERACT 
+            || _actualState == JorgeStates.USEIT 
+            || _actualState == JorgeStates.PICKUP
+            || (_actualState == JorgeStates.PATHFINDING && 
+                (_previousState == JorgeStates.USEIT ||
+                 _previousState == JorgeStates.PICKUP ||
+                 _previousState == JorgeStates.INTERACT))) return;
 
         EventManager.Trigger("OnAssistantPing", interactuable);
         SoundManager.instance.PlaySound(SoundID.ASSISTANT_PING);

@@ -8,6 +8,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 {
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
+    private Model _player => GameManager.Instance.Player;
 
     [SerializeField] protected int _actualMagazineBullets;
     protected int _actualReserveBullets;
@@ -73,12 +74,11 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     public void OnWeaponEquip(Transform parent, WeaponManager weaponManager, Transform nozzlePoint)
     {
         _isEquiped = true;
-        _collider.enabled = false;
         _nozzlePoint = nozzlePoint;
 
         _weaponManager = weaponManager;
 
-        _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        ChangeCollisions(false);
 
         transform.position = parent.position;
         transform.rotation = parent.rotation;
@@ -103,15 +103,36 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     {
         //animator.SetTrigger("changeWeapon");
         transform.parent = null;
+        transform.position = _player.transform.position + (_player.transform.forward * 1);
 
-        _collider.enabled = true;
-
-        _rigidbody.constraints = RigidbodyConstraints.None;
+        ChangeCollisions(true);
+        
+        _rigidbody.AddForce((_player.transform.forward * 100) + (Vector3.up * 5));
 
         _isEquiped = false;
 
         EventManager.Trigger("OnADSDisable");
 
+    }
+
+    public void ChangeCollisions(bool state)
+    {
+        if (state)
+        {
+            _collider.enabled = true;
+
+            _rigidbody.constraints = RigidbodyConstraints.None;
+            _rigidbody.useGravity = true;
+            _rigidbody.isKinematic = false;
+        }
+        else
+        {
+            _collider.enabled = false;
+
+            _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            _rigidbody.useGravity = false;
+            _rigidbody.isKinematic = true;
+        }
     }
 
     #region SO Getters

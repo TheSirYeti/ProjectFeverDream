@@ -119,7 +119,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     
     protected void OnResetScene(params object[] parameters)
     {
-        LeanTween.cancel(gameObject);
+        //LeanTween.cancel(gameObject);
     }
 
     #region RAGDOLLS
