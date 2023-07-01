@@ -50,7 +50,7 @@ public class PhysicsSystem
         ConstantForce();
         Acceleration();
 
-        _rb.velocity = _impulseVector + _constantVector + _accelerationVector;
+        _rb.velocity = (_impulseVector + _constantVector + _accelerationVector);
     }
 
     #region Impulse Functions

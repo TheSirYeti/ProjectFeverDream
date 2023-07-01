@@ -44,7 +44,7 @@ public class CameraAim
         
         var colliders =
             Physics.OverlapSphere(_camera.transform.position, _interactDistance, LayerManager.LM_ALLINTERACTS);
-        //Debug.Log(1);
+
         if (!colliders.Any())
         {
             if (_actualInteract == null) return;
@@ -55,8 +55,7 @@ public class CameraAim
 
             return;
         }
-
-        //Debug.Log(2);
+        
         var objectInView = colliders.Where(x =>
         {
             var maxDistance = new Vector3(0.5f, 0.5f, 0);
@@ -79,8 +78,6 @@ public class CameraAim
 
             return;
         }
-
-        //Debug.Log(3);
 
         var closeObj = objectInView.OrderBy(x =>
             {

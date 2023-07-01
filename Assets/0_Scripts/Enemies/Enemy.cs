@@ -7,106 +7,112 @@ using UnityEngine;
 
 public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 {
-    [Header("-== Base Properties ==-")]
-    [SerializeField] protected float hp;
+    [Header("-== Base Properties ==-")] [SerializeField]
+    protected float hp;
+
     [SerializeField] protected int enemySet;
     protected float maxHP;
-    [Space(20)]
 
-    [Header("-== Target Properties ==-")]
-    [SerializeField] protected GameObject target;
+    [Space(20)] [Header("-== Target Properties ==-")] [SerializeField]
+    protected GameObject target;
+
     protected bool wasDetected = false;
     [SerializeField] private float minChaseDistance;
-    
+
     [Header("-== Assistant Interactions ==-")]
     //Quizas sea TEMP, quizas no
-    [SerializeField] Assistant.Interactuables _type;
-    [SerializeField] Transform _interactPoint;
-    //[SerializeField] private OutlineBehaviour _outline;
-    [Space(20)]
+    [SerializeField]
+    Assistant.Interactuables _type;
 
-    [Space(20)] [Header("-== Attack Properties ==-")] 
-    [SerializeField] protected Collider attackCollider;
+    [SerializeField] Transform _interactPoint;
+
+    //[SerializeField] private OutlineBehaviour _outline;
+    [Space(20)] [Space(20)] [Header("-== Attack Properties ==-")] [SerializeField]
+    protected Collider attackCollider;
+
     [SerializeField] protected float attackCooldown;
     [SerializeField] protected float currentAttackCooldown;
     [SerializeField] protected bool isAttacking;
-    
-    [Space(20)]
-    [Header("-== Movement Properties ==-")]
+
+    [Space(20)] [Header("-== Movement Properties ==-")]
     protected bool _canMove = true;
+
     [SerializeField] protected float speed;
     protected float maxSpeed;
     [SerializeField] private float accelerationValue;
 
     [Space(20)]
-    [Header("-== Pathfinding Properties ==-")] 
+    [Header("-== Pathfinding Properties ==-")]
     //[SerializeField] protected List<Node> nodePath;
-    [SerializeField] Path nodeList;
+    [SerializeField]
+    Path nodeList;
+
     protected int currentNode = 0;
     Vector3 _actualDir;
     [SerializeField] private float minDistanceToNode;
     [SerializeField] protected bool isPathfinding;
     [SerializeField] protected float pathfindingCooldown, pathfindingRate;
-    
+
     Transform _actualObjective;
     Vector3 _dir;
     [SerializeField] Transform _previousObjective;
 
-    [Space(20)]
-    [Header("-== Detection / FoV Properties ==-")]
-    [SerializeField] protected float fovViewRadius;
+    [Space(20)] [Header("-== Detection / FoV Properties ==-")] [SerializeField]
+    protected float fovViewRadius;
+
     [SerializeField] protected float fovViewAngle;
     [SerializeField] protected Transform fovTransformPoint;
     [SerializeField] protected LayerMask entityDetectionMask;
-    
-    [Space(20)]
-    [Header("-== Ragdoll Properties ==-")] 
-    [SerializeField] protected Rigidbody rb;
+
+    [Space(20)] [Header("-== Ragdoll Properties ==-")] [SerializeField]
+    protected Rigidbody rb;
+
     [SerializeField] private bool hasRagdoll;
     protected bool isInRagdollMode = false;
+
     [SerializeField] protected Rigidbody[] ragdollRigidbodies;
+
     //Temp
     [SerializeField] private Transform _bodyCenter;
 
-    [Space(20)]
-    [Header("-== View Properties ==-")]
-    [SerializeField] protected Animator animator;
-    [Space(20)] 
-    [SerializeField] protected List<Renderer> renderers;
-    [Space(20)] 
-    [SerializeField] protected Renderer faceRenderer;
+    [Space(20)] [Header("-== View Properties ==-")] [SerializeField]
+    protected Animator animator;
+
+    [Space(20)] [SerializeField] protected List<Renderer> renderers;
+    [Space(20)] [SerializeField] protected Renderer faceRenderer;
     [SerializeField] protected float faceTransitionTime;
     [SerializeField] protected float minTransitionValue = 0f, maxTransitionValue = 10f;
     [SerializeField] private ParticleSystem _hitParticle;
-    
+
     protected Dictionary<string, float> _damageRecive = new Dictionary<string, float>();
-    [Space(20)] 
-    [Header("-== Hitpoints Properties ==-")]
-    [SerializeField] protected float dmg;
-    [Space(10)] 
-    [SerializeField] protected float weakDmg, bodyDmg, headDmg, generalDmg;
+
+    [Space(20)] [Header("-== Hitpoints Properties ==-")] [SerializeField]
+    protected float dmg;
+
+    [Space(10)] [SerializeField] protected float weakDmg, bodyDmg, headDmg, generalDmg;
     public bool isDead = false;
 
-    [Space(20)] [Header("-== SFX Properties ==-")] 
-    [SerializeField] protected List<AudioSource> audioSources;
+    [Space(20)] [Header("-== SFX Properties ==-")] [SerializeField]
+    protected List<AudioSource> audioSources;
+
     protected List<int> audioIDs = new List<int>();
 
     [SerializeField] protected List<AudioSource> detectSFX;
     protected List<int> audioDetectIDs = new List<int>();
-    
-    [Space(20)] [Header("-== VFX Properties ==-")]
-    [SerializeField] protected List<ParticleSystem> deathShockParticles;
+
+    [Space(20)] [Header("-== VFX Properties ==-")] [SerializeField]
+    protected List<ParticleSystem> deathShockParticles;
 
 
     public abstract void Attack();
-    
+
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
-        UpdateManager._instance.AddComponents(new PausableObject(){anim = animator, rb = rb});
+        UpdateManager._instance.AddComponents(new PausableObject() { anim = animator, rb = rb });
         EventManager.Subscribe("ChangeMovementState", ChangeCinematicMode);
     }
-    
+
     private void ChangeCinematicMode(params object[] parameters)
     {
         _canMove = (bool)parameters[0];
@@ -123,15 +129,15 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     {
         if (!hasRagdoll)
             return;
-        
+
         isInRagdollMode = true;
 
         foreach (var rigidbody in ragdollRigidbodies)
         {
-            if(rigidbody != rb)
+            if (rigidbody != rb)
                 rigidbody.isKinematic = false;
         }
-        
+
         //collider.enabled = false;
         rb.isKinematic = true;
         animator.enabled = false;
@@ -141,15 +147,15 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     {
         if (!hasRagdoll)
             return;
-        
+
         isInRagdollMode = false;
 
         foreach (var rigidbody in ragdollRigidbodies)
         {
-            if(rigidbody != rb)
+            if (rigidbody != rb)
                 rigidbody.isKinematic = true;
         }
-        
+
         //collider.enabled = true;
         rb.isKinematic = false;
         animator.enabled = true;
@@ -162,10 +168,10 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
         foreach (var rigidbody in ragdollRigidbodies)
         {
-            if(rigidbody != rb)
+            if (rigidbody != rb)
                 rigidbody.isKinematic = true;
         }
-        
+
         //collider.enabled = true;
         rb.isKinematic = true;
         animator.enabled = false;
@@ -175,7 +181,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     #endregion
 
     #region MOVEMENT
-    
+
     public abstract void Move();
 
     public void SetSpeedValue(float value)
@@ -193,11 +199,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     {
         speed = 0;
     }
-    
+
     protected void DoGenericChase()
     {
-        transform.forward = target.transform.position - transform.position;
-        
+        //transform.forward = target.transform.position - transform.position;
+
         transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
         transform.position += transform.forward * speed * Time.deltaTime;
     }
@@ -209,21 +215,22 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         desired.Normalize();
         desired *= -1;
 
-        transform.forward = desired;
+        //transform.forward = desired;
 
         Vector3 lookAtValue =
             new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-        
-        transform.LookAt(transform.position - (lookAtValue - transform.position));
+
+        ///transform.LookAt(transform.position - (lookAtValue - transform.position));
         transform.position += desired * speed * Time.deltaTime;
     }
 
     public void DoPathfinding()
     {
         _dir = (_actualObjective.position) - transform.position;
-
-        Quaternion targetRotation = Quaternion.LookRotation(_dir);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, speed * Time.deltaTime);
+        //_dir = new Vector3(_dir.x, transform.position.y, _dir.z);
+        // targetRotation = Quaternion.LookRotation(_dir);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, speed * Time.deltaTime);
+        //_dir = AlignDir();
 
         transform.position += _dir.normalized * speed * Time.deltaTime;
 
@@ -232,14 +239,53 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
             if (nodeList.PathCount() > 0)
             {
                 _actualObjective = nodeList.GetNextNode().transform;
+                if (!InSight(transform.position, _actualObjective.position))
+                {
+                    var initial = MPathfinding._instance.GetClosestNode(transform.position);
+
+                    if (initial == null)
+                    {
+                        Destroy(gameObject);
+                    }
+
+                    var targetNode = MPathfinding._instance.GetClosestNode(target.transform.position);
+
+                    if (targetNode == null)
+                    {
+                        Destroy(gameObject);
+                        return;
+                    }
+
+                    nodeList = MPathfinding._instance.TestNewGetPath(initial, targetNode);
+                
+                    _actualObjective = nodeList.GetNextNode().transform;
+                }
             }
             else
             {
-                nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
+                var initial = MPathfinding._instance.GetClosestNode(transform.position);
+
+                if (initial == null)
+                {
+                    UpdateManager._instance.RemoveObject(this);
+                    Destroy(gameObject);
+                }
+
+                var targetNode = MPathfinding._instance.GetClosestNode(target.transform.position);
+
+                if (targetNode == null)
+                {
+                    UpdateManager._instance.RemoveObject(this);
+                    Destroy(gameObject);
+                    return;
+                }
+
+                nodeList = MPathfinding._instance.TestNewGetPath(initial, targetNode);
+                
                 _actualObjective = nodeList.GetNextNode().transform;
             }
         }
-        
+
         if (InSight(transform.position, target.transform.position))
         {
             Debug.Log("In sight?");
@@ -247,6 +293,21 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         }
     }
     
+    Vector3 AlignDir()
+    {
+        RaycastHit hit;
+        Vector3 planeNormal;
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.5f, LayerManager.LM_FLOOR))
+            planeNormal = hit.normal;
+        else
+            return _dir;
+
+        // Use Vector3.ProjectOnPlane to align the direction with the plane
+        Vector3 alignedDirection = Vector3.ProjectOnPlane(_dir, planeNormal);
+        return alignedDirection;
+    }
+
     protected bool IsInDistance()
     {
         return Vector3.Distance(target.transform.position, transform.position) <= minChaseDistance;
@@ -279,45 +340,74 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
                     maxDistance = distance;
                 }
             }
-            
+
             Debug.Log(furthestNode + " - Node to go to");
+
+            var initial = MPathfinding._instance.GetClosestNode(transform.position);
+
+            if (initial == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
             
-            nodeList = MPathfinding._instance.GetPath(transform.position, 
-                nodeCollisions[furthestNode].transform.position);
+            var targetNode = MPathfinding._instance.GetClosestNode(nodeCollisions[furthestNode].transform.position);
+
+            if (targetNode == null)
+            {
+                Destroy(gameObject);
+            }
             
+            nodeList = MPathfinding._instance.TestNewGetPath(initial, targetNode);
+
             Debug.Log(furthestNode + " - Node to go to - " + nodeList.PathCount() + " - noed count");
-            
+
             _actualObjective = nodeList.GetNextNode().transform;
         }
         else
         {
-            nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
+            var initial = MPathfinding._instance.GetClosestNode(transform.position);
+
+            if (initial == null)
+            {
+                Destroy(gameObject);
+            }
+            
+            var targetNode = MPathfinding._instance.GetClosestNode(target.transform.position);
+
+            if (targetNode == null)
+            {
+                Destroy(gameObject);
+            }
+            
+            nodeList = MPathfinding._instance.TestNewGetPath(initial, targetNode);
             _actualObjective = nodeList.GetNextNode().transform;
         }
+
         Debug.Log("LLEGO A TERMINAR DE CALCULAR EL PF");
     }
-    
-    public List<Node> ConstructPathThetaStar(Node startingNode, Node goalNode)
-    {
-        var path = ConstructPathAStar(startingNode, goalNode);
-        if (path != null)
-        {
-            path.Reverse();
-            int index = 0;
 
-            while (index <= path.Count - 1)
-            {
-                int indexNextNext = index + 2;
-                if (indexNextNext > path.Count - 1) break;
-                if (InSight(path[index].transform.position, path[indexNextNext].transform.position))
-                    path.Remove(path[index + 1]);
-                else index++;
+    // public List<Node> ConstructPathThetaStar(Node startingNode, Node goalNode)
+    // {
+    //     var path = ConstructPathAStar(startingNode, goalNode);
+    //     if (path != null)
+    //     {
+    //         path.Reverse();
+    //         int index = 0;
+    //
+    //         while (index <= path.Count - 1)
+    //         {
+    //             int indexNextNext = index + 2;
+    //             if (indexNextNext > path.Count - 1) break;
+    //             if (InSight(path[index].transform.position, path[indexNextNext].transform.position))
+    //                 path.Remove(path[index + 1]);
+    //             else index++;
+    //         }
+    //     }
+    //
+    //     return path;
+    // }
 
-            }
-        }
-        return path;
-    }
-    
     protected bool InSight(Vector3 start, Vector3 end)
     {
         Vector3 dir = end - start;
@@ -325,67 +415,68 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         else return false;
     }
 
-    public List<Node> ConstructPathAStar(Node startingNode, Node goalNode)
-    {
-        if (startingNode == null || goalNode == null)
-            return default;
+    // public List<Node> ConstructPathAStar(Node startingNode, Node goalNode)
+    // {
+    //     if (startingNode == null || goalNode == null)
+    //         return default;
+    //
+    //     PriorityQueue frontier = new PriorityQueue();
+    //     frontier.Put(startingNode, 0);
+    //
+    //     Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
+    //     Dictionary<Node, int> costSoFar = new Dictionary<Node, int>();
+    //
+    //     cameFrom.Add(startingNode, null);
+    //     costSoFar.Add(startingNode, 0);
+    //
+    //     while (frontier.Count() > 0)
+    //     {
+    //         Node current = frontier.Get();
+    //
+    //         if (current == goalNode)
+    //         {
+    //             List<Node> path = new List<Node>();
+    //             Node nodeToAdd = current;
+    //
+    //             while (nodeToAdd != null)
+    //             {
+    //                 path.Add(nodeToAdd);
+    //                 nodeToAdd = cameFrom[nodeToAdd];
+    //             }
+    //
+    //             return path;
+    //         }
+    //
+    //         foreach (var next in current.GetNeighbors())
+    //         {
+    //             int newCost = costSoFar[current] + next.cost;
+    //
+    //             if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
+    //             {
+    //                 if (costSoFar.ContainsKey(next))
+    //                 {
+    //                     costSoFar[next] = newCost;
+    //                     cameFrom[next] = current;
+    //                 }
+    //                 else
+    //                 {
+    //                     cameFrom.Add(next, current);
+    //                     costSoFar.Add(next, newCost);
+    //                 }
+    //
+    //                 float priority = newCost + Heuristic(next.transform.position, goalNode.transform.position);
+    //                 frontier.Put(next, priority);
+    //             }
+    //         }
+    //     }
+    //
+    //     return default;
+    // }
 
-        PriorityQueue frontier = new PriorityQueue();
-        frontier.Put(startingNode, 0);
-
-        Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
-        Dictionary<Node, int> costSoFar = new Dictionary<Node, int>();
-
-        cameFrom.Add(startingNode, null);
-        costSoFar.Add(startingNode, 0);
-
-        while (frontier.Count() > 0)
-        {
-            Node current = frontier.Get();
-
-            if (current == goalNode)
-            {
-                List<Node> path = new List<Node>();
-                Node nodeToAdd = current;
-
-                while (nodeToAdd != null)
-                {
-                    path.Add(nodeToAdd);
-                    nodeToAdd = cameFrom[nodeToAdd];
-                }
-
-                return path;
-            }
-
-            foreach (var next in current.GetNeighbors())
-            {
-                int newCost = costSoFar[current] + next.cost;
-
-                if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
-                {
-                    if (costSoFar.ContainsKey(next))
-                    {
-                        costSoFar[next] = newCost;
-                        cameFrom[next] = current;
-                    }
-                    else
-                    {
-                        cameFrom.Add(next, current);
-                        costSoFar.Add(next, newCost);
-                    }
-
-                    float priority = newCost + Heuristic(next.transform.position, goalNode.transform.position);
-                    frontier.Put(next, priority);
-                }
-            }
-        }
-        return default;
-    }
-    
-    float Heuristic(Vector3 a, Vector3 b)
-    {
-        return Vector3.Distance(a, b);
-    }
+    // float Heuristic(Vector3 a, Vector3 b)
+    // {
+    //     return Vector3.Distance(a, b);
+    // }
 
     #endregion
 
@@ -394,12 +485,13 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     public bool IsInFieldOfView()
     {
         bool isInView = false;
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(fovTransformPoint.position, fovViewRadius, entityDetectionMask);
+        Collider[] targetsInViewRadius =
+            Physics.OverlapSphere(fovTransformPoint.position, fovViewRadius, entityDetectionMask);
 
         foreach (var item in targetsInViewRadius)
         {
             Vector3 dirToTarget = (item.transform.position - fovTransformPoint.position);
-            
+
             if (Vector3.Angle(fovTransformPoint.forward, dirToTarget.normalized) < fovViewAngle / 2)
             {
                 if (InSight(fovTransformPoint.position, item.transform.position))
@@ -420,17 +512,16 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
     public abstract void SetDetection();
 
-
     #endregion
-    
+
     #region DAMAGE / HEALTH
-    
+
     public abstract void Death();
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (isDead || !isAttacking) return;
-        
+
         IPlayerLife playerLife = other.GetComponentInParent<IPlayerLife>();
 
         if (playerLife != null)
@@ -438,12 +529,12 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
             playerLife.GetDamage((int)dmg);
         }
     }
-    
+
     public void TakeDamage(string partDamaged, float dmg, bool hasKnockback = false)
     {
         if (!_damageRecive.ContainsKey(partDamaged) || isInRagdollMode || isDead)
             return;
-        
+
         _hitParticle.Play();
 
         float totalDmg = dmg * _damageRecive[partDamaged];
@@ -460,7 +551,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         {
             DoKnockback();
         }
-        
+
         if (partDamaged == "Body")
         {
             //EventManager.Trigger("AddCoin", 10);
@@ -488,7 +579,6 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     }
 
     public abstract void DoKnockback();
-
 
     #endregion
 
@@ -558,6 +648,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     {
         return "Eat the Robot";
     }
+
     #endregion
 
     #region FACE VALUES
@@ -569,7 +660,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         DETECT,
         DEAD
     }
-    
+
     public void DoFaceTransition(FaceID faceID)
     {
         StopCoroutine(FaceSwap(faceID));
@@ -582,18 +673,18 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         {
             faceRenderer.materials[1].SetFloat("_StaticChangeFace", value);
         });
-        
+
         yield return new WaitForSeconds(faceTransitionTime);
 
-        
+
         faceRenderer.materials[1].SetFloat("_ControlFace", (int)faceID);
-        
-        
+
+
         LeanTween.value(maxTransitionValue, minTransitionValue, faceTransitionTime).setOnUpdate((float value) =>
         {
             faceRenderer.materials[1].SetFloat("_StaticChangeFace", value);
         });
-        
+
         yield return new WaitForSeconds(faceTransitionTime);
     }
 
@@ -612,10 +703,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
             Gizmos.DrawLine(fovTransformPoint.position, fovTransformPoint.position + lineB * fovViewRadius);
         }
     }
-    
+
     Vector3 DirFromAngle(float angle)
     {
         return new Vector3(Mathf.Sin(angle * Mathf.Deg2Rad), 0, Mathf.Cos(angle * Mathf.Deg2Rad));
     }
+
     #endregion
 }

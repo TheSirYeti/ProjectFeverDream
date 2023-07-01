@@ -239,7 +239,24 @@ public class Assistant : GenericObject
         pathFinding.OnEnter += x =>
         {
             //Debug.Log("path");
-            nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
+
+            var initial = MPathfinding._instance.GetClosestNode(transform.position);
+
+            if (initial == null)
+            {
+                SendInputToFSM(JorgeStates.FOLLOW);
+                return;
+            }
+            
+            var target = MPathfinding._instance.GetClosestNode(_previousObjective.position);
+
+            if (target == null)
+            {
+                SendInputToFSM(JorgeStates.FOLLOW);
+                return;
+            }
+            
+            nodeList = MPathfinding._instance.TestNewGetPath(initial, target);
             _actualObjective = nodeList.GetNextNode().transform;
         };
 
@@ -273,7 +290,24 @@ public class Assistant : GenericObject
                     }
                     else
                     {
-                        nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
+                        var initial = MPathfinding._instance.GetClosestNode(transform.position);
+
+                        if (initial == null)
+                        {
+                            SendInputToFSM(JorgeStates.FOLLOW);
+                            return;
+                        }
+            
+                        var target = MPathfinding._instance.GetClosestNode(_previousObjective.position);
+
+                        if (target == null)
+                        {
+                            SendInputToFSM(JorgeStates.FOLLOW);
+                            return;
+                        }
+            
+                        nodeList = MPathfinding._instance.TestNewGetPath(initial, target);
+                        
                         _actualObjective = nodeList.GetNextNode().transform;
                     }
                 }

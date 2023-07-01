@@ -139,11 +139,12 @@ public class Model : GenericObject, IPlayerLife
         CheckDmg();
 
         currentDmgCooldown -= Time.deltaTime;
+        _physics.PhysicsFixedUpdate();
     }
 
     public override void OnFixedUpdate()
     {
-        _physics.PhysicsFixedUpdate();
+        
     }
 
     private void ChangeMovementState(params object[] parameters)
