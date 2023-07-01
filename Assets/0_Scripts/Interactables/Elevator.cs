@@ -88,6 +88,8 @@ public class Elevator : GenericObject, IAssistInteract
 
     IEnumerator DoElevatorCycle()
     {
+        LeanTween.reset();
+        
         while (true)
         {
             LeanTween.moveY(elevator, endPoint.position.y, elevationTime);

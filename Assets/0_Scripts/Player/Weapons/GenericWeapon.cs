@@ -24,7 +24,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 
     [SerializeField] int _pickUpID;
     //[SerializeField] private OutlineBehaviour _outline;
-    bool _isEquiped = false;
+    public bool _isEquiped = false;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
     public abstract void Reload();

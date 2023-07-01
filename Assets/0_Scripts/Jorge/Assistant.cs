@@ -408,12 +408,17 @@ public class Assistant : GenericObject
             {
                 _actualObjective.transform.parent = transform;
                 _holdingItem = _actualObjective.gameObject.GetComponent<IAssistInteract>();
-                
+
                 if (_holdingItem == null)
                 {
                     SendInputToFSM(JorgeStates.FOLLOW);
                     return;
                 }
+                
+                //TODO lol
+                var weapon = _holdingItem.GetTransform().gameObject.GetComponent<GenericWeapon>();
+                if(weapon != null)
+                    weapon._isEquiped = true;
                 
                 Debug.Log(_holdingItem.InteractID());
 
@@ -651,7 +656,7 @@ public class Assistant : GenericObject
             }
         }
     }
-
+    
     void ChangeBlackHoleVars()
     {
         _loadingAmmount += _loadingSpeed * Time.deltaTime;
