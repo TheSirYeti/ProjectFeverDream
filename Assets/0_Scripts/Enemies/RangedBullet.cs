@@ -18,7 +18,7 @@ public class RangedBullet : GenericObject
         rand = Random.Range(0, viewObjects.Count);
         viewObjects[rand].SetActive(true);
         StartCoroutine(DoSignRotation());
-        Destroy(gameObject, timeToDie);
+        StartCoroutine(DoDeath());
     }
 
     public override void OnUpdate()
@@ -51,6 +51,8 @@ public class RangedBullet : GenericObject
             other.gameObject.layer == LayerMask.NameToLayer("Floor") ||
             other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            StopCoroutine(DoDeath());
+            UpdateManager._instance.RemoveObject(this);
             Destroy(gameObject);
         }
     }
@@ -65,4 +67,12 @@ public class RangedBullet : GenericObject
             yield return new WaitForSeconds(rotateSpeed);
         }
     }
+
+    IEnumerator DoDeath()
+    {
+        yield return new WaitForSeconds(timeToDie);
+        UpdateManager._instance.RemoveObject(this);
+        Destroy(gameObject);
+    }
+    
 }
