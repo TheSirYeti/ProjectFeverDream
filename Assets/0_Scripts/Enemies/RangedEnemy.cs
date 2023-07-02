@@ -266,6 +266,13 @@ public class RangedEnemy : Enemy
         pathfind.OnEnter += x =>
         {
             CalculatePathPreview(false);
+            
+            if (nodeList.PathCount() <= 0)
+            {
+                SendInputToFSM(RangedEnemyStates.CHASE);
+                return;
+            }
+            
             isPathfinding = true;
         };
 
@@ -349,6 +356,7 @@ public class RangedEnemy : Enemy
 
         reload.OnEnter += x =>
         {
+            StopCoroutine(ReloadTimer());
             StartCoroutine(ReloadTimer());
         };
 
