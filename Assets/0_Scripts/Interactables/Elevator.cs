@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+
 //using UnityFx.Outline;
 
 public class Elevator : GenericObject, IAssistInteract
@@ -9,10 +11,20 @@ public class Elevator : GenericObject, IAssistInteract
     [SerializeField] Assistant.Interactuables _type;
 
     [SerializeField] private Transform interactPoint;
-    [SerializeField] private GameObject elevator;
-    [SerializeField] private Transform startPoint, endPoint;
-    [SerializeField] private float elevationTime, holdTime;
+    [SerializeField] private Transform _elevator;
+    [SerializeField] private float elevatorSpeed;
+    [SerializeField] private float holdTime;
     private bool interactable = true;
+
+    [SerializeField] private Transform[] _wayPoints;
+    [SerializeField] private bool _movesBackward = false;
+    private int _waypointIndex = 1;
+    private Vector3 _actualDir;
+    private int _waypointDir = 1;
+    private bool _isWaiting = false;
+    private float _timer = 0;
+    private bool _isActive = false;
+
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -20,15 +32,44 @@ public class Elevator : GenericObject, IAssistInteract
 
     public override void OnStart()
     {
-        
     }
-    
+
+    public override void OnUpdate()
+    {
+        if (!_isActive) return;
+
+        if (_isWaiting)
+        {
+            _timer += Time.deltaTime;
+            if (_timer > holdTime)
+            {
+                _isWaiting = false;
+            }
+
+            return;
+        }
+
+        var actualDir = _wayPoints[_waypointIndex].position - _elevator.position;
+        _elevator.position += actualDir.normalized * (elevatorSpeed * Time.deltaTime);
+
+        if (!(Vector3.Distance(_elevator.position, _wayPoints[_waypointIndex].position) < 0.2f)) return;
+
+        _isWaiting = false;
+        _waypointIndex += _waypointDir;
+
+        if (_waypointIndex <= _wayPoints.Length - 1) return;
+
+        if (_movesBackward)
+            _waypointDir *= -1;
+        else
+            _waypointIndex = 0;
+    }
+
     //TODO: Set Interfaces
     public void Interact(IAssistInteract usableItem = null)
     {
-        StopCoroutine(DoElevatorCycle());
-        StartCoroutine(DoElevatorCycle());
         interactable = false;
+        _isActive = true;
         Debug.Log("ASCENSOR");
     }
 
@@ -89,23 +130,6 @@ public class Elevator : GenericObject, IAssistInteract
     public Transform UsablePoint()
     {
         throw new System.NotImplementedException();
-    }
-
-    IEnumerator DoElevatorCycle()
-    {
-        LeanTween.reset();
-        elevator.transform.position = startPoint.transform.position;
-        
-        while (true)
-        {
-            LeanTween.moveY(elevator, endPoint.position.y, elevationTime);
-
-            yield return new WaitForSeconds(elevationTime + holdTime);
-            
-            LeanTween.moveY(elevator, startPoint.position.y, elevationTime);
-
-            yield return new WaitForSeconds(elevationTime + holdTime);
-        }
     }
 
     public string ActionName()
