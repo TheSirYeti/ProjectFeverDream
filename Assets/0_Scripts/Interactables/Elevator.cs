@@ -54,7 +54,7 @@ public class Elevator : GenericObject, IAssistInteract
         var actualDir = _wayPoints[_waypointIndex].position - _elevator.position;
         _elevator.position += actualDir.normalized * (elevatorSpeed * Time.deltaTime);
 
-        if (!(Vector3.Distance(_elevator.position, _wayPoints[_waypointIndex].position) < 0.2f)) return;
+        if (!(Vector3.Distance(_elevator.position, _wayPoints[_waypointIndex].position) < 0.05f)) return;
 
         _isWaiting = true;
         _waypointIndex += _waypointDir;
