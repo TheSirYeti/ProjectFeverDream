@@ -16,14 +16,16 @@ public class RangedBullet : GenericObject
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
-    }
-
-    public override void OnStart()
-    {
+        
         rand = Random.Range(0, viewObjects.Count);
         viewObjects[rand].SetActive(true);
         StartCoroutine(DoSignRotation());
         StartCoroutine(DoDeath());
+    }
+
+    public override void OnStart()
+    {
+        
     }
 
     public override void OnUpdate()
@@ -58,7 +60,8 @@ public class RangedBullet : GenericObject
         {
             StopCoroutine(DoDeath());
             UpdateManager._instance.RemoveObject(this);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
     }
     
@@ -77,7 +80,8 @@ public class RangedBullet : GenericObject
     {
         yield return new WaitForSeconds(timeToDie);
         UpdateManager._instance.RemoveObject(this);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
     
 }
