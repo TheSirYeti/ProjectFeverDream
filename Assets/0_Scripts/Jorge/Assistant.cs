@@ -356,10 +356,18 @@ public class Assistant : GenericObject
                         _actualRenders = _interactuable.GetRenderer();
                         foreach (Renderer render in _actualRenders)
                         {
-                            render.material = _blackholeMat;
-                            render.material.SetVector("_BlackHolePosition",
-                                new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
-                                    0));
+                            for (int i = 0; i < render.materials.Length; i++)
+                            {
+                                render.materials[i] = _blackholeMat;
+                                render.materials[i].SetVector("_BlackHolePosition",
+                                    new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
+                                        0));
+                            }
+                            //
+                            // render.material = _blackholeMat;
+                            // render.material.SetVector("_BlackHolePosition",
+                            //     new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
+                            //         0));
                         }
 
                         LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
@@ -696,7 +704,12 @@ public class Assistant : GenericObject
 
         foreach (Renderer render in _actualRenders)
         {
-            render.material.SetFloat("_Effect", _loadingAmmount);
+            //render.material.SetFloat("_Effect", _loadingAmmount);
+            
+            for (int i = 0; i < render.materials.Length; i++)
+            {
+                render.materials[i].SetFloat("_Effect", _loadingAmmount);
+            }
         }
     }
 
