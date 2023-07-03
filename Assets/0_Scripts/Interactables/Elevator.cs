@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 public class Elevator : GenericObject, IAssistInteract
 {
     [SerializeField] private Outline _outline;
+    [SerializeField] private ScreenControllerShader _screenControllerShader;
     [SerializeField] Assistant.Interactuables _type;
 
     [SerializeField] private Transform interactPoint;
@@ -69,6 +70,7 @@ public class Elevator : GenericObject, IAssistInteract
     //TODO: Set Interfaces
     public void Interact(IAssistInteract usableItem = null)
     {
+        _screenControllerShader.ChangeSettings(0, 1, 1);
         interactable = false;
         _isActive = true;
         Debug.Log("ASCENSOR");

@@ -648,7 +648,7 @@ MonoBehaviour:
   _interactPoint: {fileID: 5842393174781493930}
   audioSources:
   - {fileID: 3300264889246632702}
-  activatedMat: {fileID: 2100000, guid: f805c1fff5d721e40b22777907f067d1, type: 2}
+  _screenControllerShader: {fileID: 8097653606679819104}
   renderers:
   - {fileID: 6009497248050352362}
   - {fileID: 3060752205332052143}
@@ -709,3 +709,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
+--- !u!1 &3844907292584644112 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -4116744009942465187, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
+  m_PrefabInstance: {fileID: 8324263917328567117}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8097653606679819104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3844907292584644112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4becba69e03c654ea220a96d1520f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _screenMAT: {fileID: 2100000, guid: 5cd02ae0ba80ba3438790248916b2496, type: 2}
+  controlColor: 1
+  lockValue: 0
+  _interactive: 1
+  _unlock: {r: 0.3764706, g: 1, b: 0, a: 0}
+  _lock: {r: 1, g: 0, b: 0, a: 0}

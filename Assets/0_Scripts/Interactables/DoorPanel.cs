@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-//using UnityFx.Outline;
 
 public class DoorPanel : GenericObject, IAssistInteract
 {
@@ -17,8 +16,8 @@ public class DoorPanel : GenericObject, IAssistInteract
     [SerializeField] private List<AudioSource> audioSources;
     private List<int> audioIDs = new List<int>();
 
-    [Header("TEMP")] [SerializeField] 
-    private Material activatedMat;
+    [Header("TEMP")] 
+    [SerializeField] private ScreenControllerShader _screenControllerShader;
     [SerializeField] private List<Renderer> renderers;
 
     private void Awake()
@@ -51,6 +50,7 @@ public class DoorPanel : GenericObject, IAssistInteract
     {
         _door.SetBool("open", true);
         SoundManager.instance.PlaySoundByInt(audioIDs[0]);
+        _screenControllerShader.ChangeSettings(0, 1, 1);
         _isClose = false;
     }
 

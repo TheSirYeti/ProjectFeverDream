@@ -5,18 +5,18 @@ using UnityEngine.Serialization;
 
 public class View : GenericObject
 {
-    Model _model;
+    private Model _model;
     public Animator _animator;
-    WeaponManager _weaponManager;
+    private WeaponManager _weaponManager;
 
     [SerializeField] private Transform _hitParticlesPoint;
-    
-    [SerializeField] List<ParticleSystem> _fullBaggeteSlice;
-    [SerializeField] List<ParticleSystem> _brokenBaggeteSlice;
 
-    [SerializeField] List<ParticleSystem> _toasterParticles;
+    [SerializeField] private List<ParticleSystem> _fullBaggeteSlice;
+    [SerializeField] private List<ParticleSystem> _brokenBaggeteSlice;
 
-    [SerializeField] ParticleSystem _bagguetHit;
+    [SerializeField] private List<ParticleSystem> _toasterParticles;
+
+    [SerializeField] private ParticleSystem _bagguetHit;
     
     private void Awake()
     {
@@ -47,6 +47,7 @@ public class View : GenericObject
     
     public void SetAnimatorController(RuntimeAnimatorController animCont)
     {
+        //var parameters = _animator.GetParameter();
         _animator.runtimeAnimatorController = animCont;
     }
     
@@ -132,6 +133,11 @@ public class View : GenericObject
         _weaponManager.ExecuteShoot();
     }
 
+    public void ReloadEvent()
+    {
+        _weaponManager.ExecuteReload();
+    }
+    
     public void AEvent_FullBaggueteVFX(int attack)
     {
         FullSlice(attack);
