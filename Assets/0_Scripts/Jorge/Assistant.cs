@@ -576,9 +576,7 @@ public class Assistant : GenericObject
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            transform.position = _player.transform.position;
             ResetGeorge();
-            SendInputToFSM(JorgeStates.FOLLOW);
         }
     }
 
@@ -598,6 +596,9 @@ public class Assistant : GenericObject
         _holdingItem = null;
         
         _isInteracting = false;
+        
+        transform.position = _player.transform.position;
+        SendInputToFSM(JorgeStates.FOLLOW);
     }
 
     public override void OnFixedUpdate()

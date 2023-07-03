@@ -614,6 +614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5984656914625017133}
   - component: {fileID: 5137006702738865296}
+  - component: {fileID: 9124963447454828829}
   m_Layer: 11
   m_Name: Robot_base_rigging
   m_TagString: Untagged
@@ -730,6 +731,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.19232559, y: 0.10461201, z: -0.000017225742}
     m_Extent: {x: 1.1593382, y: 0.27824318, z: 1.2480154}
   m_DirtyAABB: 0
+--- !u!114 &9124963447454828829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337266791237399703}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1617933088413929851
 GameObject:
   m_ObjectHideFlags: 0
@@ -2887,7 +2906,6 @@ GameObject:
   - component: {fileID: 643089006540210307}
   - component: {fileID: 643089006540210304}
   - component: {fileID: 643089006540210318}
-  - component: {fileID: 6974961084995423424}
   m_Layer: 10
   m_Name: NewWaiterRobot
   m_TagString: Robot
@@ -3671,7 +3689,7 @@ MonoBehaviour:
   minChaseDistance: 15
   _type: 1
   _interactPoint: {fileID: 643089005455145185}
-  _outline: {fileID: 6974961084995423424}
+  _outline: {fileID: 9124963447454828829}
   attackCollider: {fileID: 643089006540211064}
   attackCooldown: 2
   currentAttackCooldown: 0
@@ -3737,24 +3755,6 @@ MonoBehaviour:
   searchRange: 10
   scaredRange: 5
   timeScared: 5
---- !u!114 &6974961084995423424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9043821534065177203}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 1
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 10
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1001 &331534304378783970
 PrefabInstance:
   m_ObjectHideFlags: 0
