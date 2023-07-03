@@ -585,9 +585,18 @@ public class Assistant : GenericObject
     public void ResetGeorge()
     {
         _interactuable = null;
-        if(_holdingItem != null && _holdingItem.GetTransform() != null && _holdingItem.GetTransform().parent != null)
+        if (_holdingItem != null && _holdingItem.GetTransform() != null)
+        {
             _holdingItem.GetTransform().parent = null;
+            var weapon = _holdingItem.GetTransform().gameObject.GetComponent<GenericWeapon>();
+            if (weapon != null)
+            {
+                weapon._isEquiped = false;
+                weapon.ChangeCollisions(true);
+            }
+        }
         _holdingItem = null;
+        
         _isInteracting = false;
     }
 
