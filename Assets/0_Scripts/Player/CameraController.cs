@@ -147,7 +147,7 @@ public class CameraController : GenericObject
         dir.Normalize();
         _mainCameraParent.transform.position += dir * _cameraSpeeed * Time.deltaTime;
 
-        if (Vector3.Distance(_mainCameraParent.transform.position, _actualCameraPos.position) < 0.1f)
+        if (Vector3.Distance(_mainCameraParent.transform.position, _actualCameraPos.position) < 0.2f)
         {
             _mainCameraParent.transform.position = _actualCameraPos.position;
             _initialCamPos = _cameraGetter.transform.localPosition;

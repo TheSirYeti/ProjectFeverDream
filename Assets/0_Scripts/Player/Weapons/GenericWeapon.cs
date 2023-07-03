@@ -80,7 +80,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 
         ChangeCollisions(false);
 
-        transform.position = parent.position;
+        transform.position = parent.position - (parent.up * -1.5f);
         transform.rotation = parent.rotation;
         transform.parent = parent;
 

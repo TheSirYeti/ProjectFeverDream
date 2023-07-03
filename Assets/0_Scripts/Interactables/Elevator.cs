@@ -44,6 +44,7 @@ public class Elevator : GenericObject, IAssistInteract
             if (_timer > holdTime)
             {
                 _isWaiting = false;
+                _timer = 0;
             }
 
             return;
@@ -54,7 +55,7 @@ public class Elevator : GenericObject, IAssistInteract
 
         if (!(Vector3.Distance(_elevator.position, _wayPoints[_waypointIndex].position) < 0.2f)) return;
 
-        _isWaiting = false;
+        _isWaiting = true;
         _waypointIndex += _waypointDir;
 
         if (_waypointIndex <= _wayPoints.Length - 1) return;

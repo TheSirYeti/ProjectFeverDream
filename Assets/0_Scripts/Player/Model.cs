@@ -386,8 +386,15 @@ public class Model : GenericObject, IPlayerLife
         isSlide = false;
         _slideSoundChecker = false;
 
-        if (isCrouch) _actualSpeed = _crunchSpeed;
-        else if (!isRunning) _actualSpeed = _walkingSpeed;
+        if (isCrouch)
+        {
+            _actualSpeed = _crunchSpeed;
+            isRunning = false;
+        }
+        else if (!isRunning)
+        {
+            _actualSpeed = _walkingSpeed;
+        }
         else _actualSpeed = _runningSpeed;
     }
 
@@ -480,6 +487,11 @@ public class Model : GenericObject, IPlayerLife
             floorChecker = OnFloor_Checker;
         }
     }
+
+    // private bool CheckFloor()
+    // {
+    //     
+    // }
 
     void CheckRoof()
     {
