@@ -47,7 +47,24 @@ public class View : GenericObject
     
     public void SetAnimatorController(RuntimeAnimatorController animCont)
     {
-        //var parameters = _animator.GetParameter();
+        var parameters = _animator.parameters;
+
+        foreach (var parameter in parameters)
+        {
+            if (parameter.type == AnimatorControllerParameterType.Bool)
+            {
+                _animator.SetBool(parameter.name, false);
+            }
+            else if (parameter.type == AnimatorControllerParameterType.Trigger)
+            {
+                _animator.ResetTrigger(parameter.name);
+            }
+            else if (parameter.type == AnimatorControllerParameterType.Int)
+            {
+                _animator.SetInteger(parameter.name, 0);
+            }
+        }
+        
         _animator.runtimeAnimatorController = animCont;
     }
     

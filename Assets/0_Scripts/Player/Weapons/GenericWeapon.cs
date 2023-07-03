@@ -102,6 +102,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     public void OnWeaponUnequip()
     {
         //animator.SetTrigger("changeWeapon");
+        OnDelegateUpdate = delegate {  };
         transform.parent = null;
         transform.position = _player.transform.position + (_player.transform.forward * 1);
 
