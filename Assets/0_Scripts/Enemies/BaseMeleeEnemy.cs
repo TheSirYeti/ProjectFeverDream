@@ -79,6 +79,8 @@ public class BaseMeleeEnemy : Enemy
             audioDetectIDs.Add(SoundManager.instance.AddSFXSource(sfx));
         }
         
+        EventManager.Subscribe("OnResetTriggerLevel", OnResetScene);
+        
         DoFsmSetup();
     }
 
@@ -425,6 +427,8 @@ public class BaseMeleeEnemy : Enemy
 
     public void DoWarningFadeIn()
     {
+        LeanTween.cancel(gameObject);
+        
         foreach (var renderer in renderers)
         {
             LeanTween.value(0, 1, 0.3f).setOnUpdate((float value) =>
@@ -436,6 +440,8 @@ public class BaseMeleeEnemy : Enemy
     
     public void DoWarningFadeOut()
     {
+        LeanTween.cancel(gameObject);
+        
         foreach (var renderer in renderers)
         {
             LeanTween.value(1, 0, 0.3f).setOnUpdate((float value) =>

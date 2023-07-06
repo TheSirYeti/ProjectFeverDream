@@ -212,8 +212,10 @@ public class SoundManager : MonoBehaviour
         volumeSFX = volume;
         for (int i = 0; i < sfxChannel.Length; i++)
         {
-            sfxChannel[i].volume = volumeSFX;
+            if(sfxChannel[i] != null)
+                sfxChannel[i].volume = volumeSFX;
         }
+        
         PlayerPrefs.SetFloat("PREFS_VolumeSFX", volume);
     }
 

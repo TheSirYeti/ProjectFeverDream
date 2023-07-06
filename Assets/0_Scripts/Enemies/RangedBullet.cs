@@ -13,12 +13,19 @@ public class RangedBullet : GenericObject
     [SerializeField] private List<GameObject> viewObjects;
     private int rand = 0;
 
-    public override void OnStart()
+    private void Awake()
     {
+        UpdateManager._instance.AddObject(this);
+        
         rand = Random.Range(0, viewObjects.Count);
         viewObjects[rand].SetActive(true);
         StartCoroutine(DoSignRotation());
-        Destroy(gameObject, timeToDie);
+        StartCoroutine(DoDeath());
+    }
+
+    public override void OnStart()
+    {
+        
     }
 
     public override void OnUpdate()
@@ -26,10 +33,10 @@ public class RangedBullet : GenericObject
         transform.position += transform.forward * bulletSpeed * Time.fixedDeltaTime;
     }
 
-    public void OnBulletSpawn()
+    /*public void OnBulletSpawn()
     {
         UpdateManager._instance.AddObject(this);
-    }
+    }*/
 
     private void OnDestroy()
     {
@@ -51,7 +58,10 @@ public class RangedBullet : GenericObject
             other.gameObject.layer == LayerMask.NameToLayer("Floor") ||
             other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Destroy(gameObject);
+            StopCoroutine(DoDeath());
+            UpdateManager._instance.RemoveObject(this);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
     }
     
@@ -65,4 +75,13 @@ public class RangedBullet : GenericObject
             yield return new WaitForSeconds(rotateSpeed);
         }
     }
+
+    IEnumerator DoDeath()
+    {
+        yield return new WaitForSeconds(timeToDie);
+        UpdateManager._instance.RemoveObject(this);
+        gameObject.SetActive(false);
+        //Destroy(gameObject);
+    }
+    
 }

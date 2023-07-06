@@ -12,6 +12,8 @@ public class MainMenuManager : GenericObject
     [SerializeField] private Slider sfxSlider, musicSlider, sensSlider;
     [SerializeField] private TextMeshProUGUI sfxVolumeNumber, musicVolumeNumber, sensText;
     [SerializeField] private GameObject mainMenu, generalMenu, audioMenu, controllerMenu, graphicsMenu;
+
+    [SerializeField] private GameObject[] _selectedButton;
     
     private void Awake()
     {
@@ -38,6 +40,12 @@ public class MainMenuManager : GenericObject
 
     public void ResetMenu()
     {
+        foreach (var button in _selectedButton)
+        {
+            button.SetActive(false);
+        }
+        _selectedButton[0].SetActive(true);
+        
         mainMenu.SetActive(true);
         generalMenu.SetActive(false);
         audioMenu.SetActive(false);

@@ -253,11 +253,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
+--- !u!1 &354401092515956147 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
+  m_PrefabInstance: {fileID: 588419296844167394}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1126116815070355209 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
   m_PrefabInstance: {fileID: 588419296844167394}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7264178800840695896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354401092515956147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &6596516625878447310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -347,11 +370,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
+--- !u!1 &6290087468875925919 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
+  m_PrefabInstance: {fileID: 6596516625878447310}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6629634649445110565 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6feae94e0e155b4419247b578fe5a9ac, type: 3}
   m_PrefabInstance: {fileID: 6596516625878447310}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3662952411292410419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6290087468875925919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &6642384575575728476
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -596,12 +642,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   isPausable: 1
+  _outline: {fileID: 3662952411292410419}
   _type: 0
   _door: {fileID: 429532700128031993}
   _interactPoint: {fileID: 5842393174781493930}
   audioSources:
   - {fileID: 3300264889246632702}
-  activatedMat: {fileID: 2100000, guid: f805c1fff5d721e40b22777907f067d1, type: 2}
+  _screenControllerShader: {fileID: 8097653606679819104}
   renderers:
   - {fileID: 6009497248050352362}
   - {fileID: 3060752205332052143}
@@ -662,3 +709,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
+--- !u!1 &3844907292584644112 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -4116744009942465187, guid: 5009f7608d58f6b4faa726980385de23, type: 3}
+  m_PrefabInstance: {fileID: 8324263917328567117}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8097653606679819104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3844907292584644112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4becba69e03c654ea220a96d1520f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _screenMAT: {fileID: 2100000, guid: 5cd02ae0ba80ba3438790248916b2496, type: 2}
+  controlColor: 1
+  lockValue: 0
+  _interactive: 1
+  _unlock: {r: 0.3764706, g: 1, b: 0, a: 0}
+  _lock: {r: 1, g: 0, b: 0, a: 0}

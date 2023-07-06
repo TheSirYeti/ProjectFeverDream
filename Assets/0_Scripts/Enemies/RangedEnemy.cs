@@ -28,6 +28,7 @@ public class RangedEnemy : Enemy
     [SerializeField] private float searchRange = 30;
     [SerializeField] private float scaredRange;
     [SerializeField] private float timeScared;
+    private bool canGetScared = true;
     private float currentScare = 0f;
 
     public enum RangedEnemyStates
@@ -79,6 +80,8 @@ public class RangedEnemy : Enemy
         {
             audioDetectIDs.Add(SoundManager.instance.AddSFXSource(sfx));
         }
+        
+        EventManager.Subscribe("OnResetTriggerLevel", OnResetScene);
         
         DoFsmSetup();
         rb.isKinematic = false;
@@ -178,13 +181,13 @@ public class RangedEnemy : Enemy
                 return;
             }
 
-            if (InDanger())
+            if (InDanger() && canGetScared)
             {
                 SendInputToFSM(RangedEnemyStates.SCARED);
                 return;
             }
             
-            if (IsInDistance())
+            if (IsInDistance() && InSight(fovTransformPoint.position, transform.position))
             {
                 isAttacking = true;
                 SendInputToFSM(RangedEnemyStates.SHOOT);
@@ -213,7 +216,7 @@ public class RangedEnemy : Enemy
             transform.LookAt(
                 new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
             
-            Debug.Log("DETECT");
+            //Debug.Log("DETECT");
         };
 
         detect.OnExit += x =>
@@ -227,14 +230,14 @@ public class RangedEnemy : Enemy
 
         chasing.OnUpdate += () =>
         {
-            Debug.Log("CHASING");
+            //Debug.Log("CHASING");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
                 return;
             }
 
-            if (InDanger())
+            if (InDanger() && canGetScared)
             {
                 SendInputToFSM(RangedEnemyStates.SCARED);
                 return;
@@ -263,25 +266,32 @@ public class RangedEnemy : Enemy
         pathfind.OnEnter += x =>
         {
             CalculatePathPreview(false);
+            
+            if (nodeList.PathCount() <= 0)
+            {
+                SendInputToFSM(RangedEnemyStates.CHASE);
+                return;
+            }
+            
             isPathfinding = true;
         };
 
         pathfind.OnUpdate += () =>
         {
-            Debug.Log("PF");
+            //Debug.Log("PF");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
                 return;
             }
 
-            if (InDanger())
+            if (InDanger() && canGetScared)
             {
                 SendInputToFSM(RangedEnemyStates.SCARED);
                 return;
             }
             
-            if (IsInDistance())
+            if (IsInDistance() && InSight(fovTransformPoint.position, transform.position))
             {
                 SendInputToFSM(RangedEnemyStates.SHOOT);
                 return;
@@ -313,14 +323,14 @@ public class RangedEnemy : Enemy
 
         shoot.OnUpdate += () =>
         {
-            Debug.Log("SHOOT");
+            //Debug.Log("SHOOT");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
                 return;
             }
             
-            if (InDanger())
+            if (InDanger() && canGetScared)
             {
                 SendInputToFSM(RangedEnemyStates.SCARED);
                 return;
@@ -346,19 +356,20 @@ public class RangedEnemy : Enemy
 
         reload.OnEnter += x =>
         {
+            StopCoroutine(ReloadTimer());
             StartCoroutine(ReloadTimer());
         };
 
         reload.OnUpdate += () =>
         {
-            Debug.Log("RELOAD");
+            //Debug.Log("RELOAD");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
                 return;
             }
             
-            if (InDanger())
+            if (InDanger() && canGetScared)
             {
                 SendInputToFSM(RangedEnemyStates.SCARED);
                 return;
@@ -387,8 +398,18 @@ public class RangedEnemy : Enemy
 
         scared.OnEnter += x =>
         {
+            if(!canGetScared) SendInputToFSM(RangedEnemyStates.CHASE);
+            
             DoWarningFadeOut();
             CalculatePathPreview(true);
+
+            if (nodeList.PathCount() <= 0)
+            {
+                SendInputToFSM(RangedEnemyStates.CHASE);
+                canGetScared = false;
+                return;
+            }
+            
             isPathfinding = true;
             currentScare = timeScared;
             animator.Play("ScaredMovement");
@@ -396,7 +417,7 @@ public class RangedEnemy : Enemy
 
         scared.OnUpdate += () =>
         {
-            Debug.Log("SCARED");
+            //Debug.Log("SCARED");
             if (isDead)
             {
                 SendInputToFSM(RangedEnemyStates.DIE);
@@ -480,7 +501,7 @@ public class RangedEnemy : Enemy
         GameObject bullet = Instantiate(bulletPrefab);
         bullet.transform.position = spawnPoint.position;
         bullet.transform.forward = (target.transform.position + (Vector3.up / 3)) - spawnPoint.position;
-        bullet.GetComponent<RangedBullet>()?.OnBulletSpawn();
+        //bullet.GetComponent<RangedBullet>()?.OnBulletSpawn();
     }
 
     public void OnShotOver()

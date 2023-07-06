@@ -53,8 +53,12 @@ public class CutsceneToggler : GenericObject
     
     public void StopCutscene()
     {
-        player.transform.position = cameraGO.transform.position;
-        player.transform.rotation = cameraGO.transform.rotation;
+        if (isInCutscene)
+        {
+            player.transform.position = cameraGO.transform.position;
+            player.transform.rotation = cameraGO.transform.rotation;
+        }
+        
         EventManager.Trigger("ChangeMovementState", true);
 
         cameraGO.gameObject.SetActive(false);

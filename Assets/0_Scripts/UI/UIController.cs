@@ -17,6 +17,7 @@ public class UIController : GenericObject
     [Space(20)] 
     [SerializeField] private List<GameObject> weaponRegion;
     [SerializeField] private List<GameObject> objectiveRegion;
+    [SerializeField] private List<GameObject> controlsRegion;
     int _actualWeapon = 0;
     [Space(20)]
     [SerializeField] private Animator redScreenAnimator;
@@ -47,7 +48,7 @@ public class UIController : GenericObject
     private float yBias = 35f;
     
     
-    private Camera cam;
+    private Camera cam => GameManager.Instance.GetCamera();
 
     [Header("Interactable")]
     [SerializeField] private TextMeshProUGUI _interactuableUI;
@@ -76,6 +77,16 @@ public class UIController : GenericObject
         if (Input.GetKeyUp(KeyCode.Tab))
         {
             ShowObjectiveUI(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            ShowControlsUI(true);
+        }
+        
+        if (Input.GetKeyUp(KeyCode.LeftAlt))
+        {
+            ShowControlsUI(false);
         }
         
         if (!isPingEnabled) return;
@@ -267,6 +278,14 @@ public class UIController : GenericObject
         }
     }
 
+    void ShowControlsUI(bool status)
+    {
+        foreach (var obj in controlsRegion)
+        {
+            obj.SetActive(status);
+        }
+    }
+
     IEnumerator ShowObjectiveChange()
     {
         ShowObjectiveUI(true);
@@ -297,15 +316,16 @@ public class UIController : GenericObject
 
     void SetPingPosition()
     {
-        ping.gameObject.SetActive(true);
-        ping.transform.position = GameManager.Instance.GetCamera().WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
-
-        /*if (buttonRenderer.isVisible)
+        var dir = currentPingTarget.position - cam.transform.position;
+        if (Vector3.Angle(cam.transform.forward, dir) < 90)
         {
             ping.gameObject.SetActive(true);
-            ping.transform.position = Camera.main.WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
+            ping.transform.position = cam.WorldToScreenPoint(currentPingTarget.position) + new Vector3(0f, yBias, 0f);
         }
-        else ping.gameObject.SetActive(false);*/
+        else
+        {
+            ping.gameObject.SetActive(false);
+        }
     }
     
     void DoPingStart(object[] parameters)
@@ -331,6 +351,8 @@ public class UIController : GenericObject
     
     void DoPingEnd(object[] parameters)
     {
+        LeanTween.reset();
+        
         LeanTween.value(1, 0, fadeInValue).setOnUpdate((float value) =>
         {
             ping.color = new Color(ping.color.r, ping.color.g, ping.color.b, value);

@@ -22,8 +22,10 @@ public class Assistant : GenericObject
     [SerializeField] private float _interactDistance;
     [SerializeField] private float _pickupDistance;
     [SerializeField] private float _nodeDistance;
+    [SerializeField] private Transform _pickUpPoint;
 
     private Path nodeList;
+    private JorgeStates _actualState;
     private JorgeStates _previousState;
     [SerializeField] Transform _previousObjective;
 
@@ -161,7 +163,7 @@ public class Assistant : GenericObject
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            .SetTransition(JorgeStates.PICKUP, pickup)
+            //.SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
@@ -169,7 +171,7 @@ public class Assistant : GenericObject
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            .SetTransition(JorgeStates.INTERACT, interact)
+            //.SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.USEIT, useit)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
@@ -178,7 +180,7 @@ public class Assistant : GenericObject
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
             //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            .SetTransition(JorgeStates.INTERACT, interact)
+            //.SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
@@ -199,6 +201,7 @@ public class Assistant : GenericObject
         follow.OnEnter += x =>
         {
             //Debug.Log("follow");
+            _actualState = JorgeStates.FOLLOW;
             _actualObjective = _player;
         };
 
@@ -238,25 +241,8 @@ public class Assistant : GenericObject
 
         pathFinding.OnEnter += x =>
         {
-            //Debug.Log("path");
-
-            var initial = MPathfinding._instance.GetClosestNode(transform.position);
-
-            if (initial == null)
-            {
-                SendInputToFSM(JorgeStates.FOLLOW);
-                return;
-            }
-            
-            var target = MPathfinding._instance.GetClosestNode(_previousObjective.position);
-
-            if (target == null)
-            {
-                SendInputToFSM(JorgeStates.FOLLOW);
-                return;
-            }
-            
-            nodeList = MPathfinding._instance.TestNewGetPath(initial, target);
+            _actualState = JorgeStates.PATHFINDING;
+            nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
             _actualObjective = nodeList.GetNextNode().transform;
         };
 
@@ -290,24 +276,7 @@ public class Assistant : GenericObject
                     }
                     else
                     {
-                        var initial = MPathfinding._instance.GetClosestNode(transform.position);
-
-                        if (initial == null)
-                        {
-                            SendInputToFSM(JorgeStates.FOLLOW);
-                            return;
-                        }
-            
-                        var target = MPathfinding._instance.GetClosestNode(_previousObjective.position);
-
-                        if (target == null)
-                        {
-                            SendInputToFSM(JorgeStates.FOLLOW);
-                            return;
-                        }
-            
-                        nodeList = MPathfinding._instance.TestNewGetPath(initial, target);
-                        
+                        nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
                         _actualObjective = nodeList.GetNextNode().transform;
                     }
                 }
@@ -329,6 +298,8 @@ public class Assistant : GenericObject
 
         interact.OnEnter += x =>
         {
+            _actualState = JorgeStates.INTERACT;
+            
             _interactuable = _actualObjective.gameObject.GetComponent<IAssistInteract>();
             if (_interactuable == null)
                 _interactuable = _actualObjective.gameObject.GetComponentInParent<IAssistInteract>();
@@ -385,10 +356,18 @@ public class Assistant : GenericObject
                         _actualRenders = _interactuable.GetRenderer();
                         foreach (Renderer render in _actualRenders)
                         {
-                            render.material = _blackholeMat;
-                            render.material.SetVector("_BlackHolePosition",
-                                new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
-                                    0));
+                            for (int i = 0; i < render.materials.Length; i++)
+                            {
+                                render.materials[i] = _blackholeMat;
+                                render.materials[i].SetVector("_BlackHolePosition",
+                                    new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
+                                        0));
+                            }
+                            //
+                            // render.material = _blackholeMat;
+                            // render.material.SetVector("_BlackHolePosition",
+                            //     new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
+                            //         0));
                         }
 
                         LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
@@ -423,7 +402,7 @@ public class Assistant : GenericObject
 
         pickup.OnEnter += x =>
         {
-            //Debug.Log("Pick Up");
+            _actualState = JorgeStates.PICKUP;
         };
 
         pickup.OnUpdate += () =>
@@ -440,16 +419,26 @@ public class Assistant : GenericObject
 
             if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
             {
-                _actualObjective.transform.parent = transform;
+                _actualObjective.transform.rotation = _pickUpPoint.rotation;
+                _actualObjective.transform.parent = _pickUpPoint;
+                _actualObjective.transform.localPosition = Vector3.zero;
                 _holdingItem = _actualObjective.gameObject.GetComponent<IAssistInteract>();
-                
-                Debug.Log(_holdingItem.InteractID());
 
                 if (_holdingItem == null)
                 {
                     SendInputToFSM(JorgeStates.FOLLOW);
                     return;
                 }
+                
+                //TODO lol
+                var weapon = _holdingItem.GetTransform().gameObject.GetComponent<GenericWeapon>();
+                if (weapon != null)
+                {
+                    weapon._isEquiped = true;
+                    weapon.ChangeCollisions(false);
+                }
+                
+                Debug.Log(_holdingItem.InteractID());
 
 
                 if (_holdingItem.isAutoUsable())
@@ -478,7 +467,7 @@ public class Assistant : GenericObject
         useit.OnEnter += x =>
         {
             _actualObjective = _holdingItem.UsablePoint();
-            //Debug.Log(_actualObjective.name);
+            _actualState = JorgeStates.USEIT;
         };
 
         useit.OnUpdate += () =>
@@ -491,6 +480,7 @@ public class Assistant : GenericObject
             if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, LayerManager.LM_ENEMYSIGHT))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
+                return;
             }
 
             if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
@@ -501,10 +491,12 @@ public class Assistant : GenericObject
                 {
                     _holdingItem.GetTransform().transform.parent = null;
                     tempItemAction.Interact(_holdingItem);
+                    _holdingItem = null;
                 }
                 else
                 {
                     Destroy(_holdingItem.GetTransform().gameObject);
+                    _holdingItem = null;
                 }
 
                 SendInputToFSM(JorgeStates.FOLLOW);
@@ -525,6 +517,8 @@ public class Assistant : GenericObject
 
         hide.OnEnter += x =>
         {
+            _actualState = JorgeStates.HIDE;
+            
             Collider[] hidingSpots =
                 Physics.OverlapSphere(_player.position, _hidingSpotsDetectionDistance, _hidingSpotsMask);
 
@@ -537,7 +531,10 @@ public class Assistant : GenericObject
 
             var dir = _actualObjective.position - transform.position;
             if (Physics.Raycast(transform.position, dir, dir.magnitude * 0.9f, LayerManager.LM_ALLOBSTACLE))
+            {
                 SendInputToFSM(JorgeStates.PATHFINDING);
+                return;
+            }
         };
 
         hide.OnUpdate += () =>
@@ -584,6 +581,32 @@ public class Assistant : GenericObject
         fsm.Update();
         ExtraUpdate();
         _actualDir += _obstacleDir.normalized * _obstacleSpeed;
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            ResetGeorge();
+        }
+    }
+
+    public void ResetGeorge()
+    {
+        _interactuable = null;
+        if (_holdingItem != null && _holdingItem.GetTransform() != null)
+        {
+            _holdingItem.GetTransform().parent = null;
+            var weapon = _holdingItem.GetTransform().gameObject.GetComponent<GenericWeapon>();
+            if (weapon != null)
+            {
+                weapon._isEquiped = false;
+                weapon.ChangeCollisions(true);
+            }
+        }
+        _holdingItem = null;
+        
+        _isInteracting = false;
+        
+        transform.position = _player.transform.position;
+        SendInputToFSM(JorgeStates.FOLLOW);
     }
 
     public override void OnFixedUpdate()
@@ -615,8 +638,13 @@ public class Assistant : GenericObject
 
     public void SetObjective(Transform interactuable, JorgeStates goToState)
     {
-        if (_interactuable != null && (goToState == JorgeStates.INTERACT || goToState == JorgeStates.USEIT ||
-                                       goToState == JorgeStates.PICKUP)) return;
+        if (_actualState == JorgeStates.INTERACT 
+            || _actualState == JorgeStates.USEIT 
+            || _actualState == JorgeStates.PICKUP
+            || (_actualState == JorgeStates.PATHFINDING && 
+                (_previousState == JorgeStates.USEIT ||
+                 _previousState == JorgeStates.PICKUP ||
+                 _previousState == JorgeStates.INTERACT))) return;
 
         EventManager.Trigger("OnAssistantPing", interactuable);
         SoundManager.instance.PlaySound(SoundID.ASSISTANT_PING);
@@ -669,14 +697,19 @@ public class Assistant : GenericObject
             }
         }
     }
-
+    
     void ChangeBlackHoleVars()
     {
         _loadingAmmount += _loadingSpeed * Time.deltaTime;
 
         foreach (Renderer render in _actualRenders)
         {
-            render.material.SetFloat("_Effect", _loadingAmmount);
+            //render.material.SetFloat("_Effect", _loadingAmmount);
+            
+            for (int i = 0; i < render.materials.Length; i++)
+            {
+                render.materials[i].SetFloat("_Effect", _loadingAmmount);
+            }
         }
     }
 
@@ -700,13 +733,22 @@ public class Assistant : GenericObject
     IEnumerator WaitAction(float time, bool isTrigger)
     {
         yield return new WaitForSeconds(time);
-
+        
         if (isTrigger)
-            _animator.SetTrigger(_interactuable.AnimationToExecute());
+        {
+            if(_interactuable != null)
+                _animator.SetTrigger(_interactuable.AnimationToExecute());
+        }
         else
-            _animator.SetBool(_interactuable.AnimationToExecute(), false);
+        {
+            if(_interactuable != null)
+                _animator.SetBool(_interactuable.AnimationToExecute(), false);
+        }
 
-        _interactuable.Interact();
+        
+        if(_interactuable != null)
+            _interactuable.Interact();
+        
         _interactuable = null;
         _actualObjective = _player;
         _loadingAmmount = 0;

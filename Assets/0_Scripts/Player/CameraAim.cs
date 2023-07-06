@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 //using UnityFx.Outline;
 
 public class CameraAim
@@ -21,7 +22,7 @@ public class CameraAim
         _assistant = assistant;
 
         _interactDistance = interactDistance;
-        
+
         EventManager.Subscribe("ChangeMovementState", ChangeCinematicState);
     }
 
@@ -29,10 +30,7 @@ public class CameraAim
     {
         _isActive = (bool)parameters[0];
 
-        if (_actualInteract != null)
-        {
-            //_actualInteract.ChangeOutlineState(false);
-        }
+        _actualInteract?.ChangeOutlineState(false);
     }
 
     public void CheckActualAim()
@@ -41,21 +39,22 @@ public class CameraAim
         {
             return;
         }
-        
+
         var colliders =
             Physics.OverlapSphere(_camera.transform.position, _interactDistance, LayerManager.LM_ALLINTERACTS);
-
+        //Debug.Log(1);
         if (!colliders.Any())
         {
             if (_actualInteract == null) return;
 
-            //_actualInteract.ChangeOutlineState(false);
+            _actualInteract?.ChangeOutlineState(false);
             _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
 
             return;
         }
-        
+
+        //Debug.Log(2);
         var objectInView = colliders.Where(x =>
         {
             var maxDistance = new Vector3(0.5f, 0.5f, 0);
@@ -72,12 +71,14 @@ public class CameraAim
         {
             if (_actualInteract == null) return;
 
-            //.ChangeOutlineState(false);
+            _actualInteract.ChangeOutlineState(false);
             _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
 
             return;
         }
+
+        //Debug.Log(3);
 
         var closeObj = objectInView.OrderBy(x =>
             {
@@ -88,22 +89,23 @@ public class CameraAim
             })
             .First().gameObject
             .GetComponent<IAssistInteract>();
-        
+
         //Debug.Log(4);
         if (closeObj == null || !closeObj.CanInteract())
         {
-            //_actualInteract?.ChangeOutlineState(false);
+            _actualInteract?.ChangeOutlineState(false);
             _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
 
             return;
         }
+
         //Debug.Log(5);
         if (closeObj == _actualInteract) return;
 
-        //_actualInteract?.ChangeOutlineState(false);
+        _actualInteract?.ChangeOutlineState(false);
         _actualInteract = closeObj;
-        //_actualInteract.ChangeOutlineState(true);
+        _actualInteract.ChangeOutlineState(true);
         EventManager.Trigger("InteractUI", true, _actualInteract.ActionName());
     }
 

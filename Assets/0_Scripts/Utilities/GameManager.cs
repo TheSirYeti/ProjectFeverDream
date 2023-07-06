@@ -145,6 +145,7 @@ public class GameManager : MonoBehaviour
         EventManager.ResetEventDictionary();
         SoundManager.instance.StopAllSounds();
         SoundManager.instance.StopAllMusic();
+        LeanTween.reset();
 
         InGameSceneManager.instace.UnloadScene();
 

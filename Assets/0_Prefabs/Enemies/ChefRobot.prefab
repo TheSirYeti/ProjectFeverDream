@@ -338,7 +338,7 @@ GameObject:
   - component: {fileID: 3055812626318986805}
   m_Layer: 10
   m_Name: ChefRobot
-  m_TagString: Untagged
+  m_TagString: Robot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -406,7 +406,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9969f693cf8dd4643843ff6138072d5b, type: 3}
   m_Controller: {fileID: 9100000, guid: 7a8255381b1f94b478960b70a0d224b0, type: 2}
-  m_CullingMode: 2
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -444,21 +444,22 @@ MonoBehaviour:
   hp: 200
   enemySet: 0
   target: {fileID: 0}
-  minChaseDistance: 2
+  minChaseDistance: 1.5
   _type: 1
   _interactPoint: {fileID: 6985060687993072258}
+  _outline: {fileID: 3346365942254953361}
   attackCollider: {fileID: 239757362170953704}
   attackCooldown: 4
   currentAttackCooldown: 0
   isAttacking: 0
   speed: 9
   accelerationValue: 6
-  minDistanceToNode: 0.5
+  minDistanceToNode: 0.2
   isPathfinding: 0
   pathfindingCooldown: 0
   pathfindingRate: 2
   _previousObjective: {fileID: 0}
-  fovViewRadius: 10
+  fovViewRadius: 20
   fovViewAngle: 100
   fovTransformPoint: {fileID: 239757360862816264}
   entityDetectionMask:
@@ -1678,6 +1679,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2860619289973545478}
   - component: {fileID: 5919639801787216117}
+  - component: {fileID: 3346365942254953361}
   m_Layer: 11
   m_Name: Robot_Basic_Lowpoly
   m_TagString: Untagged
@@ -1786,6 +1788,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.001248002, y: -0.34958875, z: 0.060527354}
     m_Extent: {x: 1.1611018, y: 1.1723498, z: 0.36933976}
   m_DirtyAABB: 0
+--- !u!114 &3346365942254953361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680301297062914851}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1912505081158989193
 GameObject:
   m_ObjectHideFlags: 0
@@ -12802,7 +12822,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7211551152380867714}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: fa09ad1aba45bc7458250bcb960e8267, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -57747,14 +57767,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e38f5edc6352704c90169f9a575dd32, type: 3}
---- !u!1 &6029226168334061471 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8e38f5edc6352704c90169f9a575dd32, type: 3}
-  m_PrefabInstance: {fileID: 6876280369600508622}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6406315413163660581 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e38f5edc6352704c90169f9a575dd32, type: 3}
+  m_PrefabInstance: {fileID: 6876280369600508622}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6029226168334061471 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8e38f5edc6352704c90169f9a575dd32, type: 3}
   m_PrefabInstance: {fileID: 6876280369600508622}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7047971965399969762
@@ -57875,14 +57895,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1538e587767d1f849ac912f227f7d095, type: 3}
---- !u!1 &7931324862252257141 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1538e587767d1f849ac912f227f7d095, type: 3}
-  m_PrefabInstance: {fileID: 7120419852380549668}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7303265590372029903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1538e587767d1f849ac912f227f7d095, type: 3}
+  m_PrefabInstance: {fileID: 7120419852380549668}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7931324862252257141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1538e587767d1f849ac912f227f7d095, type: 3}
   m_PrefabInstance: {fileID: 7120419852380549668}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7256712257600441027
