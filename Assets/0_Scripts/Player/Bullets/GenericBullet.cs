@@ -46,7 +46,7 @@ public abstract class GenericBullet : GenericObject
         if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _damagableMask))
         {
             if (_canDmg)
-                hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg);
+                hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg, transform.position);
 
             _actualWeapon.ReturnBullet(this);
         }
