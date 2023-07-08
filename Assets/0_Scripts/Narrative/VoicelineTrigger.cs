@@ -27,6 +27,8 @@ public class VoicelineTrigger : GenericObject
 
     public void OnEnable()
     {
+        Debug.Log("FUNCO1");
+        
         if(doOnEnable)
             DoVoicelineFunc();
     }
@@ -37,9 +39,10 @@ public class VoicelineTrigger : GenericObject
         {
             EventManager.Trigger("OnVoicelineSetTriggered", mySet);
             hasBeenTriggered = true;
+            Debug.Log("FUNCO2");
             return;
         }
-        
+        Debug.Log("NO FUNCO");
         EventManager.Trigger("OnVoicelineStopTriggered");
     }
 }

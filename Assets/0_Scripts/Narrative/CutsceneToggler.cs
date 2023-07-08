@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class CutsceneToggler : GenericObject
 {
-    public GameObject cameraGO, cutscenePlayerCam, cutsceneEndPos;
+    public GameObject cameraGO, cutscenePlayerCam, georgeDummy, cutsceneEndPos;
     private bool isInCutscene = false;
     private GameObject player;
     public Transform playerCorner;
@@ -73,8 +73,10 @@ public class CutsceneToggler : GenericObject
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
         
+        GameManager.Instance.Assistant.transform.position = playerCorner.transform.position;
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
 
+        georgeDummy.SetActive(true);
         cutscenePlayerCam.gameObject.SetActive(true);
 
         isInCutscene = true;
@@ -84,12 +86,14 @@ public class CutsceneToggler : GenericObject
     {
         if (isInCutscene)
         {
+            GameManager.Instance.Assistant.transform.position = cutsceneEndPos.transform.position;
             player.transform.position = cutsceneEndPos.transform.position;
             player.transform.rotation = cutsceneEndPos.transform.rotation;
         }
         
         EventManager.Trigger("ChangeMovementState", true);
 
+        georgeDummy.SetActive(false);
         cutscenePlayerCam.gameObject.SetActive(false);
 
         GameManager.Instance.GetCamera().gameObject.SetActive(true);
