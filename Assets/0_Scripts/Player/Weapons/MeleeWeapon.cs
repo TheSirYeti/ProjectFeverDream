@@ -151,7 +151,7 @@ public class MeleeWeapon : GenericWeapon
 
             EventManager.Trigger("VFX_BaggueteHit");
 
-            damagableInterface.TakeDamage("Body", _weaponSO.dmg, _weaponSO.hasKnockback);
+            damagableInterface.TakeDamage("Body", _weaponSO.dmg, transform.position, _isBroken ? OnDeathKnockBacks.LIGHTKNOCKBACK : OnDeathKnockBacks.MIDKNOCKBACK ,_weaponSO.hasKnockback);
 
             if (_actualEnemiesHit.Any()) return;
 

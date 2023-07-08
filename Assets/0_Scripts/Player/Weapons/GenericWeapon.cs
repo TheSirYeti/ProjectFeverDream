@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+
 //using UnityFx.Outline;
 
 public abstract class GenericWeapon : GenericObject, IAssistInteract
@@ -41,13 +42,9 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 
     public bool CanShoot()
     {
-        if (_weaponSO.isMelee) return true;
-        else if (_actualMagazineBullets > 0) return true;
-        else
-        {
-            //SoundManager.instance.PlaySound(SoundID.NO_AMMO);
-            return false;
-        }
+        if (_weaponSO.isMelee || _actualMagazineBullets > 0) return true;
+
+        return false;
     }
 
     public bool CanADS()
@@ -96,24 +93,24 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
             EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
             EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
         }
+
         EventManager.Trigger("ChangeEquipedWeapontUI", _weaponSO.weaponID);
     }
 
     public void OnWeaponUnequip()
     {
         //animator.SetTrigger("changeWeapon");
-        OnDelegateUpdate = delegate {  };
+        OnDelegateUpdate = delegate { };
         transform.parent = null;
         transform.position = _player.transform.position + (_player.transform.forward * 1);
 
         ChangeCollisions(true);
-        
+
         _rigidbody.AddForce((_player.transform.forward * 100) + (Vector3.up * 5));
 
         _isEquiped = false;
 
         EventManager.Trigger("OnADSDisable");
-
     }
 
     public void ChangeCollisions(bool state)
@@ -137,6 +134,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     }
 
     #region SO Getters
+
     public bool GetTypeOfWeapons()
     {
         return _weaponSO.isMelee;
@@ -161,9 +159,11 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     {
         return _weaponSO.animatorController;
     }
+
     #endregion
 
     #region Bullets Region
+
     public void AddBullets(int ammountToAddBullets)
     {
         int missingBullets = _weaponSO.maxBulletsInInventory - _actualReserveBullets;
@@ -193,9 +193,11 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     {
         _bulletPool.ReturnObject(bullet.gameObject);
     }
+
     #endregion
 
     #region Usable Interface
+
     //TODO: Set Interfaces
 
     public void ChangeOutlineState(bool state)
@@ -231,7 +233,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 
     public Assistant.JorgeStates GetState()
     {
-       return Assistant.JorgeStates.PICKUP;
+        return Assistant.JorgeStates.PICKUP;
     }
 
     public Transform GetTransform()
@@ -263,9 +265,11 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     {
         throw new NotImplementedException();
     }
+
     #endregion
 
     #region CheatZone
+
     public void SetAmmo(int newAmmo)
     {
         _actualReserveBullets = newAmmo;
@@ -273,5 +277,6 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
         EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
         EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
     }
+
     #endregion
 }

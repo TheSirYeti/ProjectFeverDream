@@ -85,9 +85,11 @@ public class Toaster : GenericWeapon
             }
         }
 
-        for (int i = 0; i < toasterHits.Count; i++)
+        for (var i = 0; i < toasterHits.Count; i++)
         {
-            toasterHits[i].collider.GetComponentInParent<ITakeDamage>()?.TakeDamage("Body", actualDmg * ammountPellets[i]);
+            toasterHits[i].collider.GetComponentInParent<ITakeDamage>()?.
+                TakeDamage("Body", actualDmg * ammountPellets[i], transform.position, 
+                    Vector3.Distance(toasterHits[i].collider.transform.position, transform.position) > 5 ? OnDeathKnockBacks.LIGHTKNOCKBACK : OnDeathKnockBacks.HIGHKNOCKBACK);
         }
 
         EventManager.Trigger("CameraShake", true);

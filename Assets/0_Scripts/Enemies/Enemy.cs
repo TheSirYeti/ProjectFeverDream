@@ -65,6 +65,10 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     [SerializeField] private bool hasRagdoll;
     protected bool isInRagdollMode = false;
     [SerializeField] protected Rigidbody[] ragdollRigidbodies;
+    private Vector3 _hitOrigin;
+    [SerializeField] private Rigidbody _centerOfMass;
+    private OnDeathKnockBacks _lastKnockback;
+    [SerializeField] private float[] _knockbacksForce;
     //Temp
     [SerializeField] private Transform _bodyCenter;
 
@@ -143,6 +147,13 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         //collider.enabled = false;
         rb.isKinematic = true;
         animator.enabled = false;
+
+        var forceDir = transform.position - _hitOrigin;
+        // 20k escopeta melee
+        // 10-15k baguette grande
+        // 5-10k baguette dual
+        
+        _centerOfMass.AddForce(forceDir.normalized * _knockbacksForce[(int)_lastKnockback]);
     }
 
     public void StopRagdoll()
@@ -315,95 +326,11 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         }
         Debug.Log("LLEGO A TERMINAR DE CALCULAR EL PF");
     }
-    
-    public List<Node> ConstructPathThetaStar(Node startingNode, Node goalNode)
-    {
-        var path = ConstructPathAStar(startingNode, goalNode);
-        if (path != null)
-        {
-            path.Reverse();
-            int index = 0;
-
-            while (index <= path.Count - 1)
-            {
-                int indexNextNext = index + 2;
-                if (indexNextNext > path.Count - 1) break;
-                if (InSight(path[index].transform.position, path[indexNextNext].transform.position))
-                    path.Remove(path[index + 1]);
-                else index++;
-
-            }
-        }
-        return path;
-    }
-    
     protected bool InSight(Vector3 start, Vector3 end)
     {
         Vector3 dir = end - start;
         if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_ENEMYSIGHT)) return true;
         else return false;
-    }
-
-    public List<Node> ConstructPathAStar(Node startingNode, Node goalNode)
-    {
-        if (startingNode == null || goalNode == null)
-            return default;
-
-        PriorityQueue frontier = new PriorityQueue();
-        frontier.Put(startingNode, 0);
-
-        Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
-        Dictionary<Node, int> costSoFar = new Dictionary<Node, int>();
-
-        cameFrom.Add(startingNode, null);
-        costSoFar.Add(startingNode, 0);
-
-        while (frontier.Count() > 0)
-        {
-            Node current = frontier.Get();
-
-            if (current == goalNode)
-            {
-                List<Node> path = new List<Node>();
-                Node nodeToAdd = current;
-
-                while (nodeToAdd != null)
-                {
-                    path.Add(nodeToAdd);
-                    nodeToAdd = cameFrom[nodeToAdd];
-                }
-
-                return path;
-            }
-
-            foreach (var next in current.GetNeighbors())
-            {
-                int newCost = costSoFar[current] + next.cost;
-
-                if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
-                {
-                    if (costSoFar.ContainsKey(next))
-                    {
-                        costSoFar[next] = newCost;
-                        cameFrom[next] = current;
-                    }
-                    else
-                    {
-                        cameFrom.Add(next, current);
-                        costSoFar.Add(next, newCost);
-                    }
-
-                    float priority = newCost + Heuristic(next.transform.position, goalNode.transform.position);
-                    frontier.Put(next, priority);
-                }
-            }
-        }
-        return default;
-    }
-    
-    float Heuristic(Vector3 a, Vector3 b)
-    {
-        return Vector3.Distance(a, b);
     }
 
     #endregion
@@ -459,10 +386,13 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         }
     }
     
-    public void TakeDamage(string partDamaged, float dmg, bool hasKnockback = false)
+    public void TakeDamage(string partDamaged, float dmg, Vector3 hitOrigin, OnDeathKnockBacks onDeathKnockback = OnDeathKnockBacks.NOKNOCKBACK, bool hasKnockback = false)
     {
         if (!_damageRecive.ContainsKey(partDamaged) || isInRagdollMode || isDead)
             return;
+
+        _hitOrigin = hitOrigin;
+        _lastKnockback = onDeathKnockback;
         
         _hitParticle.Play();
 
