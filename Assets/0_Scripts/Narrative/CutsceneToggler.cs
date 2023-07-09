@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CutsceneToggler : GenericObject
 {
     public GameObject cameraGO, cutscenePlayerCam, georgeDummy, cutsceneEndPos;
+    [CanBeNull] public List<Transform> playerAnimPos;
     private bool isInCutscene = false;
     private GameObject player;
     public Transform playerCorner;
@@ -19,24 +21,6 @@ public class CutsceneToggler : GenericObject
     {
         player = GameManager.Instance.Player.gameObject;
         EventManager.Subscribe("OnResetTriggerLevel", StopCutsceneEvent);
-    }
-
-    /*private void OnEnable()
-    {
-        StartCutscene();
-    }
-    
-    private void OnDisable()
-    {
-        StopCutscene();
-    }*/
-
-    public override void OnUpdate()
-    {
-        /*if (isInCutscene)
-        {
-            DoPlayerPos();
-        }*/
     }
 
     public void StartCutscene()
@@ -68,21 +52,23 @@ public class CutsceneToggler : GenericObject
         isInCutscene = false;
     }
     
-    public void StartPlayerCutscene()
+    public void StartPlayerCutsceneWithGeorge(int posID)
     {
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
+        
         
         GameManager.Instance.Assistant.transform.position = playerCorner.transform.position;
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
 
         georgeDummy.SetActive(true);
         cutscenePlayerCam.gameObject.SetActive(true);
+        cutscenePlayerCam.transform.position = playerAnimPos[posID].position;
 
         isInCutscene = true;
     }
     
-    public void StopPlayerCutscene()
+    public void StopPlayerCutsceneWithGeorge()
     {
         if (isInCutscene)
         {
@@ -101,16 +87,44 @@ public class CutsceneToggler : GenericObject
         isInCutscene = false;
     }
     
+    public void StartPlayerCutsceneNoGeorge(int posID)
+    {
+        player.transform.position = playerCorner.position;
+        EventManager.Trigger("ChangeMovementState", false);
+        
+        //GameManager.Instance.Assistant.transform.position = playerCorner.transform.position;
+        GameManager.Instance.GetCamera().gameObject.SetActive(false);
+
+        //georgeDummy.SetActive(true);
+        cutscenePlayerCam.gameObject.SetActive(true);
+        cutscenePlayerCam.transform.position = playerAnimPos[posID].position;
+
+        isInCutscene = true;
+    }
+    
+    public void StopPlayerCutsceneNoGeorge()
+    {
+        if (isInCutscene)
+        {
+            //GameManager.Instance.Assistant.transform.position = cutsceneEndPos.transform.position;
+            player.transform.position = cutsceneEndPos.transform.position;
+            player.transform.rotation = cutsceneEndPos.transform.rotation;
+        }
+        
+        EventManager.Trigger("ChangeMovementState", true);
+
+        //georgeDummy.SetActive(false);
+        cutscenePlayerCam.gameObject.SetActive(false);
+
+        GameManager.Instance.GetCamera().gameObject.SetActive(true);
+
+        isInCutscene = false;
+    }
+    
     public void StopCutsceneEvent(object[] parameters)
     {
         StopCutscene();
-        StopPlayerCutscene();
-    }
-
-    public void DoPlayerPos()
-    {
-        player.transform.position = cameraGO.transform.position;
-        player.transform.rotation = cameraGO.transform.rotation;
+        StopPlayerCutsceneWithGeorge();
     }
 
     public void OnLevelOver()
