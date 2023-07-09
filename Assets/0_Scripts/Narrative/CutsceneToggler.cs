@@ -23,6 +23,20 @@ public class CutsceneToggler : GenericObject
         EventManager.Subscribe("OnResetTriggerLevel", StopCutsceneEvent);
     }
 
+    public override void OnUpdate()
+    {
+        if (isInCutscene)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                /*SoundManager.instance.StopAllVoiceLines();
+                StopCutscene();
+                StopPlayerCutsceneNoGeorge();
+                StopPlayerCutsceneWithGeorge();*/
+            }
+        }
+    }
+
     public void StartCutscene()
     {
         player.transform.position = playerCorner.position;
