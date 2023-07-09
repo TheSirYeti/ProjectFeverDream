@@ -75,6 +75,7 @@ public class CameraController : GenericObject
         // Get Main Camera
         _cameraGetter = GameManager.Instance.GetCamera();
         GameManager.Instance.SetCameraParent(_mainCameraParent);
+        _cameraGetter.transform.parent = null;
 
         // Get all the posible points for the camera
         Transform povParent = transform.Find("POVs");
@@ -92,7 +93,7 @@ public class CameraController : GenericObject
 
         _actualFOV = _walkingFOV;
 
-        _initialCamPos = _cameraGetter.transform.localPosition;
+        _initialCamPos = _mainCameraParent.localPosition;
     }
 
     public override void OnStart()
@@ -114,6 +115,12 @@ public class CameraController : GenericObject
         interactChecker();
         cameraMovement();
         cameraEffects();
+    }
+
+    public override void OnLateUpdate()
+    {
+        _cameraGetter.transform.position = _mainCameraParent.transform.position;
+        _cameraGetter.transform.rotation = transform.rotation * _actualCameraPos.localRotation;
     }
 
     #region Camera Move

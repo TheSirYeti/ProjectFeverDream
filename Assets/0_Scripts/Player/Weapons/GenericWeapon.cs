@@ -22,7 +22,6 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
     [SerializeField] Collider _collider;
 
     protected Transform _nozzlePoint;
-    [SerializeField] protected LayerMask _shooteableMask;
 
     [SerializeField] int _pickUpID;
     [SerializeField] private Outline _outline;

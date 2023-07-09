@@ -37,25 +37,25 @@ public abstract class GenericBullet : GenericObject
     protected void Movement()
     {
         transform.position += transform.forward * (_speed * Time.deltaTime);
-        CheckCollisions();
+        //CheckCollisions();
     }
-
-    void CheckCollisions()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _damagableMask))
-        {
-            if (_canDmg)
-                hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg, transform.position);
-
-            _actualWeapon.ReturnBullet(this);
-        }
-        else if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _collisionMask))
-        {
-            GameObject decal = Instantiate(_fakeDecal, hit.point, transform.rotation);
-            decal.transform.forward = hit.normal * -1;
-            Destroy(decal, 3f);
-            _actualWeapon.ReturnBullet(this);
-        }
-    }
+    //
+    // void CheckCollisions()
+    // {
+    //     RaycastHit hit;
+    //     if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _damagableMask))
+    //     {
+    //         if (_canDmg)
+    //             hit.collider.GetComponentInParent<ITakeDamage>().TakeDamage("Body", _dmg, transform.position);
+    //
+    //         _actualWeapon.ReturnBullet(this);
+    //     }
+    //     else if (Physics.Raycast(transform.position, transform.forward, out hit, _distanceCollision, _collisionMask))
+    //     {
+    //         GameObject decal = Instantiate(_fakeDecal, hit.point, transform.rotation);
+    //         decal.transform.forward = hit.normal * -1;
+    //         Destroy(decal, 3f);
+    //         _actualWeapon.ReturnBullet(this);
+    //     }
+    // }
 }
