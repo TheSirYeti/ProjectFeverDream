@@ -5,11 +5,22 @@ using UnityEngine;
 
 public class EnemyInteract : GenericObject, IAssistInteract
 {
+    [SerializeField] private Transform _interactPoint;
     [SerializeField] private Enemy _enemy;
     private bool _isDead => _enemy.isDead;
     [SerializeField] private List<Renderer> _renderers;
     [SerializeField] private Outline _outline;
     [SerializeField] private Assistant.Interactuables _type;
+
+    private void Awake()
+    {
+        UpdateManager._instance.AddObject(this);
+    }
+
+    public override void OnLateUpdate()
+    {
+        _interactPoint.position = transform.position + Vector3.up * 1.5f;
+    }
 
 
     #region INTERACTIONS
@@ -59,7 +70,7 @@ public class EnemyInteract : GenericObject, IAssistInteract
 
     public Transform GetInteractPoint()
     {
-        return transform;
+        return _interactPoint;
     }
 
     public List<Renderer> GetRenderer()
@@ -69,6 +80,7 @@ public class EnemyInteract : GenericObject, IAssistInteract
 
     public void Interact(IAssistInteract usableItem = null)
     {
+        UpdateManager._instance.RemoveObject(this);
         Destroy(_enemy.gameObject);
     }
 
