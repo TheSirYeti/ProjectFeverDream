@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security;
 using UnityEngine;
 
-public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
+public abstract class Enemy : GenericObject, ITakeDamage
 {
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp;
@@ -17,13 +17,6 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     [SerializeField] protected GameObject target;
     protected bool wasDetected = false;
     [SerializeField] private float minChaseDistance;
-    
-    [Header("-== Assistant Interactions ==-")]
-    //Quizas sea TEMP, quizas no
-    [SerializeField] Assistant.Interactuables _type;
-    [SerializeField] Transform _interactPoint;
-    [SerializeField] private Outline _outline;
-    [Space(20)]
 
     [Space(20)] [Header("-== Attack Properties ==-")] 
     [SerializeField] protected Collider attackCollider;
@@ -89,7 +82,8 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
     [SerializeField] protected float dmg;
     [Space(10)] 
     [SerializeField] protected float weakDmg, bodyDmg, headDmg, generalDmg;
-    public bool isDead = false;
+
+    public bool isDead { get; protected set; } = false;
 
     [Space(20)] [Header("-== SFX Properties ==-")] 
     [SerializeField] protected List<AudioSource> audioSources;
@@ -186,7 +180,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
         {
             if (rigidbody != rb)
             {
-                rigidbody.detectCollisions = false;
+                rigidbody.detectCollisions = true;
                 rigidbody.isKinematic = true;
             }
         }
@@ -442,77 +436,7 @@ public abstract class Enemy : GenericObject, ITakeDamage, IAssistInteract
 
     #endregion
 
-    #region INTERACTIONS
 
-    public Assistant.JorgeStates GetState()
-    {
-        return Assistant.JorgeStates.INTERACT;
-    }
-
-    public Transform GetTransform()
-    {
-        return _bodyCenter;
-    }
-
-    public bool CanInteract()
-    {
-        return isDead;
-    }
-
-    public string AnimationToExecute()
-    {
-        return "absorbing";
-    }
-
-    public void ChangeOutlineState(bool state)
-    {
-        if (_outline != null)
-        {
-            _outline.enabled = state;
-            _outline.OutlineWidth = 10;
-        }
-    }
-
-    public int InteractID()
-    {
-        return 1;
-    }
-
-    public bool isAutoUsable()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Transform UsablePoint()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Transform GetInteractPoint()
-    {
-        return _interactPoint;
-    }
-
-    public List<Renderer> GetRenderer()
-    {
-        return renderers;
-    }
-
-    public void Interact(IAssistInteract usableItem = null)
-    {
-        Destroy(gameObject);
-    }
-
-    Assistant.Interactuables IAssistInteract.GetType()
-    {
-        return _type;
-    }
-
-    public string ActionName()
-    {
-        return "Eat the Robot";
-    }
-    #endregion
 
     #region FACE VALUES
 

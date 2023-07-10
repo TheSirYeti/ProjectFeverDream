@@ -401,6 +401,69 @@ Transform:
   m_Father: {fileID: 1789648787900556007}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -0.000000005912612, y: 0.000000022775811, z: 0.0000006271877}
+--- !u!1 &840454764919426976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8190617048898356103}
+  - component: {fileID: 6576995628062003461}
+  - component: {fileID: 5341422286645381186}
+  m_Layer: 10
+  m_Name: InteractPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8190617048898356103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840454764919426976}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 9096375514410105}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6576995628062003461
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840454764919426976}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5341422286645381186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840454764919426976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8e4040295fe0d47bdfad195d0e3c73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemy: {fileID: 643089006540210318}
+  _renderers:
+  - {fileID: 3489662038626097138}
+  - {fileID: 5137006702738865296}
+  _outline: {fileID: 9124963447454828829}
+  _type: 1
 --- !u!1 &942824117894119371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1355,6 +1418,7 @@ Transform:
   - {fileID: 6892160910451475917}
   - {fileID: 8967155948452682484}
   - {fileID: 9059122445154165773}
+  - {fileID: 8190617048898356103}
   m_Father: {fileID: 1869549026994180299}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: -90.01113}
@@ -2906,7 +2970,7 @@ GameObject:
   - component: {fileID: 643089006540210307}
   - component: {fileID: 643089006540210304}
   - component: {fileID: 643089006540210318}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: NewWaiterRobot
   m_TagString: Robot
   m_Icon: {fileID: 0}
@@ -3687,9 +3751,6 @@ MonoBehaviour:
   enemySet: -1
   target: {fileID: 0}
   minChaseDistance: 15
-  _type: 1
-  _interactPoint: {fileID: 643089005455145185}
-  _outline: {fileID: 9124963447454828829}
   attackCollider: {fileID: 643089006540211064}
   attackCooldown: 2
   currentAttackCooldown: 0
@@ -3742,7 +3803,6 @@ MonoBehaviour:
   bodyDmg: 1
   headDmg: 2
   generalDmg: 1
-  isDead: 0
   audioSources: []
   detectSFX:
   - {fileID: 643089006540210304}
