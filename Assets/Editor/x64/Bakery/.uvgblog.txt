@@ -371,3 +371,159 @@ Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/Chapter01-1_LMA1_f
 Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/Chapter01-1_LMA2_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/Chapter01-1_LMA2_final.hdr" 1024
 Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/Chapter01-1_LMA4_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/Chapter01-1_LMA4_final.hdr" 1024
 Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/Chapter01-1_LMA3_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/Chapter01-1_LMA3_final.hdr" 1024
+2023-7-29
+Rendering UV GBuffer for MainMenu_Background_LM0 50
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for MainMenu_Background_LMA1 50
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for MainMenu_Background_LMA2 50
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for MainMenu_Background_LMA3 50
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for MainMenu_Background_LMA4 50
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftrace fixpos12 "C:\Users\JP\AppData\Local\Temp\frender" "uvpos_MainMenu_Background_LMA2.lz4" 2 0 2 0
+Running ftrace fixpos12 "C:\Users\JP\AppData\Local\Temp\frender" "uvpos_MainMenu_Background_LMA1.lz4" 2 0 1 0
+Running ftrace fixpos12 "C:\Users\JP\AppData\Local\Temp\frender" "uvpos_MainMenu_Background_LMA4.lz4" 2 0 4 0
+Running ftrace fixpos12 "C:\Users\JP\AppData\Local\Temp\frender" "uvpos_MainMenu_Background_LM0.lz4" 2 0 0 0
+Running ftrace fixpos12 "C:\Users\JP\AppData\Local\Temp\frender" "uvpos_MainMenu_Background_LMA3.lz4" 2 0 3 0
+Running ftrace batchpointlightlegacy "C:\Users\JP\AppData\Local\Temp\frender" "PointBatch_2_0_4" 4 0 2 batchpointlight_2_0_4.bin
+Running ftrace addmul "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA2" 4 0 2 comp_2.bin
+Running ftrace batchpointlightlegacy "C:\Users\JP\AppData\Local\Temp\frender" "PointBatch_1_0_4" 4 0 1 batchpointlight_1_0_4.bin
+Running ftrace addmul "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1" 4 0 1 comp_1.bin
+Running ftrace batchpointlightlegacy "C:\Users\JP\AppData\Local\Temp\frender" "PointBatch_4_0_4" 4 0 4 batchpointlight_4_0_4.bin
+Running ftrace addmul "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA4" 4 0 4 comp_4.bin
+Running ftrace batchpointlightlegacy "C:\Users\JP\AppData\Local\Temp\frender" "PointBatch_0_0_4" 4 0 0 batchpointlight_0_0_4.bin
+Running ftrace addmul "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0" 4 0 0 comp_0.bin
+Running ftrace batchpointlightlegacy "C:\Users\JP\AppData\Local\Temp\frender" "PointBatch_3_0_4" 4 0 3 batchpointlight_3_0_4.bin
+Running ftrace addmul "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA3" 4 0 3 comp_3.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA2_diffuse" 4 16 2 "gi_MainMenu_Background_LMA20.bin" "MainMenu_Background_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_diffuse" 4 16 1 "gi_MainMenu_Background_LMA10.bin" "MainMenu_Background_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA4_diffuse" 4 16 4 "gi_MainMenu_Background_LMA40.bin" "MainMenu_Background_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_diffuse" 4 16 0 "gi_MainMenu_Background_LM00.bin" "MainMenu_Background_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA3_diffuse" 4 16 3 "gi_MainMenu_Background_LMA30.bin" "MainMenu_Background_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA2_diffuse" 4 16 2 "gi_MainMenu_Background_LMA21.bin" "MainMenu_Background_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_diffuse" 4 16 1 "gi_MainMenu_Background_LMA11.bin" "MainMenu_Background_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA4_diffuse" 4 16 4 "gi_MainMenu_Background_LMA41.bin" "MainMenu_Background_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_diffuse" 4 16 0 "gi_MainMenu_Background_LM01.bin" "MainMenu_Background_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA3_diffuse" 4 16 3 "gi_MainMenu_Background_LMA31.bin" "MainMenu_Background_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA2_diffuse" 4 16 2 "gi_MainMenu_Background_LMA22.bin" "MainMenu_Background_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_diffuse" 4 16 1 "gi_MainMenu_Background_LMA12.bin" "MainMenu_Background_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA4_diffuse" 4 16 4 "gi_MainMenu_Background_LMA42.bin" "MainMenu_Background_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_diffuse" 4 16 0 "gi_MainMenu_Background_LM02.bin" "MainMenu_Background_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA3_diffuse" 4 16 3 "gi_MainMenu_Background_LMA32.bin" "MainMenu_Background_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA2_diffuse" 4 16 2 "gi_MainMenu_Background_LMA23.bin" "MainMenu_Background_LMA2_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_diffuse" 4 16 1 "gi_MainMenu_Background_LMA13.bin" "MainMenu_Background_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA4_diffuse" 4 16 4 "gi_MainMenu_Background_LMA43.bin" "MainMenu_Background_LMA4_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_diffuse" 4 16 0 "gi_MainMenu_Background_LM03.bin" "MainMenu_Background_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA3_diffuse" 4 16 3 "gi_MainMenu_Background_LMA33.bin" "MainMenu_Background_LMA3_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA2_final" 4 16 2 "gi_MainMenu_Background_LMA24.bin" "MainMenu_Background_LMA2_lights_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_final" 4 16 1 "gi_MainMenu_Background_LMA14.bin" "MainMenu_Background_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA4_final" 4 16 4 "gi_MainMenu_Background_LMA44.bin" "MainMenu_Background_LMA4_lights_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_final" 4 16 0 "gi_MainMenu_Background_LM04.bin" "MainMenu_Background_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA3_final" 4 16 3 "gi_MainMenu_Background_LMA34.bin" "MainMenu_Background_LMA3_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA2_final_HDR.lz4" "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA2_final_HDR.lz4" 1024 0
+Running seamfixer "C:\Users\JP\AppData\Local\Temp\frender" "2" "MainMenu_Background_LMA2_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA1_final_HDR.lz4" "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA1_final_HDR.lz4" 1024 0
+Running seamfixer "C:\Users\JP\AppData\Local\Temp\frender" "1" "MainMenu_Background_LMA1_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA4_final_HDR.lz4" "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA4_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\JP\AppData\Local\Temp\frender" "4" "MainMenu_Background_LMA4_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LM0_final_HDR.lz4" "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LM0_final_HDR.lz4" 1024 0
+Running seamfixer "C:\Users\JP\AppData\Local\Temp\frender" "0" "MainMenu_Background_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA3_final_HDR.lz4" "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA3_final_HDR.lz4" 512 0
+Running seamfixer "C:\Users\JP\AppData\Local\Temp\frender" "3" "MainMenu_Background_LMA3_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA2_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/MainMenu_Background_LMA2_final.hdr" 1024
+Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA1_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/MainMenu_Background_LMA1_final.hdr" 1024
+Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA4_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/MainMenu_Background_LMA4_final.hdr" 1024
+Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LM0_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/MainMenu_Background_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA3_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/MainMenu_Background_LMA3_final.hdr" 1024
+Total cache size 22830772
+Total cache size after purge 22830772
+Total cache size 22830772
+Total cache size after purge 22830772
+[137/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets9.resource
+[138/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets7.assets
+[139/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets5.assets
+[140/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets8.resource
+[141/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets9.assets
+[142/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets8.assets
+[143/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets4.assets
+[144/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets2.assets
+[145/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets1.resource
+[146/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets3.assets
+[147/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets8.assets.resS
+[148/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets2.assets.resS
+[149/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets1.assets
+[152/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/Resources/unity_builtin_extra
+[153/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets0.assets
+[154/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets0.assets.resS
+[155/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets1.assets.resS
+[156/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level9.resS
+[157/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level9
+[158/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level8.resS
+[159/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/resources.assets.resS
+[160/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets6.assets
+[161/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level8
+[162/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/resources.assets
+[163/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level7
+[164/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level7.resS
+[165/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level4
+[166/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets6.resource
+[167/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level3
+[168/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level5
+[169/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level2
+[170/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level1
+[171/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level5.resS
+[172/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/globalgamemanagers.assets
+[173/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level0
+[174/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets4.assets.resS
+[175/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/globalgamemanagers
+[176/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/globalgamemanagers.assets.resS
+[177/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets0.resource
+[178/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets3.assets.resS
+[179/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level6
+[180/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/level6.resS
+[181/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets5.assets.resS
+[182/185    0s] AddBootConfigGUID Library/Bee/artifacts/WinPlayerBuildProgram/boot.config
+[183/185    0s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/boot.config
+[184/185    3s] CopyFiles T:/Users/JP/Documents/GitHub/Tesis Builds/Test 2022LTS/Robotpalooza_Data/sharedassets6.assets.resS
+*** Tundra build success (3.86 seconds), 46 items updated, 185 evaluated
+Total cache size 22830772
+Total cache size after purge 22830772
+abort_threads: Failed aborting id: 00000000000041CC, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000002964, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000002EE4, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000003260, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000000698, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 00000000000041CC, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000002964, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000002EE4, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000003260, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 0000000000000698, mono_thread_manage will ignore it
+
