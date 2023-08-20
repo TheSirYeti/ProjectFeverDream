@@ -49,6 +49,38 @@ MonoBehaviour:
   quality:
     overrideState: 0
     value: 2
+--- !u!114 &-6309070088518139906
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08bb226f3b36274aa0891192b6a87a7, type: 3}
+  m_Name: SpeedEffect_ShaderPPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  _NoiseTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 1adb1b7aa225268479537efed0551df3, type: 3}
+    defaultState: 1
+  _AmountNoise:
+    overrideState: 1
+    value: 0.98
+  _SatureNoise:
+    overrideState: 1
+    value: 0.75
+  _Alpha:
+    overrideState: 1
+    value: 1
+  _HardEgdesNoise:
+    overrideState: 1
+    value: -0.2
 --- !u!114 &-5475145203879272090
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -71,6 +103,40 @@ MonoBehaviour:
   sampleCount:
     overrideState: 1
     value: 8
+--- !u!114 &-4663332124991724135
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b77c5407dc277943b591ade9e6b18c5, type: 3}
+  m_Name: LensDistortion
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  intensity:
+    overrideState: 1
+    value: 46
+  intensityX:
+    overrideState: 0
+    value: 1
+  intensityY:
+    overrideState: 0
+    value: 1
+  centerX:
+    overrideState: 0
+    value: 0
+  centerY:
+    overrideState: 0
+    value: 0
+  scale:
+    overrideState: 0
+    value: 1
 --- !u!114 &-3685971747057381807
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -115,6 +181,25 @@ MonoBehaviour:
   opacity:
     overrideState: 0
     value: 1
+--- !u!114 &-3382094984537004241
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321085f8da0899843ad65f3a164ef762, type: 3}
+  m_Name: BorderCinematic_EffectPPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  _SliderBorder:
+    overrideState: 1
+    value: 0.72
 --- !u!114 &-478078726597545855
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -143,6 +228,28 @@ MonoBehaviour:
   lumContrib:
     overrideState: 0
     value: 0.8
+--- !u!114 &-94214318779845112
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6cf1d1f728ec824e9d6e4996d6b984b, type: 3}
+  m_Name: DamageScreen_EffectPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _Color2:
+    overrideState: 0
+    value: {r: 0.3490565, g: 0, b: 0, a: 0}
+  _Float3:
+    overrideState: 0
+    value: -1.25
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +269,10 @@ MonoBehaviour:
   - {fileID: -478078726597545855}
   - {fileID: 5201708494839170604}
   - {fileID: -5475145203879272090}
+  - {fileID: -4663332124991724135}
+  - {fileID: -6309070088518139906}
+  - {fileID: -3382094984537004241}
+  - {fileID: -94214318779845112}
 --- !u!114 &1846353530187866418
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -209,6 +320,38 @@ MonoBehaviour:
   dirtIntensity:
     overrideState: 0
     value: 0
+--- !u!114 &5038733903300632833
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c83866c2e0d8a5349ba1705b43618ac9, type: 3}
+  m_Name: DamageScreenPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _NoiseTexture:
+    overrideState: 1
+    value: {fileID: 2800000, guid: 1adb1b7aa225268479537efed0551df3, type: 3}
+    defaultState: 1
+  _AmountNoise:
+    overrideState: 1
+    value: 0.9
+  _SatureNoise:
+    overrideState: 1
+    value: 0.75
+  _Alpha:
+    overrideState: 1
+    value: 0.55
+  _HardEgdesNoise:
+    overrideState: 1
+    value: -0.2
 --- !u!114 &5201708494839170604
 MonoBehaviour:
   m_ObjectHideFlags: 3
