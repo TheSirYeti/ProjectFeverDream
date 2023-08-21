@@ -77,10 +77,60 @@ MonoBehaviour:
     value: 0.75
   _Alpha:
     overrideState: 1
-    value: 1
+    value: 2.75
   _HardEgdesNoise:
     overrideState: 1
     value: -0.2
+  _Color:
+    overrideState: 0
+    value: {r: 0.9669811, g: 0.9759491, b: 1, a: 1}
+--- !u!114 &-5749204436253150789
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a79b01ea5641d4aa6daa2e23605641, type: 3}
+  m_Name: Bloom
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  intensity:
+    overrideState: 0
+    value: 0
+  threshold:
+    overrideState: 0
+    value: 1
+  softKnee:
+    overrideState: 0
+    value: 0.5
+  clamp:
+    overrideState: 0
+    value: 65472
+  diffusion:
+    overrideState: 0
+    value: 7
+  anamorphicRatio:
+    overrideState: 0
+    value: 0
+  color:
+    overrideState: 0
+    value: {r: 1, g: 1, b: 1, a: 1}
+  fastMode:
+    overrideState: 0
+    value: 0
+  dirtTexture:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+  dirtIntensity:
+    overrideState: 0
+    value: 0
 --- !u!114 &-5475145203879272090
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -103,40 +153,6 @@ MonoBehaviour:
   sampleCount:
     overrideState: 1
     value: 8
---- !u!114 &-4663332124991724135
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b77c5407dc277943b591ade9e6b18c5, type: 3}
-  m_Name: LensDistortion
-  m_EditorClassIdentifier: 
-  active: 0
-  enabled:
-    overrideState: 1
-    value: 1
-  intensity:
-    overrideState: 1
-    value: 46
-  intensityX:
-    overrideState: 0
-    value: 1
-  intensityY:
-    overrideState: 0
-    value: 1
-  centerX:
-    overrideState: 0
-    value: 0
-  centerY:
-    overrideState: 0
-    value: 0
-  scale:
-    overrideState: 0
-    value: 1
 --- !u!114 &-3685971747057381807
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -181,25 +197,6 @@ MonoBehaviour:
   opacity:
     overrideState: 0
     value: 1
---- !u!114 &-3382094984537004241
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 321085f8da0899843ad65f3a164ef762, type: 3}
-  m_Name: BorderCinematic_EffectPPSSettings
-  m_EditorClassIdentifier: 
-  active: 0
-  enabled:
-    overrideState: 1
-    value: 1
-  _SliderBorder:
-    overrideState: 1
-    value: 0.72
 --- !u!114 &-478078726597545855
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -228,28 +225,6 @@ MonoBehaviour:
   lumContrib:
     overrideState: 0
     value: 0.8
---- !u!114 &-94214318779845112
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6cf1d1f728ec824e9d6e4996d6b984b, type: 3}
-  m_Name: DamageScreen_EffectPPSSettings
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  _Color2:
-    overrideState: 0
-    value: {r: 0.3490565, g: 0, b: 0, a: 0}
-  _Float3:
-    overrideState: 0
-    value: -1.25
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,63 +238,16 @@ MonoBehaviour:
   m_Name: PP Profile
   m_EditorClassIdentifier: 
   settings:
-  - {fileID: 1846353530187866418}
+  - {fileID: -5749204436253150789}
   - {fileID: -3685971747057381807}
   - {fileID: -6507959157862039447}
   - {fileID: -478078726597545855}
   - {fileID: 5201708494839170604}
   - {fileID: -5475145203879272090}
-  - {fileID: -4663332124991724135}
   - {fileID: -6309070088518139906}
-  - {fileID: -3382094984537004241}
-  - {fileID: -94214318779845112}
---- !u!114 &1846353530187866418
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48a79b01ea5641d4aa6daa2e23605641, type: 3}
-  m_Name: Bloom
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  intensity:
-    overrideState: 1
-    value: 2
-  threshold:
-    overrideState: 0
-    value: 0
-  softKnee:
-    overrideState: 0
-    value: 0.343
-  clamp:
-    overrideState: 0
-    value: 65472
-  diffusion:
-    overrideState: 1
-    value: 4
-  anamorphicRatio:
-    overrideState: 0
-    value: 0
-  color:
-    overrideState: 0
-    value: {r: 1, g: 1, b: 1, a: 1}
-  fastMode:
-    overrideState: 0
-    value: 0
-  dirtTexture:
-    overrideState: 0
-    value: {fileID: 0}
-    defaultState: 1
-  dirtIntensity:
-    overrideState: 0
-    value: 0
+  - {fileID: 5813088329983635037}
+  - {fileID: 9069899450717518666}
+  - {fileID: 7681918959098512838}
 --- !u!114 &5038733903300632833
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1663,3 +1591,154 @@ MonoBehaviour:
       - 0.5
       - 0.5
       - 0.5
+--- !u!114 &5813088329983635037
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b91a283442ff7d49a4e3a38049da76c, type: 3}
+  m_Name: LowHP_EffectPPSSettings
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  _ColorBorder:
+    overrideState: 0
+    value: {r: 0.2274509, g: 0.02745098, b: 0.003921569, a: 1}
+  _AmountCorners:
+    overrideState: 1
+    value: 1.65
+  _SmoothCorners:
+    overrideState: 1
+    value: 5
+  _BlendCorners:
+    overrideState: 1
+    value: 0.5
+  _SpeedCorners:
+    overrideState: 1
+    value: 7
+  _IntesityCornersMin:
+    overrideState: 0
+    value: 1
+  _IntesityCornersMax:
+    overrideState: 0
+    value: 1.07
+  _Grayscale:
+    overrideState: 1
+    value: 0.7
+  _ScaleNoise:
+    overrideState: 0
+    value: 7
+  _SpeedNoise:
+    overrideState: 0
+    value: 0.1
+--- !u!114 &7681918959098512838
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 321085f8da0899843ad65f3a164ef762, type: 3}
+  m_Name: BorderCinematic_EffectPPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  _SliderBorder:
+    overrideState: 1
+    value: 0
+--- !u!114 &8844013255559459578
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91135c5eda2512349889adfed3a336c8, type: 3}
+  m_Name: DamageScreen_Effect_2PPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  _EXP:
+    overrideState: 0
+    value: 3.5
+  _EXP2:
+    overrideState: 0
+    value: 3.5
+  _Border:
+    overrideState: 1
+    value: 32.1
+  _Border2:
+    overrideState: 1
+    value: 5
+  _Vector2:
+    overrideState: 1
+    value: {x: -0, y: 0, z: 0, w: 0}
+  _Color1:
+    overrideState: 1
+    value: {r: 0.7830189, g: 0.04801533, b: 0.04801533, a: 0}
+  _Color0:
+    overrideState: 1
+    value: {r: 0.3584905, g: 0, b: 0, a: 0}
+  _Float1:
+    overrideState: 1
+    value: 1.12
+--- !u!114 &9069899450717518666
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6cf1d1f728ec824e9d6e4996d6b984b, type: 3}
+  m_Name: DamageScreen_EffectPPSSettings
+  m_EditorClassIdentifier: 
+  active: 0
+  enabled:
+    overrideState: 1
+    value: 1
+  _BorderUOne:
+    overrideState: 1
+    value: 30
+  _BorderUTwo:
+    overrideState: 1
+    value: 8
+  _BorderVOne:
+    overrideState: 1
+    value: 10
+  _BorderVTwo:
+    overrideState: 1
+    value: 4
+  _ColorEmission:
+    overrideState: 0
+    value: {r: 0.7647059, g: 0.1843136, b: 0.1843136, a: 0}
+  _ColorShadow:
+    overrideState: 0
+    value: {r: 0.3584905, g: 0, b: 0, a: 0}
+  _ControlScreenLeft:
+    overrideState: 1
+    value: 1
+  _ControlScreenRight:
+    overrideState: 1
+    value: 1
+  _ControlScreenDown:
+    overrideState: 1
+    value: 1
+  _ControlScreenUP:
+    overrideState: 1
+    value: 1

@@ -9268,6 +9268,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4201368175407034316, guid: def82dd5c7d809b49b45080f07b811b1, type: 3}
+      propertyPath: weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201368175407034316, guid: def82dd5c7d809b49b45080f07b811b1, type: 3}
+      propertyPath: isGlobal
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201368175407034316, guid: def82dd5c7d809b49b45080f07b811b1, type: 3}
+      propertyPath: priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4201368175407034316, guid: def82dd5c7d809b49b45080f07b811b1, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -9440,6 +9452,8 @@ MonoBehaviour:
   - assemblyQualifiedName: SpeedEffect_ShaderPPSSettings, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - assemblyQualifiedName: BorderCinematic_EffectPPSSettings, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: LowHP_EffectPPSSettings, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - assemblyQualifiedName: DamageScreen_EffectPPSSettings, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -10818,8 +10832,8 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_Camera: {fileID: 1324058784}
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -12050,6 +12064,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1956707615}
     m_Modifications:
+    - target: {fileID: 1141125107645894911, guid: 3af603f955166d341a46a507ef788c25, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1141125107857371052, guid: 3af603f955166d341a46a507ef788c25, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -183.91

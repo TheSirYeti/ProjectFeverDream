@@ -74,7 +74,7 @@ Shader /*ase_name*/ "Hidden/Templates/PostProcessStack" /*end*/
 
 			float4 Frag (ASEVaryingsDefault i /*ase_frag_input*/ ) : SV_Target
 			{
-				/*ase_local_var:spn*/float4 ase_ppsScreenPosFragNorm = float4(i.texcoordStereo,0,1);
+				/*ase_local_var:spn*/float4 ase_ppsScreenPosFragNorm = float4(i.texcoordStereo,1,1);
 
 				/*ase_frag_code:i=ASEVaryingsDefault*/
 
