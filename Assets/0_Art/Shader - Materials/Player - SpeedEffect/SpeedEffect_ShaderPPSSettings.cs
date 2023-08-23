@@ -16,7 +16,8 @@ public sealed class SpeedEffect_ShaderPPSSettings : PostProcessEffectSettings
 	[Tooltip( "Sature Noise" )]
 	public FloatParameter _SatureNoise = new FloatParameter { value = 0.4269153f };
 	[Tooltip( "Alpha" )]
-	public FloatParameter _Alpha = new FloatParameter { value = 0.54f };
+    [Range(0.0f, 1.0f)]
+    public FloatParameter _Alpha = new FloatParameter { value = 0.54f };
 	[Tooltip( "Hard Egdes Noise" )]
 	public FloatParameter _HardEgdesNoise = new FloatParameter { value = -0.2f };
 	[Tooltip( "Color" )]
