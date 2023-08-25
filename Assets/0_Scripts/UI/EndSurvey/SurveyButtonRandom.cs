@@ -7,8 +7,6 @@ using Random = UnityEngine.Random;
 
 public class SurveyButtonRandom : GenericObject, IPointerEnterHandler
 {
-    [SerializeField] private RectTransform canvas;
-    
     private void Awake()
     {
         UpdateManager._instance.AddObject(this);
@@ -22,14 +20,6 @@ public class SurveyButtonRandom : GenericObject, IPointerEnterHandler
 
     public void DoRandomPos()
     {
-        transform.position = GetBottomLeftCorner(canvas) - 
-                             new Vector3(Random.Range(0, canvas.rect.x), Random.Range(0, canvas.rect.y), 0);
-    }
-    
-    Vector3 GetBottomLeftCorner(RectTransform rt)
-    {
-        Vector3[] v = new Vector3[4];
-        rt.GetWorldCorners(v);
-        return v[0];
+        transform.position = new Vector3(Random.Range(0, Screen.width), Random.Range(0, Screen.height), 0);
     }
 }
