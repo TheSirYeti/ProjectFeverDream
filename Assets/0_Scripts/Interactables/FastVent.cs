@@ -15,7 +15,7 @@ public class FastVent : GenericObject
 
     private Action ActualUpdate = delegate { };
 
-    [SerializeField] private Transform _playerTransform;
+    private Transform _playerTransform;
     private int _actualWayPoint;
     private int _actualDir = 1;
 
