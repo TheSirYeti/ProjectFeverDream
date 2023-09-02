@@ -6,6 +6,6 @@ public class InteractAutoAimSystem : GenericObject
 {
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 }

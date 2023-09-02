@@ -22,12 +22,12 @@ public abstract class GenericBullet : GenericObject
     private void OnDisable()
     {
         StopAllCoroutines();
-        UpdateManager._instance.RemoveObject(this);
+        UpdateManager.instance.RemoveObject(this);
     }
 
     public void BulletSetter(Vector3 dir, GenericWeapon actualWeapon, float dmg)
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
         
         transform.forward = dir;
         _actualWeapon = actualWeapon;

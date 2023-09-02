@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
         else
         {
             _fadeAnimator.Play("FadeOut");
-            UpdateManager._instance.OnSceneLoad();
+            UpdateManager.instance.OnSceneLoad();
         }
     }
 
@@ -141,7 +141,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(_fadeAnimator.GetCurrentAnimatorStateInfo(0).length);
         }
 
-        UpdateManager._instance.OnSceneUnload();
+        UpdateManager.instance.OnSceneUnload();
         EventManager.ResetEventDictionary();
         SoundManager.instance.StopAllSounds();
         SoundManager.instance.StopAllMusic();
@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => !InGameSceneManager.instace.isLoading);
         yield return new WaitForFrames(2);
 
-        UpdateManager._instance.OnSceneLoad();
+        UpdateManager.instance.OnSceneLoad();
         yield return new WaitForEndOfFrame();
 
         if (InGameSceneManager.instace.HasLoadingScene(_actualScene))
@@ -232,12 +232,12 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         SoundManager.instance.PauseAllSounds();
-        UpdateManager._instance.ChangeGameState(true);
+        UpdateManager.instance.ChangeGameState(true);
     }
 
     public void ResumeGame()
     {
         SoundManager.instance.ResumeAllSounds();
-        UpdateManager._instance.ChangeGameState(false);
+        UpdateManager.instance.ChangeGameState(false);
     }
 }

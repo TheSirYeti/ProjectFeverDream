@@ -14,7 +14,7 @@ public class SurveyManager : GenericObject
     {
         instance = this;
         
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
         
         DoNextQuestion();
     }

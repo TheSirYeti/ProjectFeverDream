@@ -19,7 +19,7 @@ public class Toaster : GenericWeapon
 
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     /* -------------------------------- START -------------------------------- */

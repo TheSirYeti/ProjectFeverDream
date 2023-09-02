@@ -28,7 +28,7 @@ public class WeaponManager : GenericObject, IAssistInteract
 
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
     
     public override void OnStart()

@@ -29,7 +29,7 @@ public class MeleeWeapon : GenericWeapon
 
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     public override void OnStart()
@@ -51,7 +51,7 @@ public class MeleeWeapon : GenericWeapon
     private void OnDestroy()
     {
         StopAllCoroutines();
-        UpdateManager._instance.RemoveObject(this);
+        UpdateManager.instance.RemoveObject(this);
     }
 
     public override void Shoot(Transform pointOfShoot, bool isADS)

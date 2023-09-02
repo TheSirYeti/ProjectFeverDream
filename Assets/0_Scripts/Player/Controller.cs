@@ -5,11 +5,11 @@ using System;
 
 public class Controller
 {
-    Model _model;
-    CameraController _cameraController;
-    WeaponManager _weaponManager;
+    private readonly Model _model;
+    private readonly CameraController _cameraController;
+    private readonly WeaponManager _weaponManager;
 
-    public Action onUpdate = delegate { };
+    public Action OnUpdate = delegate { };
 
     public Controller(Model model, CameraController cameraController, WeaponManager weaponManager)
     {
@@ -17,24 +17,32 @@ public class Controller
         _cameraController = cameraController;
         _weaponManager = weaponManager;
 
-        onUpdate += GetMouse;
-        onUpdate += GetShootInput;
-        onUpdate += GetReloadInput;
-        onUpdate += GetADSInput;
+        OnUpdate += GetMouse;
+        OnUpdate += GetShootInput;
+        OnUpdate += GetReloadInput;
+        OnUpdate += GetADSInput;
         //onUpdate += GetNumsInput;
-        onUpdate += GetMovementInput;
-        onUpdate += GetJumpInput;
-        onUpdate += GetCrunchInput;
-        onUpdate += GetRunInput;
-        onUpdate += GetInteractInput;
+        OnUpdate += GetMovementInput;
+        OnUpdate += GetJumpInput;
+        OnUpdate += GetCrunchInput;
+        OnUpdate += GetRunInput;
+        OnUpdate += GetInteractInput;
+        
+        EventManager.Subscribe("ChangeMovementInputs", ChangeMovementInputs);
     }
 
-    void GetMouse()
+    private void ChangeMovementInputs(params object[] parameters)
+    {
+        if ((bool)parameters[0]) OnUpdate += GetMovementInput;
+        else OnUpdate -= GetMovementInput;
+    }
+
+    private void GetMouse()
     {
         _cameraController.MoveCamera(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
 
-    void GetShootInput()
+    private void GetShootInput()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -46,7 +54,7 @@ public class Controller
         }
     }
 
-    void GetADSInput()
+    private void GetADSInput()
     {
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
@@ -58,7 +66,7 @@ public class Controller
         }
     }
 
-    void GetReloadInput()
+    private void GetReloadInput()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -82,7 +90,7 @@ public class Controller
     //    }
     //}
 
-    void GetMovementInput()
+    private void GetMovementInput()
     {
         float h = 0;
         float v = 0;
@@ -100,13 +108,13 @@ public class Controller
         _model.Move(h, v);
     }
 
-    void GetJumpInput()
+    private void GetJumpInput()
     {
         if (Input.GetButtonDown("Jump"))
             _model.Jump();
     }
 
-    void GetCrunchInput()
+    private void GetCrunchInput()
     {
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -129,7 +137,7 @@ public class Controller
         }
     }
 
-    void GetRunInput()
+    private void GetRunInput()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
@@ -141,7 +149,7 @@ public class Controller
         }
     }
 
-    void GetInteractInput()
+    private void GetInteractInput()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {

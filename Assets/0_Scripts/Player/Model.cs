@@ -29,6 +29,8 @@ public class Model : GenericObject, IPlayerLife
     [Space(20)] [Header("-== Physics Properties ==-")] [SerializeField]
     float _gravity = -10f;
 
+    private bool _physicsActive = true;
+
     [Space(20)] [Header("-== Movement Properties ==-")]
     float _actualSpeed;
 
@@ -80,7 +82,7 @@ public class Model : GenericObject, IPlayerLife
 
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     public override void OnAwake()
@@ -116,10 +118,11 @@ public class Model : GenericObject, IPlayerLife
 
         EventManager.Subscribe("SetAssistant", SetAssistant);
         EventManager.Subscribe("ChangeMovementState", ChangeMovementState);
+        EventManager.Subscribe("ChangePhysicsState", ChangePhysicsState);
 
         floorChecker = OnAir_Checker;
 
-        UpdateManager._instance.AddComponents(new PausableObject() { anim = _view._animator, rb = _rb });
+        UpdateManager.instance.AddComponents(new PausableObject() { anim = _view._animator, rb = _rb });
     }
 
     public override void OnStart()
@@ -131,7 +134,7 @@ public class Model : GenericObject, IPlayerLife
     public override void OnUpdate()
     {
         if (_canMove)
-            _controller.onUpdate();
+            _controller.OnUpdate();
 
         floorChecker();
         crouchChecker();
@@ -139,8 +142,14 @@ public class Model : GenericObject, IPlayerLife
         CheckDmg();
 
         currentDmgCooldown -= Time.deltaTime;
-        
-        _physics.PhysicsFixedUpdate();
+
+        if (_physicsActive)
+            _physics.PhysicsFixedUpdate();
+    }
+
+    private void ChangePhysicsState(params object[] parameters)
+    {
+        _physicsActive = (bool)parameters[0];
     }
 
     private void ChangeMovementState(params object[] parameters)
@@ -487,11 +496,6 @@ public class Model : GenericObject, IPlayerLife
             floorChecker = OnFloor_Checker;
         }
     }
-
-    // private bool CheckFloor()
-    // {
-    //     
-    // }
 
     void CheckRoof()
     {

@@ -10,7 +10,7 @@ public class CloseDoors : GenericObject
     
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     private void OnTriggerEnter(Collider other)

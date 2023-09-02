@@ -9,7 +9,7 @@ public class CutsceneTrigger : GenericObject
     public int timelineID;
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     public override void OnStart()

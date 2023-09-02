@@ -9,7 +9,7 @@ public class RagdollToggler : GenericObject
     public List<Rigidbody> ragdollRigidbodies;
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     public override void OnStart()

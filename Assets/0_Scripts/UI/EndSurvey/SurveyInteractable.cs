@@ -8,7 +8,7 @@ public abstract class SurveyInteractable : GenericObject
     [SerializeField] protected List<GameObject> surveyObjects;
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     public abstract void OnSurveyStart();

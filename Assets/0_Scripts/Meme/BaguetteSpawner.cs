@@ -11,7 +11,7 @@ public class BaguetteSpawner : GenericObject
     
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
     
     public void SpawnBaguettes()

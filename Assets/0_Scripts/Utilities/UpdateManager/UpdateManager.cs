@@ -6,7 +6,7 @@ using System.Linq;
 
 public class UpdateManager : MonoBehaviour, ISceneChanges
 {
-    public static UpdateManager _instance;
+    public static UpdateManager instance;
 
     private bool _gamePause = false;
 
@@ -37,8 +37,8 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
     private void Awake()
     {
         Debug.Log("Update awake");
-        if (_instance) Destroy(gameObject);
-        else _instance = this;
+        if (instance) Destroy(gameObject);
+        else instance = this;
     }
 
     private void Update()

@@ -15,7 +15,7 @@ public class RangedBullet : GenericObject
 
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
         
         rand = Random.Range(0, viewObjects.Count);
         viewObjects[rand].SetActive(true);
@@ -41,7 +41,7 @@ public class RangedBullet : GenericObject
     private void OnDestroy()
     {
         StopAllCoroutines();
-        UpdateManager._instance.RemoveObject(this);
+        UpdateManager.instance.RemoveObject(this);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -59,7 +59,7 @@ public class RangedBullet : GenericObject
             other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             StopCoroutine(DoDeath());
-            UpdateManager._instance.RemoveObject(this);
+            UpdateManager.instance.RemoveObject(this);
             gameObject.SetActive(false);
             //Destroy(gameObject);
         }
@@ -79,7 +79,7 @@ public class RangedBullet : GenericObject
     IEnumerator DoDeath()
     {
         yield return new WaitForSeconds(timeToDie);
-        UpdateManager._instance.RemoveObject(this);
+        UpdateManager.instance.RemoveObject(this);
         gameObject.SetActive(false);
         //Destroy(gameObject);
     }

@@ -100,8 +100,8 @@ public abstract class Enemy : GenericObject, ITakeDamage
     
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
-        UpdateManager._instance.AddComponents(new PausableObject(){anim = animator, rb = rb});
+        UpdateManager.instance.AddObject(this);
+        UpdateManager.instance.AddComponents(new PausableObject(){anim = animator, rb = rb});
         EventManager.Subscribe("ChangeMovementState", ChangeCinematicMode);
     }
     

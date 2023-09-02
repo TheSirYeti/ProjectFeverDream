@@ -14,7 +14,7 @@ public class EnemyInteract : GenericObject, IAssistInteract
 
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     public override void OnLateUpdate()
@@ -80,7 +80,7 @@ public class EnemyInteract : GenericObject, IAssistInteract
 
     public void Interact(IAssistInteract usableItem = null)
     {
-        UpdateManager._instance.RemoveObject(this);
+        UpdateManager.instance.RemoveObject(this);
         Destroy(_enemy.gameObject);
     }
 

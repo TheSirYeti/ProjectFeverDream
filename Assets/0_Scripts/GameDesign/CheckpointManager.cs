@@ -13,7 +13,7 @@ public class CheckpointManager : GenericObject
     
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
     
     public override void OnStart()

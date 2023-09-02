@@ -14,7 +14,7 @@ public class CutsceneToggler : GenericObject
     public Transform playerCorner;
     private void Awake()
     {
-        UpdateManager._instance.AddObject(this);
+        UpdateManager.instance.AddObject(this);
     }
 
     public override void OnStart()
