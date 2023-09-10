@@ -11,7 +11,7 @@ public class MainMenuManager : GenericObject
 {
     [SerializeField] private Slider sfxSlider, musicSlider, sensSlider;
     [SerializeField] private TextMeshProUGUI sfxVolumeNumber, musicVolumeNumber, sensText;
-    [SerializeField] private GameObject mainMenu, generalMenu, audioMenu, controllerMenu, graphicsMenu;
+    [SerializeField] private GameObject mainMenu, generalMenu, audioMenu, controllerMenu, graphicsMenu, skipCutsceneMenu;
 
     [SerializeField] private GameObject[] _selectedButton;
     
@@ -51,6 +51,7 @@ public class MainMenuManager : GenericObject
         audioMenu.SetActive(false);
         controllerMenu.SetActive(false);
         graphicsMenu.SetActive(false);
+        skipCutsceneMenu.SetActive(false);
     }
 
     public void SetSFXVolume(float volume)
@@ -94,6 +95,11 @@ public class MainMenuManager : GenericObject
             sensSlider.value = PlayerPrefs.GetFloat("Sensibilidad");;
             sensText.text = Convert.ToInt32(sensSlider.value * 100f).ToString();
         }
+    }
+
+    public void SetSkipValue(int skipIntroValue)
+    {
+        PlayerPrefs.SetInt("SkipIntro", skipIntroValue);
     }
     
     public void LoadScene(int sceneID)
