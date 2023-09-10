@@ -11,6 +11,7 @@ public class FastVent : GenericObject
 
     [SerializeField] private float _detectionRadius;
     [SerializeField] private float _speed;
+    [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _cdPerUse;
 
     private Action ActualUpdate = delegate { };
@@ -41,12 +42,12 @@ public class FastVent : GenericObject
             var playerCol = Physics.OverlapSphere(_enterPoint[i].position, _detectionRadius, LayerManager.LM_PLAYER);
 
             if (playerCol.Length == 0) continue;
-            
+
             _playerTransform = playerCol[0].transform.parent.parent;
             ActualUpdate = MovePlayer;
-            EventManager.Trigger("ChangeMovementInputs", false);
+            EventManager.Trigger("ChangeMovementState", false, true);
             EventManager.Trigger("ChangePhysicsState", false);
-            
+
             if (i == 0)
             {
                 _actualWayPoint = 0;
@@ -65,6 +66,10 @@ public class FastVent : GenericObject
     private void MovePlayer()
     {
         var dir = _wayPoints[_actualWayPoint].position - _playerTransform.position;
+        
+        var targetRotation = Quaternion.LookRotation(dir);
+        _playerTransform.rotation = Quaternion.Lerp(_playerTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+        
         _playerTransform.position += dir.normalized * (_speed * Time.deltaTime);
 
         if (dir.magnitude < 0.3f)
@@ -73,9 +78,9 @@ public class FastVent : GenericObject
 
             if (_actualWayPoint < 0 || _actualWayPoint >= _wayPoints.Length)
             {
-                EventManager.Trigger("ChangeMovementInputs", true);
+                EventManager.Trigger("ChangeMovementState", true, false);
                 EventManager.Trigger("ChangePhysicsState", true);
-                ActualUpdate = delegate {  };
+                ActualUpdate = delegate { };
                 StartCoroutine(WaitForReset());
             }
         }
@@ -95,9 +100,9 @@ public class FastVent : GenericObject
         {
             Gizmos.DrawWireSphere(enterPoint.position, _detectionRadius);
         }
-        
+
         if (!_wayPoints.Any()) return;
-        
+
         Gizmos.color = Color.blue;
         foreach (var wayPoint in _wayPoints)
         {
@@ -105,4 +110,3 @@ public class FastVent : GenericObject
         }
     }
 }
-

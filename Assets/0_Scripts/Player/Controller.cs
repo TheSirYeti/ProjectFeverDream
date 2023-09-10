@@ -28,13 +28,6 @@ public class Controller
         OnUpdate += GetRunInput;
         OnUpdate += GetInteractInput;
         
-        EventManager.Subscribe("ChangeMovementInputs", ChangeMovementInputs);
-    }
-
-    private void ChangeMovementInputs(params object[] parameters)
-    {
-        if ((bool)parameters[0]) OnUpdate += GetMovementInput;
-        else OnUpdate -= GetMovementInput;
     }
 
     private void GetMouse()

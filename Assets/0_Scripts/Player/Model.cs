@@ -161,10 +161,30 @@ public class Model : GenericObject, IPlayerLife
 
         SoundManager.instance.StopSoundByID("RUN");
         SoundManager.instance.StopSoundByID("WALK");
+        
+        if(!(bool)parameters[0])
+        {
+            _dir = Vector3.zero;
+            _rb.velocity = Vector3.zero;
+            _physics.RemoveAllPhysics();
+        }
+
+        if ((bool)parameters[1])
+        {
+            _cameraController.StartTranslate(1);
+            Crouch(1);
+        }
+        else
+        {
+            _cameraController.StartTranslate(0);
+            Crouch(0);
+        }
     }
 
     public void Move(float hAxie, float vAxie)
     {
+        Debug.Log("a");
+        
         if (_isOnFloor && (hAxie != 0 || vAxie != 0))
         {
             EventManager.Trigger("CameraBobbing", true);

@@ -8,33 +8,33 @@ public class PhysicsSystem
 {
     #region Actual Impulse Forces
     // Impulse Lists
-    List<string> _impulseName = new List<string>();
-    List<Vector3> _impulseDir = new List<Vector3>();
-    List<float> _impulseForce = new List<float>();
-    List<float> _impulseSpeed = new List<float>();
-    Vector3 _impulseVector;
+    private List<string> _impulseName = new List<string>();
+    private List<Vector3> _impulseDir = new List<Vector3>();
+    private List<float> _impulseForce = new List<float>();
+    private List<float> _impulseSpeed = new List<float>();
+    private Vector3 _impulseVector;
     #endregion
 
     #region Actual Constant Forces
     // Constant Lists
-    List<string> _constantName = new List<string>();
-    List<Vector3> _constantDir = new List<Vector3>();
-    List<float> _constantForce = new List<float>();
-    List<float> _constantDuration = new List<float>();
-    Vector3 _constantVector;
+    private List<string> _constantName = new List<string>();
+    private List<Vector3> _constantDir = new List<Vector3>();
+    private List<float> _constantForce = new List<float>();
+    private List<float> _constantDuration = new List<float>();
+    private Vector3 _constantVector;
     #endregion
 
     #region Actual Acceleration Forces
     // Acceleration Lists
-    List<string> _accelerationName = new List<string>();
-    List<Vector3> _accelerationDir = new List<Vector3>();
-    List<float> _accelerationForce = new List<float>();
-    List<float> _accelerationDuration = new List<float>();
-    List<float> _accelerationSpeed = new List<float>();
-    Vector3 _accelerationVector;
+    private List<string> _accelerationName = new List<string>();
+    private List<Vector3> _accelerationDir = new List<Vector3>();
+    private List<float> _accelerationForce = new List<float>();
+    private List<float> _accelerationDuration = new List<float>();
+    private List<float> _accelerationSpeed = new List<float>();
+    private Vector3 _accelerationVector;
     #endregion
 
-    Rigidbody _rb;
+    private Rigidbody _rb;
 
     public Action PhysicsFixedUpdate = delegate { };
 
@@ -51,6 +51,28 @@ public class PhysicsSystem
         Acceleration();
 
         _rb.velocity = _impulseVector + _constantVector + _accelerationVector;
+    }
+
+    public void RemoveAllPhysics()
+    {
+        _impulseName = new List<string>();
+        _impulseDir = new List<Vector3>();
+        _impulseForce = new List<float>();
+        _impulseSpeed = new List<float>();
+        _impulseVector = Vector3.zero;
+
+        _constantName = new List<string>();
+        _constantDir = new List<Vector3>();
+        _constantForce = new List<float>();
+        _constantDuration = new List<float>();
+        _constantVector = Vector3.zero;
+
+        _accelerationName = new List<string>();
+        _accelerationDir = new List<Vector3>();
+        _accelerationForce = new List<float>();
+        _accelerationDuration = new List<float>();
+        _accelerationSpeed = new List<float>();
+        _accelerationVector = Vector3.zero;
     }
 
     #region Impulse Functions
