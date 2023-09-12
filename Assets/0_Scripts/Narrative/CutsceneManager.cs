@@ -25,7 +25,13 @@ public class CutsceneManager : GenericObject
 
     public override void OnStart()
     {
-        if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0 && playFirstCutscene)
+        /*if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0 && playFirstCutscene)
+        {
+            director.playableAsset = allTimelines[0];
+            director.Play();
+        }*/
+        
+        if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0 && PlayerPrefs.GetInt("SkipIntro") == 0)
         {
             director.playableAsset = allTimelines[0];
             director.Play();
