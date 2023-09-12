@@ -15,6 +15,8 @@ public class DoorPanel : GenericObject, IAssistInteract
     [Space(20)] 
     [SerializeField] private List<AudioSource> audioSources;
     private List<int> audioIDs = new List<int>();
+    [Space(20)] 
+    [SerializeField] private FastVent myVent;
 
     [Header("TEMP")] 
     [SerializeField] private ScreenControllerShader _screenControllerShader;
@@ -51,6 +53,10 @@ public class DoorPanel : GenericObject, IAssistInteract
         _door.SetBool("open", true);
         SoundManager.instance.PlaySoundByInt(audioIDs[0]);
         _screenControllerShader.ChangeSettings(0, 1, 1);
+        if (myVent != null)
+        {
+            myVent.EnableVent();
+        }
         _isClose = false;
     }
 

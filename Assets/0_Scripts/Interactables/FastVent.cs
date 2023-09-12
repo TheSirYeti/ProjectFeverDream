@@ -6,6 +6,7 @@ using System.Linq;
 
 public class FastVent : GenericObject
 {
+    private bool isEnabled = false;
     [SerializeField] private Transform[] _enterPoint;
     [SerializeField] private Transform[] _wayPoints;
 
@@ -32,7 +33,8 @@ public class FastVent : GenericObject
 
     public override void OnUpdate()
     {
-        ActualUpdate();
+        if(isEnabled)
+            ActualUpdate();
     }
 
     private void CheckForPlayer()
@@ -90,6 +92,11 @@ public class FastVent : GenericObject
     {
         yield return new WaitForSeconds(_cdPerUse);
         ActualUpdate = CheckForPlayer;
+    }
+
+    public void EnableVent()
+    {
+        isEnabled = true;
     }
 
     private void OnDrawGizmos()

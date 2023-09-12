@@ -117,6 +117,7 @@ public class GameManager : MonoBehaviour
 
     public void ReloadScene()
     {
+        Debug.Log("Huh?");
         InGameSceneManager.instace.SetNextScene(_actualScene);
         StartCoroutine(SceneLoader(true));
     }

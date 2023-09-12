@@ -168,8 +168,8 @@ public class Model : GenericObject, IPlayerLife
             _rb.velocity = Vector3.zero;
             _physics.RemoveAllPhysics();
         }
-
-        if ((bool)parameters[1])
+    
+        if (parameters.Length > 1 && (bool)parameters[1])
         {
             _cameraController.StartTranslate(1);
             Crouch(1);
