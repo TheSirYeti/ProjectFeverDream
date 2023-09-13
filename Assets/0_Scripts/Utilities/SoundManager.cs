@@ -537,8 +537,16 @@ public enum SoundID
     ASSISTANT_EAT_09,
     PROJECTOR,
     HEAVY_DOOR,
-    DRAW_SWORD
-
+    DRAW_SWORD,
+    PUNCHING,
+    ANNOUNCEMENT,
+    ELEVATOR_DING,
+    ELEVATOR_CLOSE,
+    ELEVATOR_OPEN,
+    FALL_IMPACT,
+    VENT_HIT_1,
+    VENT_HIT_2,
+    VENT_HIT_3,
 }
 
 public enum MusicID

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public class FastVent : GenericObject
 {
@@ -77,6 +78,11 @@ public class FastVent : GenericObject
         if (dir.magnitude < 0.3f)
         {
             _actualWayPoint += _actualDir;
+            if (SoundManager.instance != null)
+            {
+                int randSfx = Random.Range(1, 4);
+                SoundManager.instance.PlaySoundByID("VENT_HIT_" + randSfx);
+            }
 
             if (_actualWayPoint < 0 || _actualWayPoint >= _wayPoints.Length)
             {
