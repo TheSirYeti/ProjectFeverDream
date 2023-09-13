@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class CutsceneToggler : GenericObject
 {
     public GameObject cameraGO, cutscenePlayerCam, georgeDummy, cutsceneEndPos;
+    private Transform originalPlayerCamTransform;
     [CanBeNull] public List<Transform> playerAnimPos;
     private bool isInCutscene = false;
     private GameObject player;
@@ -19,6 +20,7 @@ public class CutsceneToggler : GenericObject
 
     public override void OnStart()
     {
+        originalPlayerCamTransform = cutscenePlayerCam.transform;
         player = GameManager.Instance.Player.gameObject;
         EventManager.Subscribe("OnResetTriggerLevel", StopCutsceneEvent);
     }
@@ -70,14 +72,14 @@ public class CutsceneToggler : GenericObject
     {
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
-        
-        
+
         GameManager.Instance.Assistant.transform.position = playerCorner.transform.position;
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
 
         georgeDummy.SetActive(true);
         cutscenePlayerCam.gameObject.SetActive(true);
         cutscenePlayerCam.transform.position = playerAnimPos[posID].position;
+        cutscenePlayerCam.transform.rotation = playerAnimPos[posID].rotation;
 
         isInCutscene = true;
     }
@@ -94,6 +96,7 @@ public class CutsceneToggler : GenericObject
         EventManager.Trigger("ChangeMovementState", true);
 
         georgeDummy.SetActive(false);
+        cutscenePlayerCam.transform.rotation = originalPlayerCamTransform.rotation;
         cutscenePlayerCam.gameObject.SetActive(false);
 
         GameManager.Instance.GetCamera().gameObject.SetActive(true);
@@ -112,6 +115,7 @@ public class CutsceneToggler : GenericObject
         //georgeDummy.SetActive(true);
         cutscenePlayerCam.gameObject.SetActive(true);
         cutscenePlayerCam.transform.position = playerAnimPos[posID].position;
+        cutscenePlayerCam.transform.rotation = playerAnimPos[posID].rotation;
 
         isInCutscene = true;
     }
@@ -128,6 +132,7 @@ public class CutsceneToggler : GenericObject
         EventManager.Trigger("ChangeMovementState", true);
 
         //georgeDummy.SetActive(false);
+        cutscenePlayerCam.transform.rotation = originalPlayerCamTransform.rotation;
         cutscenePlayerCam.gameObject.SetActive(false);
 
         GameManager.Instance.GetCamera().gameObject.SetActive(true);
