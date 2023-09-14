@@ -73,7 +73,7 @@ public class TempEnemyForPF : MonoBehaviour
 
     void GetNewPath()
     {
-        _actualPath = MPathfinding._instance.GetPath(transform.position, objective.position);
+        _actualPath = MPathfinding.instance.GetPath(transform.position, objective.position);
         _actualNode = _actualPath.GetNextNode();
     }
 

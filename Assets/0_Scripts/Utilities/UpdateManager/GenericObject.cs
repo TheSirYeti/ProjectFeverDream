@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GenericObject : MonoBehaviour, IOnInit, IOnUpdate
+public abstract class GenericObject : MonoBehaviour, IOnInit, IOnUpdate, IWeighted
 {
     //Priority for update
     public int priority = 0;
@@ -24,4 +24,6 @@ public abstract class GenericObject : MonoBehaviour, IOnInit, IOnUpdate
     public virtual void OnLateUpdate(){}
 
     #endregion
+
+    public float Weight => priority;
 }

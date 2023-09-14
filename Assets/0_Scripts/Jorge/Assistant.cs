@@ -242,7 +242,7 @@ public class Assistant : GenericObject
         pathFinding.OnEnter += x =>
         {
             _actualState = JorgeStates.PATHFINDING;
-            nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
+            nodeList = MPathfinding.instance.GetPath(transform.position, _previousObjective.position);
             _actualObjective = nodeList.GetNextNode().transform;
         };
 
@@ -276,7 +276,7 @@ public class Assistant : GenericObject
                     }
                     else
                     {
-                        nodeList = MPathfinding._instance.GetPath(transform.position, _previousObjective.position);
+                        nodeList = MPathfinding.instance.GetPath(transform.position, _previousObjective.position);
                         _actualObjective = nodeList.GetNextNode().transform;
                     }
                 }

@@ -256,7 +256,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
             }
             else
             {
-                nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
+                nodeList = MPathfinding.instance.GetPath(transform.position, target.transform.position);
                 _actualObjective = nodeList.GetNextNode().transform;
             }
         }
@@ -305,7 +305,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
             
             Debug.Log(furthestNode + " - Node to go to");
             
-            nodeList = MPathfinding._instance.GetPath(transform.position, 
+            nodeList = MPathfinding.instance.GetPath(transform.position, 
                 nodeCollisions[furthestNode].transform.position);
             
             Debug.Log(furthestNode + " - Node to go to - " + nodeList.PathCount() + " - noed count");
@@ -314,7 +314,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
         }
         else
         {
-            nodeList = MPathfinding._instance.GetPath(transform.position, target.transform.position);
+            nodeList = MPathfinding.instance.GetPath(transform.position, target.transform.position);
             if(nodeList != null && nodeList.CheckNextNode() != null)
                 _actualObjective = nodeList.GetNextNode().transform;
         }
