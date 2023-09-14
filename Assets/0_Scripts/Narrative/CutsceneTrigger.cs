@@ -23,7 +23,7 @@ public class CutsceneTrigger : GenericObject
         {
             hasTriggered = true;
             //SoundManager.instance.StopAllSounds();
-            //SoundManager.instance.StopAllMusic();
+            SoundManager.instance.StopAllMusic();
             SoundManager.instance.StopAllVoiceLines();
             CutsceneManager.instance.PlayTimeline(timelineID);
         }

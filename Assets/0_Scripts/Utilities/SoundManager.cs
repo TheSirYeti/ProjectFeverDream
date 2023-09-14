@@ -555,7 +555,9 @@ public enum MusicID
     INTRO_JINGLE,
     MAINMENU,
     BATTLE_MUSIC,
-    OUTRO_LOGO
+    OUTRO_LOGO,
+    ELEVATOR,
+    PREFIGHT,
 }
 
 public enum VoiceLineID
