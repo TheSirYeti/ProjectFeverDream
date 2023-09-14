@@ -244,7 +244,7 @@ public class RangedEnemy : Enemy
                 return;
             }
            
-            if (!InSight(transform.position, target.transform.position, Vector3.down * .5f))
+            if (!InSight(transform.position, target.transform.position))
             {
                 SendInputToFSM(RangedEnemyStates.PATHFIND);
                 return;
@@ -292,7 +292,7 @@ public class RangedEnemy : Enemy
                 return;
             }
 
-            if (InSight(transform.position, target.transform.position, Vector3.down * .5f))
+            if (InSight(transform.position, target.transform.position))
             {
                 SendInputToFSM(RangedEnemyStates.CHASE);
                 return;

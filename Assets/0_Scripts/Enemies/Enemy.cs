@@ -283,7 +283,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
             }
         }
         
-        if (InSight(transform.position, target.transform.position, Vector3.down * .5f))
+        if (InSight(transform.position, target.transform.position))
         {
             //Debug.Log("In sight?");
             isPathfinding = false;
@@ -345,15 +345,13 @@ public abstract class Enemy : GenericObject, ITakeDamage
     }
     protected bool InSight(Vector3 start, Vector3 end)
     {
-        Vector3 dir = end - start;
-        if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_ENEMYSIGHT)) return true;
-        else return false;
+        return MPathfinding.OnSight(start, end);
     }
 
     protected bool InSight(Vector3 start, Vector3 end, Vector3 offset)
     {
-        var fromPoint = transform.position + offset;
-        var toPoint = target.transform.position;
+        var fromPoint = start + offset;
+        var toPoint = end;
         toPoint.y = fromPoint.y;
 
         return MPathfinding.OnSight(fromPoint, toPoint);

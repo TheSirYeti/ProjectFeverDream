@@ -211,7 +211,7 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
-            if (!InSight(transform.position, target.transform.position, Vector3.down * 0.5f))
+            if (!InSight(transform.position, target.transform.position))
             {
                 SendInputToFSM(MeleeEnemyStates.PATHFIND);
                 return;
@@ -245,7 +245,7 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
-            if (InSight(transform.position, target.transform.position, Vector3.down * 0.5f))
+            if (InSight(transform.position, target.transform.position))
             {
                 SendInputToFSM(MeleeEnemyStates.CHASING);
                 return;
@@ -372,7 +372,7 @@ public class BaseMeleeEnemy : Enemy
             return;
         }
         
-        if (!InSight(transform.position, target.transform.position, Vector3.down * 0.5f))
+        if (!InSight(transform.position, target.transform.position))
         {
             if (isPathfinding)
             {
