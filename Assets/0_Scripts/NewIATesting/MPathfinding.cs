@@ -19,19 +19,53 @@ public class MPathfinding : GenericObject
 
     private Action ClearNodes = delegate {  };
 
+    private readonly Queue<Tuple<Vector3, Vector3, Action<Path>, Action>> _requestQueue = new ();
+
     private void Awake()
     {
         instance = this;
+        StartCoroutine(LazyPathFinding());
     }
 
-    public Path GetPath(Vector3 origen, Vector3 target)
+    private IEnumerator LazyPathFinding()
+    {
+        while (true)
+        {
+            if (!_requestQueue.Any())
+            {
+                yield return null;
+                continue;
+            }
+
+            var actualRequest = _requestQueue.Dequeue();
+
+            GetPath(actualRequest.Item1, actualRequest.Item2);
+
+            if (_actualPath != null && _actualPath.PathCount() > 0) actualRequest.Item3(_actualPath);
+            else actualRequest.Item4();
+
+            yield return null;
+        }
+    }
+
+    public void RequestPath(Vector3 origen, Vector3 target, Action<Path> successCallBack, Action failCallBack)
+    {
+        _requestQueue.Enqueue(Tuple.Create(origen, target, successCallBack, failCallBack));
+    }
+
+    private void GetPath(Vector3 origen, Vector3 target)
     {
         _actualPath = new Path();
         _closeNodes = new HashSet<MNode>();
         _openNodes = new PriorityQueue<MNode>();
 
         _origenNode = GetClosestNode(origen);
+
+        if (_origenNode == null) return;
+        
         _targetNode = GetClosestNode(target);
+
+        if (_targetNode == null) return;
 
         _actualNode = _origenNode;
 
@@ -39,8 +73,6 @@ public class MPathfinding : GenericObject
         
         ClearNodes();
         ClearNodes = delegate {  };
-        
-        return _actualPath;
     }
 
     private void AStar()
@@ -70,6 +102,17 @@ public class MPathfinding : GenericObject
 
                 
                 node.previousNode = _actualNode;
+
+                if (_actualNode == null)
+                {
+                    Debug.Log("a");
+                }
+
+                if (node == null)
+                {
+                    Debug.Log("b");
+                }
+                
                 node.SetWeight(_actualNode.Weight + 1 +
                                Vector3.Distance(node.transform.position, _targetNode.transform.position));
 
@@ -97,7 +140,13 @@ public class MPathfinding : GenericObject
         stack.Push(_actualNode);
         var previousNode = _actualNode.previousNode;
 
-        if (previousNode == null) Debug.Log("no existe");
+        if (previousNode == null)
+        {
+            Debug.Log("no existe");
+            _actualPath = null;
+            return;
+        }
+        
         var watchdog = 10000;
         while (_actualNode != _origenNode && watchdog > 0)
         {
@@ -132,7 +181,7 @@ public class MPathfinding : GenericObject
         var closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
             .Where(x => OnSight(t, x.transform.position)).ToArray();
 
-        var watchdog = 10000;
+        var watchdog = 100;
         while (closestNodes.Length <= 0)
         {
             watchdog--;
@@ -170,6 +219,12 @@ public class MPathfinding : GenericObject
         var dir = to - from;
         var ray = new Ray(from, dir);
 
-        return !Physics.Raycast(ray, dir.magnitude, LayerManager.LM_ENEMYSIGHT);
+        if (Physics.Raycast(from, dir, out var hit, dir.magnitude,  LayerManager.LM_ENEMYSIGHT))
+        {
+            Debug.Log(hit.collider.name);
+            return false;
+        }
+        
+        return true;
     }
 }

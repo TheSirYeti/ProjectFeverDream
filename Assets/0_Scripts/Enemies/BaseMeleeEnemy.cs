@@ -81,6 +81,8 @@ public class BaseMeleeEnemy : Enemy
         EventManager.Subscribe("OnResetTriggerLevel", OnResetScene);
         
         DoFsmSetup();
+
+        _exitPF = () => { SendInputToFSM(MeleeEnemyStates.IDLE); };
     }
 
     #region FSM SETUP
@@ -209,7 +211,7 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
-            if (!InSight(transform.position, target.transform.position))
+            if (!InSight(transform.position, target.transform.position, Vector3.down * 0.5f))
             {
                 SendInputToFSM(MeleeEnemyStates.PATHFIND);
                 return;
@@ -243,11 +245,13 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
-            if (InSight(transform.position, target.transform.position))
+            if (InSight(transform.position, target.transform.position, Vector3.down * 0.5f))
             {
                 SendInputToFSM(MeleeEnemyStates.CHASING);
                 return;
             }
+
+            if (_waitingPF) return;
             
             SetSpeedValue(Time.deltaTime);
             DoPathfinding();
@@ -368,7 +372,7 @@ public class BaseMeleeEnemy : Enemy
             return;
         }
         
-        if (!InSight(transform.position, target.transform.position))
+        if (!InSight(transform.position, target.transform.position, Vector3.down * 0.5f))
         {
             if (isPathfinding)
             {

@@ -35,7 +35,10 @@ public abstract class Enemy : GenericObject, ITakeDamage
     [Header("-== Pathfinding Properties ==-")] 
     //[SerializeField] protected List<Node> nodePath;
     protected Path nodeList;
-    protected int currentNode = 0;
+    protected bool _waitingPF = false;
+    private Action<Path> _successPFRequest = delegate(Path path) {  };
+    private Action _failPFRequest = delegate {  };
+    protected Action _exitPF = delegate {  };
     Vector3 _actualDir;
     [SerializeField] private float minDistanceToNode;
     [SerializeField] protected bool isPathfinding;
@@ -103,8 +106,22 @@ public abstract class Enemy : GenericObject, ITakeDamage
         UpdateManager.instance.AddObject(this);
         UpdateManager.instance.AddComponents(new PausableObject(){anim = animator, rb = rb});
         EventManager.Subscribe("ChangeMovementState", ChangeCinematicMode);
+
+        _successPFRequest = path =>
+        {
+            nodeList = path;
+            _waitingPF = false;
+            _actualObjective = nodeList.GetNextNode().transform;
+        };
+
+        _failPFRequest = () => 
+        { 
+            isPathfinding = false;
+            _waitingPF = false;
+            _exitPF();
+        };
     }
-    
+
     private void ChangeCinematicMode(params object[] parameters)
     {
         _canMove = (bool)parameters[0];
@@ -256,12 +273,17 @@ public abstract class Enemy : GenericObject, ITakeDamage
             }
             else
             {
-                nodeList = MPathfinding.instance.GetPath(transform.position, target.transform.position);
-                _actualObjective = nodeList.GetNextNode().transform;
+                _waitingPF = true;
+                
+                var fromPoint = transform.position - Vector3.down;
+                var toPoint = target.transform.position;
+                toPoint.y = fromPoint.y;
+                
+                MPathfinding.instance.RequestPath(fromPoint, toPoint,  _successPFRequest, _failPFRequest);
             }
         }
         
-        if (InSight(transform.position, target.transform.position))
+        if (InSight(transform.position, target.transform.position, Vector3.down * .5f))
         {
             //Debug.Log("In sight?");
             isPathfinding = false;
@@ -304,19 +326,20 @@ public abstract class Enemy : GenericObject, ITakeDamage
             
             
             Debug.Log(furthestNode + " - Node to go to");
+
+            _waitingPF = true;
             
-            nodeList = MPathfinding.instance.GetPath(transform.position, 
-                nodeCollisions[furthestNode].transform.position);
+            MPathfinding.instance.RequestPath(transform.position, 
+                nodeCollisions[furthestNode].transform.position, _successPFRequest, _failPFRequest);
             
-            Debug.Log(furthestNode + " - Node to go to - " + nodeList.PathCount() + " - noed count");
-            
-            _actualObjective = nodeList.GetNextNode().transform;
         }
         else
-        {
-            nodeList = MPathfinding.instance.GetPath(transform.position, target.transform.position);
-            if(nodeList != null && nodeList.CheckNextNode() != null)
-                _actualObjective = nodeList.GetNextNode().transform;
+        {               
+            var fromPoint = transform.position - Vector3.down;
+            var toPoint = target.transform.position;
+            toPoint.y = fromPoint.y;
+            _waitingPF = true;
+            MPathfinding.instance.RequestPath(fromPoint, toPoint, _successPFRequest, _failPFRequest);
         }
         Debug.Log("LLEGO A TERMINAR DE CALCULAR EL PF");
     }
@@ -325,6 +348,15 @@ public abstract class Enemy : GenericObject, ITakeDamage
         Vector3 dir = end - start;
         if (!Physics.Raycast(start, dir, dir.magnitude, LayerManager.LM_ENEMYSIGHT)) return true;
         else return false;
+    }
+
+    protected bool InSight(Vector3 start, Vector3 end, Vector3 offset)
+    {
+        var fromPoint = transform.position + offset;
+        var toPoint = target.transform.position;
+        toPoint.y = fromPoint.y;
+
+        return MPathfinding.OnSight(fromPoint, toPoint);
     }
 
     #endregion
