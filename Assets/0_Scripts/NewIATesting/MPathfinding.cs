@@ -48,7 +48,7 @@ public class MPathfinding : GenericObject
             _doingPath = true;
             _getPathCoroutine = StartCoroutine(GetPath(actualRequest.Item1, actualRequest.Item2));
 
-            yield return new WaitUntil(() => _doingPath = false);
+            yield return new WaitUntil(() => _doingPath == false);
 
             if (_actualPath != null && _actualPath.PathCount() > 0) actualRequest.Item3(_actualPath);
             else actualRequest.Item4();
@@ -89,7 +89,7 @@ public class MPathfinding : GenericObject
         _doingAStart = true;
         _aStartCoroutine = StartCoroutine(AStar());
 
-        yield return new WaitUntil(() => _doingAStart = false);
+        yield return new WaitUntil(() => _doingAStart ==  false);
 
         ClearNodes();
         ClearNodes = delegate { };
@@ -248,8 +248,7 @@ public class MPathfinding : GenericObject
     public static bool OnSight(Vector3 from, Vector3 to)
     {
         var dir = to - from;
-        var ray = new Ray(from, dir);
 
-        return !Physics.Raycast(from, dir, out var hit, dir.magnitude, LayerManager.LM_ENEMYSIGHT);
+        return !Physics.Raycast(from, dir, dir.magnitude, LayerManager.LM_ENEMYSIGHT);
     }
 }
