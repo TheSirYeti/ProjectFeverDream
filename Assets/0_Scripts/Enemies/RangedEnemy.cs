@@ -268,12 +268,6 @@ public class RangedEnemy : Enemy
         {
             CalculatePathPreview(false);
             
-            if (nodeList.PathCount() <= 0)
-            {
-                SendInputToFSM(RangedEnemyStates.CHASE);
-                return;
-            }
-            
             isPathfinding = true;
         };
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -13,13 +14,18 @@ public class MPathfinding : GenericObject
     private MNode _targetNode;
     private MNode _actualNode;
     public float searchingRange;
-    
+
     private HashSet<MNode> _closeNodes = new HashSet<MNode>();
     private PriorityQueue<MNode> _openNodes = new PriorityQueue<MNode>();
 
-    private Action ClearNodes = delegate {  };
+    private Action ClearNodes = delegate { };
 
-    private readonly Queue<Tuple<Vector3, Vector3, Action<Path>, Action>> _requestQueue = new ();
+    private Coroutine _getPathCoroutine;
+    private bool _doingPath = false;
+    private Coroutine _aStartCoroutine;
+    private bool _doingAStart = false;
+
+    private readonly Queue<Tuple<Vector3, Vector3, Action<Path>, Action>> _requestQueue = new();
 
     private void Awake()
     {
@@ -39,7 +45,10 @@ public class MPathfinding : GenericObject
 
             var actualRequest = _requestQueue.Dequeue();
 
-            GetPath(actualRequest.Item1, actualRequest.Item2);
+            _doingPath = true;
+            _getPathCoroutine = StartCoroutine(GetPath(actualRequest.Item1, actualRequest.Item2));
+
+            yield return new WaitUntil(() => _doingPath = false);
 
             if (_actualPath != null && _actualPath.PathCount() > 0) actualRequest.Item3(_actualPath);
             else actualRequest.Item4();
@@ -53,7 +62,7 @@ public class MPathfinding : GenericObject
         _requestQueue.Enqueue(Tuple.Create(origen, target, successCallBack, failCallBack));
     }
 
-    private void GetPath(Vector3 origen, Vector3 target)
+    private IEnumerator GetPath(Vector3 origen, Vector3 target)
     {
         _actualPath = new Path();
         _closeNodes = new HashSet<MNode>();
@@ -61,32 +70,47 @@ public class MPathfinding : GenericObject
 
         _origenNode = GetClosestNode(origen);
 
-        if (_origenNode == null) return;
-        
+        if (_origenNode == null)
+        {
+            _doingPath = false;
+            yield break;
+        }
+
         _targetNode = GetClosestNode(target);
 
-        if (_targetNode == null) return;
+        if (_targetNode == null)
+        {
+            _doingPath = false;
+            yield break;
+        }
 
         _actualNode = _origenNode;
 
-        AStar();
-        
+        _doingAStart = true;
+        _aStartCoroutine = StartCoroutine(AStar());
+
+        yield return new WaitUntil(() => _doingAStart = false);
+
         ClearNodes();
-        ClearNodes = delegate {  };
+        ClearNodes = delegate { };
+        _doingPath = false;
     }
 
-    private void AStar()
+    private IEnumerator AStar()
     {
         if (_actualNode == null)
         {
             Debug.Log("ACA DEBERIA CRASHEAR!");
-            return;
+            _doingAStart = false;
+            yield break;
         }
 
         _closeNodes.Add(_actualNode);
-        _actualNode.nodeColor = Color.green;
 
         var watchdog = 10000;
+
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
 
         while (_actualNode != _targetNode && watchdog > 0)
         {
@@ -96,23 +120,24 @@ public class MPathfinding : GenericObject
             {
                 var node = _actualNode.GetNeighbor(i);
                 node.nodeColor = Color.magenta;
-                if (_closeNodes.Contains(node) || 
+                if (_closeNodes.Contains(node) ||
                     !OnSight(_actualNode.transform.position, node.transform.position) ||
                     (node.previousNode != null && node.previousNode.Weight < _actualNode.Weight)) continue;
 
-                
-                node.previousNode = _actualNode;
-
                 if (_actualNode == null)
                 {
-                    Debug.Log("a");
+                    _doingAStart = false;
+                    yield break;
                 }
 
                 if (node == null)
                 {
-                    Debug.Log("b");
+                    _doingAStart = false;
+                    yield break;
                 }
-                
+
+                node.previousNode = _actualNode;
+
                 node.SetWeight(_actualNode.Weight + 1 +
                                Vector3.Distance(node.transform.position, _targetNode.transform.position));
 
@@ -128,9 +153,15 @@ public class MPathfinding : GenericObject
             else break;
 
             _closeNodes.Add(_actualNode);
+
+            if (stopWatch.ElapsedMilliseconds <= 1) continue;
+            
+            yield return null;
+            stopWatch.Restart();
         }
 
         ThetaStar();
+        _doingAStart = false;
     }
 
     private void ThetaStar()
@@ -146,7 +177,7 @@ public class MPathfinding : GenericObject
             _actualPath = null;
             return;
         }
-        
+
         var watchdog = 10000;
         while (_actualNode != _origenNode && watchdog > 0)
         {
@@ -219,12 +250,6 @@ public class MPathfinding : GenericObject
         var dir = to - from;
         var ray = new Ray(from, dir);
 
-        if (Physics.Raycast(from, dir, out var hit, dir.magnitude,  LayerManager.LM_ENEMYSIGHT))
-        {
-            Debug.Log(hit.collider.name);
-            return false;
-        }
-        
-        return true;
+        return !Physics.Raycast(from, dir, out var hit, dir.magnitude, LayerManager.LM_ENEMYSIGHT);
     }
 }

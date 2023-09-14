@@ -275,18 +275,24 @@ public class Assistant : GenericObject
         {
             if (_waitingPF) return;
 
-            _dir = (_actualObjective.position) - transform.position;
-
             if (MPathfinding.OnSight(transform.position, _previousObjective.position))
             {
                 SendInputToFSM(_previousState);
                 return;
             }
-
-            Quaternion targetRotation = Quaternion.LookRotation(_dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-
-            _actualDir = _dir.normalized * _interactSpeed;
+            
+            _dir = Vector3.zero;
+            _dir = _actualObjective.position - transform.position;
+            
+            if (Vector3.Angle(_dir, transform.forward) > 0)
+            {
+                var targetRotation = Quaternion.LookRotation(_dir);
+                transform.rotation =
+                    Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            }
+            
+            _dir.Normalize();
+            _dir *= _interactSpeed;
 
             if (Vector3.Distance(transform.position, _actualObjective.position) < _nodeDistance)
             {
@@ -429,10 +435,15 @@ public class Assistant : GenericObject
 
         pickup.OnUpdate += () =>
         {
+            _dir = Vector3.zero;
             _dir = _actualObjective.position - transform.position;
-
-            Quaternion targetRotation = Quaternion.LookRotation(_dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            
+            if (Vector3.Angle(_dir, transform.forward) > 0)
+            {
+                var targetRotation = Quaternion.LookRotation(_dir);
+                transform.rotation =
+                    Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            }
 
             if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, LayerManager.LM_ENEMYSIGHT))
             {
@@ -473,7 +484,8 @@ public class Assistant : GenericObject
                 }
             }
 
-            _actualDir = _dir * _interactSpeed;
+            _dir.Normalize();
+            _dir *= _interactSpeed;
         };
 
         pickup.OnExit += x =>
@@ -494,10 +506,15 @@ public class Assistant : GenericObject
 
         useit.OnUpdate += () =>
         {
+            _dir = Vector3.zero;
             _dir = _actualObjective.position - transform.position;
-
-            Quaternion targetRotation = Quaternion.LookRotation(_dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            
+            if (Vector3.Angle(_dir, transform.forward) > 0)
+            {
+                var targetRotation = Quaternion.LookRotation(_dir);
+                transform.rotation =
+                    Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            }
 
             if (Physics.Raycast(transform.position, _dir, _dir.magnitude * 0.9f, LayerManager.LM_ENEMYSIGHT))
             {
@@ -524,7 +541,8 @@ public class Assistant : GenericObject
                 SendInputToFSM(JorgeStates.FOLLOW);
             }
 
-            _actualDir = _dir.normalized * _interactSpeed;
+            _dir.Normalize();
+            _dir *= _interactSpeed;
         };
 
         useit.OnExit += x =>
@@ -567,17 +585,23 @@ public class Assistant : GenericObject
 
             if (Vector3.Distance(transform.position, _actualObjective.position) < 0.2f)
             {
-                _actualDir = Vector3.zero;
                 _dir = _player.position - transform.position;
             }
-            else
+            
+            if (Vector3.Angle(_dir, transform.forward) > 0)
             {
-                _actualDir = _dir * _followSpeed;
+                var targetRotation = Quaternion.LookRotation(_dir);
+                transform.rotation =
+                    Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
             }
 
-            Quaternion targetRotation = Quaternion.LookRotation(_dir);
-            transform.rotation =
-                Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, _actualObjective.position) < 0.2f) _dir = Vector3.zero;
+            else
+            {
+                _dir.Normalize();
+                _dir *= _followSpeed;
+            }
         };
 
         hide.OnExit += x =>
