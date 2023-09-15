@@ -18,6 +18,11 @@ public class View : GenericObject
 
     [SerializeField] private ParticleSystem _bagguetHit;
     
+    [SerializeField] private PostProccesingAbstract _borderCinematicPP;
+    [SerializeField] private PostProccesingAbstract _damageScreenPP;
+    [SerializeField] private PostProccesingAbstract _LowHPPP;
+    [SerializeField] private PostProccesingAbstract _SpeedEffectPP;
+    
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
@@ -32,6 +37,7 @@ public class View : GenericObject
         EventManager.Subscribe("VFX_BaggueteHit", BagguetsHitEffect);
         EventManager.Subscribe("VFX_ToasterON", ToasterVFX_ON);
         EventManager.Subscribe("VFX_ToasterOFF", ToasterVFX_OFF);
+        EventManager.Subscribe("OnPPCalled", SetPPState);
 
         _bagguetHit.transform.parent = null;
         _animator = GetComponent<Animator>();
@@ -41,6 +47,25 @@ public class View : GenericObject
     {
         _model = (Model)parameters[0];
         _weaponManager = (WeaponManager)parameters[1];
+    }
+    
+    public void SetPPState(object[] parameters)
+    {
+        switch ((PPNames)parameters[0])
+        {
+            case PPNames.BORDERCINEMATIC:
+                _borderCinematicPP.EffectEnabled((bool)parameters[1]);
+                break;
+            case PPNames.DAMAGESCREEN:
+                _damageScreenPP.EffectEnabled((bool)parameters[1]);
+                break;
+            case PPNames.LOWHP:
+                _LowHPPP.EffectEnabled((bool)parameters[1]);
+                break;
+            case PPNames.SPEEDEFFECT:
+                _SpeedEffectPP.EffectEnabled((bool)parameters[1]);
+                break;
+        }
     }
 
     #region Animator
@@ -181,4 +206,12 @@ public class View : GenericObject
     }
 
     #endregion
+}
+
+public enum PPNames
+{
+    BORDERCINEMATIC,
+    DAMAGESCREEN,
+    LOWHP,
+    SPEEDEFFECT
 }

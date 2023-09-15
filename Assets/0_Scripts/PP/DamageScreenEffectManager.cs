@@ -26,11 +26,7 @@ public class DamageScreenEffectManager : PostProccesingAbstract
         _postProcessVolume.profile.TryGetSettings(out _damageScreenEffect);
     }
 
-    public void Update()
-    {
-        EffectEnabled(_enabled);
-        GeneralSettings();
-    }
+
     protected override void GeneralSettings()
     {
         if (_enabled)
@@ -44,11 +40,33 @@ public class DamageScreenEffectManager : PostProccesingAbstract
             _damageScreenEffect._ColorShadow.value = ShadowColor;
         }
     }
-    protected override void EffectEnabled(bool on)
+
+    private Coroutine resetCoroutine;
+    public override void EffectEnabled(bool on)
     {
         if (on)
+        {
+            if (resetCoroutine != null)
+            {
+                StopCoroutine(resetCoroutine);
+            }
+            resetCoroutine = StartCoroutine(ResetFlash());
+
             _damageScreenEffect.active = true;
+            _damageScreenEffect._ControlScreenUP.value = 1;
+            _damageScreenEffect._ControlScreenDown.value = 1;
+            _damageScreenEffect._ControlScreenLeft.value = 1;
+            _damageScreenEffect._ControlScreenRight.value = 1;
+            _damageScreenEffect._ColorEmission.value = Emission;
+            _damageScreenEffect._ColorShadow.value = ShadowColor;
+        }
         else
             _damageScreenEffect.active = false;
+    }
+
+    IEnumerator ResetFlash()
+    {
+        yield return new WaitForSeconds(0.2f);
+        EffectEnabled(false);
     }
 }

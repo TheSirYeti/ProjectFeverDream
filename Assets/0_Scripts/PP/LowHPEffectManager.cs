@@ -19,11 +19,6 @@ public class LowHPEffectManager : PostProccesingAbstract
         _postProcessVolume.profile.TryGetSettings(out _lowHPEffect);
     }
 
-    public void Update()
-    {
-        EffectEnabled(_enabled);
-        GeneralSettings();
-    }
     protected override void GeneralSettings()
     {
         if (_enabled)
@@ -32,10 +27,14 @@ public class LowHPEffectManager : PostProccesingAbstract
             _lowHPEffect._Grayscale.value = _grayScale;
         }
     }
-    protected override void EffectEnabled(bool on)
+    public override void EffectEnabled(bool on)
     {
         if (on)
+        {
             _lowHPEffect.active = true;
+            _lowHPEffect._AmountCorners.value = 1.57f;
+            _lowHPEffect._Grayscale.value = 0.4f;
+        }
         else
             _lowHPEffect.active = false;
     }

@@ -9,5 +9,5 @@ public abstract class PostProccesingAbstract: MonoBehaviour
     [SerializeField] protected PostProcessVolume _postProcessVolume;
     [SerializeField] protected bool _enabled = false;
     protected abstract void GeneralSettings();
-    protected abstract void EffectEnabled(bool on);
+    public abstract void EffectEnabled(bool on);
 }
