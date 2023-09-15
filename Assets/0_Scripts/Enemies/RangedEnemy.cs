@@ -448,6 +448,9 @@ public class RangedEnemy : Enemy
 
         die.OnEnter += x =>
         {
+            if(myWall != null)
+                myWall.AddDeathToll();
+            
             DoWarningFadeOut();
             SoundManager.instance.PlaySound(SoundID.ENEMY_GENERIC_DEATH);
             DoFaceTransition(FaceID.DEAD);

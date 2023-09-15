@@ -22,7 +22,11 @@ public class ResetTrigger : GenericObject
 
         if (other.gameObject.tag == "Robot")
         {
+            if (other.gameObject.GetComponent<Enemy>().myWall != null) 
+                other.gameObject.GetComponent<Enemy>().myWall.AddDeathToll();
+            
             gameObject.SetActive(false);
+            
         }
         
     }

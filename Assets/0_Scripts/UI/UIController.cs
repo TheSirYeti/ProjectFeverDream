@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class UIController : GenericObject
 {
+    [Header("Whole UI")] 
+    [SerializeField] private GameObject allUI;
+    
     [Header("Player UI")]
     [SerializeField] TextMeshProUGUI _healthUI;
     [SerializeField] Image _bulletsBar;
@@ -114,6 +117,12 @@ public class UIController : GenericObject
         EventManager.Subscribe("OnSubtitleOff", DisableSubtitle);
         EventManager.Subscribe("OnAssistantPing", DoPingStart);
         EventManager.Subscribe("OnPlayerTakeDamage", DoRedScreen);
+        EventManager.Subscribe("OnCutsceneEvent", ToggleUIEvent);
+    }
+
+    void ToggleUIEvent(object[] parameters)
+    {
+        allUI.SetActive((bool)parameters[0]);
     }
 
     #endregion

@@ -10,6 +10,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
     [Header("-== Base Properties ==-")]
     [SerializeField] protected float hp;
     [SerializeField] protected int enemySet;
+    public EnemyWallChecker myWall;
     protected float maxHP;
     [Space(20)]
 

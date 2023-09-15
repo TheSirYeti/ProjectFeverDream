@@ -43,6 +43,7 @@ public class CutsceneToggler : GenericObject
     {
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
+        EventManager.Trigger("OnCutsceneEvent", false);
         
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
 
@@ -60,6 +61,7 @@ public class CutsceneToggler : GenericObject
         }
         
         EventManager.Trigger("ChangeMovementState", true);
+        EventManager.Trigger("OnCutsceneEvent", true);
 
         cameraGO.gameObject.SetActive(false);
 
@@ -72,6 +74,7 @@ public class CutsceneToggler : GenericObject
     {
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
+        EventManager.Trigger("OnCutsceneEvent", false);
 
         GameManager.Instance.Assistant.transform.position = playerCorner.transform.position;
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
@@ -94,6 +97,7 @@ public class CutsceneToggler : GenericObject
         }
         
         EventManager.Trigger("ChangeMovementState", true);
+        EventManager.Trigger("OnCutsceneEvent", true);
 
         georgeDummy.SetActive(false);
         cutscenePlayerCam.transform.rotation = originalPlayerCamTransform.rotation;
@@ -108,6 +112,7 @@ public class CutsceneToggler : GenericObject
     {
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
+        EventManager.Trigger("OnCutsceneEvent", false);
         
         //GameManager.Instance.Assistant.transform.position = playerCorner.transform.position;
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
@@ -130,6 +135,7 @@ public class CutsceneToggler : GenericObject
         }
         
         EventManager.Trigger("ChangeMovementState", true);
+        EventManager.Trigger("OnCutsceneEvent", true);
 
         //georgeDummy.SetActive(false);
         cutscenePlayerCam.transform.rotation = originalPlayerCamTransform.rotation;
@@ -148,6 +154,11 @@ public class CutsceneToggler : GenericObject
 
     public void OnLevelOver()
     {
+        EventManager.Trigger("OnCutsceneEvent", true);
+        player.transform.position = cutsceneEndPos.transform.position;
+        player.transform.rotation = cutsceneEndPos.transform.rotation;
+        cutscenePlayerCam.transform.position = cutsceneEndPos.transform.position;
+        cutscenePlayerCam.transform.rotation = cutsceneEndPos.transform.rotation;
         GameManager.Instance.NextScene();
     }
     

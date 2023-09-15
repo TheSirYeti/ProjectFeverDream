@@ -371,3 +371,56 @@ Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/Chapter01-1_LMA1_f
 Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/Chapter01-1_LMA2_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/Chapter01-1_LMA2_final.hdr" 1024
 Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/Chapter01-1_LMA4_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/Chapter01-1_LMA4_final.hdr" 1024
 Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/Chapter01-1_LMA3_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/Chapter01-1_LMA3_final.hdr" 1024
+2023-9-13
+Rendering UV GBuffer for MainMenu_Background_LM0 50
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Rendering UV GBuffer for MainMenu_Background_LMA1 50
+RGBA32F...RGBA8...RGBA8_SRGB...RGBA16F...states...
+Rendering faceted UV normal...
+Rendering UV pos...
+Rendering smooth UV pos...
+Done
+Done
+Running ftrace fixpos12 "C:\Users\JP\AppData\Local\Temp\frender" "uvpos_MainMenu_Background_LM0.lz4" 2 0 0 0
+Running ftrace fixpos12 "C:\Users\JP\AppData\Local\Temp\frender" "uvpos_MainMenu_Background_LMA1.lz4" 2 0 1 0
+Running ftrace batchpointlightlegacy "C:\Users\JP\AppData\Local\Temp\frender" "PointBatch_0_0_4" 4 0 0 batchpointlight_0_0_4.bin
+Running ftrace addmul "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0" 4 0 0 comp_0.bin
+Running ftrace batchpointlightlegacy "C:\Users\JP\AppData\Local\Temp\frender" "PointBatch_1_0_4" 4 0 1 batchpointlight_1_0_4.bin
+Running ftrace addmul "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1" 4 0 1 comp_1.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_diffuse" 4 16 0 "gi_MainMenu_Background_LM00.bin" "MainMenu_Background_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_diffuse" 4 16 1 "gi_MainMenu_Background_LMA10.bin" "MainMenu_Background_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_diffuse" 4 16 0 "gi_MainMenu_Background_LM01.bin" "MainMenu_Background_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_diffuse" 4 16 1 "gi_MainMenu_Background_LMA11.bin" "MainMenu_Background_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_diffuse" 4 16 0 "gi_MainMenu_Background_LM02.bin" "MainMenu_Background_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_diffuse" 4 16 1 "gi_MainMenu_Background_LMA12.bin" "MainMenu_Background_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_diffuse" 4 16 0 "gi_MainMenu_Background_LM03.bin" "MainMenu_Background_LM0_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_diffuse" 4 16 1 "gi_MainMenu_Background_LMA13.bin" "MainMenu_Background_LMA1_diffuse0_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LM0_final" 4 16 0 "gi_MainMenu_Background_LM04.bin" "MainMenu_Background_LM0_lights_HDR.lz4" vbTraceTex.bin
+Running ftrace texgi "C:\Users\JP\AppData\Local\Temp\frender" "MainMenu_Background_LMA1_final" 4 16 1 "gi_MainMenu_Background_LMA14.bin" "MainMenu_Background_LMA1_lights_HDR.lz4" vbTraceTex.bin
+Running denoiserOIDN c "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LM0_final_HDR.lz4" "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LM0_final_HDR.lz4" 2048 0
+Running seamfixer "C:\Users\JP\AppData\Local\Temp\frender" "0" "MainMenu_Background_LM0_final_HDR.lz4"
+Running denoiserOIDN c "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA1_final_HDR.lz4" "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA1_final_HDR.lz4" 256 0
+Running seamfixer "C:\Users\JP\AppData\Local\Temp\frender" "1" "MainMenu_Background_LMA1_final_HDR.lz4"
+Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LM0_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/MainMenu_Background_LM0_final.hdr" 1024
+Running halffloat2hdr "C:\Users\JP\AppData\Local\Temp\frender/MainMenu_Background_LMA1_final_HDR.lz4" "C:/Github M2/ProjectFeverDream/Assets/BakeryLightmaps/MainMenu_Background_LMA1_final.hdr" 1024
+C:\build\output\Unity-Technologies\mono\mono\eglib\gpath.c:115: assertion 'filename != NULL' failed
+
+Total cache size 97212040
+Total cache size after purge 97212040
+Total cache size 97212040
+Total cache size after purge 97212040
+C:\build\output\Unity-Technologies\mono\mono\eglib\gpath.c:115: assertion 'filename != NULL' failed
+
+Total cache size 97212040
+Total cache size after purge 97212040
+abort_threads: Failed aborting id: 00000000000010D0, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 00000000000035B8, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 00000000000010D0, mono_thread_manage will ignore it
+
+abort_threads: Failed aborting id: 00000000000035B8, mono_thread_manage will ignore it
+
