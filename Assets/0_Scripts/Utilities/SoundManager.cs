@@ -547,6 +547,8 @@ public enum SoundID
     VENT_HIT_1,
     VENT_HIT_2,
     VENT_HIT_3,
+    SPATULA_THROW,
+    ASSISTANT_HEAL
 }
 
 public enum MusicID

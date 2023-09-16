@@ -36,7 +36,7 @@ public class CutsceneManager : GenericObject
             director.playableAsset = allTimelines[0];
             director.Play();
             
-            //EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, true);
+            EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, true);
         }
     }
 
