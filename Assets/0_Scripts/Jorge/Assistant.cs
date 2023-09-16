@@ -371,7 +371,7 @@ public class Assistant : GenericObject
                         }
 
                         LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
-
+                        GameManager.Instance.Player.Health(15);
                         ExtraUpdate = ChangeBlackHoleVars;
                         //_animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;

@@ -271,7 +271,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
     
     protected bool IsInDistance()
     {
-        return Vector3.Distance(target.transform.position, transform.position) <= minChaseDistance;
+        return Vector3.Distance(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z), transform.position) <= minChaseDistance;
     }
 
     #endregion
