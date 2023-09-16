@@ -183,8 +183,6 @@ public class Model : GenericObject, IPlayerLife
 
     public void Move(float hAxie, float vAxie)
     {
-        Debug.Log("a");
-        
         if (_isOnFloor && (hAxie != 0 || vAxie != 0))
         {
             EventManager.Trigger("CameraBobbing", true);

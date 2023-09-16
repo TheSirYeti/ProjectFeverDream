@@ -51,8 +51,10 @@ public class Toaster : GenericWeapon
     {
         if (_actualMagazineBullets <= 0) return;
 
-        var actualDir = pointOfShoot.forward;
+        var actualDir = Camera.main.transform.forward;
 
+        if (_actualLoading < 0.5f) _actualLoading = 0.5f;
+        
         var actualPellets = (int)(numPellets * _actualLoading);
         var actualDmg = (int)(_weaponSO.dmg * _actualLoading);
         var actualSpreadAngle = 1 - _actualLoading;
@@ -64,17 +66,17 @@ public class Toaster : GenericWeapon
         for (int i = 0; i < actualPellets; i++)
         {
             var randomHorizontalAngle = Random.Range(-spreadAngle / 2f, spreadAngle / 2f);
-            var horizontalRotation = Quaternion.AngleAxis(randomHorizontalAngle * actualSpreadAngle, Vector3.up);
+            var horizontalRotation = Quaternion.AngleAxis(randomHorizontalAngle, Camera.main.transform.up);
 
             var randomVerticalAngle = Random.Range(-verticalAngle / 2f, verticalAngle / 2f);
-            var verticalRotation = Quaternion.AngleAxis(randomVerticalAngle, pointOfShoot.right);
+            var verticalRotation = Quaternion.AngleAxis(randomVerticalAngle, Camera.main.transform.right * -1);
 
             var pelletRotation = verticalRotation * horizontalRotation;
 
             var pelletDirection = pelletRotation * actualDir;
 
             RaycastHit hit;
-            if (Physics.Raycast(pointOfShoot.position, pelletDirection, out hit, _maxShootDistance, LayerManager.LM_WEAPONSTARGETS))
+            if (Physics.Raycast(pointOfShoot.position, pelletDirection, out hit, _maxShootDistance, LayerManager.LM_ENEMY))
             {
                 if (!toasterHits.Contains(hit))
                 {
@@ -99,8 +101,8 @@ public class Toaster : GenericWeapon
             if (damagableObject != null)
             {
                 var distanceMultiplier = 1 - (Vector3.Distance(transform.position, toasterHits[i].point) / _maxShootDistance);                                             
-                damagableObject?.                                                                                                                                          
-                    TakeDamage("Body", actualDmg * ammountPellets[i] * distanceMultiplier, transform.position,                                                             
+                damagableObject.                                                                                                                                          
+                    TakeDamage("Body", actualDmg * ammountPellets[toasterHits.IndexOf(toasterHits[i])] * distanceMultiplier, transform.position,                                                             
                         Vector3.Distance(toasterHits[i].point, transform.position) > 5 ? OnDeathKnockBacks.LIGHTKNOCKBACK : OnDeathKnockBacks.HIGHKNOCKBACK);              
             }
             else
