@@ -1,37 +1,15 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class MNode : MonoBehaviour
+public class MNode : MonoBehaviour, IWeighted
 {
     [SerializeField] private List<MNode> _neighbors = new List<MNode>();
 
-    private float _weigth = 0;
-    public MNode _previouseNode = null;
+    private float _weight = 0;
+    public MNode previousNode = null;
     public Color nodeColor;
-
-    // private void OnEnable()
-    // {
-    //     
-    //     if (Physics.Raycast(transform.position, Vector3.forward, 1, LayerManager.LM_WALL))
-    //     {
-    //         _weigth += 10;
-    //     }
-    //     else if (Physics.Raycast(transform.position, Vector3.back, 1, LayerManager.LM_WALL))
-    //     {
-    //         _weigth += 10;
-    //     }
-    //     else if (Physics.Raycast(transform.position, Vector3.right, 1, LayerManager.LM_WALL))
-    //     {
-    //         _weigth += 10;
-    //     }
-    //     else if (Physics.Raycast(transform.position, Vector3.left, 1, LayerManager.LM_WALL))
-    //     {
-    //         _weigth += 10;
-    //     }
-    // }
 
     public void AddNeighbor(MNode neighbor)
     {
@@ -44,15 +22,13 @@ public class MNode : MonoBehaviour
 
     public void RemoveNeighbor(MNode neighbor)
     {
-        int index = _neighbors.IndexOf(neighbor);
+        var index = _neighbors.IndexOf(neighbor);
         _neighbors.RemoveAt(index);
     }
 
     public bool CheckNeighbor(MNode neighbor)
     {
-        if (_neighbors.Contains(neighbor)) return true;
-
-        return false;
+        return _neighbors.Contains(neighbor);
     }
 
     public void ClearNeighbours()
@@ -62,10 +38,7 @@ public class MNode : MonoBehaviour
 
     public bool HasNeighbours()
     {
-        if (_neighbors.Count > 0)
-            return true;
-
-        return false;
+        return _neighbors.Count > 0;
     }
 
     public MNode GetNeighbor(int index)
@@ -80,26 +53,20 @@ public class MNode : MonoBehaviour
 
     public void SetWeight(float weigth)
     {
-        _weigth = weigth;
-    }
-
-    public float GetWeight()
-    {
-        return _weigth;
+        _weight = weigth;
     }
 
     public void ResetNode()
     {
-        _weigth = 0;
-        _previouseNode = null;
-        nodeColor = Color.blue;
+        _weight = 0;
+        previousNode = null;
     }
 
     public void DestroyNode()
     {
-        for (int i = 0; i < _neighbors.Count; i++)
+        foreach (var t in _neighbors)
         {
-            _neighbors[i].RemoveNeighbor(this);
+            t.RemoveNeighbor(this);
         }
     }
 
@@ -119,7 +86,9 @@ public class MNode : MonoBehaviour
 
 
         Gizmos.color = Color.yellow;
-        if (_previouseNode)
-            Gizmos.DrawLine(transform.position, _previouseNode.transform.position);
+        if (previousNode)
+            Gizmos.DrawLine(transform.position, previousNode.transform.position);
     }
+
+    public float Weight => _weight;
 }

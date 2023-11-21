@@ -81,6 +81,8 @@ public class BaseMeleeEnemy : Enemy
         EventManager.Subscribe("OnResetTriggerLevel", OnResetScene);
         
         DoFsmSetup();
+
+        _exitPF = () => { SendInputToFSM(MeleeEnemyStates.IDLE); };
     }
 
     #region FSM SETUP
@@ -248,6 +250,8 @@ public class BaseMeleeEnemy : Enemy
                 SendInputToFSM(MeleeEnemyStates.CHASING);
                 return;
             }
+
+            if (_waitingPF) return;
             
             SetSpeedValue(Time.deltaTime);
             DoPathfinding();

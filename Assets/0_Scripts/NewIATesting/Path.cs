@@ -5,29 +5,25 @@ using UnityEngine;
 
 public class Path
 {
-    public Queue<MNode> pathQueue = new Queue<MNode>();
+    private readonly Queue<MNode> _pathQueue = new Queue<MNode>();
 
     public void AddNode(MNode node)
     {
-        pathQueue.Enqueue(node);
+        _pathQueue.Enqueue(node);
     }
 
     public MNode GetNextNode()
     {
-        if (pathQueue.Count > 0)
-            return pathQueue.Dequeue();
-        else return null;
+        return _pathQueue.Any() ? _pathQueue.Dequeue() : null;
     }
 
     public MNode CheckNextNode()
     {
-        if (!pathQueue.Any()) return null;
-        
-        return pathQueue.Peek();
+        return _pathQueue.Any() ?  _pathQueue.Peek() : null;
     }
 
     public int PathCount()
     {
-        return pathQueue.Count;
+        return _pathQueue.Count;
     }
 }

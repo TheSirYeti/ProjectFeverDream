@@ -1,188 +1,198 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-//
-// //TODO: Testing, delete later
-// [ExecuteAlways]
 public class MPathfinding : GenericObject
 {
-    [Header("Testing Vars")] public Transform _tempOrigen;
-    public Transform _tempTarget;
-
-    [Header("Real Vars")] public static MPathfinding _instance;
-    private Path actualPath;
+    public static MPathfinding instance;
+    private Path _actualPath;
     private MNode _origenNode;
     private MNode _targetNode;
-    private MNode _actualnode;
+    private MNode _actualNode;
     public float searchingRange;
 
-    public MNode[] nodes;
+    private HashSet<MNode> _closeNodes = new HashSet<MNode>();
+    private PriorityQueue<MNode> _openNodes = new PriorityQueue<MNode>();
 
-    private Queue<MNode> _nodePath = new Queue<MNode>();
+    private Action ClearNodes = delegate { };
 
-    private HashSet<MNode> closeNodes = new HashSet<MNode>();
-    private PriorityQueue<MNode> openNodes = new PriorityQueue<MNode>();
+    private Coroutine _getPathCoroutine;
+    private bool _doingPath = false;
+    private Coroutine _aStartCoroutine;
+    private bool _doingAStart = false;
 
-    public List<MNode> checker = new List<MNode>();
+    private readonly Queue<Tuple<Vector3, Vector3, Action<Path>, Action>> _requestQueue = new();
 
     private void Awake()
     {
-        _instance = this;
+        instance = this;
+        StartCoroutine(LazyPathFinding());
     }
 
-    public void ClearNodes()
+    private IEnumerator LazyPathFinding()
     {
-        Debug.Log("limpiando...");
-        foreach (var node in nodes)
+        while (true)
         {
-            node.ResetNode();
-        }
+            if (!_requestQueue.Any())
+            {
+                yield return null;
+                continue;
+            }
 
-        Debug.Log("termine");
-    }
+            var actualRequest = _requestQueue.Dequeue();
 
-    public void TestFunc()
-    {
-        GetPath(_tempOrigen.position, _tempTarget.position);
-    }
+            _doingPath = true;
+            _getPathCoroutine = StartCoroutine(GetPath(actualRequest.Item1, actualRequest.Item2));
 
-    void TestCleanUp()
-    {
-        foreach (var node in nodes)
-        {
-            node.ResetNode();
-        }
+            yield return new WaitUntil(() => _doingPath == false);
 
-        for (int i = 0; i < checker.Count; i++)
-        {
-            checker[i].nodeColor = Color.green;
-            if (i != 0)
-                checker[i]._previouseNode = checker[i - 1];
+            if (_actualPath != null && _actualPath.PathCount() > 0) actualRequest.Item3(_actualPath);
+            else actualRequest.Item4();
+
+            yield return null;
         }
     }
 
-    public Path GetPath(Vector3 origen, Vector3 target)
+    public void RequestPath(Vector3 origen, Vector3 target, Action<Path> successCallBack, Action failCallBack)
     {
-        checker = new List<MNode>();
+        _requestQueue.Enqueue(Tuple.Create(origen, target, successCallBack, failCallBack));
+    }
 
-        // Stopwatch timer = new Stopwatch();
-        // timer.Start();
-
-        actualPath = new Path();
-        closeNodes = new HashSet<MNode>();
-        openNodes = new PriorityQueue<MNode>();
-        _nodePath = new Queue<MNode>();
+    private IEnumerator GetPath(Vector3 origen, Vector3 target)
+    {
+        _actualPath = new Path();
+        _closeNodes = new HashSet<MNode>();
+        _openNodes = new PriorityQueue<MNode>();
 
         _origenNode = GetClosestNode(origen);
+
+        if (_origenNode == null)
+        {
+            _doingPath = false;
+            yield break;
+        }
+
         _targetNode = GetClosestNode(target);
 
-        _actualnode = _origenNode;
+        if (_targetNode == null)
+        {
+            _doingPath = false;
+            yield break;
+        }
 
-        AStar();
+        _actualNode = _origenNode;
 
-        // timer.Stop();
-        // long ts = timer.ElapsedMilliseconds;
-        // Debug.Log("Termine en: " + ts + " milisegundos");
+        _doingAStart = true;
+        _aStartCoroutine = StartCoroutine(AStar());
 
-        //TestCleanUp();
+        yield return new WaitUntil(() => _doingAStart ==  false);
 
-        return actualPath;
+        ClearNodes();
+        ClearNodes = delegate { };
+        _doingPath = false;
     }
 
-    void AStar()
+    private IEnumerator AStar()
     {
-        if (_actualnode == null)
+        if (_actualNode == null)
         {
             Debug.Log("ACA DEBERIA CRASHEAR!");
-            return;
+            _doingAStart = false;
+            yield break;
         }
-        
-        closeNodes.Add(_actualnode);
-        _actualnode.nodeColor = Color.green;
+
+        _closeNodes.Add(_actualNode);
 
         var watchdog = 10000;
-        Queue<MNode> checkingNodes;
 
-        while (_actualnode != _targetNode && watchdog > 0)
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+
+        while (_actualNode != _targetNode && watchdog > 0)
         {
             watchdog--;
 
-            checkingNodes = new Queue<MNode>();
-
-
-            for (var i = 0; i < _actualnode.NeighboursCount(); i++)
+            for (var i = 0; i < _actualNode.NeighboursCount(); i++)
             {
-                var node = _actualnode.GetNeighbor(i);
+                var node = _actualNode.GetNeighbor(i);
                 node.nodeColor = Color.magenta;
-                if (closeNodes.Contains(node)) continue;
+                if (_closeNodes.Contains(node) ||
+                    !OnSight(_actualNode.transform.position, node.transform.position) ||
+                    (node.previousNode != null && node.previousNode.Weight < _actualNode.Weight)) continue;
 
-                node._previouseNode = _actualnode;
-                node.SetWeight(_actualnode.GetWeight() + 1 +
-                               Vector3.Distance(node.transform.position, _targetNode.transform.position));
-
-                openNodes.Enqueue(new TObj<MNode>() { myObj = node, myWeight = node.GetWeight() });
-                checkingNodes.Enqueue(node);
-            }
-
-            if (checkingNodes.Count > 0)
-            {
-                MNode cheaperNode = checkingNodes.Dequeue();
-                while (checkingNodes.Count > 0)
+                if (_actualNode == null)
                 {
-                    if (cheaperNode == _targetNode) break;
-
-                    var actualNode = checkingNodes.Dequeue();
-
-                    if (actualNode.GetWeight() < cheaperNode.GetWeight())
-                        cheaperNode = actualNode;
+                    _doingAStart = false;
+                    yield break;
                 }
 
-                _actualnode = cheaperNode;
+                if (node == null)
+                {
+                    _doingAStart = false;
+                    yield break;
+                }
+
+                node.previousNode = _actualNode;
+
+                node.SetWeight(_actualNode.Weight + 1 +
+                               Vector3.Distance(node.transform.position, _targetNode.transform.position));
+
+                ClearNodes += node.ResetNode;
+
+                _openNodes.Enqueue(node);
             }
-            else
+
+            if (!_openNodes.IsEmpty)
             {
-                _actualnode = openNodes.Dequeue();
+                _actualNode = _openNodes.Dequeue();
             }
+            else break;
 
+            _closeNodes.Add(_actualNode);
 
-            closeNodes.Add(_actualnode);
-
-            //if (_actualnode == _targetNode) Debug.Log("llegue");
+            if (stopWatch.ElapsedMilliseconds <= 1) continue;
+            
+            yield return null;
+            stopWatch.Restart();
         }
 
         ThetaStar();
+        _doingAStart = false;
     }
 
     private void ThetaStar()
     {
-        Stack stack = new Stack();
-        _actualnode = _targetNode;
-        stack.Push(_actualnode);
-        var previouseNode = _actualnode._previouseNode;
+        var stack = new Stack();
+        _actualNode = _targetNode;
+        stack.Push(_actualNode);
+        var previousNode = _actualNode.previousNode;
 
-        if (previouseNode == null) Debug.Log("no existe");
-        int watchdog = 10000;
-        while (_actualnode != _origenNode && watchdog > 0)
+        if (previousNode == null)
+        {
+            Debug.Log("no existe");
+            _actualPath = null;
+            return;
+        }
+
+        var watchdog = 10000;
+        while (_actualNode != _origenNode && watchdog > 0)
         {
             watchdog--;
 
-            //if(watchdog <= 0)Debug.Log("Primer while theta");
-
-            if (previouseNode._previouseNode && OnSight(_actualnode.transform.position,
-                    previouseNode._previouseNode.transform.position))
+            if (previousNode.previousNode && OnSight(_actualNode.transform.position,
+                    previousNode.previousNode.transform.position))
             {
-                previouseNode = previouseNode._previouseNode;
+                previousNode = previousNode.previousNode;
             }
             else
             {
-                _actualnode._previouseNode = previouseNode;
-                _actualnode = previouseNode;
-                stack.Push(_actualnode);
+                _actualNode.previousNode = previousNode;
+                _actualNode = previousNode;
+                stack.Push(_actualNode);
             }
         }
 
@@ -191,27 +201,19 @@ public class MPathfinding : GenericObject
         {
             watchdog--;
 
-            //if(watchdog <= 0)Debug.Log("Segundo while theta");
-
-            MNode nextNode = stack.Pop() as MNode;
-            checker.Add(nextNode);
-            actualPath.AddNode(nextNode);
+            var nextNode = stack.Pop() as MNode;
+            _actualPath.AddNode(nextNode);
         }
-        //Debug.Log(actualPath.PathCount());
     }
 
-    public MNode GetClosestNode(Vector3 t, bool isForAssistant = false)
+    private MNode GetClosestNode(Vector3 t, bool isForAssistant = false)
     {
         var actualSearchingRange = searchingRange;
-        var _closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
-            .Where(x =>
-            {
-                var dir = x.transform.position - t;
-                return !Physics.Raycast(t, dir, dir.magnitude * 1, LayerManager.LM_OBSTACLE);
-            }).ToArray();
+        var closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
+            .Where(x => OnSight(t, x.transform.position)).ToArray();
 
-        var watchdog = 10000;
-        while (_closestNodes.Length <= 0)
+        var watchdog = 100;
+        while (closestNodes.Length <= 0)
         {
             watchdog--;
             if (watchdog <= 0)
@@ -220,48 +222,33 @@ public class MPathfinding : GenericObject
             }
 
             actualSearchingRange += searchingRange;
-            _closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
-                .Where(x =>
-                {
-                    var dir = x.transform.position - t;
-                    return !Physics.Raycast(t, dir, dir.magnitude * 1, LayerManager.LM_OBSTACLE);
-                }).ToArray();
+            closestNodes = Physics.OverlapSphere(t, actualSearchingRange, LayerManager.LM_NODE)
+                .Where(x => OnSight(t, x.transform.position)).ToArray();
         }
 
         MNode mNode = null;
 
-        float minDistance = Mathf.Infinity;
-        for (int i = 0; i < _closestNodes.Length; i++)
+        var minDistance = Mathf.Infinity;
+        foreach (var node in closestNodes)
         {
-            float distance = Vector3.Distance(t, _closestNodes[i].transform.position);
-            if (distance <= minDistance)
-            {
-                var tempNode = _closestNodes[i].gameObject.GetComponent<MNode>();
+            var distance = Vector3.Distance(t, node.transform.position);
+            if (distance > minDistance) continue;
 
-                if (tempNode == null) continue;
-                
-                mNode = tempNode;
-                minDistance = distance;
-            }
+            var tempNode = node.gameObject.GetComponent<MNode>();
+
+            if (tempNode == null) continue;
+
+            mNode = tempNode;
+            minDistance = distance;
         }
 
         return mNode;
     }
 
-    bool OnSight(Vector3 from, Vector3 to)
+    public static bool OnSight(Vector3 from, Vector3 to)
     {
-        Vector3 dir = to - from;
-        Ray ray = new Ray(from, dir);
+        var dir = to - from;
 
-        if (Physics.Raycast(ray, dir.magnitude, LayerManager.LM_ALLOBSTACLE))
-            return false;
-
-        return true;
+        return !Physics.Raycast(from, dir, dir.magnitude, LayerManager.LM_ENEMYSIGHT);
     }
-
-    // private void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.yellow;
-    //     Gizmos.DrawWireSphere(_tempOrigen.position, searchingRange);
-    // }
 }

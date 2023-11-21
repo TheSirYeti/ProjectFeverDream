@@ -84,6 +84,7 @@ public class RangedEnemy : Enemy
         EventManager.Subscribe("OnResetTriggerLevel", OnResetScene);
         
         DoFsmSetup();
+        _exitPF = () => { SendInputToFSM(RangedEnemyStates.IDLE);};
         rb.isKinematic = false;
         DoFaceTransition(FaceID.IDLE);
         StopRagdoll();
@@ -267,12 +268,6 @@ public class RangedEnemy : Enemy
         {
             CalculatePathPreview(false);
             
-            if (nodeList.PathCount() <= 0)
-            {
-                SendInputToFSM(RangedEnemyStates.CHASE);
-                return;
-            }
-            
             isPathfinding = true;
         };
 
@@ -303,7 +298,7 @@ public class RangedEnemy : Enemy
                 return;
             }
 
-            if (isPathfinding)
+            if (isPathfinding && !_waitingPF)
             {
                 Debug.Log("PF2");
                 SetSpeedValue(Time.deltaTime);
@@ -403,12 +398,12 @@ public class RangedEnemy : Enemy
             DoWarningFadeOut();
             CalculatePathPreview(true);
 
-            if (nodeList.PathCount() <= 0)
-            {
-                SendInputToFSM(RangedEnemyStates.CHASE);
-                canGetScared = false;
-                return;
-            }
+            // if (nodeList.PathCount() <= 0)
+            // {
+            //     SendInputToFSM(RangedEnemyStates.CHASE);
+            //     canGetScared = false;
+            //     return;
+            // }
             
             isPathfinding = true;
             currentScare = timeScared;
@@ -423,6 +418,8 @@ public class RangedEnemy : Enemy
                 SendInputToFSM(RangedEnemyStates.DIE);
                 return;
             }
+
+            if (_waitingPF) return;
             
             currentScare -= Time.deltaTime;
 

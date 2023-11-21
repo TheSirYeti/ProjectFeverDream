@@ -11,10 +11,11 @@ public static class LayerManager
     public static int L_NODE = 8;
     public static int L_INTERACT = 10;
     public static int L_ENEMY = 11;
+    public static int L_HIDINGSPOT = 12;
+    public static int L_PATHFINDINGOBSTACLE = 13;
     public static int L_PICKUP = 14;
     public static int L_USABLE = 15;
     public static int L_PROP = 17;
-    public static int L_PATHFINDINGOBSTACLE = 13;
     
     // SINGLE LAYER MASK
     public static LayerMask LM_PLAYER = 1 << L_PLAYER;
@@ -23,6 +24,7 @@ public static class LayerManager
     public static LayerMask LM_NODE = 1 << L_NODE;
     public static LayerMask LM_INTERACT = 1 << L_INTERACT;
     public static LayerMask LM_ENEMY = 1 << L_ENEMY;
+    public static LayerMask LM_HIDINGSPOT = 1 << L_HIDINGSPOT;
     public static LayerMask LM_PICKUP = 1 << L_PICKUP;
     public static LayerMask LM_USABLE = 1 << L_USABLE;
     public static LayerMask LM_PROP = 1 << L_PROP;

@@ -102,7 +102,7 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     public void AddObject(GenericObject genericObject)
     {
-        _awakeQueue.Enqueue(new TObj<GenericObject>() { myObj = genericObject, myWeight = genericObject.priority });
+        _awakeQueue.Enqueue(genericObject);
     }
 
     public void RemoveObject(GenericObject genericObject)
@@ -128,30 +128,30 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
         yield return new WaitForFrames(4);
         while (true)
         {
-            while (_awakeQueue.Count() < 1)
+            while (_awakeQueue.IsEmpty)
             {
                 yield return null;
             }
 
-            while (_awakeQueue.Count() > 0)
+            while (!_awakeQueue.IsEmpty)
             {
                 GenericObject obj = _awakeQueue.Dequeue();
 
                 obj.OnAwake();
 
-                _startQueue.Enqueue(new TObj<GenericObject>() { myObj = obj, myWeight = obj.priority });
+                _startQueue.Enqueue(obj);
             }
 
-            while (_startQueue.Count() > 0)
+            while (!_startQueue.IsEmpty)
             {
                 GenericObject obj = _startQueue.Dequeue();
 
                 obj.OnStart();
 
-                _lateStartQueue.Enqueue(new TObj<GenericObject>() { myObj = obj, myWeight = obj.priority });
+                _lateStartQueue.Enqueue(obj);
             }
 
-            while (_lateStartQueue.Count() > 0)
+            while (!_lateStartQueue.IsEmpty)
             {
                 GenericObject obj = _lateStartQueue.Dequeue();
 
