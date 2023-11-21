@@ -17,11 +17,6 @@ public class BorderCinematicEffectManager : PostProccesingAbstract
         _postProcessVolume.profile.TryGetSettings(out _borderCinematicEffect);
     }
 
-    public void Update()
-    {
-        EffectEnabled(_enabled);
-        GeneralSettings();
-    }
     protected override void GeneralSettings()
     {
         if (_enabled)
@@ -29,10 +24,13 @@ public class BorderCinematicEffectManager : PostProccesingAbstract
             _borderCinematicEffect._SliderBorder.value = _slider;
         }
     }
-    protected override void EffectEnabled(bool on)
+    public override void EffectEnabled(bool on)
     {
         if (on)
+        {
             _borderCinematicEffect.active = true;
+            _borderCinematicEffect._SliderBorder.value = 1;
+        }
         else
             _borderCinematicEffect.active = false;
     }

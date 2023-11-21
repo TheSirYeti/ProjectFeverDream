@@ -43,6 +43,11 @@ public class CutsceneToggler : GenericObject
     {
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
+        EventManager.Trigger("OnCutsceneEvent", false);
+        EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, true);
+        EventManager.Trigger("OnPPCalled", PPNames.LOWHP, false);
+        EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, false);
+        EventManager.Trigger("OnPPCalled", PPNames.DAMAGESCREEN, false);
         
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
 
@@ -60,6 +65,8 @@ public class CutsceneToggler : GenericObject
         }
         
         EventManager.Trigger("ChangeMovementState", true);
+        EventManager.Trigger("OnCutsceneEvent", true);
+        EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, false);
 
         cameraGO.gameObject.SetActive(false);
 
@@ -72,6 +79,11 @@ public class CutsceneToggler : GenericObject
     {
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
+        EventManager.Trigger("OnCutsceneEvent", false);
+        EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, true);
+        EventManager.Trigger("OnPPCalled", PPNames.LOWHP, false);
+        EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, false);
+        EventManager.Trigger("OnPPCalled", PPNames.DAMAGESCREEN, false);
 
         GameManager.Instance.Assistant.transform.position = playerCorner.transform.position;
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
@@ -94,6 +106,9 @@ public class CutsceneToggler : GenericObject
         }
         
         EventManager.Trigger("ChangeMovementState", true);
+        EventManager.Trigger("OnCutsceneEvent", true);
+        EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, false);
+        
 
         georgeDummy.SetActive(false);
         cutscenePlayerCam.transform.rotation = originalPlayerCamTransform.rotation;
@@ -108,6 +123,11 @@ public class CutsceneToggler : GenericObject
     {
         player.transform.position = playerCorner.position;
         EventManager.Trigger("ChangeMovementState", false);
+        EventManager.Trigger("OnCutsceneEvent", false);
+        EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, true);
+        EventManager.Trigger("OnPPCalled", PPNames.LOWHP, false);
+        EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, false);
+        EventManager.Trigger("OnPPCalled", PPNames.DAMAGESCREEN, false);
         
         //GameManager.Instance.Assistant.transform.position = playerCorner.transform.position;
         GameManager.Instance.GetCamera().gameObject.SetActive(false);
@@ -130,6 +150,8 @@ public class CutsceneToggler : GenericObject
         }
         
         EventManager.Trigger("ChangeMovementState", true);
+        EventManager.Trigger("OnCutsceneEvent", true);
+        EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, false);
 
         //georgeDummy.SetActive(false);
         cutscenePlayerCam.transform.rotation = originalPlayerCamTransform.rotation;
@@ -148,6 +170,12 @@ public class CutsceneToggler : GenericObject
 
     public void OnLevelOver()
     {
+        EventManager.Trigger("OnCutsceneEvent", true);
+        EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, false);
+        player.transform.position = cutsceneEndPos.transform.position;
+        player.transform.rotation = cutsceneEndPos.transform.rotation;
+        cutscenePlayerCam.transform.position = cutsceneEndPos.transform.position;
+        cutscenePlayerCam.transform.rotation = cutsceneEndPos.transform.rotation;
         GameManager.Instance.NextScene();
     }
     

@@ -17,19 +17,13 @@ public class SpeedEffectManager : PostProccesingAbstract
         _postProcessVolume.profile.TryGetSettings(out _speedEffect);
     }
 
-    public void Update()
-    {
-        EffectEnabled(_enabled);
-        GeneralSettings();
-    }
-
     protected override void GeneralSettings()
     {
         if (_enabled)
             _speedEffect._Alpha.value = _effectAlpha;
     }
 
-    protected override void EffectEnabled(bool on)
+    public override void EffectEnabled(bool on)
     {
         if (on)
             _speedEffect.active = true;

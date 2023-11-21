@@ -289,6 +289,9 @@ public class BaseMeleeEnemy : Enemy
 
         die.OnEnter += x =>
         {
+            if(myWall != null)
+                myWall.AddDeathToll();
+            
             DisableAttackRegion();
             SoundManager.instance.PlaySound(SoundID.ENEMY_GENERIC_DEATH);
             DoFaceTransition(FaceID.DEAD);

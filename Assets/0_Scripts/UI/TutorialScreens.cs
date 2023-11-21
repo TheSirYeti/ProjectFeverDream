@@ -15,7 +15,7 @@ public class TutorialScreens : GenericObject
     
     public override void OnStart()
     {
-        StartCoroutine(DoTutorialSign(0));
+        //StartCoroutine(DoTutorialSign(0));
         EventManager.Subscribe("OnTutorialTriggered", TriggerTutorial);
         EventManager.Subscribe("OnTutorialExit", DisableTutorials);
     }

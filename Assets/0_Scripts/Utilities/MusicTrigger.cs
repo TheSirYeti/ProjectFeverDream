@@ -19,6 +19,7 @@ public class MusicTrigger : GenericObject
         if (other.gameObject.tag == "Player" && !hasBeenTriggered)
         {
             hasBeenTriggered = true;
+            SoundManager.instance.StopAllMusic();
             SoundManager.instance.PlayMusic(musicID, loop);
         }
         

@@ -377,11 +377,17 @@ public class Model : GenericObject, IPlayerLife
             if (state == 1)
             {
                 _actualSpeed = _runningSpeed;
+                EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, true);
             }
             else
             {
                 _actualSpeed = _walkingSpeed;
+                EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, false);
             }
+        }
+        else
+        {
+            EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, false);
         }
     }
 
@@ -397,6 +403,7 @@ public class Model : GenericObject, IPlayerLife
             SoundManager.instance.PlaySound(SoundID.SLIDE);
             _slideSoundChecker = true;
         }
+        EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, true);
 
         yield return new WaitForSeconds(_slideDuration / 2);
 
@@ -423,6 +430,7 @@ public class Model : GenericObject, IPlayerLife
             _actualSpeed = _walkingSpeed;
         }
         else _actualSpeed = _runningSpeed;
+        EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, false);
     }
 
     IEnumerator CoyoteTime()
@@ -531,6 +539,9 @@ public class Model : GenericObject, IPlayerLife
         _life = Mathf.Clamp(_life, 0, _maxLife);
 
         EventManager.Trigger("ChangeHealthUI", _life);
+        
+        if(_life >= _maxLife * 0.25f)
+            EventManager.Trigger("OnPPCalled", PPNames.LOWHP, false);
     }
 
     public void GetDamage(int dmg)
@@ -542,6 +553,12 @@ public class Model : GenericObject, IPlayerLife
 
         _life = Mathf.Clamp(_life, 0, _maxLife);
         EventManager.Trigger("ChangeHealthUI", _life);
+        EventManager.Trigger("OnPPCalled", PPNames.DAMAGESCREEN, true);
+
+        if (_life <= _maxLife * 0.25f)
+        {
+            EventManager.Trigger("OnPPCalled", PPNames.LOWHP, true);
+        }
 
         //TODO: Add SFX and VFX for player dmg
         if (SoundManager.instance != null)
@@ -549,7 +566,7 @@ public class Model : GenericObject, IPlayerLife
 
         currentDmgCooldown = dmgCooldown;
 
-        EventManager.Trigger("OnPlayerTakeDamage");
+        //EventManager.Trigger("OnPlayerTakeDamage");
 
         if (_life <= 0)
         {

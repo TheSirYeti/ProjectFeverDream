@@ -10,6 +10,9 @@ public class Elevator : GenericObject, IAssistInteract
     [SerializeField] private Outline _outline;
     [SerializeField] private ScreenControllerShader _screenControllerShader;
     [SerializeField] Assistant.Interactuables _type;
+    
+    [SerializeField] private ParticleSystem vfx;
+    [SerializeField] private SpatialSound sfx;
 
     [SerializeField] private Transform interactPoint;
     [SerializeField] private Transform _elevator;
@@ -56,6 +59,9 @@ public class Elevator : GenericObject, IAssistInteract
 
         if (!(Vector3.Distance(_elevator.position, _wayPoints[_waypointIndex].position) < 0.05f)) return;
 
+        vfx.Play();
+        sfx.PlaySound();
+        
         _isWaiting = true;
         _waypointIndex += _waypointDir;
 
