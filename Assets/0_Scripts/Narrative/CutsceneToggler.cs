@@ -13,6 +13,7 @@ public class CutsceneToggler : GenericObject
     private bool isInCutscene = false;
     private GameObject player;
     public Transform playerCorner;
+    public Transform playerTP;
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
@@ -58,6 +59,11 @@ public class CutsceneToggler : GenericObject
         GameManager.Instance.GetCamera().gameObject.SetActive(true);
 
         isInCutscene = false;
+    }
+
+    public void MovePlayerToPos()
+    {
+        player.transform.position = playerTP.position;
     }
     
     public void StartPlayerCutsceneWithGeorge(int posID)

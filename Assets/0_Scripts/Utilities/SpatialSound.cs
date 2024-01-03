@@ -34,11 +34,11 @@ public class SpatialSound : GenericObject
         SoundManager.instance.PlaySoundByInt(audioID, loop);
     }
 
-    // private void OnEnable()
-    // {
-    //     if(playOnEnable)
-    //         PlaySound();
-    // }
+    private void OnEnable()
+    {
+        if(playOnEnable)
+            PlaySound();
+    }
 
     private void OnDrawGizmos()
     {
