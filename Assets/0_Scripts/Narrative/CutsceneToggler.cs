@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class CutsceneToggler : GenericObject
@@ -64,6 +65,12 @@ public class CutsceneToggler : GenericObject
     public void MovePlayerToPos()
     {
         player.transform.position = playerTP.position;
+    }
+    
+    public void SetCutsceneMode(int mode)
+    {
+        Debug.Log("Triggereo");
+        EventManager.Trigger("OnCutsceneUIToggled", mode);
     }
     
     public void StartPlayerCutsceneWithGeorge(int posID)

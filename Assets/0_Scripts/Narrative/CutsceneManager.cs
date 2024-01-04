@@ -25,12 +25,12 @@ public class CutsceneManager : GenericObject
 
     public override void OnStart()
     {
-        if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0 && PlayerPrefs.GetInt("SkipIntro") == 0)
+        if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0)
         {
             director.playableAsset = allTimelines[0];
             director.Play();
             
-            EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, true);
+            //EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, true);
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class UIController : GenericObject
     [SerializeField] private List<GameObject> weaponRegion;
     [SerializeField] private List<GameObject> objectiveRegion;
     [SerializeField] private List<GameObject> controlsRegion;
+    [SerializeField] private List<GameObject> healthRegion;
     int _actualWeapon = 0;
     [Space(20)]
     [SerializeField] private Animator redScreenAnimator;
@@ -65,7 +67,6 @@ public class UIController : GenericObject
     public override void OnStart()
     {
         SetUpEvents();
-        
         ShowObjectiveUI(false);
         ChangeEquipedWeapontUI(-1);
     }
@@ -92,6 +93,17 @@ public class UIController : GenericObject
             ShowControlsUI(false);
         }
         
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            EventManager.Trigger("OnCutsceneUIToggled", 1);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            EventManager.Trigger("OnCutsceneUIToggled", 0);
+        }
+        
+        
         if (!isPingEnabled) return;
         
         if(currentPingTarget != null)
@@ -102,6 +114,7 @@ public class UIController : GenericObject
 
     void SetUpEvents()
     {
+        EventManager.Subscribe("OnCutsceneUIToggled", SetUIMode);
         EventManager.Subscribe("ChangeHealthUI", ChangeHealthUI);
         EventManager.Subscribe("ChangeBulletUI", ChangeBulletUI);
         EventManager.Subscribe("ChangeReserveBulletUI", ChangeReserveBulletUI);
@@ -305,6 +318,93 @@ public class UIController : GenericObject
 
     #endregion
 
+    #region UI MOMENTS
+
+    [Serializable]
+    public enum GameplayMode
+    {
+        NORMAL,
+        ONLY_CROSSHAIR,
+        ONLY_OBJECTIVE,
+        FULL_CUSTCENE,
+    }
+    
+    public void SetUIMode(object[] parameters)
+    {
+        Debug.Log("ENTRE A SETUIMODE");
+        GameplayMode mode = (GameplayMode)parameters[0];
+        Debug.Log("YO SOY " + mode);
+        
+        switch (mode)
+        {
+            case GameplayMode.NORMAL:
+                foreach (var uiObject in healthRegion)
+                {
+                    uiObject.SetActive(true);
+                }
+                foreach (var uiObject in objectiveRegion)
+                {
+                    uiObject.SetActive(true);
+                }
+                /*foreach (var uiObject in weaponRegion)
+                {
+                    uiObject.SetActive(true);
+                }*/
+                crosshair.SetActive(true);
+                break;
+            
+            case GameplayMode.ONLY_CROSSHAIR:
+                foreach (var uiObject in healthRegion)
+                {
+                    uiObject.SetActive(false);
+                }
+                foreach (var uiObject in objectiveRegion)
+                {
+                    uiObject.SetActive(false);
+                }
+                foreach (var uiObject in weaponRegion)
+                {
+                    uiObject.SetActive(false);
+                }
+                crosshair.SetActive(true);
+                break;
+            
+            case GameplayMode.ONLY_OBJECTIVE:
+                foreach (var uiObject in healthRegion)
+                {
+                    uiObject.SetActive(false);
+                }
+                foreach (var uiObject in objectiveRegion)
+                {
+                    uiObject.SetActive(true);
+                }
+                foreach (var uiObject in weaponRegion)
+                {
+                    uiObject.SetActive(false);
+                }
+                crosshair.SetActive(true);
+                break;
+            
+            case GameplayMode.FULL_CUSTCENE:
+                foreach (var uiObject in healthRegion)
+                {
+                    uiObject.SetActive(false);
+                }
+                foreach (var uiObject in objectiveRegion)
+                {
+                    uiObject.SetActive(false);
+                }
+                foreach (var uiObject in weaponRegion)
+                {
+                    uiObject.SetActive(false);
+                }
+                crosshair.SetActive(false);
+                break;
+        }
+    }
+
+    #endregion
+    
     #region SUBTITLES
 
     void DoSubtitle(object[] parameters)
