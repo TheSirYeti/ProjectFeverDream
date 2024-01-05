@@ -65,6 +65,7 @@ public class CutsceneToggler : GenericObject
     public void MovePlayerToPos()
     {
         player.transform.position = playerTP.position;
+        cameraGO.transform.rotation = playerTP.rotation;
     }
     
     public void SetCutsceneMode(int mode)
