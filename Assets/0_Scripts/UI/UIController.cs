@@ -123,7 +123,7 @@ public class UIController : GenericObject
         EventManager.Subscribe("PlayerDamage", TriggerPlayerDamage);
         EventManager.Subscribe("OnADSEnabled", EnableADS);
         EventManager.Subscribe("OnADSDisabled", DisableADS);
-        EventManager.Subscribe("ChangeObjetive", ChangesObjective);
+        EventManager.Subscribe("ChangeObjective", ChangesObjective);
         EventManager.Subscribe("ChangeObjectiveProgress", ChangeObjectiveProgress);
         EventManager.Subscribe("InteractUI", InteractUI);
         EventManager.Subscribe("OnSubtitleOn", DoSubtitle);
@@ -282,7 +282,7 @@ public class UIController : GenericObject
     {
         _titleObjetive.text = (string)parameters[0];
         _descriptionObjetive.text = (string)parameters[1];
-        _progressObjective.text = "0%";
+        //_progressObjective.text = "0%";
 
         StartCoroutine(ShowObjectiveChange());
     }

@@ -8,13 +8,15 @@ using UnityEngine.UI;
 
 public class CutsceneToggler : GenericObject
 {
-    public GameObject cameraGO, cutscenePlayerCam, georgeDummy, cutsceneEndPos;
+    public GameObject officialCam, cameraGO, cutscenePlayerCam, georgeDummy, cutsceneEndPos;
     private Transform originalPlayerCamTransform;
     [CanBeNull] public List<Transform> playerAnimPos;
     private bool isInCutscene = false;
     private GameObject player;
     public Transform playerCorner;
     public Transform playerTP;
+    [SerializeField] private string newObjectiveTitle;
+    [SerializeField] private string newObjectiveDescription;
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
@@ -24,6 +26,7 @@ public class CutsceneToggler : GenericObject
     {
         originalPlayerCamTransform = cutscenePlayerCam.transform;
         player = GameManager.Instance.Player.gameObject;
+        //officialCam = GameManager.Instance.GetCamera().gameObject;
         EventManager.Subscribe("OnResetTriggerLevel", StopCutsceneEvent);
     }
 
@@ -65,14 +68,27 @@ public class CutsceneToggler : GenericObject
     public void MovePlayerToPos()
     {
         player.transform.position = playerTP.position;
-        cameraGO.transform.rotation = playerTP.rotation;
+        player.transform.rotation = Quaternion.LookRotation((playerTP.forward * 2) - playerTP.position);
+    }
+
+    public void AllowPlayerMovement(bool status)
+    {
+        EventManager.Trigger("ChangeMovementState", status, !status);
+        EventManager.Trigger("ChangePhysicsState", status);
     }
     
     public void SetCutsceneMode(int mode)
     {
-        Debug.Log("Triggereo");
         EventManager.Trigger("OnCutsceneUIToggled", mode);
     }
+
+    public void ObjectiveUpdateSignal()
+    {
+        EventManager.Trigger("ChangeObjective", newObjectiveTitle, newObjectiveDescription);
+    }
+
+
+    #region OBSOLETO / A BORRAR
     
     public void StartPlayerCutsceneWithGeorge(int posID)
     {
@@ -182,4 +198,6 @@ public class CutsceneToggler : GenericObject
     {
         EventManager.Trigger("OnLevelFinished");
     }
+    
+    #endregion
 }
