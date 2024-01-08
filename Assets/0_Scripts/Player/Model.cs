@@ -6,6 +6,16 @@ using System.Linq;
 
 public class Model : GenericObject, IPlayerLife
 {
+    private enum PlayerStates
+    {
+        IDLE,
+        WALK,
+        RUN,
+        SLIDE,
+        CROUCH,
+        ONAIR
+    }
+    
     //Class Reference
     PhysicsSystem _physics;
     Controller _controller;
@@ -26,8 +36,8 @@ public class Model : GenericObject, IPlayerLife
     float dmgCooldown = 0.5f;
     float currentDmgCooldown = -1f;
 
-    [Space(20)] [Header("-== Physics Properties ==-")] [SerializeField]
-    float _gravity = -10f;
+    [Space(20)] [Header("-== Physics Properties ==-")] 
+    [SerializeField] float _gravity = -10f;
 
     private bool _physicsActive = true;
 
@@ -79,6 +89,9 @@ public class Model : GenericObject, IPlayerLife
     // Colliders
     List<GameObject> _posibleColliders = new List<GameObject>();
     GameObject _actualCollider;
+    
+    // New FSM Player
+    private EventFSM<PlayerStates> _fsm;
 
     private void Awake()
     {
@@ -146,6 +159,35 @@ public class Model : GenericObject, IPlayerLife
         if (_physicsActive)
             _physics.PhysicsFixedUpdate();
     }
+
+    #region FSM SetUp
+
+    private void FSMSetUp()
+    {
+        var idle = new State<PlayerStates>("IDLE");
+        var walk = new State<PlayerStates>("WALK");
+        var run = new State<PlayerStates>("RUN");
+        var slide = new State<PlayerStates>("SLIDE");
+        var crouch = new State<PlayerStates>("CROUCH");
+        var onAir = new State<PlayerStates>("ONAIR");
+        
+        
+        StateConfigurer.Create(idle)
+            .SetTransition(PlayerStates.WALK, walk)
+            .SetTransition(PlayerStates.RUN, run)
+            .SetTransition(PlayerStates.CROUCH, crouch)
+            .SetTransition(PlayerStates.ONAIR, onAir)
+            .Done();
+        
+        StateConfigurer.Create(walk)
+            .SetTransition(PlayerStates.IDLE, idle)
+            .SetTransition(PlayerStates.RUN, run)
+            .SetTransition(PlayerStates.CROUCH, crouch)
+            .SetTransition(PlayerStates.ONAIR, onAir)
+            .Done();
+    }
+
+    #endregion
 
     private void ChangePhysicsState(params object[] parameters)
     {
