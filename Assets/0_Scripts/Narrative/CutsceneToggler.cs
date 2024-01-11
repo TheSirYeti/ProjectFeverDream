@@ -26,7 +26,6 @@ public class CutsceneToggler : GenericObject
     {
         originalPlayerCamTransform = cutscenePlayerCam.transform;
         player = GameManager.Instance.Player.gameObject;
-        //officialCam = GameManager.Instance.GetCamera().gameObject;
         EventManager.Subscribe("OnResetTriggerLevel", StopCutsceneEvent);
     }
 
@@ -51,7 +50,8 @@ public class CutsceneToggler : GenericObject
         if (isInCutscene)
         {
             player.transform.position = cameraGO.transform.position;
-            player.transform.rotation = cameraGO.transform.rotation;
+            
+            EventManager.Trigger("SetNewRotation", cameraGO.transform.rotation.eulerAngles);
         }
         
         EventManager.Trigger("ChangeMovementState", true);

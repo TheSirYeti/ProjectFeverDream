@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Serialization;
 
 public class CameraController : GenericObject
 {
@@ -15,6 +16,7 @@ public class CameraController : GenericObject
 
     Transform _actualCameraPos;
     List<Transform> _cameraPositions = new List<Transform>();
+    public IEnumerable<Transform> CameraPosGetter => _cameraPositions;
 
     [Header("-== Sensibility Properties ==-")]
     [SerializeField] private float _cameraSens = 500;
@@ -42,9 +44,15 @@ public class CameraController : GenericObject
     [SerializeField] float _bobbingAmount = 0.2f;
     private float _timer = 0.0f;
 
+    [FormerlySerializedAs("_maxYRot")]
     [Space(20)]
     [Header("-== Camera Clamp Properties ==-")]
-    [SerializeField] private float _maxYRot = 50, _minYRot = -50;
+    [SerializeField] private float _maxXRot = 50;
+
+    [FormerlySerializedAs("_minYRot")]
+    [Space(20)]
+    [Header("-== Camera Clamp Properties ==-")]
+    [SerializeField] private float _minXRot = -50;
 
     private float _xRotation;
     private float _yRotation;
@@ -67,6 +75,7 @@ public class CameraController : GenericObject
     {
         EventManager.Subscribe("CameraShake", ShakeState);
         EventManager.Subscribe("CameraBobbing", SetBobbing);
+        EventManager.Subscribe("SetNewRotation", SetNewRotation);
 
         _model = GetComponent<Model>();
 
@@ -127,14 +136,37 @@ public class CameraController : GenericObject
     // Void for move the camera with an input
     public void MoveCamera(float xAxie, float yAxie)
     {
-        _xRotation += xAxie * _cameraSens * Time.deltaTime;
-        _yRotation += yAxie * -1 * _cameraSens * Time.deltaTime;
+        var actualHorizontalRot = transform.rotation.eulerAngles.y;
+        var actualVerticalRot = _actualCameraPos.rotation.eulerAngles.x;
+        
+        actualHorizontalRot += xAxie * _cameraSens * Time.deltaTime;
+        actualVerticalRot += yAxie * -1 * _cameraSens * Time.deltaTime;
 
-        _yRotation = Mathf.Clamp(_yRotation, _minYRot, _maxYRot);
+        if (actualVerticalRot is < 270 and > 210)
+        {
+            actualVerticalRot = 270;
+        }
 
-        transform.rotation = Quaternion.Euler(new Vector3(0, _xRotation, 0));
-        _actualCameraPos.localRotation = Quaternion.Euler(new Vector3(_yRotation, 0, 0));
+        if (actualVerticalRot is > 90 and < 190)
+        {
+            actualVerticalRot = 90;
+        }
+
+        // actualVerticalRot = Mathf.Clamp(actualVerticalRot, _minXRot, _maxXRot);
+
+        Debug.Log(actualVerticalRot);
+        transform.rotation = Quaternion.Euler(new Vector3(0, actualHorizontalRot, 0));
+        _actualCameraPos.localRotation = Quaternion.Euler(new Vector3(actualVerticalRot, 0, 0));
     }
+
+    private void SetNewRotation(params object[] parameters)
+    {
+        var actualRot = (Vector3)parameters[0];
+        
+        transform.rotation = Quaternion.Euler(new Vector3(0, actualRot.y, 0));
+        _actualCameraPos.localRotation = Quaternion.Euler(new Vector3(actualRot.x, 0, 0));
+    }
+    
     #endregion
 
     #region Change Camera Spot

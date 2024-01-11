@@ -22,6 +22,7 @@ public class Model : GenericObject, IPlayerLife
     View _view;
     [HideInInspector] public WeaponManager weaponManager { get; private set; }
     CameraController _cameraController;
+    public IEnumerable<Transform> PovsGetter => _cameraController.CameraPosGetter;
     Assistant _assistant;
 
     //Component Reference
