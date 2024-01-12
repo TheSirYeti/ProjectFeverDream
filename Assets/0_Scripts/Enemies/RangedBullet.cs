@@ -23,20 +23,10 @@ public class RangedBullet : GenericObject
         StartCoroutine(DoDeath());
     }
 
-    public override void OnStart()
-    {
-        
-    }
-
     public override void OnUpdate()
     {
         transform.position += transform.forward * bulletSpeed * Time.fixedDeltaTime;
     }
-
-    /*public void OnBulletSpawn()
-    {
-        UpdateManager._instance.AddObject(this);
-    }*/
 
     private void OnDestroy()
     {
