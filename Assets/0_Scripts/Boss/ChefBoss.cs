@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 using Random = System.Random;
 
 public class ChefBoss : GenericObject
@@ -32,11 +33,11 @@ public class ChefBoss : GenericObject
     [SerializeField] private float _spatulaAddedDistance;
 
     [Header("Shuffle Attack")] 
-    [SerializeField] private float _shufflePrepareTime;
+    [SerializeField] private float _shufflePrepareTime, _shuffleChooseTime;
     [SerializeField] private int _shuffleItemAmount;
     [SerializeField] private int _shuffleAmount;
     [SerializeField] private float _shuffleTimeBetweenPlates;
-    [SerializeField] private GameObject _shuffleItem;
+    [SerializeField] private GameObject _shuffleItem, _shufflePunishItem;
     [SerializeField] private List<Transform> _shuffleSpawnpoints;
     
     
@@ -202,10 +203,44 @@ public class ChefBoss : GenericObject
 
         foreach (var item in allShuffles)
         {
-            item.OnShufflingStopped();
+            item.SetShufflingStatus(false);
         }
-        
         yield return null;
+
+        float currentTimer = 0f;
+        bool flag = false;
+        while (currentTimer <= _shuffleChooseTime && !flag)
+        {
+            foreach (var item in allShuffles)
+            {
+                if (!item.CanInteract())
+                {
+                    flag = true;
+                }
+            }
+            
+            currentTimer += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        foreach (var item in allShuffles)
+        {
+            item.SetShufflingStatus(true);
+        }
+
+        yield return new WaitForSeconds(2f);
+        if (!flag)
+        {
+            //sfx no elegiste
+            
+            GameObject trap = Instantiate(_shufflePunishItem);
+            trap.transform.position = GameManager.Instance.Player.transform.position + new Vector3(0, 45f, 0);
+            yield return new WaitForSeconds(1f);
+        }
+
+        foreach (var item in allShuffles)
+        {
+            item.DestroyPlate();
+        }
     }
     
 }

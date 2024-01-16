@@ -31,14 +31,21 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
         _animator.Play(_animationClose);
     }
 
-    public void Reveal()
+    void Reveal()
     {
+        chosen = true;
+        isShuffling = true;
         StartCoroutine(DoRevealSpawning());
     }
 
-    public void OnShufflingStopped()
+    public void DestroyPlate()
     {
-        isShuffling = false;
+        Destroy(gameObject);
+    }
+
+    public void SetShufflingStatus(bool status)
+    {
+        isShuffling = status;
     }
 
     public void SetGoodPlate()
