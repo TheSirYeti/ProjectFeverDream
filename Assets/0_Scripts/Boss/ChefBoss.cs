@@ -36,7 +36,7 @@ public class ChefBoss : GenericObject
     [SerializeField] private int _shuffleItemAmount;
     [SerializeField] private int _shuffleAmount;
     [SerializeField] private float _shuffleTimeBetweenPlates;
-    [SerializeField] private GameObject _shuffleGoodItem, _shuffleBadItem;
+    [SerializeField] private GameObject _shuffleItem;
     [SerializeField] private List<Transform> _shuffleSpawnpoints;
     
     
@@ -129,15 +129,20 @@ public class ChefBoss : GenericObject
     IEnumerator DoShuffleAttack()
     {
         List<ShuffleSurprise> allShuffles = new List<ShuffleSurprise>();
+
+        #region Shuffling
+
         int randGoodItem = UnityEngine.Random.Range(0, _shuffleItemAmount);
         
         for (int i = 0; i < _shuffleItemAmount; i++)
         {
             GameObject item;
 
+            item = Instantiate(_shuffleItem);
             if (i == randGoodItem)
-                item = Instantiate(_shuffleGoodItem);
-            else  item = Instantiate(_shuffleBadItem);
+            {
+                item.GetComponent<ShuffleSurprise>().SetGoodPlate();
+            }
 
             item.transform.position = _shuffleSpawnpoints[i].position;
             
@@ -148,7 +153,7 @@ public class ChefBoss : GenericObject
 
         foreach (var surprise in allShuffles)
         {
-            surprise.Reveal();
+            surprise.Open();
         }
         yield return new WaitForSeconds(2.5f);
         
@@ -160,7 +165,6 @@ public class ChefBoss : GenericObject
 
         for (int i = 0; i < _shuffleAmount; i++)
         {
-            Debug.Log("INICIO TREMENDO");
             int randSurprise1 = UnityEngine.Random.Range(0, _shuffleItemAmount);
             int randSurprise2 = UnityEngine.Random.Range(0, _shuffleItemAmount);
 
@@ -189,9 +193,16 @@ public class ChefBoss : GenericObject
                 tempFinalPos1, _shuffleTimeBetweenPlates / 2f);
             
             yield return new WaitForSeconds(_shuffleTimeBetweenPlates / 2f);
-            Debug.Log("FIN TREMENDO");
+            
             yield return new WaitForSeconds(0.25f);
 
+        }
+
+        #endregion
+
+        foreach (var item in allShuffles)
+        {
+            item.OnShufflingStopped();
         }
         
         yield return null;

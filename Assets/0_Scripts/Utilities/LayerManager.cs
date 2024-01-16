@@ -36,5 +36,6 @@ public static class LayerManager
     public static LayerMask LM_NODEOBSTACLE = (LM_PROP | LM_WALL);
     public static LayerMask LM_ALLOBSTACLE = (LM_PROP | LM_WALL | LM_FLOOR );
     public static LayerMask LM_ENEMYSIGHT = (LM_PROP | LM_WALL | LM_FLOOR | LM_PATHFINDINGOBSTACLE);
+    public static LayerMask LM_FLOORCHECK = (LM_FLOOR | LM_PROP);
     public static LayerMask LM_WEAPONSTARGETS = (LM_FLOOR | LM_WALL | LM_ENEMY | LM_PROP);
 }
