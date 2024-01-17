@@ -39,7 +39,11 @@ public class ChefBoss : GenericObject
     [SerializeField] private float _shuffleTimeBetweenPlates;
     [SerializeField] private GameObject _shuffleItem, _shufflePunishItem;
     [SerializeField] private List<Transform> _shuffleSpawnpoints;
-    
+
+    [Header("Rain Attack")]
+    [SerializeField] private List<GameObject> _allPatterns;
+    [SerializeField] private int _rainAttackAmount;
+    [SerializeField] private float _rainTimeBetweenAttacks;
     
     private Model _playerRef;
     
@@ -52,7 +56,7 @@ public class ChefBoss : GenericObject
 
     public override void OnStart()
     {
-        StartCoroutine(DoShuffleAttack());
+        StartCoroutine(DoRainPattern());
     }
 
     IEnumerator DoRangedPatternAttack()
@@ -241,6 +245,27 @@ public class ChefBoss : GenericObject
         {
             item.DestroyPlate();
         }
+    }
+
+    IEnumerator DoRainPattern()
+    {
+        for (int i = 0; i <= _rainAttackAmount; i++)
+        {
+            int rand = UnityEngine.Random.Range(0, _allPatterns.Count);
+
+            GameObject currentPattern = _allPatterns[rand];
+
+            foreach (Transform child in currentPattern.transform)
+            {
+                Debug.Log("Gol");
+                child.gameObject.SetActive(true);
+                child.GetComponent<RainModule>().DoDrop();
+            }
+
+            yield return new WaitForSeconds(_rainTimeBetweenAttacks);
+        }
+        
+        yield return null;
     }
     
 }

@@ -6,6 +6,10 @@ using UnityEngine;
 public class UtensilDrop : GenericObject
 {
     [SerializeField] private ParticleSystem _impactParticles;
+    [SerializeField] private GameObject _warningCircle;
+    private MeshRenderer _warningRenderer;
+    private Material _warningMat;
+    [SerializeField] private Color _startColor, _endColor;
     [Space(10)]
     [SerializeField] private Transform _centerOfImpact;
     [SerializeField] private float _raycastOffset;
@@ -26,19 +30,30 @@ public class UtensilDrop : GenericObject
 
     public override void OnStart()
     {
+        _warningRenderer = _warningCircle.GetComponent<MeshRenderer>();
+        _warningMat = _warningRenderer.material;
         StartCoroutine(DropUtensil());
     }
 
     IEnumerator DropUtensil()
     {
+        Physics.Raycast(_centerOfImpact.position, Vector3.down, out RaycastHit hit, Mathf.Infinity, LayerManager.LM_FLOOR);
+
+        _warningCircle.transform.position = hit.point + new Vector3(0, 0.1f, 0);
+        _warningCircle.transform.parent = null;
+        
         while (!Physics.Raycast(_centerOfImpact.position,
                    Vector3.down,
                    _raycastOffset,
                    LayerManager.LM_FLOOR) 
                && currentTimer < expirationTimer)
         {
+            Color lerpedColor = Color.Lerp(_startColor, _endColor, currentTimer / 2f);
+            _warningMat.SetColor("_Color", lerpedColor);
+            
             currentTimer += Time.deltaTime;
             transform.position += _downwardSpeed * Vector3.down * Time.deltaTime;
+            
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
@@ -49,15 +64,18 @@ public class UtensilDrop : GenericObject
         }
 
         yield return new WaitForSeconds(_timeToDie);
+        
+        Destroy(_warningCircle);
         Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<IPlayerLife>(out IPlayerLife player) && !hasCollided)
+        IPlayerLife playerLife = other.GetComponentInParent<IPlayerLife>();
+
+        if (playerLife != null)
         {
-           player.GetDamage(_totalDamage);
-           Destroy(gameObject);
+            playerLife.GetDamage(_totalDamage);
         }
     }
 
