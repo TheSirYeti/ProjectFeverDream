@@ -154,7 +154,7 @@ public class CameraController : GenericObject
 
         // actualVerticalRot = Mathf.Clamp(actualVerticalRot, _minXRot, _maxXRot);
 
-        Debug.Log(actualVerticalRot);
+        //Debug.Log(actualVerticalRot);
         transform.rotation = Quaternion.Euler(new Vector3(0, actualHorizontalRot, 0));
         _actualCameraPos.localRotation = Quaternion.Euler(new Vector3(actualVerticalRot, 0, 0));
     }

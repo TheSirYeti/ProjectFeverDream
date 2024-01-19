@@ -10,6 +10,7 @@ public class RainModule : GenericObject
     [SerializeField] private float _speed;
     [SerializeField] private Transform _startingPosition;
     [SerializeField] private GameObject _warningCircle;
+    [SerializeField] private ParticleSystem _impactParticles;
     [Space(10)] 
     [SerializeField] private float _waitDropTime;
     private Renderer _warningRenderer;
@@ -26,10 +27,8 @@ public class RainModule : GenericObject
         
         _startingPosition.position = transform.position;
         _startingPosition.parent = null;
-
-        Vector3 tempPos = _warningCircle.transform.position;
+        
         _warningCircle.transform.parent = null;
-        //_warningCircle.transform.position = tempPos;
         _warningRenderer = _warningCircle.GetComponent<Renderer>();
         _warningMat = _warningRenderer.material;
        
@@ -79,6 +78,7 @@ public class RainModule : GenericObject
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
+        _impactParticles.Play();
         yield return new WaitForSeconds(1.5f);
         _warningCircle.SetActive(false);
         gameObject.SetActive(false);

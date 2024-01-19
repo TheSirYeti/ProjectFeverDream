@@ -40,7 +40,7 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
 
     public void DestroyPlate()
     {
-        Destroy(gameObject);
+       gameObject.SetActive(false);
     }
 
     public void SetShufflingStatus(bool status)
