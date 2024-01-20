@@ -96,7 +96,7 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
 
     public Transform GetInteractPoint()
     {
-        return transform;
+        return _interactPoint;
     }
 
     public List<Renderer> GetRenderer()

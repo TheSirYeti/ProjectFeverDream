@@ -12,7 +12,7 @@ public class ChefBoss : GenericObject
     #region BOSS STATS
 
     [Header("Boss Stats")] [SerializeField]
-    private float _totalHitPoints;
+    private int _totalHitPoints;
 
     #endregion
 
@@ -100,12 +100,18 @@ public class ChefBoss : GenericObject
 
     private List<IEnumerator> _allAttackCoroutines;
     private List<int> availableAttacks;
+    
     private int _currentAttackAmount = 0;
     private int _totalAttackAmount = 3;
+    
     private float _currentTimeBetweenWaves = 0;
     private float _currentTimeBetweenAttacks = 0;
     private float _timeBetweenAttacks = 10f;
     private float _timeBetweenWaves = 5f;
+
+    private float _currentTimeTakeDamage = 0f;
+    private float _timeTakeDamage = 5f;
+    
     private bool attackDone = false;
     private bool waveDone = false;
 
@@ -268,6 +274,29 @@ public class ChefBoss : GenericObject
             }
         };
 
+        take_damage.OnEnter += x =>
+        {
+            _totalHitPoints--;
+            if (_totalHitPoints <= 0)
+            {
+                SendInputToFSM(ChefStates.DIE);
+                return;
+            }
+
+            _currentTimeTakeDamage = 0f;
+            BuffAttacks();
+        };
+
+        take_damage.OnUpdate += () =>
+        {
+            _currentTimeTakeDamage += Time.deltaTime;
+            if (_currentTimeTakeDamage >= _timeTakeDamage)
+            {
+                SendInputToFSM(ChefStates.ATTACKING);
+                return;
+            }
+        };
+        
         #endregion
 
         _fsm = new EventFSM<ChefStates>(idle);
@@ -312,7 +341,7 @@ public class ChefBoss : GenericObject
             availableAttacks.Add(rand);
         }
 
-        string temp = "";
+        string temp = "|";
         for (int i = 0; i < _totalAttackAmount; i++)
         {
             temp += availableAttacks[i] + "|";
@@ -527,12 +556,14 @@ public class ChefBoss : GenericObject
             }
             
             currentTimer += Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
+            Debug.Log("TIMEEE " + currentTimer);
+            yield return new WaitForEndOfFrame();
         }
         foreach (var item in allShuffles)
         {
             item.SetShufflingStatus(true);
         }
+        GameManager.Instance.Assistant.ResetGeorge();
 
         yield return new WaitForSeconds(2f);
         if (!flag)
