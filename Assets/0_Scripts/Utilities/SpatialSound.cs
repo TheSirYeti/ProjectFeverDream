@@ -42,6 +42,7 @@ public class SpatialSound : GenericObject
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(transform.position, 1f);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, 1f);
     }
 }

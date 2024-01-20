@@ -16,9 +16,6 @@ public class RecipeBillboard : GenericObject
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
-        DisplayNextRecipe();
-        DisplayNextRecipe();
-        DisplayNextRecipe();
     }
 
     public void DisplayNextRecipe()

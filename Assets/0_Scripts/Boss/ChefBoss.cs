@@ -590,12 +590,10 @@ public class ChefBoss : GenericObject
         for (int i = 0; i <= _rainAttackAmount; i++)
         {
             int rand = UnityEngine.Random.Range(0, _allPatterns.Count);
-
             GameObject currentPattern = _allPatterns[rand];
 
             foreach (Transform child in currentPattern.transform)
             {
-                Debug.Log("Gol");
                 child.gameObject.SetActive(true);
                 child.GetComponent<RainModule>().DoDrop();
             }

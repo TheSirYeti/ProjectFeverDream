@@ -39,6 +39,7 @@ public class InGameSceneManager : MonoBehaviour
 
     public void SetNextScene(int index)
     {
+        PlayerPrefs.SetInt("CurrentLevel", index);
         _sceneToLoad = _scenes[index];
     }
 

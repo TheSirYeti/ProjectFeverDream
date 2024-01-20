@@ -25,7 +25,7 @@ public class CutsceneManager : GenericObject
 
     public override void OnStart()
     {
-        if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0)
+        if (PlayerPrefs.GetInt("CurrentCheckpoint") == 0 && PlayerPrefs.GetInt("CurrentLevel") == 3)
         {
             director.playableAsset = allTimelines[0];
             director.Play();
