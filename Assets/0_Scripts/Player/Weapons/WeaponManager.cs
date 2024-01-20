@@ -171,9 +171,9 @@ public class WeaponManager : GenericObject, IAssistInteract
         EquipWeapon(usableItem.GetTransform().gameObject.GetComponent<GenericWeapon>(), true, true);
     }
 
-    public Assistant.Interactuables GetType()
+    public Interactuables GetInteractType()
     {
-        return Assistant.Interactuables.WEAPONMANAGER;
+        return Interactuables.WEAPONMANAGER;
     }
 
     public Assistant.JorgeStates GetState()
@@ -216,17 +216,17 @@ public class WeaponManager : GenericObject, IAssistInteract
         throw new NotImplementedException();
     }
 
-    public int InteractID()
+    public bool CanInteractWith(IAssistInteract assistInteract)
     {
-        return 0;
+        return assistInteract is GenericWeapon ? true : false;
     }
 
-    public bool isAutoUsable()
+    public bool IsAutoUsable()
     {
         return false;
     }
 
-    public Transform UsablePoint()
+    public Transform GoesToUsablePoint()
     {
         throw new NotImplementedException();
     }

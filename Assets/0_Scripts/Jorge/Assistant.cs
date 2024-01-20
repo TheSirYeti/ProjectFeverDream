@@ -6,6 +6,17 @@ using System.Linq;
 //using UnityFx.Outline;
 using Random = UnityEngine.Random;
 
+public enum Interactuables
+{
+    DOOR,
+    ENEMY,
+    ELEVATOR,
+    WEAPON,
+    WEAPONMANAGER,
+    COOKINGSTATION,
+    INGREDIENT
+}
+
 public class Assistant : GenericObject
 {
     Action ExtraUpdate = delegate { };
@@ -78,15 +89,7 @@ public class Assistant : GenericObject
 
     [SerializeField] private float interactDialogueCount, eatDialogueCount;
     [SerializeField] [Range(0, 100)] private float dialogueChance;
-
-    public enum Interactuables
-    {
-        DOOR,
-        ENEMY,
-        ELEVATOR,
-        WEAPON,
-        WEAPONMANAGER
-    }
+    
 
     public enum JorgeStates
     {
@@ -153,6 +156,7 @@ public class Assistant : GenericObject
             //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
+            .SetTransition(JorgeStates.USEIT, useit)
             .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
@@ -331,7 +335,7 @@ public class Assistant : GenericObject
                 _interactuable = _actualObjective.gameObject.GetComponentInParent<IAssistInteract>();
 
             var rand = Random.Range(0f, 100f);
-            if (rand <= dialogueChance && _interactuable.GetType() != Interactuables.ENEMY)
+            if (rand <= dialogueChance && _interactuable.GetInteractType() != Interactuables.ENEMY)
             {
                 EventManager.Trigger("OnAssistantInteractDialogueTriggered");
             }
@@ -366,7 +370,7 @@ public class Assistant : GenericObject
                 _isInteracting = true;
                 _obstacleDir = Vector3.zero;
 
-                switch (_interactuable.GetType())
+                switch (_interactuable.GetInteractType())
                 {
                     case Interactuables.DOOR:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
@@ -455,9 +459,12 @@ public class Assistant : GenericObject
 
             if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
             {
-                _actualObjective.transform.rotation = _pickUpPoint.rotation;
-                _actualObjective.transform.parent = _pickUpPoint;
-                _actualObjective.transform.localPosition = Vector3.zero;
+                if (_holdingItem != null && _holdingItem is IPickUp pickUp)
+                {
+                    pickUp.UnPickUp();
+                    _holdingItem = null;
+                }
+                
                 _holdingItem = _actualObjective.gameObject.GetComponent<IAssistInteract>();
 
                 if (_holdingItem == null)
@@ -465,19 +472,18 @@ public class Assistant : GenericObject
                     SendInputToFSM(JorgeStates.FOLLOW);
                     return;
                 }
+                
+                _actualObjective.transform.rotation = _pickUpPoint.rotation;
+                _actualObjective.transform.parent = _pickUpPoint;
+                _actualObjective.transform.localPosition = Vector3.zero;
 
-                //TODO lol
-                var weapon = _holdingItem.GetTransform().gameObject.GetComponent<GenericWeapon>();
-                if (weapon != null)
+                if (_holdingItem is IPickUp pickUpItem)
                 {
-                    weapon._isEquiped = true;
-                    weapon.ChangeCollisions(false);
+                    pickUpItem.Pickup();
                 }
 
-                Debug.Log(_holdingItem.InteractID());
 
-
-                if (_holdingItem.isAutoUsable())
+                if (_holdingItem.IsAutoUsable())
                 {
                     SendInputToFSM(JorgeStates.USEIT);
                 }
@@ -503,7 +509,9 @@ public class Assistant : GenericObject
 
         useit.OnEnter += x =>
         {
-            _actualObjective = _holdingItem.UsablePoint();
+            if (_holdingItem.IsAutoUsable())
+                _actualObjective = _holdingItem.GoesToUsablePoint();
+            
             _actualState = JorgeStates.USEIT;
         };
 
@@ -527,7 +535,7 @@ public class Assistant : GenericObject
 
             if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
             {
-                var tempItemAction = _actualObjective.GetComponent<IAssistInteract>();
+                var tempItemAction = _actualObjective.GetComponent<IAssistInteract>() ?? _actualObjective.GetComponentInParent<IAssistInteract>();
 
                 if (tempItemAction != null)
                 {
@@ -647,11 +655,9 @@ public class Assistant : GenericObject
         if (_holdingItem != null && _holdingItem.GetTransform() != null)
         {
             _holdingItem.GetTransform().parent = null;
-            var weapon = _holdingItem.GetTransform().gameObject.GetComponent<GenericWeapon>();
-            if (weapon != null)
+            if (_holdingItem is IPickUp pickUp)
             {
-                weapon._isEquiped = false;
-                weapon.ChangeCollisions(true);
+               pickUp.UnPickUp();
             }
         }
 
@@ -697,6 +703,7 @@ public class Assistant : GenericObject
         SoundManager.instance.PlaySound(SoundID.ASSISTANT_PING);
         _actualObjective = interactuable;
         _previousObjective = interactuable;
+        
 
         SendInputToFSM(goToState);
     }

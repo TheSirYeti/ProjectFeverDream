@@ -10,7 +10,7 @@ public class EnemyInteract : GenericObject, IAssistInteract
     private bool _isDead => _enemy.isDead;
     [SerializeField] private List<Renderer> _renderers;
     [SerializeField] private Outline _outline;
-    [SerializeField] private Assistant.Interactuables _type;
+    [SerializeField] private Interactuables _type;
 
     private void Awake()
     {
@@ -53,17 +53,17 @@ public class EnemyInteract : GenericObject, IAssistInteract
         _outline.OutlineWidth = 10;
     }
 
-    public int InteractID()
+    public bool CanInteractWith(IAssistInteract assistInteract)
     {
-        return 1;
+        throw new NotImplementedException();
     }
 
-    public bool isAutoUsable()
+    public bool IsAutoUsable()
     {
         return false;
     }
 
-    public Transform UsablePoint()
+    public Transform GoesToUsablePoint()
     {
         throw new NotImplementedException();
     }
@@ -84,7 +84,7 @@ public class EnemyInteract : GenericObject, IAssistInteract
         Destroy(_enemy.gameObject);
     }
 
-    Assistant.Interactuables IAssistInteract.GetType()
+    Interactuables IAssistInteract.GetInteractType()
     {
         return _type;
     }

@@ -5,7 +5,7 @@ using System;
 
 //using UnityFx.Outline;
 
-public abstract class GenericWeapon : GenericObject, IAssistInteract
+public abstract class GenericWeapon : GenericObject, IAssistInteract, IPickUp
 {
     [SerializeField] protected SO_Weapon _weaponSO;
     protected WeaponManager _weaponManager;
@@ -23,7 +23,6 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 
     protected Transform _nozzlePoint;
 
-    [SerializeField] int _pickUpID;
     [SerializeField] private Outline _outline;
     public bool _isEquiped = false;
 
@@ -205,17 +204,17 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
         _outline.OutlineWidth = 8;
     }
 
-    public int InteractID()
+    public bool CanInteractWith(IAssistInteract assistInteract)
     {
-        return _pickUpID;
+        throw new NotImplementedException();
     }
 
-    public bool isAutoUsable()
+    public bool IsAutoUsable()
     {
         return true;
     }
 
-    public Transform UsablePoint()
+    public Transform GoesToUsablePoint()
     {
         return _weaponManager.transform;
     }
@@ -225,9 +224,9 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
         Debug.Log("Here?");
     }
 
-    public Assistant.Interactuables GetType()
+    public Interactuables GetInteractType()
     {
-        return Assistant.Interactuables.WEAPON;
+        return Interactuables.WEAPON;
     }
 
     public Assistant.JorgeStates GetState()
@@ -267,6 +266,24 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract
 
     #endregion
 
+    #region PickUp Interface
+
+    public void Pickup()
+    {
+        _isEquiped = true;
+        ChangeCollisions(false);
+    }
+
+    public void UnPickUp()
+    {
+        transform.parent = null;
+        _isEquiped = false;
+        ChangeCollisions(true);
+    }
+
+    #endregion
+
+    
     #region CheatZone
 
     public void SetAmmo(int newAmmo)

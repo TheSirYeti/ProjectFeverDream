@@ -9,7 +9,7 @@ public class Elevator : GenericObject, IAssistInteract
 {
     [SerializeField] private Outline _outline;
     [SerializeField] private ScreenControllerShader _screenControllerShader;
-    [SerializeField] Assistant.Interactuables _type;
+    [SerializeField] Interactuables _type;
     
     [SerializeField] private ParticleSystem vfx;
     [SerializeField] private SpatialSound sfx;
@@ -82,7 +82,7 @@ public class Elevator : GenericObject, IAssistInteract
         Debug.Log("ASCENSOR");
     }
 
-    public Assistant.Interactuables GetType()
+    public Interactuables GetInteractType()
     {
         return _type;
     }
@@ -126,17 +126,17 @@ public class Elevator : GenericObject, IAssistInteract
         }
     }
 
-    public int InteractID()
+    public bool CanInteractWith(IAssistInteract assistInteract)
     {
         throw new System.NotImplementedException();
     }
 
-    public bool isAutoUsable()
+    public bool IsAutoUsable()
     {
         return false;
     }
 
-    public Transform UsablePoint()
+    public Transform GoesToUsablePoint()
     {
         throw new System.NotImplementedException();
     }

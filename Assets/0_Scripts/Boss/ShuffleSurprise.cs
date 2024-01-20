@@ -79,9 +79,9 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
         Reveal();
     }
 
-    public Assistant.Interactuables GetType()
+    public Interactuables GetInteractType()
     {
-        return Assistant.Interactuables.DOOR;
+        return Interactuables.DOOR;
     }
 
     public Assistant.JorgeStates GetState()
@@ -124,17 +124,17 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
         //
     }
 
-    public int InteractID()
+    public bool CanInteractWith(IAssistInteract assistInteract)
     {
         throw new NotImplementedException();
     }
 
-    public bool isAutoUsable()
+    public bool IsAutoUsable()
     {
         throw new NotImplementedException();
     }
 
-    public Transform UsablePoint()
+    public Transform GoesToUsablePoint()
     {
         throw new NotImplementedException();
     }

@@ -7,7 +7,7 @@ using UnityEngine;
 public class DoorPanel : GenericObject, IAssistInteract
 {
     [SerializeField] private Outline _outline;
-    [SerializeField] Assistant.Interactuables _type;
+    [SerializeField] Interactuables _type;
 
     bool _isClose = true;
     [SerializeField] Animator _door;
@@ -70,7 +70,6 @@ public class DoorPanel : GenericObject, IAssistInteract
         return "pluggingWire";
     }
 
-    //TODO: Set Interfaces
     public void ChangeOutlineState(bool state)
     {
         if (_outline != null)
@@ -80,17 +79,17 @@ public class DoorPanel : GenericObject, IAssistInteract
         }
     }
 
-    public int InteractID()
+    public bool CanInteractWith(IAssistInteract assistInteract)
     {
         throw new NotImplementedException();
     }
 
-    public bool isAutoUsable()
+    public bool IsAutoUsable()
     {
         throw new NotImplementedException();
     }
 
-    public Transform UsablePoint()
+    public Transform GoesToUsablePoint()
     {
         throw new NotImplementedException();
     }
@@ -105,7 +104,7 @@ public class DoorPanel : GenericObject, IAssistInteract
         return null;
     }
 
-    Assistant.Interactuables IAssistInteract.GetType()
+    Interactuables IAssistInteract.GetInteractType()
     {
         return _type;
     }

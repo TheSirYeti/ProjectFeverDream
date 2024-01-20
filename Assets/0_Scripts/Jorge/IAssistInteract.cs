@@ -4,17 +4,17 @@ using UnityEngine;
 
 public interface IAssistInteract
 {
-    public abstract void Interact(IAssistInteract usableItem = null);
-    public abstract Assistant.Interactuables GetType();
-    public abstract Assistant.JorgeStates GetState();
-    public abstract Transform GetTransform();
-    public abstract Transform GetInteractPoint();
-    public abstract List<Renderer> GetRenderer();
-    public abstract bool CanInteract();
-    public abstract string ActionName();
-    public abstract string AnimationToExecute();
-    public abstract void ChangeOutlineState(bool state);
-    public abstract int InteractID();
-    public abstract bool isAutoUsable();
-    public abstract Transform UsablePoint();
+    public void Interact(IAssistInteract usableItem = null);
+    public Interactuables GetInteractType();
+    public Assistant.JorgeStates GetState();
+    public Transform GetTransform();
+    public Transform GetInteractPoint();
+    public List<Renderer> GetRenderer();
+    public bool CanInteract();
+    public string ActionName();
+    public string AnimationToExecute();
+    public void ChangeOutlineState(bool state);
+    public bool CanInteractWith(IAssistInteract assistInteract);
+    public bool IsAutoUsable();
+    public Transform GoesToUsablePoint();
 }

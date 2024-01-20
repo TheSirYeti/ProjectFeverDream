@@ -42,7 +42,7 @@ public class CameraAim
 
         var colliders =
             Physics.OverlapSphere(_camera.transform.position, _interactDistance, LayerManager.LM_ALLINTERACTS);
-        //Debug.Log(1);
+
         if (!colliders.Any())
         {
             if (_actualInteract == null) return;
@@ -54,7 +54,6 @@ public class CameraAim
             return;
         }
 
-        //Debug.Log(2);
         var objectInView = colliders.Where(x =>
         {
             var maxDistance = new Vector3(0.5f, 0.5f, 0);
@@ -78,8 +77,6 @@ public class CameraAim
             return;
         }
 
-        //Debug.Log(3);
-
         var closeObj = objectInView.OrderBy(x =>
             {
                 var maxDistance = new Vector2(0.5f, 0.5f);
@@ -90,7 +87,6 @@ public class CameraAim
             .First().gameObject
             .GetComponent<IAssistInteract>();
 
-        //Debug.Log(4);
         if (closeObj == null || !closeObj.CanInteract())
         {
             _actualInteract?.ChangeOutlineState(false);
@@ -100,7 +96,6 @@ public class CameraAim
             return;
         }
 
-        //Debug.Log(5);
         if (closeObj == _actualInteract) return;
 
         _actualInteract?.ChangeOutlineState(false);
@@ -113,9 +108,9 @@ public class CameraAim
     {
         if (_actualInteract == null) return;
 
-
         if (_actualInteract.GetState() == Assistant.JorgeStates.USEIT &&
-            _actualInteract.InteractID() == _assistant._holdingItem.InteractID())
+            _assistant._holdingItem != null &&
+            _actualInteract.CanInteractWith(_assistant._holdingItem))
         {
             _assistant.SetObjective(_actualInteract.GetInteractPoint(), _actualInteract.GetState());
         }

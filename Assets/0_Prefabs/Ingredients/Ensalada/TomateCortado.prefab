@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 6345682474942263751}
   - component: {fileID: 1531338426545642655}
   - component: {fileID: 3721769543211038071}
-  m_Layer: 0
+  - component: {fileID: 3475967371254112300}
+  m_Layer: 10
   m_Name: TomateCortado
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,6 +122,26 @@ MonoBehaviour:
   priority: 0
   isPausable: 1
   _cookingType: 5
+  _ingredientType: 5
   _cookingDuration: 3
   _hasOutput: 1
   _output: {fileID: 0}
+  _outline: {fileID: 3475967371254112300}
+--- !u!114 &3475967371254112300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4549218638394325648}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
