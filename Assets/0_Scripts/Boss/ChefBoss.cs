@@ -340,14 +340,6 @@ public class ChefBoss : GenericObject
             }
             availableAttacks.Add(rand);
         }
-
-        string temp = "|";
-        for (int i = 0; i < _totalAttackAmount; i++)
-        {
-            temp += availableAttacks[i] + "|";
-        }
-
-        Debug.Log(temp);
     }
 
     void DoAttack(int attackID)

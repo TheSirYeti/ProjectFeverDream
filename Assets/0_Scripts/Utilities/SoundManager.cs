@@ -280,6 +280,19 @@ public class SoundManager : MonoBehaviour
         musicChannel[idToPlay].volume = volumeMusic;
         musicChannel[idToPlay].pitch = pitch;  
     }
+    
+    public void PlayMusicByInt(int idToPlay, bool loop = false, float pitch = 1)
+    {
+        musicChannel[idToPlay].Play();
+        musicChannel[idToPlay].loop = loop;
+        musicChannel[idToPlay].volume = volumeMusic;
+        musicChannel[idToPlay].pitch = pitch;
+    }
+    
+    public void StopMusicByInt(int idToPlay, bool loop = false, float pitch = 1)
+    {
+        musicChannel[idToPlay].Stop();
+    }
 
     public void StopAllMusic()
     {
