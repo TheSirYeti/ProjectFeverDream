@@ -6,17 +6,33 @@ using System;
 public class MixerStation : GenericObject, IAssistInteract
 {
     private bool _isOccupied = false;
+    [Header("Mixer Properties")]
     [SerializeField] private List<IngredientType> _requiredIngredients;
     private List<IngredientType> _currentIngredients = new List<IngredientType>();
+    
+    [Header("Transforms")]
     [SerializeField] private Ingredient mixingOutput;
     [SerializeField] private Transform inputPoint;
     [SerializeField] private Transform outputPoint;
 
+    [Header("View Properties")]
     [SerializeField] private Outline outline;
+    [SerializeField] private AudioSource _sfx;
+    private int _sfxID;
+    [SerializeField] private AudioSource _doneSfx;
+    private int _doneSfxID;
 
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+    }
+    
+    public override void OnStart()
+    {
+        _sfxID = SoundManager.instance.AddSFXSource(_sfx);
+        _doneSfxID = SoundManager.instance.AddSFXSource(_doneSfx);
+        
+        Debug.Log(_sfxID);
     }
 
     public void ProcessFood(Ingredient ingredient)
@@ -25,7 +41,7 @@ public class MixerStation : GenericObject, IAssistInteract
         ingredient.gameObject.SetActive(false);
 
         if (_currentIngredients.Count == _requiredIngredients.Count)
-            StartCoroutine(DoMixing(mixingOutput));
+            StartCoroutine(DoMixing(ingredient));
     }
 
     public bool CheckIngredientList(Ingredient ingredient)
@@ -39,10 +55,13 @@ public class MixerStation : GenericObject, IAssistInteract
     {
         _isOccupied = true;
 
+        SoundManager.instance.PlaySoundByInt(_sfxID, true);
         //feedback de que esta cortando
         yield return new WaitForSeconds(ingredient.GetDuration());
 
-        var finalOutput = Instantiate(ingredient);
+        SoundManager.instance.StopSoundByInt(_sfxID);
+        SoundManager.instance.PlaySoundByInt(_doneSfxID);
+        var finalOutput = Instantiate(mixingOutput);
 
         finalOutput.transform.position = outputPoint.position;
         _isOccupied = false;

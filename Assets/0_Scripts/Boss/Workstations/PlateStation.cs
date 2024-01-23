@@ -6,17 +6,31 @@ using System;
 public class PlateStation : GenericObject, IAssistInteract
 {
     private bool _isOccupied = false;
+    [Header("Plate Properties")]
     [SerializeField] private List<IngredientType> _requiredIngredients;
     private List<IngredientType> _currentIngredients = new List<IngredientType>();
+    
+    [Header("Transforms")]
     [SerializeField] private Ingredient mixingOutput;
     [SerializeField] private Transform inputPoint;
     [SerializeField] private Transform outputPoint;
-
+    
+    [Header("View Properties")]
     [SerializeField] private Outline outline;
+    [SerializeField] private AudioSource _sfx;
+    private int _sfxID;
+    [SerializeField] private AudioSource _doneSfx;
+    private int _doneSfxID;
 
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+    }
+    
+    public override void OnStart()
+    {
+        _sfxID = SoundManager.instance.AddSFXSource(_sfx);
+        _doneSfxID = SoundManager.instance.AddSFXSource(_doneSfx);
     }
 
     public void ProcessFood(Ingredient ingredient)
@@ -40,9 +54,12 @@ public class PlateStation : GenericObject, IAssistInteract
         _isOccupied = true;
 
         //feedback de que esta cortando
+        SoundManager.instance.PlaySoundByInt(_sfxID, true);
         yield return new WaitForSeconds(ingredient.GetDuration());
 
         var finalOutput = Instantiate(ingredient);
+        SoundManager.instance.StopSoundByInt(_sfxID);
+        SoundManager.instance.PlaySoundByInt(_doneSfxID);
 
         finalOutput.transform.position = outputPoint.position;
         _isOccupied = false;

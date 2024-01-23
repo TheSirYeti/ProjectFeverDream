@@ -6,13 +6,26 @@ using System;
 public class OvenStation : GenericObject, IAssistInteract
 {
     private bool _isOccupied = false;
+    [Header("Transforms")]
     [SerializeField] private Transform inputPoint;
     [SerializeField] private Transform outputPoint;
     
+    [Header("View Properties")]
     [SerializeField] private Outline outline;
+    [SerializeField] private AudioSource _sfx;
+    private int _sfxID;
+    [SerializeField] private AudioSource _doneSfx;
+    private int _doneSfxID;
+    
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+    }
+    
+    public override void OnStart()
+    {
+        _sfxID = SoundManager.instance.AddSFXSource(_sfx);
+        _doneSfxID = SoundManager.instance.AddSFXSource(_doneSfx);
     }
 
     IEnumerator DoOvenCooking(Ingredient ingredient)
@@ -22,10 +35,13 @@ public class OvenStation : GenericObject, IAssistInteract
         GameObject reference = ingredient.GetOutput();
         float timeToCook = ingredient.GetDuration();
         ingredient.gameObject.SetActive(false);
+        SoundManager.instance.PlaySoundByInt(_sfxID, true);
         
         //feedback de que esta horneando
         yield return new WaitForSeconds(timeToCook);
         
+        SoundManager.instance.StopSoundByInt(_sfxID);
+        SoundManager.instance.PlaySoundByInt(_doneSfxID);
         GameObject finalOutput = Instantiate(reference);
         
         finalOutput.transform.position = outputPoint.position;

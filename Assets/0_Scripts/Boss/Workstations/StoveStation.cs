@@ -6,24 +6,40 @@ using System;
 public class StoveStation : GenericObject, IAssistInteract
 {
     private bool _isOccupied = false;
+    [Header("Transforms")]
     [SerializeField] private Transform inputPoint;
     [SerializeField] private Transform outputPoint;
     [SerializeField] private Transform usingPoint;
     
+    [Header("View Properties")]
     [SerializeField] private Outline outline;
+    [SerializeField] private AudioSource _sfx;
+    private int _sfxID;
+    [SerializeField] private AudioSource _doneSfx;
+    private int _doneSfxID;
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
     }
-    
+
+    public override void OnStart()
+    {
+        _sfxID = SoundManager.instance.AddSFXSource(_sfx);
+        _doneSfxID = SoundManager.instance.AddSFXSource(_doneSfx);
+    }
+
     IEnumerator DoStoveCooking(Ingredient ingredient)
     {
         _isOccupied = true;
         
         //feedback de que esta cortando
         ingredient.transform.position = usingPoint.position;
+        SoundManager.instance.PlaySoundByInt(_sfxID, true);
+        
         yield return new WaitForSeconds(ingredient.GetDuration());
         
+        SoundManager.instance.StopSoundByInt(_sfxID);
+        SoundManager.instance.PlaySoundByInt(_doneSfxID);
         GameObject finalOutput = Instantiate(ingredient.GetOutput());
         ingredient.gameObject.SetActive(false);
         
