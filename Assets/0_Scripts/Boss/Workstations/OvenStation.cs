@@ -18,12 +18,15 @@ public class OvenStation : GenericObject, IAssistInteract
     IEnumerator DoOvenCooking(Ingredient ingredient)
     {
         _isOccupied = true;
-        
-        //feedback de que esta cortando
-        yield return new WaitForSeconds(ingredient.GetDuration());
-        
-        GameObject finalOutput = Instantiate(ingredient.GetOutput());
+
+        GameObject reference = ingredient.GetOutput();
+        float timeToCook = ingredient.GetDuration();
         ingredient.gameObject.SetActive(false);
+        
+        //feedback de que esta horneando
+        yield return new WaitForSeconds(timeToCook);
+        
+        GameObject finalOutput = Instantiate(reference);
         
         finalOutput.transform.position = outputPoint.position;
         _isOccupied = false;

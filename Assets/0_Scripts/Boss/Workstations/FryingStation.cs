@@ -8,6 +8,7 @@ public class FryingStation : GenericObject, IAssistInteract
     private bool _isOccupied = false;
     [SerializeField] private Transform inputPoint;
     [SerializeField] private Transform outputPoint;
+    [SerializeField] private Transform usingPoint;
     
     [SerializeField] private Outline outline;
     private void Awake()
@@ -20,6 +21,8 @@ public class FryingStation : GenericObject, IAssistInteract
         _isOccupied = true;
 
         if (ingredient is IPickUp pickUp)pickUp.Pickup();
+
+        ingredient.transform.position = usingPoint.position;
         
         //feedback de que esta cortando
         yield return new WaitForSeconds(ingredient.GetDuration());

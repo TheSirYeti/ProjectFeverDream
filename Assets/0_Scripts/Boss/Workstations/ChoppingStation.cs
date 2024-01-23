@@ -8,6 +8,7 @@ public class ChoppingStation : GenericObject, IAssistInteract
     private bool _isOccupied = false;
     [SerializeField] private Transform inputPoint;
     [SerializeField] private Transform outputPoint;
+    [SerializeField] private Transform usingPoint;
     
     [SerializeField] private Outline outline;
 
@@ -19,6 +20,7 @@ public class ChoppingStation : GenericObject, IAssistInteract
     IEnumerator DoChopping(Ingredient ingredient)
     {
         _isOccupied = true;
+        ingredient.transform.position = usingPoint.position;
 
         //feedback de que esta cortando
         yield return new WaitForSeconds(ingredient.GetDuration());

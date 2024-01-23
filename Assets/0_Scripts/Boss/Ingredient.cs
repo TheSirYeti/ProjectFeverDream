@@ -64,6 +64,8 @@ public class Ingredient : GenericObject, IAssistInteract, IPickUp
     
     public bool CanInteract()
     {
+        if (!_hasOutput) return false;
+        
         return _isInteractable;
     }
 
@@ -160,5 +162,8 @@ public enum IngredientType
     HUEVOS,
     LECHE,
     MEZCLATORTA,
-    TORTA
+    TORTA,
+    ENSALADA,
+    HAMBURGUESA,
+    TORTA_DECORADA
 }

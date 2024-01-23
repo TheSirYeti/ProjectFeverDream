@@ -273,6 +273,10 @@ public class ChefBoss : GenericObject
                 }
             }
         };
+        
+        #endregion
+
+        #region TAKE DAMAGE
 
         take_damage.OnEnter += x =>
         {
@@ -296,7 +300,8 @@ public class ChefBoss : GenericObject
                 return;
             }
         };
-        
+
+
         #endregion
 
         _fsm = new EventFSM<ChefStates>(idle);
@@ -548,7 +553,6 @@ public class ChefBoss : GenericObject
             }
             
             currentTimer += Time.deltaTime;
-            Debug.Log("TIMEEE " + currentTimer);
             yield return new WaitForEndOfFrame();
         }
         foreach (var item in allShuffles)

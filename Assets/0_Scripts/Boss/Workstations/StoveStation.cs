@@ -8,6 +8,7 @@ public class StoveStation : GenericObject, IAssistInteract
     private bool _isOccupied = false;
     [SerializeField] private Transform inputPoint;
     [SerializeField] private Transform outputPoint;
+    [SerializeField] private Transform usingPoint;
     
     [SerializeField] private Outline outline;
     private void Awake()
@@ -20,6 +21,7 @@ public class StoveStation : GenericObject, IAssistInteract
         _isOccupied = true;
         
         //feedback de que esta cortando
+        ingredient.transform.position = usingPoint.position;
         yield return new WaitForSeconds(ingredient.GetDuration());
         
         GameObject finalOutput = Instantiate(ingredient.GetOutput());
