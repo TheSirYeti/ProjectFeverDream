@@ -33,6 +33,7 @@ public class ChoppingStation : GenericObject, IAssistInteract
     {
         _isOccupied = true;
         ingredient.transform.position = usingPoint.position;
+        ingredient.transform.rotation = usingPoint.rotation;
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
 
         //feedback de que esta cortando
