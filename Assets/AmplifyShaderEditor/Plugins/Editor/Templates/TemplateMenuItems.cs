@@ -76,5 +76,15 @@ namespace AmplifyShaderEditor
 		{
 			AmplifyShaderEditorWindow.CreateConfirmationTemplateShader( "cf964e524c8e69742b1d21fbe2ebcc4a" );
 		}
+		[MenuItem( "Assets/Create/Amplify Shader/Impostors/Baking/Bake", false, 85 )]
+		public static void ApplyTemplateImpostorsBakingBake()
+		{
+			AmplifyShaderEditorWindow.CreateConfirmationTemplateShader( "f53051a8190f7044fa936bd7fbe116c1" );
+		}
+		[MenuItem( "Assets/Create/Amplify Shader/Impostors/Lit", false, 85 )]
+		public static void ApplyTemplateImpostorsLit()
+		{
+			AmplifyShaderEditorWindow.CreateConfirmationTemplateShader( "30a8e337ed84177439ca24b6a5c97cd1" );
+		}
 	}
 }
