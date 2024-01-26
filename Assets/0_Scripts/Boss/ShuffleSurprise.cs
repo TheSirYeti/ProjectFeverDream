@@ -9,6 +9,7 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
     [Space(10)] [SerializeField] private Animator _animator;
     [Space(10)] [SerializeField] private Transform _interactPoint;
     [SerializeField] private GameObject _goodObjectPlate, _badObjectPlate;
+    [SerializeField] private SubtitleSet _goodSub, _badSub;
     [Space(10)] [SerializeField] private string _animationOpen, _animationClose;
     [SerializeField] private GameObject _badObjectPrefab;
     [SerializeField] private Vector3 _badObjectOffset;
@@ -63,11 +64,14 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
         if (_isGood)
         {
             //Heal, sfx positivo
+            EventManager.Trigger("OnVoicelineSetTriggered", _goodSub);
+            yield return new WaitForSeconds(( _goodSub.allVoicelines[0].duration));
             yield break;
         }
 
         //sfx negativo
-        yield return new WaitForSeconds(1f);
+        EventManager.Trigger("OnVoicelineSetTriggered", _badSub);
+        yield return new WaitForSeconds(( _badSub.allVoicelines[0].duration));
         GameObject trap = Instantiate(_badObjectPrefab);
         trap.transform.position = GameManager.Instance.Player.transform.position + _badObjectOffset;
     }

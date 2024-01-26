@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.ProBuilder.MeshOperations;
 using Random = System.Random;
@@ -114,6 +115,29 @@ public class ChefBoss : GenericObject
     
     private bool attackDone = false;
     private bool waveDone = false;
+
+    #endregion
+
+    #region VIEW PROPERTIES
+
+    [Space(20)]
+    [Header("All Subtitles")] 
+    [SerializeField] private SubtitleSet _rangedSubtitleIntro;
+    [SerializeField] private List<SubtitleSet> _rangedSubtitleCounts;
+    [Space(10)] 
+    [SerializeField] private SubtitleSet _shuffleSubtitleIntro;
+    [SerializeField] private SubtitleSet _shuffleSubtitleChoose;
+    [SerializeField] private SubtitleSet _shuffleSubtitleGood;
+    [SerializeField] private SubtitleSet _shuffleSubtitleBad;
+    [SerializeField] private SubtitleSet _shuffleSubtitleTime;
+    [Space(10)] 
+    [SerializeField] private SubtitleSet _spatulaSubtitle;
+    [Space(10)] 
+    [SerializeField] private SubtitleSet _spotlightSubtitle;
+    [Space(10)] 
+    [SerializeField] private SubtitleSet _rainSubtitle;
+    [Space(10)] 
+    [SerializeField] private List<SubtitleSet> _ambushSubtitles;
 
     #endregion
 
@@ -268,7 +292,6 @@ public class ChefBoss : GenericObject
                 }
                 else
                 {
-                    Debug.Log("EIEIEIE");
                     DoAttack(availableAttacks[_currentAttackAmount]);
                 }
             }
@@ -382,12 +405,16 @@ public class ChefBoss : GenericObject
     
     IEnumerator DoRangedPatternAttack()
     {
+        EventManager.Trigger("OnVoicelineSetTriggered", _rangedSubtitleIntro);
+        yield return new WaitForSeconds((_rangedSubtitleIntro.allVoicelines[0].duration + 1f));
+        
         Debug.Log("Ranged pattern");
         for (int i = 0; i < _rangedAttackAmount; i++)
         {
             GameObject bullet = Instantiate(_rangedPatterns[UnityEngine.Random.Range(0, _rangedPatterns.Count)]);
             bullet.transform.position = _rangedAttackSpawnpoint.position;
             bullet.transform.LookAt(_playerRef.transform.position + new Vector3(0, 0.5f, 0));
+            EventManager.Trigger("OnVoicelineSetTriggered", _rangedSubtitleCounts[i]);
             yield return new WaitForSeconds(_rangedAttackRate);
         }
 
@@ -397,6 +424,9 @@ public class ChefBoss : GenericObject
 
     IEnumerator DoPlayerSpotlight()
     {
+        EventManager.Trigger("OnVoicelineSetTriggered", _spotlightSubtitle);
+        yield return new WaitForSeconds((_spotlightSubtitle.allVoicelines[0].duration));
+        
         Debug.Log("Spotlight pattern");
         float currentTimer = 0f;
         
@@ -426,6 +456,8 @@ public class ChefBoss : GenericObject
 
     IEnumerator DoGiantSpatulaSplat()
     {
+        EventManager.Trigger("OnVoicelineSetTriggered", _spatulaSubtitle);
+        
         Debug.Log("Spatyula");
         for (int i = 0; i < _spatulaAttackAmount; i++)
         {
@@ -461,8 +493,11 @@ public class ChefBoss : GenericObject
 
     IEnumerator DoShuffleAttack()
     {
+        
         Debug.Log("Shuffle");
         List<ShuffleSurprise> allShuffles = new List<ShuffleSurprise>();
+        
+        
 
         #region Shuffling
 
@@ -483,6 +518,9 @@ public class ChefBoss : GenericObject
             allShuffles.Add(item.GetComponent<ShuffleSurprise>());
         }
 
+        EventManager.Trigger("OnVoicelineSetTriggered", _shuffleSubtitleIntro);
+        yield return new WaitForSeconds((_shuffleSubtitleIntro.allVoicelines[0].duration + 0.5f));
+        
         yield return new WaitForSeconds(_shufflePrepareTime);
 
         foreach (var surprise in allShuffles)
@@ -539,6 +577,9 @@ public class ChefBoss : GenericObject
             item.SetShufflingStatus(false);
         }
         yield return null;
+        
+        EventManager.Trigger("OnVoicelineSetTriggered", _shuffleSubtitleChoose);
+        yield return new WaitForSeconds((_shuffleSubtitleChoose.allVoicelines[0].duration));
 
         float currentTimer = 0f;
         bool flag = false;
@@ -565,7 +606,8 @@ public class ChefBoss : GenericObject
         if (!flag)
         {
             //sfx no elegiste
-            
+            EventManager.Trigger("OnVoicelineSetTriggered", _shuffleSubtitleTime);
+            yield return new WaitForSeconds((_shuffleSubtitleTime.allVoicelines[0].duration + 0.5f));
             GameObject trap = Instantiate(_shufflePunishItem);
             trap.transform.position = GameManager.Instance.Player.transform.position + new Vector3(0, 45f, 0);
             yield return new WaitForSeconds(1f);
@@ -582,6 +624,9 @@ public class ChefBoss : GenericObject
 
     IEnumerator DoRainPattern()
     {
+        EventManager.Trigger("OnVoicelineSetTriggered", _rainSubtitle);
+        yield return new WaitForSeconds((_rainSubtitle.allVoicelines[0].duration));
+        
         Debug.Log("Rain pattern");
         for (int i = 0; i <= _rainAttackAmount; i++)
         {
