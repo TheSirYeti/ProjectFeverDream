@@ -8,9 +8,12 @@ public class OvenStation : GenericObject, IAssistInteract
     private bool _isOccupied = false;
     [Header("Transforms")]
     [SerializeField] private Transform inputPoint;
+    [SerializeField] private Transform usingPoint;
     [SerializeField] private Transform outputPoint;
-    
-    [Header("View Properties")]
+
+    [Header("View Properties")] 
+    [SerializeField] private Animator _animator;
+    [SerializeField] private string _eventStart, _eventEnd, _eventIdle;
     [SerializeField] private Outline outline;
     [SerializeField] private AudioSource _sfx;
     private int _sfxID;
@@ -34,7 +37,9 @@ public class OvenStation : GenericObject, IAssistInteract
 
         GameObject reference = ingredient.GetOutput();
         float timeToCook = ingredient.GetDuration();
-        ingredient.gameObject.SetActive(false);
+        ingredient.transform.position = usingPoint.transform.position;
+        ingredient.transform.rotation = usingPoint.transform.rotation;
+        
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
         
         //feedback de que esta horneando
@@ -42,6 +47,8 @@ public class OvenStation : GenericObject, IAssistInteract
         
         SoundManager.instance.StopSoundByInt(_sfxID);
         SoundManager.instance.PlaySoundByInt(_doneSfxID);
+        
+        ingredient.gameObject.SetActive(false);
         GameObject finalOutput = Instantiate(reference);
         
         finalOutput.transform.position = outputPoint.position;
