@@ -16,9 +16,12 @@ public class RecipeBillboard : GenericObject
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+        
+        EventManager.Subscribe("OnNextRecipe", DisplayNextRecipe);
+        EventManager.Subscribe("OnPlateFinished", ClearCurrentRecipe);
     }
 
-    public void DisplayNextRecipe()
+    public void DisplayNextRecipe(object[] parameters)
     {
         _currentBillboard++;
 
@@ -45,6 +48,13 @@ public class RecipeBillboard : GenericObject
             _recipeInstructionsText.text += instruction;
             _recipeInstructionsText.text += "<br>";
         }
+    }
+
+    void ClearCurrentRecipe(object[] parameters)
+    {
+        _recipeTitleText.text = "";
+        _recipeIngredientsText.text = "";
+        _recipeInstructionsText.text = "";
     }
 }
 

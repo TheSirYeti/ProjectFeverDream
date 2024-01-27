@@ -14,6 +14,7 @@ public class ChefBoss : GenericObject
 
     [Header("Boss Stats")] [SerializeField]
     private int _totalHitPoints;
+    private int _currentRecipe = -1;
 
     #endregion
 
@@ -138,6 +139,8 @@ public class ChefBoss : GenericObject
     [SerializeField] private SubtitleSet _rainSubtitle;
     [Space(10)] 
     [SerializeField] private List<SubtitleSet> _ambushSubtitles;
+    [Space(10)] 
+    [SerializeField] private List<SubtitleSet> _recipeSubtitles;
 
     #endregion
 
@@ -162,6 +165,7 @@ public class ChefBoss : GenericObject
     #endregion
     
     private Model _playerRef;
+    private bool _inCutscene = false;
     
     private void Awake()
     {
@@ -175,6 +179,8 @@ public class ChefBoss : GenericObject
         SetupAttackCoroutines();
         SetupFSM();
         SendInputToFSM(ChefStates.IDLE);
+        
+        SoundManager.instance.PlayMusic(MusicID.GAMESHOW, true);
     }
 
     public override void OnUpdate()
@@ -303,6 +309,7 @@ public class ChefBoss : GenericObject
 
         take_damage.OnEnter += x =>
         {
+            _inCutscene = true;
             _totalHitPoints--;
             if (_totalHitPoints <= 0)
             {
@@ -311,13 +318,11 @@ public class ChefBoss : GenericObject
             }
 
             _currentTimeTakeDamage = 0f;
-            BuffAttacks();
         };
 
         take_damage.OnUpdate += () =>
         {
-            _currentTimeTakeDamage += Time.deltaTime;
-            if (_currentTimeTakeDamage >= _timeTakeDamage)
+            if (!_inCutscene)
             {
                 SendInputToFSM(ChefStates.ATTACKING);
                 return;
@@ -521,7 +526,7 @@ public class ChefBoss : GenericObject
         EventManager.Trigger("OnVoicelineSetTriggered", _shuffleSubtitleIntro);
         yield return new WaitForSeconds((_shuffleSubtitleIntro.allVoicelines[0].duration + 0.5f));
         
-        yield return new WaitForSeconds(_shufflePrepareTime);
+        //yield return new WaitForSeconds(_shufflePrepareTime);
 
         foreach (var surprise in allShuffles)
         {
@@ -663,4 +668,26 @@ public class ChefBoss : GenericObject
     
     #endregion
 
+    IEnumerator SetupNextRecipe()
+    {
+        _currentRecipe++;
+        float totalSubsTime = 0f;
+
+        foreach (var voiceline in _recipeSubtitles[_currentRecipe].allVoicelines)
+        {
+            totalSubsTime += voiceline.duration;
+        }
+        
+        EventManager.Trigger("OnVoicelineSetTriggered", _recipeSubtitles[_currentRecipe]);
+        yield return new WaitForSeconds(totalSubsTime);
+        
+        EventManager.Trigger("OnNextRecipe");
+        _inCutscene = false;
+        yield return null;
+    }
+
+    void EndCurrentRecipe(object[] parameters)
+    {
+        SendInputToFSM(ChefStates.TAKE_DAMAGE);
+    }
 }
