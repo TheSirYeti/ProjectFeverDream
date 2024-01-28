@@ -234,11 +234,13 @@ public class GameManager : MonoBehaviour
     {
         SoundManager.instance.PauseAllSounds();
         UpdateManager.instance.ChangeGameState(true);
+        TimeLineManager.Instance.ChangePauseState(true);
     }
 
     public void ResumeGame()
     {
         SoundManager.instance.ResumeAllSounds();
         UpdateManager.instance.ChangeGameState(false);
+        TimeLineManager.Instance.ChangePauseState(false);
     }
 }

@@ -47,6 +47,11 @@ public class PriorityQueue<T> where T : IWeighted
         return temp;
     }
 
+    public T Peek()
+    {
+        return Count == 0 ? default : _internal[0];
+    }
+
     private void RunEnqueueRules(int index)
     {
         var parentIndex = GetParent(index);

@@ -134,10 +134,22 @@ public class Assistant : GenericObject
 
     public override void OnStart()
     {
+       
         EventManager.Trigger("SetAssistant", this);
         _player = GameManager.Instance.Player.transform;
         DoFsmSetup();
     }
+
+    // private void Start()
+    // {
+    //     TimeLineManager.Instance.AddEvents(
+    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 1),
+    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 2),
+    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 3),
+    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 4),
+    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 5)
+    //     );
+    // }
 
     void DoFsmSetup()
     {
