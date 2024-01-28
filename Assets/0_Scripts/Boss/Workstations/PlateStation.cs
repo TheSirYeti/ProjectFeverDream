@@ -9,6 +9,12 @@ public class PlateStation : GenericObject, IAssistInteract
     [Header("Plate Properties")]
     [SerializeField] private List<IngredientType> _requiredIngredients;
     private List<IngredientType> _currentIngredients = new List<IngredientType>();
+
+    [Header("Cutscene Properties")] 
+    [SerializeField] private Transform _plateCutsceneTransform;
+    [SerializeField] private Transform _plateStartingPoint;
+    [Space(10)] 
+    [SerializeField] private int _timelineID;
     
     [Header("Transforms")]
     [SerializeField] private Ingredient mixingOutput;
@@ -62,6 +68,19 @@ public class PlateStation : GenericObject, IAssistInteract
         SoundManager.instance.PlaySoundByInt(_doneSfxID);
 
         finalOutput.transform.position = outputPoint.position;
+
+        _plateCutsceneTransform.gameObject.SetActive(true);
+
+        if (_plateCutsceneTransform.childCount > 0)
+        {
+            Destroy(_plateCutsceneTransform.GetChild(0));
+        }
+        
+        _plateCutsceneTransform.position = _plateStartingPoint.position;
+        finalOutput.transform.parent = _plateCutsceneTransform;
+        
+        CutsceneManager.instance.PlayTimeline(_timelineID);
+        
         _isOccupied = false;
 
         yield return null;

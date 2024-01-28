@@ -9,6 +9,14 @@ public class BossCutsceneSignals : GenericObject
     {
         UpdateManager.instance.AddObject(this);
     }
-    
-    
+
+    public void OnStopChef()
+    {
+        EventManager.Trigger("OnPlateFinished");
+    }
+
+    public void OnHitOver()
+    {
+        EventManager.Trigger("OnNextRecipe");
+    }
 }

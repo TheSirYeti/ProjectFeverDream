@@ -12,8 +12,8 @@ public class ChefBoss : GenericObject
 {
     #region BOSS STATS
 
-    [Header("Boss Stats")] [SerializeField]
-    private int _totalHitPoints;
+    [Header("Boss Stats")] 
+    [SerializeField] private int _totalHitPoints;
     private int _currentRecipe = -1;
 
     #endregion
@@ -172,13 +172,16 @@ public class ChefBoss : GenericObject
         UpdateManager.instance.AddObject(this);
 
         _playerRef = GameManager.Instance.Player;
+        
+        EventManager.Subscribe("OnPlateFinished", EndCurrentRecipe);
+        EventManager.Subscribe("OnNextRecipe", Recover);
     }
 
     public override void OnStart()
     {
         SetupAttackCoroutines();
         SetupFSM();
-        SendInputToFSM(ChefStates.IDLE);
+        SendInputToFSM(ChefStates.TAKE_DAMAGE);
         
         SoundManager.instance.PlayMusic(MusicID.GAMESHOW, true);
     }
@@ -278,7 +281,6 @@ public class ChefBoss : GenericObject
 
             if (waveDone)
             {
-                BuffAttacks();
                 SendInputToFSM(ChefStates.IDLE);
                 return;
             }
@@ -324,7 +326,7 @@ public class ChefBoss : GenericObject
         {
             if (!_inCutscene)
             {
-                SendInputToFSM(ChefStates.ATTACKING);
+                SendInputToFSM(ChefStates.IDLE);
                 return;
             }
         };
@@ -653,6 +655,8 @@ public class ChefBoss : GenericObject
     
     public void BuffAttacks()
     {
+        if (_currentRecipe <= -1) return; 
+        
          _rangedAttackRate -= _modRangedAttackRate;
          _rangedAttackAmount += _modRangedAttackAmount;
         _spotlightTimer += _modSpotlightTimer;
@@ -668,8 +672,15 @@ public class ChefBoss : GenericObject
     
     #endregion
 
-    IEnumerator SetupNextRecipe()
+    void Recover(object[] parameters)
     {
+        StartCoroutine(SetupNextRecipe());
+    }
+    
+    public IEnumerator SetupNextRecipe()
+    {
+        BuffAttacks();
+        
         _currentRecipe++;
         float totalSubsTime = 0f;
 
@@ -681,7 +692,6 @@ public class ChefBoss : GenericObject
         EventManager.Trigger("OnVoicelineSetTriggered", _recipeSubtitles[_currentRecipe]);
         yield return new WaitForSeconds(totalSubsTime);
         
-        EventManager.Trigger("OnNextRecipe");
         _inCutscene = false;
         yield return null;
     }
