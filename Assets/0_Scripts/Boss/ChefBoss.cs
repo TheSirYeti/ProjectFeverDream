@@ -414,6 +414,8 @@ public class ChefBoss : GenericObject
     {
         EventManager.Trigger("OnVoicelineSetTriggered", _rangedSubtitleIntro);
         yield return new WaitForSeconds((_rangedSubtitleIntro.allVoicelines[0].duration + 1f));
+
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         
         Debug.Log("Ranged pattern");
         for (int i = 0; i < _rangedAttackAmount; i++)
@@ -422,6 +424,7 @@ public class ChefBoss : GenericObject
             bullet.transform.position = _rangedAttackSpawnpoint.position;
             bullet.transform.LookAt(_playerRef.transform.position + new Vector3(0, 0.5f, 0));
             EventManager.Trigger("OnVoicelineSetTriggered", _rangedSubtitleCounts[i]);
+            if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
             yield return new WaitForSeconds(_rangedAttackRate);
         }
 
@@ -434,6 +437,8 @@ public class ChefBoss : GenericObject
         EventManager.Trigger("OnVoicelineSetTriggered", _spotlightSubtitle);
         yield return new WaitForSeconds((_spotlightSubtitle.allVoicelines[0].duration));
         
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
+        
         Debug.Log("Spotlight pattern");
         float currentTimer = 0f;
         
@@ -445,6 +450,7 @@ public class ChefBoss : GenericObject
         _spotlight.SetActive(true);
         while (currentTimer <= _spotlightTimer)
         {
+            if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
             currentTimer += Time.deltaTime;
             _spotlight.transform.position = _playerRef.transform.position + new Vector3(0, 3f, 0);
             yield return new WaitForSeconds(Time.deltaTime);
@@ -464,15 +470,19 @@ public class ChefBoss : GenericObject
     IEnumerator DoGiantSpatulaSplat()
     {
         EventManager.Trigger("OnVoicelineSetTriggered", _spatulaSubtitle);
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         
         Debug.Log("Spatyula");
         for (int i = 0; i < _spatulaAttackAmount; i++)
         {
+            if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
+            
             GameObject spatula = Instantiate(_spatulaPrefab);
             spatula.transform.position = _playerRef.transform.position + new Vector3(0, -1f, _spatulaAddedDistance);
             
             if (spatula.TryGetComponent<Animator>(out Animator spatulaInstanceAnimator))
             {
+                if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
                 spatulaInstanceAnimator.Play(_spatulaBuildUpAnimationName);
                 yield return new WaitForEndOfFrame();
                 float currentTimer = 0f;
@@ -484,8 +494,10 @@ public class ChefBoss : GenericObject
                     yield return new WaitForSeconds(Time.deltaTime);
                 }
             
+                if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
                 yield return new WaitForSeconds(0.5f);
                 spatulaInstanceAnimator.Play(_spatulaImpactAnimationName);
+                if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
                 yield return new WaitForSeconds(spatulaInstanceAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.length + 0.25f);
             }
         
@@ -504,7 +516,7 @@ public class ChefBoss : GenericObject
         Debug.Log("Shuffle");
         List<ShuffleSurprise> allShuffles = new List<ShuffleSurprise>();
         
-        
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
 
         #region Shuffling
 
@@ -526,6 +538,7 @@ public class ChefBoss : GenericObject
         }
 
         EventManager.Trigger("OnVoicelineSetTriggered", _shuffleSubtitleIntro);
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         yield return new WaitForSeconds((_shuffleSubtitleIntro.allVoicelines[0].duration + 0.5f));
         
         //yield return new WaitForSeconds(_shufflePrepareTime);
@@ -534,16 +547,21 @@ public class ChefBoss : GenericObject
         {
             surprise.Open();
         }
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         yield return new WaitForSeconds(2.5f);
         
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         foreach (var surprise in allShuffles)
         {
             surprise.Close();
         }
         yield return new WaitForSeconds(1.2f);
 
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         for (int i = 0; i < _shuffleAmount; i++)
         {
+            if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
+            
             int randSurprise1 = UnityEngine.Random.Range(0, _shuffleItemAmount);
             int randSurprise2 = UnityEngine.Random.Range(0, _shuffleItemAmount);
 
@@ -585,9 +603,13 @@ public class ChefBoss : GenericObject
         }
         yield return null;
         
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
+        
         EventManager.Trigger("OnVoicelineSetTriggered", _shuffleSubtitleChoose);
         yield return new WaitForSeconds((_shuffleSubtitleChoose.allVoicelines[0].duration));
 
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
+        
         float currentTimer = 0f;
         bool flag = false;
         while (currentTimer <= _shuffleChooseTime && !flag)
@@ -609,7 +631,11 @@ public class ChefBoss : GenericObject
         }
         GameManager.Instance.Assistant.ResetGeorge();
 
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
+        
         yield return new WaitForSeconds(2f);
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
+        
         if (!flag)
         {
             //sfx no elegiste
@@ -624,7 +650,7 @@ public class ChefBoss : GenericObject
         {
             item.DestroyPlate();
         }
-
+        
         attackDone = true;
         yield return null;
     }
@@ -633,10 +659,12 @@ public class ChefBoss : GenericObject
     {
         EventManager.Trigger("OnVoicelineSetTriggered", _rainSubtitle);
         yield return new WaitForSeconds((_rainSubtitle.allVoicelines[0].duration));
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         
         Debug.Log("Rain pattern");
         for (int i = 0; i <= _rainAttackAmount; i++)
         {
+            if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
             int rand = UnityEngine.Random.Range(0, _allPatterns.Count);
             GameObject currentPattern = _allPatterns[rand];
 

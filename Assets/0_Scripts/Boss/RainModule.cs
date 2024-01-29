@@ -19,7 +19,9 @@ public class RainModule : GenericObject
     
     [SerializeField] private float _raycastOffset;
 
+    float colorTimer = 0f;
     private float _expirationTimer = 10f;
+    private bool hasDropped = false;
     
     private void Awake()
     {
@@ -36,49 +38,68 @@ public class RainModule : GenericObject
         gameObject.SetActive(false);
     }
 
+    public override void OnUpdate()
+    {
+        if (gameObject.activeSelf)
+        {
+            Color lerpedColor = Color.Lerp(_startColor, _endColor, colorTimer / 2f);
+            _warningMat.SetColor("_Color", lerpedColor);
+            
+            colorTimer += Time.deltaTime;
+
+            if (!hasDropped)
+            {
+                transform.position += _speed * Vector3.down * Time.deltaTime;
+            }
+
+            if (Physics.Raycast(transform.position,
+                    Vector3.down,
+                    _raycastOffset,
+                    LayerManager.LM_FLOOR)
+                && currentTimer < _expirationTimer)
+            {
+                if (!hasDropped)
+                {
+                    StartCoroutine(StopRainDrop());
+                }
+                hasDropped = true;
+            }
+        }
+    }
+
     public void DoDrop()
     {
         ResetStatus();
-        StartCoroutine(DoRainDrop());
     }
 
     public void ResetStatus()
     {
         _warningCircle.SetActive(true);
         _warningMat.SetColor("_Color", _startColor);
+        colorTimer = 0f;
+        currentTimer = 0f;
+        hasDropped = false;
         transform.position = _startingPosition.position;
     }
-    
-    IEnumerator DoRainDrop()
+
+    private float currentTimer = 0f;
+    void DoRainDrop()
     {
-        float currentTimer = 0f;
-        yield return new WaitForSeconds(_waitDropTime);
-
-        float colorTimer = 0f;
-        float finalColorTimer = 1f;
-
-        while (colorTimer <= finalColorTimer)
-        {
-            Color lerpedColor = Color.Lerp(_startColor, _endColor, colorTimer);
-            _warningMat.SetColor("_Color", lerpedColor);
-            
-            colorTimer += Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-        
-        while (!Physics.Raycast(transform.position,
-                   Vector3.down,
-                   _raycastOffset,
-                   LayerManager.LM_FLOOR) 
-               && currentTimer < _expirationTimer)
+        if (!Physics.Raycast(transform.position,
+                Vector3.down,
+                _raycastOffset,
+                LayerManager.LM_FLOOR)
+            && currentTimer < _expirationTimer)
         {
             currentTimer += Time.deltaTime;
             transform.position += _speed * Vector3.down * Time.deltaTime;
-            
-            yield return new WaitForSeconds(Time.deltaTime);
         }
-
+    }
+    
+    IEnumerator StopRainDrop()
+    {
         _impactParticles.Play();
+        if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         yield return new WaitForSeconds(1.5f);
         _warningCircle.SetActive(false);
         gameObject.SetActive(false);
@@ -92,6 +113,12 @@ public class RainModule : GenericObject
         if (playerLife != null)
         {
             playerLife.GetDamage(_totalDamage);
+        }
+
+        if (other.gameObject.layer == LayerManager.LM_FLOOR)
+        {
+            StartCoroutine(StopRainDrop());
+            hasDropped = true;
         }
     }
 }

@@ -205,6 +205,11 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
             }
         }
     }
+
+    public bool IsPaused()
+    {
+        return _gamePause;
+    }
 }
 
 public class PausableObject

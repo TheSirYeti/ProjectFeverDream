@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 603389029183760184}
   - component: {fileID: 4364724593278357871}
   - component: {fileID: 4198430577144603483}
-  m_Layer: 0
+  - component: {fileID: 5852671543482174366}
+  m_Layer: 17
   m_Name: RainModule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +44,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2812349636846581906}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: fa09ad1aba45bc7458250bcb960e8267, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -55,8 +56,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.5, y: 2, z: 2.5}
-  m_Center: {x: 0, y: 0.9761219, z: 0}
+  m_Size: {x: 2.5, y: 1.6091747, z: 2.5}
+  m_Center: {x: 0, y: 1.1715345, z: 0}
 --- !u!114 &4198430577144603483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,14 +73,41 @@ MonoBehaviour:
   priority: 0
   isPausable: 1
   _totalDamage: 20
-  _speed: 100
+  _speed: 40
   _startingPosition: {fileID: 1338679170655037918}
   _warningCircle: {fileID: 7468743622934412061}
   _impactParticles: {fileID: 3756933506923784595}
   _waitDropTime: 1
-  _startColor: {r: 0, g: 1, b: 0.0643208, a: 1}
+  _startColor: {r: 1, g: 0.80811363, b: 0, a: 1}
   _endColor: {r: 1, g: 0, b: 0, a: 1}
   _raycastOffset: 0.4
+--- !u!54 &5852671543482174366
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2812349636846581906}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 2
 --- !u!1 &3194855317405927099
 GameObject:
   m_ObjectHideFlags: 0
