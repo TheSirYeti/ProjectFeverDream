@@ -152,6 +152,7 @@ public class MenuController : GenericObject
     public void BTN_Quit()
     {
         EventManager.Trigger("OnResetTriggerLevel");
+        PlayerPrefs.SetInt("LevelReplayCounter", 0);
         GameManager.Instance.ChangeScene(2);
     }
 

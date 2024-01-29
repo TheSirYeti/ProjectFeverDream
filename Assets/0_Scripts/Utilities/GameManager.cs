@@ -117,7 +117,9 @@ public class GameManager : MonoBehaviour
 
     public void ReloadScene()
     {
-        Debug.Log("Huh?");
+        int replay = PlayerPrefs.GetInt("LevelReplayCounter") + 1;
+        PlayerPrefs.SetInt("LevelReplayCounter", replay);
+        
         InGameSceneManager.instace.SetNextScene(_actualScene);
         StartCoroutine(SceneLoader(true));
     }
@@ -131,8 +133,13 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForEndOfFrame();
-
+        
         _myCameras[0].transform.parent = transform;
+
+        if (_actualScene != PlayerPrefs.GetInt("CurrentLevel"))
+        {
+            PlayerPrefs.SetInt("LevelReplayCounter", 0);
+        }
 
         if (InGameSceneManager.instace.HasLoadingScene(_actualScene))
         {
@@ -146,6 +153,7 @@ public class GameManager : MonoBehaviour
         EventManager.ResetEventDictionary();
         SoundManager.instance.StopAllSounds();
         SoundManager.instance.StopAllMusic();
+        SoundManager.instance.StopAllVoiceLines();
         LeanTween.reset();
 
         InGameSceneManager.instace.UnloadScene();
