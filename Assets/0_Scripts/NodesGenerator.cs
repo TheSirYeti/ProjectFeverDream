@@ -29,13 +29,13 @@ public class NodesGenerator : MonoBehaviour
     public void Generate()
     {
         _spawnedNodes = new HashSet<Vector3>();
-        Vector3 actualStartRay = transform.position;
+        var actualStartRay = transform.position;
         actualStartRay.x -= _area.x / 2;
         actualStartRay.y += _area.y / 2;
         actualStartRay.z += _area.z / 2;
 
         MNode actualNode;
-        int count = 0;
+        var count = 0;
         while (actualStartRay.y >= minY)
         {
             actualStartRay.x = transform.position.x - (_area.x / 2);
@@ -43,10 +43,9 @@ public class NodesGenerator : MonoBehaviour
             
             while (actualStartRay.x <= maxX)
             {
-                Ray ray = new Ray(actualStartRay, Vector3.down);
-                RaycastHit hit;
+                var ray = new Ray(actualStartRay, Vector3.down);
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.LM_FLOOR))
+                if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerManager.LM_FLOOR))
                 {
                     if (!Physics.Raycast(ray, (hit.point - actualStartRay).magnitude, LayerManager.LM_NODEOBSTACLE))
                     {
@@ -98,52 +97,56 @@ public class NodesGenerator : MonoBehaviour
 
     public void GenerateNeighbours()
     {
-        for (int i = 0; i < 2; i++)
+        foreach (var node in _nodeList.Select(actualNode => actualNode.GetComponent<MNode>()))
         {
-            foreach (var actualNode in _nodeList)
-            {
-                MNode node = actualNode.GetComponent<MNode>();
-                Undo.RecordObject(node, "SetNeighbours");
-                node.ClearNeighbours();
+            Undo.RecordObject(node, "SetNeighbours");
+            node.ClearNeighbours();
+        }
 
-                Collider[] neighbours =
-                    Physics.OverlapSphere(node.transform.position, _nodeDistance, LayerManager.LM_NODE);
+        for (var i = 0; i < 2; i++)
+        {
+            foreach (var actualNode in _nodeList.Select(actualNode => actualNode.GetComponent<MNode>()))
+            {
+                Undo.RecordObject(actualNode, "SetNeighbours");
+                var neighbours =
+                    Physics.OverlapSphere(actualNode.transform.position, _nodeDistance, LayerManager.LM_NODE);
 
                 foreach (var neighbour in neighbours)
                 {
-                    MNode checkingNeightbour = neighbour.gameObject.GetComponent<MNode>();
+                    var checkingNeighbour = neighbour.gameObject.GetComponent<MNode>();
+                    
+                    if (checkingNeighbour == actualNode) continue;
 
-                    if (checkingNeightbour == node) continue;
+                    if (actualNode.CheckNeighbor(checkingNeighbour)) continue;
 
-                    if (node.CheckNeighbor(checkingNeightbour)) continue;
-
-                    Vector3 dir = neighbour.transform.position - node.transform.position;
-                    Ray rayWallChecker = new Ray(node.transform.position, dir);
+                    var dir = neighbour.transform.position - actualNode.transform.position;
+                    var rayWallChecker = new Ray(actualNode.transform.position, dir);
 
                     if (Physics.Raycast(rayWallChecker, _nodeDistance, LayerManager.LM_WALL)) continue;
 
-                    checkingNeightbour.AddNeighbor(node);
-                    node.AddNeighbor(checkingNeightbour);
+                    checkingNeighbour.AddNeighbor(actualNode);
+                    actualNode.AddNeighbor(checkingNeighbour);
                 }
-                PrefabUtility.RecordPrefabInstancePropertyModifications(node);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(actualNode);
             }
 
             ClearNodes();
         }
     }
 
-    public void ClearNodes()
+    private  void ClearNodes()
     {
-        Queue nodesToDelete = new Queue();
+        var nodesToDelete = new Queue<GameObject>();
 
         foreach (var node in _nodeList)
         {
-            Collider[] colliders =
-                Physics.OverlapSphere(node.transform.position, _nodeSize, LayerManager.LM_NODE);
-            List<GameObject> closestNodes = colliders.Select(x => x.gameObject).ToList();
-            closestNodes.Remove(node);
+            var colliders =
+                Physics.OverlapSphere(node.transform.position, _nodeSize, LayerManager.LM_NODE).Select(x=>x.gameObject);
             
-            MNode mNode = node.GetComponent<MNode>();
+           var closestNodes = colliders.Where(x=>x != node && !nodesToDelete.Contains(x)).Select(x => x);
+            
+            var mNode = node.GetComponent<MNode>();
+            
             if (Physics.CheckSphere(node.transform.position, _nodeSize, LayerManager.LM_NODEOBSTACLE) || !mNode.HasNeighbours() || closestNodes.Any())
             {
                 nodesToDelete.Enqueue(node);
@@ -152,13 +155,14 @@ public class NodesGenerator : MonoBehaviour
 
         while (nodesToDelete.Count > 0)
         {
-            GameObject node = nodesToDelete.Dequeue() as GameObject;
+            var node = nodesToDelete.Dequeue();
             _nodeList.Remove(node);
+            node.GetComponent<MNode>().DestroyNode();
 
             DestroyImmediate(node);
         }
 
-        //pathfinding.nodes = _nodeList.ToArray();
+        _nodeList = _nodeList.Where(x => x != null).ToList();
     }
 
     public void RemoveNulls()

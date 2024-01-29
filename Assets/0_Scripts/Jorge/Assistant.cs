@@ -312,7 +312,7 @@ public class Assistant : GenericObject
 
             if (Vector3.Distance(transform.position, _actualObjective.position) < _nodeDistance)
             {
-                if (nodeList.PathCount() > 0)
+                if (nodeList.AnyInPath())
                 {
                     _actualObjective = nodeList.GetNextNode().transform;
                 }

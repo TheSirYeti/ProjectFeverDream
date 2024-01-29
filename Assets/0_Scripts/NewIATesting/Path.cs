@@ -22,8 +22,8 @@ public class Path
         return _pathQueue.Any() ?  _pathQueue.Peek() : null;
     }
 
-    public int PathCount()
+    public bool AnyInPath()
     {
-        return _pathQueue.Count;
+        return _pathQueue.Any();
     }
 }

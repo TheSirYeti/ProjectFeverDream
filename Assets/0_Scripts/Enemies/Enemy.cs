@@ -268,7 +268,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
 
         if (Vector3.Distance(transform.position, (_actualObjective.position)) < minDistanceToNode)
         {
-            if (nodeList.PathCount() > 0)
+            if (nodeList.AnyInPath())
             {
                 _actualObjective = nodeList.GetNextNode().transform;
             }

@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 public class MNode : MonoBehaviour, IWeighted
 {
-    [SerializeField] private List<MNode> _neighbors = new List<MNode>();
+    [FormerlySerializedAs("_neighbors")] [SerializeField] public List<MNode> neighbors = new();
 
     private float _weight = 0;
     public MNode previousNode = null;
@@ -13,42 +13,42 @@ public class MNode : MonoBehaviour, IWeighted
 
     public void AddNeighbor(MNode neighbor)
     {
-        if (neighbor && !_neighbors.Contains(neighbor))
+        if (neighbor && !neighbors.Contains(neighbor))
         {
             
-            _neighbors.Add(neighbor);
+            neighbors.Add(neighbor);
         }
     }
 
     public void RemoveNeighbor(MNode neighbor)
     {
-        var index = _neighbors.IndexOf(neighbor);
-        _neighbors.RemoveAt(index);
+        var index = neighbors.IndexOf(neighbor);
+        neighbors.RemoveAt(index);
     }
 
     public bool CheckNeighbor(MNode neighbor)
     {
-        return _neighbors.Contains(neighbor);
+        return neighbors.Contains(neighbor);
     }
 
     public void ClearNeighbours()
     {
-        _neighbors = new List<MNode>();
+        neighbors = new List<MNode>();
     }
 
     public bool HasNeighbours()
     {
-        return _neighbors.Count > 0;
+        return neighbors.Count > 0;
     }
 
     public MNode GetNeighbor(int index)
     {
-        return _neighbors[index];
+        return neighbors[index];
     }
 
     public int NeighboursCount()
     {
-        return _neighbors.Count;
+        return neighbors.Count;
     }
 
     public void SetWeight(float weigth)
@@ -64,30 +64,39 @@ public class MNode : MonoBehaviour, IWeighted
 
     public void DestroyNode()
     {
-        foreach (var t in _neighbors)
+        foreach (var t in neighbors)
         {
             t.RemoveNeighbor(this);
         }
     }
-
+    
+    
+    public bool isOnPath = false;
+    
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
+        Gizmos.color = isOnPath? Color.yellow : Color.green;
         Gizmos.DrawWireSphere(transform.position, 0.2f);
 
-        Gizmos.color = Color.red;
-        if (_neighbors.Any())
-        {
-            foreach (var neighbor in _neighbors)
-            {
-                Gizmos.DrawLine(transform.position, neighbor.transform.position);
-            }
-        }
+        // if (isOnPath)
+        // {
+        //     Gizmos.color = Color.red;
+        //     Gizmos.DrawLine(transform.position, previousNode.transform.position);
+        // }
+
+        // Gizmos.color = Color.red;
+        // if (_neighbors.Any())
+        // {
+        //     foreach (var neighbor in _neighbors)
+        //     {
+        //         Gizmos.DrawLine(transform.position, neighbor.transform.position);
+        //     }
+        // }
 
 
-        Gizmos.color = Color.yellow;
-        if (previousNode)
-            Gizmos.DrawLine(transform.position, previousNode.transform.position);
+        // Gizmos.color = Color.yellow;
+        // if (previousNode)
+        //     Gizmos.DrawLine(transform.position, previousNode.transform.position);
     }
 
     public float Weight => _weight;
