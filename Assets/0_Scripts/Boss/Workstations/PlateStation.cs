@@ -73,7 +73,7 @@ public class PlateStation : GenericObject, IAssistInteract
 
         if (_plateCutsceneTransform.childCount > 0)
         {
-            Destroy(_plateCutsceneTransform.GetChild(0));
+            Destroy(_plateCutsceneTransform.GetChild(0).gameObject);
         }
         
         _plateCutsceneTransform.position = _plateStartingPoint.position;

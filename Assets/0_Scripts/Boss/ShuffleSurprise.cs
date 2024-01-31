@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ShuffleSurprise : GenericObject, IAssistInteract
 {
-    private bool _isGood;
+    private bool _isGood = false;
     [Space(10)] [SerializeField] private Animator _animator;
     [Space(10)] [SerializeField] private Transform _interactPoint;
     [SerializeField] private GameObject _goodObjectPlate, _badObjectPlate;
@@ -66,14 +66,19 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
             //Heal, sfx positivo
             EventManager.Trigger("OnVoicelineSetTriggered", _goodSub);
             yield return new WaitForSeconds(( _goodSub.allVoicelines[0].duration));
-            yield break;
+        }
+        else
+        {
+            //sfx negativo
+            EventManager.Trigger("OnVoicelineSetTriggered", _badSub);
+            yield return new WaitForSeconds(0.1f);
+            Debug.Log("SPAWNEO MI SARTEN AMIGIGGIGI");
+            GameObject trap = Instantiate(_badObjectPrefab);
+            trap.transform.position = GameManager.Instance.Player.transform.position + _badObjectOffset;
+            yield return new WaitForEndOfFrame();
         }
 
-        //sfx negativo
-        EventManager.Trigger("OnVoicelineSetTriggered", _badSub);
-        yield return new WaitForSeconds(( _badSub.allVoicelines[0].duration));
-        GameObject trap = Instantiate(_badObjectPrefab);
-        trap.transform.position = GameManager.Instance.Player.transform.position + _badObjectOffset;
+        yield return null;
     }
 
     #region Assistant Interact
