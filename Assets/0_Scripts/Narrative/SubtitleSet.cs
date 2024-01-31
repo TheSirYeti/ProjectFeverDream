@@ -7,6 +7,7 @@ using UnityEngine;
 public class SubtitleSet : ScriptableObject
 {
     public bool isInterruptible = true;
+    public bool isOneLiner = false;
     public List<VoicelineStruct> allVoicelines;
 
 

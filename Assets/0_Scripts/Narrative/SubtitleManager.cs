@@ -64,7 +64,8 @@ public class SubtitleManager : GenericObject
         SubtitleSet newSet = (SubtitleSet)parameters[0];
 
         if (newSet == null || 
-            (currentSubtitleSet != null && !currentSubtitleSet.isInterruptible)) 
+            (currentSubtitleSet != null && !currentSubtitleSet.isInterruptible)
+            || currentSubtitleSet != null && currentSubtitleSet != defaultSet && newSet.isOneLiner) 
             return;
 
         StopVoicelines();
