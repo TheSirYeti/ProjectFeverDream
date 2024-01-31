@@ -97,6 +97,7 @@ public class ChefBoss : GenericObject
     [Range(0, 0.1f)] [SerializeField] private float _modShuffleTimeBetweenPlates;
     [Range(0, 3)] [SerializeField] private int _modRainAttackAmount;
     [Range(0, 2)] [SerializeField] private float _modRainTimeBetweenAttacks;
+    [Range(0, 3)] [SerializeField] private int _modEnemyAmountSpawn;
 
     #endregion
 
@@ -109,7 +110,7 @@ public class ChefBoss : GenericObject
     private float _currentTimeBetweenWaves = 0;
     private float _currentTimeBetweenAttacks = 0;
     private float _timeBetweenAttacks = 10f;
-    private float _timeBetweenWaves = 5f;
+    private float _timeBetweenWaves = 10f;
 
     private float _currentTimeTakeDamage = 0f;
     private float _timeTakeDamage = 5f;
@@ -117,6 +118,17 @@ public class ChefBoss : GenericObject
     private bool attackDone = false;
     private bool waveDone = false;
 
+    #endregion
+
+    #region AMBUSH PROPERTIES
+
+    [Header("Ambush Properties")]
+    [SerializeField] private List<Transform> _enemySpawnpoints;
+    [SerializeField] private List<GameObject> _allEnemyPrefabs;
+    [SerializeField] private int totalEnemiesToSpawn;
+    private float _currentEnemySpawnTimer = 0f;
+    [SerializeField] private float _totalEnemySpawnTimer;
+    
     #endregion
 
     #region VIEW PROPERTIES
@@ -267,6 +279,8 @@ public class ChefBoss : GenericObject
             
             _currentAttackAmount = -1;
             _currentTimeBetweenAttacks = 999f;
+
+            _currentEnemySpawnTimer = 0f;
             
             SetAttackOrder();
         };
@@ -285,6 +299,14 @@ public class ChefBoss : GenericObject
                 return;
             }
 
+            _currentEnemySpawnTimer += Time.deltaTime;
+            if (_currentEnemySpawnTimer >= _totalEnemySpawnTimer)
+            {
+                _currentEnemySpawnTimer = 0f;
+                DoEnemySpawning();
+            }
+            
+            
             if (!attackDone) return;
             
             _currentTimeBetweenAttacks += Time.deltaTime;
@@ -694,12 +716,26 @@ public class ChefBoss : GenericObject
         _shuffleTimeBetweenPlates -= _modShuffleTimeBetweenPlates;
         _rainAttackAmount += _modRainAttackAmount;
         _rainTimeBetweenAttacks -= _modRainTimeBetweenAttacks;
-
+        totalEnemiesToSpawn += _modEnemyAmountSpawn;
+        
         _totalAttackAmount++;
     }
     
     #endregion
 
+    void DoEnemySpawning()
+    {
+        int randVoice = UnityEngine.Random.Range(0, _ambushSubtitles.Count);
+        EventManager.Trigger("OnVoicelineSetTriggered", _ambushSubtitles[randVoice]);
+        
+        for (int i = 0; i < totalEnemiesToSpawn; i++)
+        {
+            int rand = UnityEngine.Random.Range(0, _allEnemyPrefabs.Count);
+            GameObject robot = Instantiate(_allEnemyPrefabs[rand]);
+            robot.transform.position = _enemySpawnpoints[i].position;
+        }
+    }
+    
     void Recover(object[] parameters)
     {
         StartCoroutine(SetupNextRecipe());

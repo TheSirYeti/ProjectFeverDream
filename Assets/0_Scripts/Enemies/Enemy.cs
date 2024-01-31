@@ -16,7 +16,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
 
     [Header("-== Target Properties ==-")]
     [SerializeField] protected GameObject target;
-    protected bool wasDetected = false;
+    public bool wasDetected = false;
     [SerializeField] private float minChaseDistance;
 
     [Space(20)] [Header("-== Attack Properties ==-")] 
