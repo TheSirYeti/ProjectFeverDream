@@ -148,14 +148,14 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
+            if (!IsInFieldOfView()) return;
+            
             if (!wasDetected)
             {
                 SendInputToFSM(MeleeEnemyStates.DETECT);
                 wasDetected = true;
                 return;
             }
-            
-            if (!IsInFieldOfView()) return;
 
             if (IsInDistance())
             {
