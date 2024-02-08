@@ -299,7 +299,11 @@ public class BaseMeleeEnemy : Enemy
 
         #endregion
 
-        fsm = new EventFSM<MeleeEnemyStates>(idle);
+        
+        if(wasDetected)
+            fsm = new EventFSM<MeleeEnemyStates>(detect);
+        else
+            fsm = new EventFSM<MeleeEnemyStates>(idle);
     }
 
     private void SendInputToFSM(MeleeEnemyStates state)

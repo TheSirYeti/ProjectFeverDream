@@ -8,8 +8,9 @@ using UnityEngine.PlayerLoop;
 public class RecipeBillboard : GenericObject
 {
     [SerializeField] private List<Recipe> _recipes;
+    [SerializeField] private List<GameObject> _recipeImages;
     [Space(15)]
-    [SerializeField] private TextMeshPro _recipeTitleText, _recipeIngredientsText, _recipeInstructionsText;
+    [SerializeField] private TextMeshPro _recipeTitleText, _recipeInstructionsText;
     
     private int _currentBillboard = -1;
 
@@ -28,19 +29,17 @@ public class RecipeBillboard : GenericObject
         if (_currentBillboard >= _recipes.Count)
         {
             _recipeTitleText.text = "";
-            _recipeIngredientsText.text = "";
             _recipeInstructionsText.text = "";
 
             return;
         }
         _recipeTitleText.text = _recipes[_currentBillboard].recipeName;
-
-        _recipeIngredientsText.text = "";
-        foreach (var ingredient in _recipes[_currentBillboard].recipeIngredients)
+        
+        foreach (var img in _recipeImages)
         {
-            _recipeIngredientsText.text += ingredient;
-            _recipeIngredientsText.text += "<br>";
+            img.SetActive(false);
         }
+        _recipeImages[_currentBillboard].SetActive(true);
         
         _recipeInstructionsText.text = "";
         foreach (var instruction in _recipes[_currentBillboard].recipeInstructions)
@@ -53,8 +52,12 @@ public class RecipeBillboard : GenericObject
     void ClearCurrentRecipe(object[] parameters)
     {
         _recipeTitleText.text = "";
-        _recipeIngredientsText.text = "";
         _recipeInstructionsText.text = "";
+        
+        foreach (var img in _recipeImages)
+        {
+            img.SetActive(false);
+        }
     }
 }
 

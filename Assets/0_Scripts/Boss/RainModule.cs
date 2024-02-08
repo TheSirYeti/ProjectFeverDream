@@ -9,8 +9,11 @@ public class RainModule : GenericObject
     [Space(10)]
     [SerializeField] private float _speed;
     [SerializeField] private Transform _startingPosition;
+    [Space(10)] 
     [SerializeField] private GameObject _warningCircle;
     [SerializeField] private ParticleSystem _impactParticles;
+    [SerializeField] private AudioSource _fallingSFX, _impactSFX;
+    private int _fallingID, _impactID;
     [Space(10)] 
     [SerializeField] private float _waitDropTime;
     private Renderer _warningRenderer;
@@ -20,7 +23,7 @@ public class RainModule : GenericObject
     [SerializeField] private float _raycastOffset;
 
     float colorTimer = 0f;
-    private float _expirationTimer = 10f;
+    private float _expirationTimer = 7f;
     private bool hasDropped = false;
     
     private void Awake()
@@ -33,9 +36,17 @@ public class RainModule : GenericObject
         _warningCircle.transform.parent = null;
         _warningRenderer = _warningCircle.GetComponent<Renderer>();
         _warningMat = _warningRenderer.material;
-       
+
+        _fallingID = SoundManager.instance.AddSFXSource(_fallingSFX);
+        _impactID = SoundManager.instance.AddSFXSource(_impactSFX);
+        
         _warningCircle.SetActive(false);
         gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        SoundManager.instance.PlaySoundByInt(_fallingID);
     }
 
     public override void OnUpdate()
@@ -98,6 +109,8 @@ public class RainModule : GenericObject
     
     IEnumerator StopRainDrop()
     {
+        SoundManager.instance.StopSoundByInt(_fallingID);
+        SoundManager.instance.PlaySoundByInt(_impactID);
         _impactParticles.Play();
         if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         yield return new WaitForSeconds(1.5f);

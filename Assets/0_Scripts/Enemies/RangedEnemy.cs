@@ -455,7 +455,11 @@ public class RangedEnemy : Enemy
 
         #endregion
 
-        fsm = new EventFSM<RangedEnemyStates>(idle);
+        
+        if(wasDetected)
+            fsm = new EventFSM<RangedEnemyStates>(detect);
+        else
+            fsm = new EventFSM<RangedEnemyStates>(idle);
     }
 
     public override void OnUpdate()
