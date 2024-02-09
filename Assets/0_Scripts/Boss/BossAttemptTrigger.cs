@@ -26,6 +26,8 @@ public class BossAttemptTrigger : GenericObject
             SoundManager.instance.StopAllVoiceLines();
             
             DoIntroSequence();
+
+            gameObject.SetActive(false);
         }
     }
 

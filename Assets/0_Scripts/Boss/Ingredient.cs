@@ -12,6 +12,7 @@ public class Ingredient : GenericObject, IAssistInteract, IPickUp
     [SerializeField] private bool _hasOutput;
     [SerializeField] private GameObject _output;
     [SerializeField] private Outline _outline;
+    [SerializeField] private string _ingredientName;
 
     private bool _isInteractable = true;
 
@@ -71,7 +72,7 @@ public class Ingredient : GenericObject, IAssistInteract, IPickUp
 
     public string ActionName()
     {
-        return "PickUp Ingredient";
+        return "grab " + _ingredientName;
     }
     public void ChangeOutlineState(bool state)
     {

@@ -17,6 +17,8 @@ public class FryingStation : GenericObject, IAssistInteract
     private int _sfxID;
     [SerializeField] private AudioSource _doneSfx;
     private int _doneSfxID;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private string _animStartName, _animEndName;
     
     private void Awake()
     {
@@ -38,12 +40,13 @@ public class FryingStation : GenericObject, IAssistInteract
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
         ingredient.transform.position = usingPoint.position;
         
+        _animator.Play(_animStartName);
         //feedback de que esta cortando
         yield return new WaitForSeconds(ingredient.GetDuration());
         
         SoundManager.instance.StopSoundByInt(_sfxID);
         SoundManager.instance.PlaySoundByInt(_doneSfxID);
-        
+        _animator.Play(_animEndName);
         GameObject finalOutput = Instantiate(ingredient.GetOutput());
         ingredient.gameObject.SetActive(false);
         

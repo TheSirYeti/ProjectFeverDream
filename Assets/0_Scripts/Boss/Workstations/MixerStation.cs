@@ -21,6 +21,8 @@ public class MixerStation : GenericObject, IAssistInteract
     private int _sfxID;
     [SerializeField] private AudioSource _doneSfx;
     private int _doneSfxID;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private string _animStartName, _animEndName;
 
     private void Awake()
     {
@@ -55,12 +57,14 @@ public class MixerStation : GenericObject, IAssistInteract
     {
         _isOccupied = true;
 
+        _animator.Play(_animStartName);
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
         //feedback de que esta cortando
         yield return new WaitForSeconds(ingredient.GetDuration());
 
         SoundManager.instance.StopSoundByInt(_sfxID);
         SoundManager.instance.PlaySoundByInt(_doneSfxID);
+        _animator.Play(_animEndName);
         var finalOutput = Instantiate(mixingOutput);
 
         finalOutput.transform.position = outputPoint.position;

@@ -17,6 +17,9 @@ public class StoveStation : GenericObject, IAssistInteract
     private int _sfxID;
     [SerializeField] private AudioSource _doneSfx;
     private int _doneSfxID;
+    /*[SerializeField] private Animator _animator;
+    [SerializeField] private string _animStartName, _animEndName;*/
+    
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
@@ -35,7 +38,7 @@ public class StoveStation : GenericObject, IAssistInteract
         //feedback de que esta cortando
         ingredient.transform.position = usingPoint.position;
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
-        
+        //_animator.Play(_animStartName);
         yield return new WaitForSeconds(ingredient.GetDuration());
         
         SoundManager.instance.StopSoundByInt(_sfxID);
@@ -43,6 +46,7 @@ public class StoveStation : GenericObject, IAssistInteract
         GameObject finalOutput = Instantiate(ingredient.GetOutput());
         ingredient.gameObject.SetActive(false);
         
+        //_animator.Play(_animEndName);
         finalOutput.transform.position = outputPoint.position;
         _isOccupied = false;
         

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2444919705926303451}
   - component: {fileID: 3577220233482279540}
   - component: {fileID: 2737642428662668554}
+  - component: {fileID: 505985961402798225}
   m_Layer: 10
   m_Name: FryingTable
   m_TagString: Untagged
@@ -81,6 +82,9 @@ MonoBehaviour:
   outline: {fileID: 2737642428662668554}
   _sfx: {fileID: 7556147783527294819}
   _doneSfx: {fileID: 4530888007069243437}
+  _animator: {fileID: 505985961402798225}
+  _animStartName: Station_Start
+  _animEndName: Station_End
 --- !u!114 &2737642428662668554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,6 +103,27 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!95 &505985961402798225
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2460694341648689669}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9b42af8db6b11164c9d8805a5f52b8bf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2553841825941830462
 GameObject:
   m_ObjectHideFlags: 0

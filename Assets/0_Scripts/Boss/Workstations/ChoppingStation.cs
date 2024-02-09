@@ -17,6 +17,8 @@ public class ChoppingStation : GenericObject, IAssistInteract
     private int _sfxID;
     [SerializeField] private AudioSource _doneSfx;
     private int _doneSfxID;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private string _animStartName, _animEndName;
 
     private void Awake()
     {
@@ -36,11 +38,13 @@ public class ChoppingStation : GenericObject, IAssistInteract
         ingredient.transform.rotation = usingPoint.rotation;
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
 
+        _animator.Play(_animStartName);
         //feedback de que esta cortando
         yield return new WaitForSeconds(ingredient.GetDuration());
 
         SoundManager.instance.StopSoundByInt(_sfxID);
         SoundManager.instance.PlaySoundByInt(_doneSfxID);
+        _animator.Play(_animEndName);
         GameObject finalOutput = Instantiate(ingredient.GetOutput());
         ingredient.gameObject.SetActive(false);
 
