@@ -72,6 +72,7 @@ public class RainModule : GenericObject
                 if (!hasDropped)
                 {
                     StartCoroutine(StopRainDrop());
+                    Debug.Log("RAYCAST");
                 }
                 hasDropped = true;
             }
