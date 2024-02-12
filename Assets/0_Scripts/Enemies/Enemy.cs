@@ -293,7 +293,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
     
     protected bool IsInDistance()
     {
-        return Vector3.Distance(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z), transform.position) <= minChaseDistance;
+        return Vector3.Distance(target.transform.position, transform.position) <= minChaseDistance;
     }
 
     #endregion
@@ -336,9 +336,8 @@ public abstract class Enemy : GenericObject, ITakeDamage
         }
         else
         {               
-            var fromPoint = transform.position - Vector3.down;
+            var fromPoint = transform.position;
             var toPoint = target.transform.position;
-            toPoint.y = fromPoint.y;
             _waitingPF = true;
             MPathfinding.instance.RequestPath(fromPoint, toPoint, _successPFRequest, _failPFRequest);
         }
