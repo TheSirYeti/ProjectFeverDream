@@ -10,6 +10,8 @@ public class UtensilDrop : GenericObject
     private MeshRenderer _warningRenderer;
     private Material _warningMat;
     [SerializeField] private Color _startColor, _endColor;
+    [SerializeField] private AudioSource _fallSFX, _impactSFX;
+    private int _fallID, _impactID;
     [Space(10)]
     [SerializeField] private Transform _centerOfImpact;
     [SerializeField] private float _raycastOffset;
@@ -31,6 +33,10 @@ public class UtensilDrop : GenericObject
     public override void OnStart()
     {
         Debug.Log("SOY UNA SARTEN!");
+
+        _fallID = SoundManager.instance.AddSFXSource(_fallSFX);
+        _impactID = SoundManager.instance.AddSFXSource(_impactSFX);
+        
         _warningRenderer = _warningCircle.GetComponent<MeshRenderer>();
         _warningMat = _warningRenderer.material;
         StartCoroutine(DropUtensil());
@@ -42,6 +48,8 @@ public class UtensilDrop : GenericObject
 
         _warningCircle.transform.position = hit.point + new Vector3(0, 0.1f, 0);
         _warningCircle.transform.parent = null;
+
+        SoundManager.instance.PlaySoundByInt(_fallID);
         
         while (!Physics.Raycast(_centerOfImpact.position,
                    Vector3.down,
@@ -58,7 +66,10 @@ public class UtensilDrop : GenericObject
             
             yield return null;
         }
-
+        
+        SoundManager.instance.StopSoundByInt(_fallID);
+        SoundManager.instance.PlaySoundByInt(_impactID);
+        
         hasCollided = true;
         if (_impactParticles != null)
         {
