@@ -101,6 +101,11 @@ public class MainMenuManager : GenericObject
     {
         PlayerPrefs.SetInt("SkipIntro", skipIntroValue);
     }
+
+    public void SetCheckpoint(int checkpoint)
+    {
+        PlayerPrefs.SetInt("CurrentCheckpoint", checkpoint);
+    }
     
     public void LoadScene(int sceneID)
     {
