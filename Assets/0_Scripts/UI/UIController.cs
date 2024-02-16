@@ -73,16 +73,6 @@ public class UIController : GenericObject
 
     public override void OnUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            ShowObjectiveUI(true);
-        }
-        
-        if (Input.GetKeyUp(KeyCode.Tab))
-        {
-            ShowObjectiveUI(false);
-        }
-
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
             ShowControlsUI(true);
@@ -283,8 +273,8 @@ public class UIController : GenericObject
         _titleObjetive.text = (string)parameters[0];
         _descriptionObjetive.text = (string)parameters[1];
         //_progressObjective.text = "0%";
-
-        StartCoroutine(ShowObjectiveChange());
+        
+        ShowObjectiveUI(true);
     }
 
     void ChangeObjectiveProgress(params object[] parameters)
