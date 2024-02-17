@@ -126,8 +126,8 @@ MonoBehaviour:
   _dampingSpeed: 1
   _bobbingSpeed: 10
   _bobbingAmount: 0.01
-  _maxYRot: 90
-  _minYRot: -90
+  _maxXRot: 90
+  _minXRot: -90
   _interactDistance: 45
 --- !u!54 &2050201400054601327
 Rigidbody:
@@ -709,6 +709,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -31.142717
       objectReference: {fileID: 0}
+    - target: {fileID: 3713450584058956358, guid: 2df71dceaee83944ab6356c9f6763bac, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e87fb7a5294d703478d6d353e988ec45, type: 2}
     - target: {fileID: 3867699125004549393, guid: 2df71dceaee83944ab6356c9f6763bac, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -44.39256
