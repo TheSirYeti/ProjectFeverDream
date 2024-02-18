@@ -2,20 +2,24 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BF_1_Swing
   m_Shader: {fileID: 4800000, guid: 5ff0c729c8ef2ec4bb4a6f1d813320a0, type: 3}
-  m_ShaderKeywords: 
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -43,32 +47,35 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _CustomMove: 0
     - _D: 1.73
     - _DistortionValue: 0.3465476
     - _EmissionFloat: 1
-    - _Float0: 4.53
-    - _Float1: 1.68
-    - _Float2: 5.11
+    - _Exp: 2.84
+    - _Float0: -0.74
+    - _Float1: 2.84
+    - _Float2: 1.28
     - _Float4: 0
     - _IntensityMaskL: 4.53
     - _IntensityMaskR: 5.11
     - _InvFade: 1
     - _MaskLeft: 1.68
     - _MaskRight: 1.73
-    - _Opacity: 6
+    - _Opacity: 3.121984
     - _Saturacion: 0
+    - _SubMain: -0.74
     - _Substract: 0.67
     - __dirty: 0
     m_Colors:
     - _Position: {r: 0, g: 0, b: 0, a: 0}
     - _Remap: {r: 0, g: 1, b: -1, a: 6.18}
-    - _ShadowColor: {r: 1, g: 1, b: 1, a: 0}
+    - _ShadowColor: {r: 0.5330188, g: 0.8487244, b: 1, a: 0}
     - _SpeedTextureNoise: {r: 0, g: 0, b: 1, a: 1}
     - _TintColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _Vector0: {r: 0, g: 1, b: 0, a: 0}
-    - _Vector1: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector1: {r: 0, g: 1.01, b: 0, a: 1}
     - _Vector2: {r: 0, g: 1, b: 0, a: 0}
     - _Vector3: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
