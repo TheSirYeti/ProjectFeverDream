@@ -13,6 +13,7 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
     [Space(10)] [SerializeField] private string _animationOpen, _animationClose;
     [SerializeField] private GameObject _badObjectPrefab;
     [SerializeField] private Vector3 _badObjectOffset;
+    [Space(10)] [SerializeField] private Outline _outline;
 
     private bool isShuffling = true;
     private bool chosen = false;
@@ -63,13 +64,15 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
 
         if (_isGood)
         {
-            //Heal, sfx positivo
+            SoundManager.instance.PlaySound(SoundID.SHUFFLE_CORRECT);
+            GameManager.Instance.Player.Health(100);
+            SoundManager.instance.PlaySound(SoundID.ASSISTANT_HEAL);
             EventManager.Trigger("OnVoicelineSetTriggered", _goodSub);
             yield return new WaitForSeconds(( _goodSub.allVoicelines[0].duration));
         }
         else
         {
-            //sfx negativo
+            SoundManager.instance.PlaySound(SoundID.SHUFFLE_INCORRECT);
             EventManager.Trigger("OnVoicelineSetTriggered", _badSub);
             yield return new WaitForSeconds(0.1f);
             Debug.Log("SPAWNEO MI SARTEN AMIGIGGIGI");
@@ -130,7 +133,7 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
 
     public void ChangeOutlineState(bool state)
     {
-        //
+        _outline.enabled = state;
     }
 
     public bool CanInteractWith(IAssistInteract assistInteract)

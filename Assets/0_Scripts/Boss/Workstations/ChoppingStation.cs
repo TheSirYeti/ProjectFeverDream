@@ -91,7 +91,7 @@ public class ChoppingStation : GenericObject, IAssistInteract
 
     public string ActionName()
     {
-        return "Chopping";
+        return "use Cutting Station";
     }
 
     public void ChangeOutlineState(bool state)

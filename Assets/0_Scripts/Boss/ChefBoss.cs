@@ -614,6 +614,8 @@ public class ChefBoss : GenericObject
             LeanTween.move(allShuffles[randSurprise2].gameObject, 
                 tempFinalPos1, _shuffleTimeBetweenPlates / 2f);
             
+            SoundManager.instance.PlaySound(SoundID.SHUFFLE_WOOSH);
+            
             yield return new WaitForSeconds(_shuffleTimeBetweenPlates / 2f);
             
             yield return new WaitForSeconds(0.25f);
@@ -663,7 +665,7 @@ public class ChefBoss : GenericObject
         
         if (!flag)
         {
-            //sfx no elegiste
+            SoundManager.instance.PlaySound(SoundID.SHUFFLE_TIME);
             EventManager.Trigger("OnVoicelineSetTriggered", _shuffleSubtitleTime);
             yield return new WaitForSeconds((_shuffleSubtitleTime.allVoicelines[0].duration + 0.5f));
             GameObject trap = Instantiate(_shufflePunishItem);

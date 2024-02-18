@@ -108,7 +108,7 @@ public class MixerStation : GenericObject, IAssistInteract
 
     public string ActionName()
     {
-        return "Add Ingredient to the Mixer";
+        return "add to the Mixer";
     }
 
     public void ChangeOutlineState(bool state)

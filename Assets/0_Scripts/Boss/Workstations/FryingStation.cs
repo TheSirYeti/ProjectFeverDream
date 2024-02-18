@@ -93,7 +93,7 @@ public class FryingStation : GenericObject, IAssistInteract
 
     public string ActionName()
     {
-        return "Fry Ingredient";
+        return "use the Fryer";
     }
 
     public void ChangeOutlineState(bool state)

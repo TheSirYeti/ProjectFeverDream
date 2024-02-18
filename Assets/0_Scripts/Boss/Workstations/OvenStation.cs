@@ -94,7 +94,7 @@ public class OvenStation : GenericObject, IAssistInteract
 
     public string ActionName()
     {
-        return "Oven ingredient";
+        return "put in the Oven";
     }
 
     public void ChangeOutlineState(bool state)

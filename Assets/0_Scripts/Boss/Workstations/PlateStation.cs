@@ -121,7 +121,7 @@ public class PlateStation : GenericObject, IAssistInteract
 
     public string ActionName()
     {
-        return "Add Ingredient to the Plate";
+        return "add to the Plate";
     }
 
     public void ChangeOutlineState(bool state)

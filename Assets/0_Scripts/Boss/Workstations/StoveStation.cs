@@ -90,7 +90,7 @@ public class StoveStation : GenericObject, IAssistInteract
 
     public string ActionName()
     {
-        return "Stoving";
+        return "cook in the Stove";
     }
 
     public void ChangeOutlineState(bool state)
