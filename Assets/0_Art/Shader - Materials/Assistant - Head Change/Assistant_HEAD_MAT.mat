@@ -2,25 +2,37 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Assistant_HEAD_MAT
   m_Shader: {fileID: 4800000, guid: e03fdd62e0a9930449a8d378780ca370, type: 3}
-  m_ShaderKeywords: 
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
         m_Texture: {fileID: 2800000, guid: e9a1b9957893e41448390f087c867701, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Basecolor:
+        m_Texture: {fileID: 2800000, guid: e9a1b9957893e41448390f087c867701, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Basecolor1:
+        m_Texture: {fileID: 2800000, guid: 1ce0091f31b3f8d4aafa4d7bee0ae03a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Mascara:
@@ -29,6 +41,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Maskface:
         m_Texture: {fileID: 2800000, guid: e0fd1b7f985fc3c49b5df50029aa3510, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NomalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NomalMap1:
+        m_Texture: {fileID: 2800000, guid: a0dfaa22d8f83724fae41eed8da36731, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
@@ -40,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: e9a1b9957893e41448390f087c867701, type: 3}
+        m_Texture: {fileID: 2800000, guid: 60cafedb6d34fa7458211f8d9c46af36, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample2:
@@ -51,23 +71,53 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _ControlFace: 0
     - _ControlFace1: 0
+    - _Cutoff: 0.5
+    - _Emission: 0.6319106
     - _Fix: 0.15
-    - _Float0: 0.15
-    - _Float1: -0.57
-    - _Float2: 0.83
-    - _Float3: 1
+    - _Float0: 0.65
+    - _Float1: 0.5
+    - _Float2: 1.17
+    - _Float3: 0.3
+    - _LightValue: 0.65
+    - _LightValue1: 0.5
     - _Linemouth: 0
+    - _Mask: -0.441
+    - _Max: 1.2
+    - _Max1: 1.15
+    - _Min: 1.16
+    - _Min1: 1.06
     - _PointOffset: 0.1666
+    - _RimIntensity: 0.744
+    - _RimIntensity1: 0.26
+    - _RimOffset: 3.84
+    - _RimOffset1: 2.7
+    - _RimPower: 1
+    - _RimPower1: 0.71
+    - _ShadowValue: 0.5
+    - _ShadowValue1: 0.5
+    - _SpecularIntesity: 0.184
+    - _SpecularIntesity1: 0.283
+    - _SpecularPower: 0.45
+    - _SpecularPower1: 0.3
     - _SpeedTalking: 0.308
     - _TypeMouth: 1
-    - __dirty: 1
+    - __dirty: 0
     m_Colors:
+    - _Color0: {r: 0.54509807, g: 0.7921569, b: 1, a: 1}
+    - _Color1: {r: 0.6886792, g: 0.4400128, b: 0.3216002, a: 0}
+    - _Pointoffset: {r: 0.1666, g: 0.15, b: 0, a: 0}
+    - _RimColor: {r: 0.10849059, g: 0.41892678, b: 1, a: 1}
+    - _RimColor1: {r: 1, g: 0.6028253, b: 0.3632075, a: 1}
     - _Tilling: {r: 0, g: 0.85, b: 0, a: 0}
+    - _Tint: {r: 1, g: 1, b: 1, a: 0}
+    - _Tint1: {r: 1, g: 1, b: 1, a: 0}
     - _Vector0: {r: 1, g: 0, b: 0, a: 0}
     - _Vector1: {r: 0, g: 1, b: 0, a: 0}
     - _Vector2: {r: 0.1666, g: 0.15, b: 0, a: 0}
     - _Vector3: {r: 1, g: 0, b: 0, a: 0}
+    - _a: {r: -0.19, g: 1.24, b: 0, a: 0}
   m_BuildTextureStacks: []
