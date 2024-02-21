@@ -12,7 +12,7 @@ public class Elevator : GenericObject, IAssistInteract
     [SerializeField] Interactuables _type;
     
     [SerializeField] private ParticleSystem vfx;
-    [SerializeField] private SpatialSound sfx;
+    [SerializeField] private SpatialSound sparksSFX, movingSFX;
 
     [SerializeField] private Transform interactPoint;
     [SerializeField] private Transform _elevator;
@@ -49,6 +49,7 @@ public class Elevator : GenericObject, IAssistInteract
             {
                 _isWaiting = false;
                 _timer = 0;
+                movingSFX.PlaySound();
             }
 
             return;
@@ -60,7 +61,7 @@ public class Elevator : GenericObject, IAssistInteract
         if (!(Vector3.Distance(_elevator.position, _wayPoints[_waypointIndex].position) < 0.05f)) return;
 
         vfx.Play();
-        sfx.PlaySound();
+        sparksSFX.PlaySound();
         
         _isWaiting = true;
         _waypointIndex += _waypointDir;
@@ -79,7 +80,7 @@ public class Elevator : GenericObject, IAssistInteract
         _screenControllerShader.ChangeSettings(0, 1, 1);
         interactable = false;
         _isActive = true;
-        Debug.Log("ASCENSOR");
+        movingSFX.PlaySound();
     }
 
     public Interactuables GetInteractType()
