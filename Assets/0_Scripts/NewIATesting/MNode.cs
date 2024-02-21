@@ -84,14 +84,14 @@ public class MNode : MonoBehaviour, IWeighted
         //     Gizmos.DrawLine(transform.position, previousNode.transform.position);
         // }
 
-        // Gizmos.color = Color.red;
-        // if (_neighbors.Any())
-        // {
-        //     foreach (var neighbor in _neighbors)
-        //     {
-        //         Gizmos.DrawLine(transform.position, neighbor.transform.position);
-        //     }
-        // }
+        Gizmos.color = Color.red;
+        if (neighbors.Any())
+        {
+            foreach (var neighbor in neighbors)
+            {
+                 Gizmos.DrawLine(transform.position, neighbor.transform.position);
+            }
+        }
 
 
         // Gizmos.color = Color.yellow;

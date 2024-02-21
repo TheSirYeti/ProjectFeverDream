@@ -26,4 +26,9 @@ public class Path
     {
         return _pathQueue.Any();
     }
+
+    public int Count()
+    {
+        return _pathQueue.Count;
+    }
 }

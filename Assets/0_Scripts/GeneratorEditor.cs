@@ -40,6 +40,12 @@ public class GeneratorEditor : Editor
             _nodesGenerator.RemoveNulls();
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
+
+        if (GUILayout.Button("Clear missings"))
+        {
+            _nodesGenerator.RemoveMissing();
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+        }
     }
 }
 

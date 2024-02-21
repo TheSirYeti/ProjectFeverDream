@@ -140,6 +140,12 @@ public class BaseMeleeEnemy : Enemy
 
         #region IDLE
 
+        idle.OnEnter += x =>
+        {
+            speed = 0;
+            nodeList = null;
+        };
+
         idle.OnUpdate += () =>
         {
             if (isDead)
@@ -211,7 +217,7 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
-            if (!InSight(transform.position, target.transform.position))
+            if (!InSight(transform.position, new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z)))
             {
                 SendInputToFSM(MeleeEnemyStates.PATHFIND);
                 return;
@@ -245,7 +251,8 @@ public class BaseMeleeEnemy : Enemy
                 return;
             }
 
-            if (InSight(transform.position, target.transform.position))
+            if (InSight(transform.position, new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z))
+                && IsNearInY(target.transform.position.y, 2f))
             {
                 SendInputToFSM(MeleeEnemyStates.CHASING);
                 return;
@@ -371,31 +378,31 @@ public class BaseMeleeEnemy : Enemy
 
     public override void Move()
     {
-        SetSpeedValue(Time.deltaTime);
-
-        if (IsInDistance())
-        {
-            StopSpeed();
-            return;
-        }
-        
-        if (!InSight(transform.position, target.transform.position))
-        {
-            if (isPathfinding)
-            {
-                DoPathfinding();
-            }
-            else
-            {
-                CalculatePathPreview(false);
-            }
-            return;
-        }
-        
-        isPathfinding = false;
-        //nodePath.Clear();
-        
-        DoGenericChase();
+    //     SetSpeedValue(Time.deltaTime);
+    //
+    //     if (IsInDistance())
+    //     {
+    //         StopSpeed();
+    //         return;
+    //     }
+    //     
+    //     if (!InSight(transform.position, target.transform.position))
+    //     {
+    //         if (isPathfinding)
+    //         {
+    //             DoPathfinding();
+    //         }
+    //         else
+    //         {
+    //             CalculatePathPreview(false);
+    //         }
+    //         return;
+    //     }
+    //     
+    //     isPathfinding = false;
+    //     //nodePath.Clear();
+    //     
+    //     DoGenericChase();
     }
 
     public override void OnUpdate()

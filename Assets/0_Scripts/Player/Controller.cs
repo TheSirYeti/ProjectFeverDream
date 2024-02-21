@@ -85,18 +85,18 @@ public class Controller
 
     private void GetMovementInput()
     {
-        float h = 0;
-        float v = 0;
+        var h = Input.GetAxisRaw("Horizontal");
+        var v = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(KeyCode.A))
-            h = -1;
-        else if (Input.GetKey(KeyCode.D))
-            h = 1;
-
-        if (Input.GetKey(KeyCode.W))
-            v = 1;
-        else if (Input.GetKey(KeyCode.S))
-            v = -1;
+        // if (Input.GetKey(KeyCode.A))
+        //     h = -1;
+        // else if (Input.GetKey(KeyCode.D))
+        //     h = 1;
+        //
+        // if (Input.GetKey(KeyCode.W))
+        //     v = 1;
+        // else if (Input.GetKey(KeyCode.S))
+        //     v = -1;
 
         _model.Move(h, v);
     }

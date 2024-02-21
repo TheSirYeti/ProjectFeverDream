@@ -49,12 +49,12 @@ public class NodesGenerator : MonoBehaviour
                 {
                     if (!Physics.Raycast(ray, (hit.point - actualStartRay).magnitude, LayerManager.LM_NODEOBSTACLE))
                     {
-                        if (!_spawnedNodes.Contains(hit.point + Vector3.up * 0.2f))
+                        if (!_spawnedNodes.Contains(hit.point + Vector3.up))
                         {                       
                             actualNode = PrefabUtility.InstantiatePrefab(_prefab, transform) as MNode;
                             actualNode.gameObject.name += count;
-                            actualNode.transform.position = hit.point + Vector3.up * 0.2f;
-                            _spawnedNodes.Add(hit.point + Vector3.up * 0.2f);
+                            actualNode.transform.position = hit.point + Vector3.up;
+                            _spawnedNodes.Add(hit.point + Vector3.up);
 
                             _nodeList.Add(actualNode.gameObject);
                         }
@@ -168,6 +168,15 @@ public class NodesGenerator : MonoBehaviour
     public void RemoveNulls()
     {
         _nodeList = _nodeList.Where(x => x != null).ToList();
+    }
+
+    public void RemoveMissing()
+    {
+        var mNodes = _nodeList.Select(x => x.GetComponent<MNode>());
+        foreach (var node in mNodes)
+        {
+            node.neighbors = node.neighbors.Where(x => true).ToList();
+        }
     }
 
     private void OnDrawGizmos()

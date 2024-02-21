@@ -15,7 +15,7 @@ public class ObjectToggleTrigger : GenericObject
     {
         if (other.gameObject.tag == "Player")
         {
-            obj.SetActive(true);
+            obj?.SetActive(true);
         }
     }
 }

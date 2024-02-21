@@ -49,8 +49,8 @@ public abstract class Enemy : GenericObject, ITakeDamage
     Vector3 _dir;
     [SerializeField] Transform _previousObjective;
 
-    [Space(20)]
-    [Header("-== Detection / FoV Properties ==-")]
+    [Space(20)] [Header("-== Detection / FoV Properties ==-")] 
+    [SerializeField] protected float detectionYDistance;
     [SerializeField] protected float fovViewRadius;
     [SerializeField] protected float fovViewAngle;
     [SerializeField] protected Transform fovTransformPoint;
@@ -256,17 +256,20 @@ public abstract class Enemy : GenericObject, ITakeDamage
         transform.position += desired * speed * Time.deltaTime;
     }
 
-    public void DoPathfinding()
+    protected void DoPathfinding()
     {
         _dir = (_actualObjective.position) - transform.position;
         _dir.y = 0;
 
-        Quaternion targetRotation = Quaternion.LookRotation(_dir);
+        var targetRotation = Quaternion.LookRotation(_dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, speed * Time.deltaTime);
 
-        transform.position += _dir.normalized * speed * Time.deltaTime;
+        var alignDir = AlignDir();
+        
+        transform.position += alignDir.normalized * (speed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, (_actualObjective.position)) < minDistanceToNode)
+        if (Vector3.Distance(transform.position, (new Vector3(_actualObjective.position.x, transform.position.y, _actualObjective.position.z))) < minDistanceToNode
+            && IsNearInY(_actualObjective.position.y, 2f))
         {
             if (nodeList.AnyInPath())
             {
@@ -276,21 +279,47 @@ public abstract class Enemy : GenericObject, ITakeDamage
             {
                 _waitingPF = true;
                 
-                var fromPoint = transform.position - Vector3.down;
+                var fromPoint = transform.position;
                 var toPoint = target.transform.position;
-                toPoint.y = fromPoint.y;
+                //toPoint.y = fromPoint.y;
                 
                 MPathfinding.instance.RequestPath(fromPoint, toPoint,  _successPFRequest, _failPFRequest);
             }
         }
         
-        if (InSight(transform.position, target.transform.position))
-        {
-            //Debug.Log("In sight?");
-            isPathfinding = false;
-        }
+        // if (InSight(transform.position, target.transform.position))
+        // {
+        //     //Debug.Log("In sight?");
+        //     isPathfinding = false;
+        // }
     }
     
+    private Vector3 AlignDir()
+    {
+        Vector3 planeNormal;
+
+        if (Physics.Raycast(transform.position, transform.up * -1, out var hit, 1.5f, LayerManager.LM_FLOOR))
+            planeNormal = hit.normal;
+        else
+            return _dir;
+
+        // Use Vector3.ProjectOnPlane to align the direction with the plane
+        return  Vector3.ProjectOnPlane(_dir, planeNormal);
+    }
+
+    protected bool IsNearInY()
+    {
+        var distanceY = Mathf.Abs(transform.position.y - target.transform.position.y);
+
+        return distanceY < detectionYDistance;
+    }
+    
+    protected bool IsNearInY(float y, float maxY)
+    {
+        var distanceY = Mathf.Abs(transform.position.y - y);
+
+        return distanceY < maxY;
+    }
     protected bool IsInDistance()
     {
         return Vector3.Distance(target.transform.position, transform.position) <= minChaseDistance;
