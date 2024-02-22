@@ -17,6 +17,14 @@ public class IKManager : GenericObject
         }
     }
 
+    private void OnEnable()
+    {
+        if (_lookAtTarget == null)
+        {
+            _lookAtTarget = GameManager.Instance.Player.transform;
+        }
+    }
+
     public void OnAnimatorIK(int layerIndex)
     {
         if (_animator)

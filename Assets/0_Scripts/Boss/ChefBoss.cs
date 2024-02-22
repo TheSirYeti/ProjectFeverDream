@@ -32,6 +32,8 @@ public class ChefBoss : GenericObject
     [SerializeField] private float _rangedAttackRate;
     [SerializeField] private int _rangedAttackAmount;
     [SerializeField] private Transform _rangedAttackSpawnpoint;
+    
+    [SerializeField] private List<float> _rangedAnimationReleaseTime;
 
     #endregion
 
@@ -154,6 +156,9 @@ public class ChefBoss : GenericObject
     [Space(10)] 
     [SerializeField] private List<SubtitleSet> _recipeSubtitles;
 
+    [Space(30)] [Header("Animator")] 
+    [SerializeField] private Animator _animator;
+
     #endregion
 
     #region FSM PROPERTIES
@@ -247,6 +252,7 @@ public class ChefBoss : GenericObject
                 return;
             }
             
+            _animator.Play("Boss_Dance_04");
             _currentTimeBetweenWaves = 0f;
         };
 
@@ -403,7 +409,7 @@ public class ChefBoss : GenericObject
     {
         switch (attackID)
         {
-            case 4:
+            case 0:
                 StopCoroutine(DoRangedPatternAttack());
                 StartCoroutine(DoRangedPatternAttack());
                 break;
@@ -419,7 +425,7 @@ public class ChefBoss : GenericObject
                 StopCoroutine(DoPlayerSpotlight());
                 StartCoroutine(DoPlayerSpotlight());
                 break;
-            case 0:
+            case 4:
                 StopCoroutine(DoRainPattern());
                 StartCoroutine(DoRainPattern());
                 break;
@@ -442,6 +448,10 @@ public class ChefBoss : GenericObject
         Debug.Log("Ranged pattern");
         for (int i = 0; i < _rangedAttackAmount; i++)
         {
+            int rand = UnityEngine.Random.Range(1, 4);
+            _animator.Play("Boss_Throw_0" + rand);
+            yield return new WaitForSeconds(_rangedAnimationReleaseTime[rand - 1]);
+            
             GameObject bullet = Instantiate(_rangedPatterns[UnityEngine.Random.Range(0, _rangedPatterns.Count)]);
             bullet.transform.SetParent(InstanceManager.instance.transform);
             bullet.transform.position = _rangedAttackSpawnpoint.position;
@@ -452,6 +462,7 @@ public class ChefBoss : GenericObject
         }
 
         attackDone = true;
+        _animator.Play("Boss_Dance_0" + UnityEngine.Random.Range(1, 5));
         yield return null;
     }
 
