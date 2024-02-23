@@ -86,6 +86,9 @@ public class Assistant : GenericObject
 
     [SerializeField] Transform _player;
     public IAssistInteract _holdingItem { get; private set; }
+    
+    private bool _isUsingItem = false;
+    private bool _finishedUse = false;
 
     [SerializeField] private float interactDialogueCount, eatDialogueCount;
     [SerializeField] [Range(0, 100)] private float dialogueChance;
@@ -186,6 +189,7 @@ public class Assistant : GenericObject
         {
             _actualState = JorgeStates.FOLLOW;
             _actualObjective = _player;
+            _finishedUse = false;
         };
 
         follow.OnUpdate += () =>
@@ -470,6 +474,15 @@ public class Assistant : GenericObject
 
         useit.OnUpdate += () =>
         {
+            switch (_isUsingItem)
+            {
+                case false when _finishedUse:
+                    SendInputToFSM(JorgeStates.FOLLOW);
+                    return;
+                case true:
+                    return;
+            }
+
             _dir = Vector3.zero;
             _dir = _actualObjective.position - transform.position;
             
@@ -488,12 +501,21 @@ public class Assistant : GenericObject
 
             if (Vector3.Distance(transform.position, _actualObjective.transform.position) < _pickupDistance)
             {
-                var tempItemAction = _actualObjective.GetComponent<IAssistInteract>() ?? _actualObjective.GetComponentInParent<IAssistInteract>();
+                var tempItemAction = _actualObjective.GetComponentInParent<IAssistInteract>();
 
                 if (tempItemAction != null)
                 {
                     _holdingItem.GetTransform().transform.parent = null;
                     tempItemAction.Interact(_holdingItem);
+
+                    _isUsingItem = true;
+
+                    _dir = Vector3.zero;
+                    
+                    //TEMP
+                    var tempIngredient = _holdingItem as Ingredient;
+                    StartCoroutine(WaitUseItemTime(tempIngredient.GetDuration()));
+                    
                     _holdingItem = null;
                 }
                 else
@@ -502,7 +524,7 @@ public class Assistant : GenericObject
                     _holdingItem = null;
                 }
 
-                SendInputToFSM(JorgeStates.FOLLOW);
+                return;
             }
 
             _dir.Normalize();
@@ -579,7 +601,6 @@ public class Assistant : GenericObject
     public void OnAssistantStart(params object[] parameter)
     {
         _player = (Transform)parameter[0];
-        //_weaponManager = (IAttendance)parameter[1];
         _actualObjective = _player;
     }
 
@@ -693,6 +714,14 @@ public class Assistant : GenericObject
         }
 
         SendInputToFSM(JorgeStates.FOLLOW);
+    }
+
+    private IEnumerator WaitUseItemTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        _isUsingItem = false;
+        _finishedUse = true;
     }
 
     private void OnDrawGizmos()
