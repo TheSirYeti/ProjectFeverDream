@@ -95,12 +95,9 @@ public class Assistant : GenericObject
     {
         FOLLOW,
         PATHFINDING,
-
-        //WAITFORINTERACT,
         INTERACT,
         PICKUP,
-        USEIT,
-        HIDE
+        USEIT
     }
 
     private EventFSM<JorgeStates> fsm;
@@ -140,88 +137,45 @@ public class Assistant : GenericObject
         DoFsmSetup();
     }
 
-    // private void Start()
-    // {
-    //     TimeLineManager.Instance.AddEvents(
-    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 1),
-    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 2),
-    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 3),
-    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 4),
-    //         new Tuple<Action, float>(() => {Debug.Log(Time.time);}, 5)
-    //     );
-    // }
-
     void DoFsmSetup()
     {
         #region SETUP
 
         var follow = new State<JorgeStates>("FOLLOW");
         var pathFinding = new State<JorgeStates>("PATHFINDING");
-        //var waitForInteract = new State<JorgeStates>("WAITFORINTERACT");
         var interact = new State<JorgeStates>("INTERACT");
         var pickup = new State<JorgeStates>("PICKUP");
         var useit = new State<JorgeStates>("USEIT");
-        var hide = new State<JorgeStates>("HIDE");
 
         StateConfigurer.Create(follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.USEIT, useit)
-            .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
         StateConfigurer.Create(pathFinding)
             .SetTransition(JorgeStates.FOLLOW, follow)
-            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
             .SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
             .SetTransition(JorgeStates.USEIT, useit)
-            .SetTransition(JorgeStates.HIDE, hide)
             .Done();
-
-        // StateConfigurer.Create(waitForInteract)
-        //     .SetTransition(JorgeStates.FOLLOW, follow)
-        //     .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-        //     .SetTransition(JorgeStates.INTERACT, interact)
-        //     .SetTransition(JorgeStates.PICKUP, pickup)
-        //     .SetTransition(JorgeStates.USEIT, useit)
-        //     .Done();
 
         StateConfigurer.Create(interact)
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            //.SetTransition(JorgeStates.PICKUP, pickup)
-            .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
         StateConfigurer.Create(pickup)
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            //.SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.USEIT, useit)
-            .SetTransition(JorgeStates.HIDE, hide)
             .Done();
 
         StateConfigurer.Create(useit)
             .SetTransition(JorgeStates.FOLLOW, follow)
             .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            //.SetTransition(JorgeStates.INTERACT, interact)
             .SetTransition(JorgeStates.PICKUP, pickup)
-            .SetTransition(JorgeStates.HIDE, hide)
-            .Done();
-
-        StateConfigurer.Create(hide)
-            .SetTransition(JorgeStates.FOLLOW, follow)
-            .SetTransition(JorgeStates.PATHFINDING, pathFinding)
-            //.SetTransition(JorgeStates.WAITFORINTERACT, waitForInteract)
-            .SetTransition(JorgeStates.INTERACT, interact)
-            .SetTransition(JorgeStates.PICKUP, pickup)
-            .SetTransition(JorgeStates.USEIT, useit)
             .Done();
 
         #endregion
@@ -230,7 +184,6 @@ public class Assistant : GenericObject
 
         follow.OnEnter += x =>
         {
-            //Debug.Log("follow");
             _actualState = JorgeStates.FOLLOW;
             _actualObjective = _player;
         };
@@ -240,12 +193,6 @@ public class Assistant : GenericObject
             if (!MPathfinding.OnSight(transform.position, _player.position))
             {
                 SendInputToFSM(JorgeStates.PATHFINDING);
-                return;
-            }
-
-            if (CheckNearEnemies())
-            {
-                SendInputToFSM(JorgeStates.HIDE);
                 return;
             }
 
@@ -410,11 +357,6 @@ public class Assistant : GenericObject
                                         _vacuumPoint.position.z,
                                         0));
                             }
-                            //
-                            // render.material = _blackholeMat;
-                            // render.material.SetVector("_BlackHolePosition",
-                            //     new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y, _vacuumPoint.position.z,
-                            //         0));
                         }
 
                         LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
@@ -423,7 +365,6 @@ public class Assistant : GenericObject
                         SoundManager.instance.PlaySound(SoundID.ASSISTANT_HEAL);
                         
                         ExtraUpdate = ChangeBlackHoleVars;
-                        //_animator.SetTrigger(_interactuable.AnimationToExecute());
                         break;
                     case Interactuables.ELEVATOR:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
@@ -576,65 +517,6 @@ public class Assistant : GenericObject
 
         #endregion
 
-        #region HIDE
-
-        hide.OnEnter += x =>
-        {
-            _actualState = JorgeStates.HIDE;
-
-            Collider[] hidingSpots =
-                Physics.OverlapSphere(_player.position, _hidingSpotsDetectionDistance, LayerManager.LM_HIDINGSPOT);
-
-            if (!hidingSpots.Any()) return;
-
-            List<Collider> colliders = hidingSpots
-                .OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
-
-            _actualObjective = colliders[0].transform;
-
-            var dir = _actualObjective.position - transform.position;
-            if (Physics.Raycast(transform.position, dir, dir.magnitude * 0.9f, LayerManager.LM_ALLOBSTACLE))
-            {
-                SendInputToFSM(JorgeStates.PATHFINDING);
-                return;
-            }
-        };
-
-        hide.OnUpdate += () =>
-        {
-            if (!CheckNearEnemies()) SendInputToFSM(JorgeStates.FOLLOW);
-
-            _dir = _actualObjective.position - transform.position;
-
-            if (Vector3.Distance(transform.position, _actualObjective.position) < 0.2f)
-            {
-                _dir = _player.position - transform.position;
-            }
-            
-            if (Vector3.Angle(_dir, transform.forward) > 0)
-            {
-                var targetRotation = Quaternion.LookRotation(_dir);
-                transform.rotation =
-                    Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-            }
-
-
-            if (Vector3.Distance(transform.position, _actualObjective.position) < 0.2f) _dir = Vector3.zero;
-            else
-            {
-                _dir.Normalize();
-                _dir *= _followSpeed;
-            }
-        };
-
-        hide.OnExit += x =>
-        {
-            _previousState = JorgeStates.HIDE;
-            _previousObjective = _actualObjective;
-        };
-
-        #endregion
-
         fsm = new EventFSM<JorgeStates>(follow);
     }
 
@@ -737,15 +619,6 @@ public class Assistant : GenericObject
         ExtraUpdate = delegate { };
 
         SendInputToFSM(JorgeStates.FOLLOW);
-    }
-
-    bool CheckNearEnemies()
-    {
-        var enemies = Physics.OverlapSphere(_player.position, _enemiesDetectionDistance, LayerManager.LM_ENEMY)
-            .Where(x => MPathfinding.OnSight(transform.position, x.transform.position));
-        var aliveEnemies = enemies.Select(x => x.GetComponentInParent<Enemy>()).Where(x => !x.isDead).ToList();
-
-        return aliveEnemies.Any();
     }
 
     private void CheckObstacles()
