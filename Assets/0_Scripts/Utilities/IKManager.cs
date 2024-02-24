@@ -32,7 +32,8 @@ public class IKManager : GenericObject
             if (_isActive)
             {
                 _animator.SetLookAtWeight(1);
-                _animator.SetLookAtPosition(_lookAtTarget.position);
+                if(_lookAtTarget != null)
+                    _animator.SetLookAtPosition(_lookAtTarget.position);
             }
             else
             {

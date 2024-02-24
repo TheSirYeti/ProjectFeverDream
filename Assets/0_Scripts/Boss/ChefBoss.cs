@@ -448,6 +448,8 @@ public class ChefBoss : GenericObject
         Debug.Log("Ranged pattern");
         for (int i = 0; i < _rangedAttackAmount; i++)
         {
+            if(_inCutscene) yield break;
+            
             int rand = UnityEngine.Random.Range(1, 4);
             _animator.Play("Boss_Throw_0" + rand);
             yield return new WaitForSeconds(_rangedAnimationReleaseTime[rand - 1]);
