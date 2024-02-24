@@ -22,7 +22,8 @@ public class ScreenControllerShader : MonoBehaviour
 
     private void Awake()
     {
-        _screenMAT = GetComponent<Renderer>().material;
+        if(GetComponent<Renderer>() != null)
+            _screenMAT = GetComponent<Renderer>().material;
     }
 
     void Start()
@@ -37,6 +38,8 @@ public class ScreenControllerShader : MonoBehaviour
     
     void VariableInitiation()
     {
+        if (_screenMAT == null) return;
+        
         _screenMAT.SetFloat("_Controlcolor", controlColor);
         _screenMAT.SetFloat("_Controlring", lockValue);
         _screenMAT.SetFloat("_NoInteractive", _interactive);
