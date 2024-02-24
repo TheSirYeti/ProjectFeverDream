@@ -19,6 +19,7 @@ public class FryingStation : GenericObject, IAssistInteract
     private int _doneSfxID;
     [SerializeField] private Animator _animator;
     [SerializeField] private string _animStartName, _animEndName;
+    [SerializeField] private MonitorInfo _monitorInfo;
     
     private void Awake()
     {
@@ -41,6 +42,7 @@ public class FryingStation : GenericObject, IAssistInteract
         ingredient.transform.position = usingPoint.position;
         
         _animator.Play(_animStartName);
+        _monitorInfo.SetClockTimer(ingredient.GetDuration());
         //feedback de que esta cortando
         yield return new WaitForSeconds(ingredient.GetDuration());
         

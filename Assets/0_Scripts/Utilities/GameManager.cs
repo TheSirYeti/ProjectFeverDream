@@ -229,7 +229,6 @@ public class GameManager : MonoBehaviour
         _myCameras[0].orthographic = isOrthographic;
         if (isOrthographic)
         {
-            Debug.Log("aca");
             _myCameras[0].orthographicSize = orthographicSize;
         }
 

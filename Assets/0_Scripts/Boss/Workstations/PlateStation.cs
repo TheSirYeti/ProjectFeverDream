@@ -27,6 +27,7 @@ public class PlateStation : GenericObject, IAssistInteract
     private int _sfxID;
     [SerializeField] private AudioSource _doneSfx;
     private int _doneSfxID;
+    [SerializeField] private MonitorInfo _monitorInfo;
 
     private void Awake()
     {
@@ -61,6 +62,7 @@ public class PlateStation : GenericObject, IAssistInteract
 
         //feedback de que esta cortando
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
+        _monitorInfo.SetClockTimer(ingredient.GetDuration());
         yield return new WaitForSeconds(ingredient.GetDuration());
 
         var finalOutput = Instantiate(ingredient);

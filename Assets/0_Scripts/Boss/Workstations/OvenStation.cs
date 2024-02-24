@@ -19,6 +19,7 @@ public class OvenStation : GenericObject, IAssistInteract
     private int _doneSfxID;
     [SerializeField] private Animator _animator;
     [SerializeField] private string _animStartName, _animEndName;
+    [SerializeField] private MonitorInfo _monitorInfo;
     
     private void Awake()
     {
@@ -43,6 +44,7 @@ public class OvenStation : GenericObject, IAssistInteract
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
         _animator.Play(_animStartName);
         //feedback de que esta horneando
+        _monitorInfo.SetClockTimer(ingredient.GetDuration());
         yield return new WaitForSeconds(timeToCook);
         
         SoundManager.instance.StopSoundByInt(_sfxID);

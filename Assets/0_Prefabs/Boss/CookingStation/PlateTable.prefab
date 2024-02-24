@@ -95,6 +95,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 910883217321922224}
   - {fileID: 3421841003323665542}
   - {fileID: 8691889652992529695}
   - {fileID: 7859294255231630436}
@@ -147,6 +148,7 @@ MonoBehaviour:
   outline: {fileID: 782200110672740659}
   _sfx: {fileID: 1808672270272794509}
   _doneSfx: {fileID: 3652735898190101213}
+  _monitorInfo: {fileID: 5908949766343457543}
 --- !u!114 &782200110672740659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -540,3 +542,88 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dfed81e0f6bb0894cb75783e57a7507b, type: 3}
   m_PrefabInstance: {fileID: 94641281533486928}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3336651694361622662
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 310069457359425434}
+    m_Modifications:
+    - target: {fileID: 631846307881491912, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.047
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.8983853
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7059759
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.039975498
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.70597595
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.039975494
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -6.482
+      objectReference: {fileID: 0}
+    - target: {fileID: 2999926014911966348, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_Name
+      value: MonitorScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 3232790188226139856, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_text
+      value: PLATE
+      objectReference: {fileID: 0}
+    - target: {fileID: 4248457385704614233, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+--- !u!4 &910883217321922224 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2515876652818871862, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+  m_PrefabInstance: {fileID: 3336651694361622662}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5908949766343457543 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8957349084640199553, guid: a97e20db6506b7f41a3c82acaaac7f45, type: 3}
+  m_PrefabInstance: {fileID: 3336651694361622662}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8db002f25420d74297bd4ff7150ed63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

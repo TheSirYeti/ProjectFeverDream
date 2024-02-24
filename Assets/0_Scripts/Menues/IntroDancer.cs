@@ -17,8 +17,6 @@ public class IntroDancer : GenericObject
     public override void OnStart()
     {
         int rand = Random.Range(1, animAmount + 1);
-        
-        Debug.Log("PLAYING " + "Dance" + rand);
         anim.Play("Dance" + rand);
     }
 }

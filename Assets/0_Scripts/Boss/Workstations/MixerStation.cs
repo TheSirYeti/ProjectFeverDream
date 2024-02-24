@@ -23,6 +23,7 @@ public class MixerStation : GenericObject, IAssistInteract
     private int _doneSfxID;
     [SerializeField] private Animator _animator;
     [SerializeField] private string _animStartName, _animEndName;
+    [SerializeField] private MonitorInfo _monitorInfo;
 
     private void Awake()
     {
@@ -59,6 +60,7 @@ public class MixerStation : GenericObject, IAssistInteract
 
         _animator.Play(_animStartName);
         SoundManager.instance.PlaySoundByInt(_sfxID, true);
+        _monitorInfo.SetClockTimer(ingredient.GetDuration());
         //feedback de que esta cortando
         yield return new WaitForSeconds(ingredient.GetDuration());
 

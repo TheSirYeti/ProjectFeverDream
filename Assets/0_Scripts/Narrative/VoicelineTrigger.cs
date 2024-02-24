@@ -27,8 +27,6 @@ public class VoicelineTrigger : GenericObject
 
     public void OnEnable()
     {
-        Debug.Log("FUNCO1");
-        
         if(doOnEnable)
             DoVoicelineFunc();
     }
