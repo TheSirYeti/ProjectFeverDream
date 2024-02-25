@@ -56,6 +56,11 @@ public class PlateStation : GenericObject, IAssistInteract
         return false;
     }
 
+    public bool isLastIngredient()
+    {
+        return _currentIngredients.Count == _requiredIngredients.Count - 1;
+    }
+
     IEnumerator MakePresentation(Ingredient ingredient)
     {
         _isOccupied = true;

@@ -480,6 +480,7 @@ public class Assistant : GenericObject
                     SendInputToFSM(JorgeStates.FOLLOW);
                     return;
                 case true:
+                    _dir = Vector3.zero;
                     return;
             }
 
@@ -514,9 +515,36 @@ public class Assistant : GenericObject
                     
                     //TEMP
                     var tempIngredient = _holdingItem as Ingredient;
-                    StartCoroutine(WaitUseItemTime(tempIngredient.GetDuration()));
-                    
                     _holdingItem = null;
+
+                    if (tempIngredient && tempIngredient.hasToWait)
+                    {
+                        if (tempIngredient.GetCookingType() == CookingType.PLATE)
+                        {
+                            var tempPlateStation = tempItemAction as PlateStation;
+
+                            if (tempPlateStation && tempPlateStation.isLastIngredient())
+                            {
+                                StartCoroutine(WaitUseItemTime(tempIngredient.GetDuration()));
+                            }
+                            else
+                            {
+                                _isUsingItem = false;
+                                _finishedUse = false;
+                                SendInputToFSM(JorgeStates.FOLLOW);
+                            }
+                        }
+                        else
+                        {
+                            StartCoroutine(WaitUseItemTime(tempIngredient.GetDuration()));
+                        }
+                    }
+                    else
+                    {
+                        _isUsingItem = false;
+                        _finishedUse = false;
+                        SendInputToFSM(JorgeStates.FOLLOW);
+                    }
                 }
                 else
                 {

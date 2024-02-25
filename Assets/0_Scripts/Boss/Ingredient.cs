@@ -9,6 +9,7 @@ public class Ingredient : GenericObject, IAssistInteract, IPickUp
     [SerializeField] private CookingType _cookingType;
     [SerializeField] private IngredientType _ingredientType;
     [SerializeField] private float _cookingDuration;
+    public bool hasToWait;
     [SerializeField] private bool _hasOutput;
     [SerializeField] private GameObject _output;
     [SerializeField] private Outline _outline;
