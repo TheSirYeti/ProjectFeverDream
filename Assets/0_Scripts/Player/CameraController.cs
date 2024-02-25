@@ -161,6 +161,8 @@ public class CameraController : GenericObject
 
     private void SetNewRotation(params object[] parameters)
     {
+        Debug.Log("Set Rot from camera");
+        
         var actualRot = (Vector3)parameters[0];
         
         transform.rotation = Quaternion.Euler(new Vector3(0, actualRot.y, 0));

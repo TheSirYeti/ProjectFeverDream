@@ -52,6 +52,7 @@ public class CutsceneToggler : GenericObject
             player.transform.position = cameraGO.transform.position;
             
             EventManager.Trigger("SetNewRotation", cameraGO.transform.rotation.eulerAngles);
+            Debug.Log("Set Rot");
         }
         
         EventManager.Trigger("ChangeMovementState", true);
@@ -68,7 +69,7 @@ public class CutsceneToggler : GenericObject
     public void MovePlayerToPos()
     {
         player.transform.position = playerTP.position;
-        player.transform.rotation = Quaternion.LookRotation((playerTP.forward * 2) - playerTP.position);
+        EventManager.Trigger("SetNewRotation", playerTP.transform.rotation.eulerAngles);
     }
 
     public void AllowPlayerMovement(bool status)

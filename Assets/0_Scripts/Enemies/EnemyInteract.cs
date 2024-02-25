@@ -81,6 +81,8 @@ public class EnemyInteract : GenericObject, IAssistInteract
     public void Interact(IAssistInteract usableItem = null)
     {
         UpdateManager.instance.RemoveObject(this);
+        _outline.enabled = false;
+        Destroy(_outline);
         Destroy(_enemy.gameObject);
     }
 

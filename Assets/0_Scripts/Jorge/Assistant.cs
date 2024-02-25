@@ -512,6 +512,7 @@ public class Assistant : GenericObject
                     _isUsingItem = true;
 
                     _dir = Vector3.zero;
+                    _rb.velocity = Vector3.zero;
                     
                     //TEMP
                     var tempIngredient = _holdingItem as Ingredient;
