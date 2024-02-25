@@ -66,8 +66,11 @@ public class CutsceneToggler : GenericObject
         isInCutscene = false;
     }
 
-    public void MovePlayerToPos()
+    public void MovePlayerToPos(bool relocate = false)
     {
+        if (relocate)
+            cutscenePlayerCam.transform.position = playerTP.transform.position;
+        
         player.transform.position = playerTP.position;
         EventManager.Trigger("SetNewRotation", playerTP.transform.rotation.eulerAngles);
     }
