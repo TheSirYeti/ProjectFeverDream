@@ -356,7 +356,7 @@ public class Assistant : GenericObject
                             for (int i = 0; i < render.materials.Length; i++)
                             {
                                 render.materials[i] = _blackholeMat;
-                                render.materials[i].SetVector("_BlackHolePosition",
+                                render.materials[i].SetVector("_BlackHolePositions",
                                     new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y,
                                         _vacuumPoint.position.z,
                                         0));
