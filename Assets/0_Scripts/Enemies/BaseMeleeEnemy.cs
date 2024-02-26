@@ -183,6 +183,9 @@ public class BaseMeleeEnemy : Enemy
             animator.Play(animationPrefix + "_Detect");
             StopCoroutine(DoDetectSign());
             StartCoroutine(DoDetectSign());
+            animator.SetLookAtWeight(1);
+            if(target != null)
+                animator.SetLookAtPosition(target.transform.position);
             EventManager.Trigger("OnFirstDetection");
             //PlayRandomDetectGreet();
         };
