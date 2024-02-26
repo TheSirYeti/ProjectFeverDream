@@ -12,7 +12,7 @@ public class RobotKiller : GenericObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Robot")
+        if (other.gameObject.tag == "EP_Chef" || other.gameObject.tag == "EP_Waiter")
         {
             other.gameObject.SetActive(false);
         }

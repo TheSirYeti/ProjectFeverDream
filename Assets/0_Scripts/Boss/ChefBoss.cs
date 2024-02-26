@@ -111,8 +111,8 @@ public class ChefBoss : GenericObject
     
     private float _currentTimeBetweenWaves = 0;
     private float _currentTimeBetweenAttacks = 0;
-    private float _timeBetweenAttacks = 10f;
-    private float _timeBetweenWaves = 10f;
+    private float _timeBetweenAttacks = 13f;
+    private float _timeBetweenWaves = 13f;
 
     private float _currentTimeTakeDamage = 0f;
     private float _timeTakeDamage = 5f;
@@ -304,14 +304,6 @@ public class ChefBoss : GenericObject
                 SendInputToFSM(ChefStates.IDLE);
                 return;
             }
-
-            _currentEnemySpawnTimer += Time.deltaTime;
-            if (_currentEnemySpawnTimer >= _totalEnemySpawnTimer)
-            {
-                _currentEnemySpawnTimer = 0f;
-                DoEnemySpawning();
-            }
-            
             
             if (!attackDone) return;
             
@@ -319,17 +311,27 @@ public class ChefBoss : GenericObject
             if (_currentTimeBetweenAttacks > _timeBetweenAttacks)
             {
                 _currentTimeBetweenAttacks = 0f;
-                _currentAttackAmount++;
-                attackDone = false;
-
-                if (_currentAttackAmount >= _totalAttackAmount)
+                
+                int rand = UnityEngine.Random.Range(0, 2);
+                
+                if (rand == 0)
                 {
-                    waveDone = true;
+                    DoEnemySpawning();
                 }
                 else
                 {
-                    DoAttack(availableAttacks[_currentAttackAmount]);
+                    _currentAttackAmount++;
+                    if (_currentAttackAmount >= _totalAttackAmount)
+                    {
+                        waveDone = true;
+                    }
+                    else
+                    {
+                        DoAttack(availableAttacks[_currentAttackAmount]);
+                    }
                 }
+                
+                attackDone = false;
             }
         };
         
