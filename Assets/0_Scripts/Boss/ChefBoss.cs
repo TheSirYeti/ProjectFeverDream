@@ -111,8 +111,8 @@ public class ChefBoss : GenericObject
     
     private float _currentTimeBetweenWaves = 0;
     private float _currentTimeBetweenAttacks = 0;
-    private float _timeBetweenAttacks = 13f;
-    private float _timeBetweenWaves = 13f;
+    private float _timeBetweenAttacks = 10f;
+    private float _timeBetweenWaves = 10f;
 
     private float _currentTimeTakeDamage = 0f;
     private float _timeTakeDamage = 5f;

@@ -7,10 +7,13 @@ public class CloseDoors : GenericObject
 {
     public GameObject openDoors, closedDoors;
     private bool hasTriggered = false;
+    public Animator animator;
     
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+        
+        EventManager.Subscribe("OnFirstWeapon", OpenDoors);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -21,9 +24,13 @@ public class CloseDoors : GenericObject
             assistant.ResetGeorge();
             assistant.transform.position = GameManager.Instance.Player.transform.position;
             
-            closedDoors.SetActive(true);
-            openDoors.SetActive(false);
+            animator.Play("RestaurantDoorsClose");
             hasTriggered = true;
         }
+    }
+
+    void OpenDoors(object[] parameters)
+    {
+        animator.Play("RestaurantDoorsOpen");
     }
 }
