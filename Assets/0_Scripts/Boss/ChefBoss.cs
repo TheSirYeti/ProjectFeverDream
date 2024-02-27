@@ -329,9 +329,8 @@ public class ChefBoss : GenericObject
                     {
                         DoAttack(availableAttacks[_currentAttackAmount]);
                     }
+                    attackDone = false;
                 }
-                
-                attackDone = false;
             }
         };
         

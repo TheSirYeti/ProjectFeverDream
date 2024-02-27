@@ -11,6 +11,7 @@ public class RecipeBillboard : GenericObject
     [SerializeField] private List<GameObject> _recipeImages;
     [Space(15)]
     [SerializeField] private TextMeshPro _recipeTitleText, _recipeInstructionsText;
+    private Dictionary<IngredientType, GameObject> _recipeCheck;
     
     private int _currentBillboard = -1;
 
@@ -20,6 +21,7 @@ public class RecipeBillboard : GenericObject
         
         EventManager.Subscribe("OnNextRecipe", DisplayNextRecipe);
         EventManager.Subscribe("OnPlateFinished", ClearCurrentRecipe);
+        EventManager.Subscribe("OnIngredientAdded", SetCheckmark);
     }
 
     public void DisplayNextRecipe(object[] parameters)
@@ -34,12 +36,19 @@ public class RecipeBillboard : GenericObject
             return;
         }
         _recipeTitleText.text = _recipes[_currentBillboard].recipeName;
-        
-        foreach (var img in _recipeImages)
+
+        for (int i = 0; i < _recipeImages.Count; i++)
         {
-            img.SetActive(false);
+            _recipeImages[i].SetActive(false);
         }
+        
         _recipeImages[_currentBillboard].SetActive(true);
+
+        _recipeCheck = new Dictionary<IngredientType, GameObject>();
+        foreach (var obj in _recipeImages[_currentBillboard].GetComponent<IngredientList>().currentRecipeData)
+        {
+            _recipeCheck.Add(obj.ingredientType, obj.recipeCheckObject);
+        }
         
         _recipeInstructionsText.text = "";
         foreach (var instruction in _recipes[_currentBillboard].recipeInstructions)
@@ -57,6 +66,15 @@ public class RecipeBillboard : GenericObject
         foreach (var img in _recipeImages)
         {
             img.SetActive(false);
+        }
+    }
+
+    void SetCheckmark(object[] parameters)
+    {
+        var ingredient = (IngredientType)parameters[0];
+        if (_recipeCheck.ContainsKey(ingredient))
+        {
+            _recipeCheck[ingredient].SetActive(true);
         }
     }
 }

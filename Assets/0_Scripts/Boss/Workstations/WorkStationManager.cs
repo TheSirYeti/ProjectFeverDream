@@ -32,5 +32,7 @@ public class WorkStationManager : GenericObject
             _currentIngredients.SetActive(false);
 
         _currentIngredients = Instantiate(_ingredientPrefab);
+        if(InstanceManager.instance != null)
+            _currentIngredients.transform.SetParent(InstanceManager.instance.transform);
     }
 }

@@ -44,6 +44,8 @@ public class PlateStation : GenericObject, IAssistInteract
     {
         _currentIngredients.Add(ingredient.GetIngredientType());
         ingredient.gameObject.SetActive(false);
+        EventManager.Trigger("OnIngredientAdded", ingredient.GetIngredientType());
+        SoundManager.instance.PlaySound(SoundID.ELEVATOR_DING);
 
         if (_currentIngredients.Count == _requiredIngredients.Count)
             StartCoroutine(MakePresentation(mixingOutput));
@@ -51,7 +53,8 @@ public class PlateStation : GenericObject, IAssistInteract
 
     public bool CheckIngredientList(Ingredient ingredient)
     {
-        if (_requiredIngredients.Contains(ingredient.GetIngredientType()) && !_currentIngredients.Contains(ingredient.GetIngredientType()))
+        if (_requiredIngredients.Contains(ingredient.GetIngredientType()) 
+            && !_currentIngredients.Contains(ingredient.GetIngredientType()))
             return true;
         return false;
     }
