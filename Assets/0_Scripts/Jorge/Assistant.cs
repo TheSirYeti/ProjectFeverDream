@@ -86,7 +86,8 @@ public class Assistant : GenericObject
 
     [SerializeField] Transform _player;
     public IAssistInteract _holdingItem { get; private set; }
-    
+
+    private bool _isFirstWeapon = true;
     private bool _isUsingItem = false;
     private bool _finishedUse = false;
 
@@ -395,7 +396,16 @@ public class Assistant : GenericObject
 
         #region PICKUP
 
-        pickup.OnEnter += x => { _actualState = JorgeStates.PICKUP; };
+        pickup.OnEnter += x =>
+        {
+            _actualState = JorgeStates.PICKUP; 
+            if (_isFirstWeapon)
+            {
+                Debug.Log("EVENTOOOOOOO");
+                EventManager.Trigger("OnFirstWeapon");
+            }
+            _isFirstWeapon = false;
+        };
 
         pickup.OnUpdate += () =>
         {

@@ -66,6 +66,8 @@ public class CameraController : GenericObject
     Action cameraEffects = delegate { };
     Action interactChecker = delegate { };
 
+    private bool _isActive = true;
+    
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
@@ -76,6 +78,7 @@ public class CameraController : GenericObject
         EventManager.Subscribe("CameraShake", ShakeState);
         EventManager.Subscribe("CameraBobbing", SetBobbing);
         EventManager.Subscribe("SetNewRotation", SetNewRotation);
+        EventManager.Subscribe("ChangeMovementState", SetCameraStatus);
 
         _model = GetComponent<Model>();
 
@@ -121,6 +124,8 @@ public class CameraController : GenericObject
 
     public override void OnUpdate()
     {
+        if (!_isActive) return;
+        
         interactChecker();
         cameraMovement();
         cameraEffects();
@@ -312,5 +317,10 @@ public class CameraController : GenericObject
             pos.y = _initialCamPos.y;
             _cameraGetter.transform.localPosition = pos;
         }
+    }
+
+    void SetCameraStatus(object[] parameters)
+    {
+        _isActive = (bool)parameters[0];
     }
 }

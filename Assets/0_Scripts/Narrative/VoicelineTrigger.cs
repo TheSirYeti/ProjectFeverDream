@@ -10,7 +10,8 @@ public class VoicelineTrigger : GenericObject
 
     public bool doOnEnable = false;
     public bool isForStopping = false;
-    
+
+    public ObjectiveData objData;
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
@@ -22,6 +23,9 @@ public class VoicelineTrigger : GenericObject
         {
             hasBeenTriggered = true;
             DoVoicelineFunc();
+            
+            if(objData != null)
+                objData.ChangeObjective(null);
         }
     }
 
