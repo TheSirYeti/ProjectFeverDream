@@ -737,6 +737,8 @@ public class ChefBoss : GenericObject
         _rainAttackAmount += _modRainAttackAmount;
         _rainTimeBetweenAttacks -= _modRainTimeBetweenAttacks;
         totalEnemiesToSpawn += _modEnemyAmountSpawn;
+        _timeBetweenAttacks -= 2f;
+        _timeBetweenWaves -= 2f;
         
         _totalAttackAmount++;
     }
