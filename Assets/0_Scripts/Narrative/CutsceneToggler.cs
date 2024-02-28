@@ -191,6 +191,7 @@ public class CutsceneToggler : GenericObject
     {
         EventManager.Trigger("OnCutsceneEvent", true);
         EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, false);
+        PlayerPrefs.SetInt("LevelReplayCounter", 0);
         player.transform.position = cutsceneEndPos.transform.position;
         player.transform.rotation = cutsceneEndPos.transform.rotation;
         cutscenePlayerCam.transform.position = cutsceneEndPos.transform.position;
