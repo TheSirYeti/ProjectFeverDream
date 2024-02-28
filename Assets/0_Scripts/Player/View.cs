@@ -54,16 +54,16 @@ public class View : GenericObject
         switch ((PPNames)parameters[0])
         {
             case PPNames.BORDERCINEMATIC:
-                _borderCinematicPP.EffectEnabled((bool)parameters[1]);
+                _borderCinematicPP?.EffectEnabled((bool)parameters[1]);
                 break;
             case PPNames.DAMAGESCREEN:
-                _damageScreenPP.EffectEnabled((bool)parameters[1]);
+                _damageScreenPP?.EffectEnabled((bool)parameters[1]);
                 break;
             case PPNames.LOWHP:
-                _LowHPPP.EffectEnabled((bool)parameters[1]);
+                _LowHPPP?.EffectEnabled((bool)parameters[1]);
                 break;
             case PPNames.SPEEDEFFECT:
-                _SpeedEffectPP.EffectEnabled((bool)parameters[1]);
+                _SpeedEffectPP?.EffectEnabled((bool)parameters[1]);
                 break;
         }
     }

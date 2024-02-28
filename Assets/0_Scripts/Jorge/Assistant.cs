@@ -93,7 +93,7 @@ public class Assistant : GenericObject
 
     [SerializeField] private float interactDialogueCount, eatDialogueCount;
     [SerializeField] [Range(0, 100)] private float dialogueChance;
-    
+
 
     public enum JorgeStates
     {
@@ -114,7 +114,7 @@ public class Assistant : GenericObject
 
     public override void OnAwake()
     {
-        EventManager.Subscribe("OnAssistantStart", OnAssistantStart);
+        //EventManager.Subscribe("OnAssistantStart", OnAssistantStart);
 
         EventManager.Subscribe("ChangeMovementState", ChangeCinematicMode);
         GameManager.Instance.Assistant = this;
@@ -135,7 +135,6 @@ public class Assistant : GenericObject
 
     public override void OnStart()
     {
-       
         EventManager.Trigger("SetAssistant", this);
         _player = GameManager.Instance.Player.transform;
         DoFsmSetup();
@@ -197,13 +196,14 @@ public class Assistant : GenericObject
         {
             if (!MPathfinding.OnSight(transform.position, _player.position))
             {
+                Debug.Log(2);
                 SendInputToFSM(JorgeStates.PATHFINDING);
                 return;
             }
 
             _dir = Vector3.zero;
             _dir = _player.position - transform.position;
-            
+
             if (Vector3.Angle(_dir, transform.forward) > 0)
             {
                 var targetRotation = Quaternion.LookRotation(_dir);
@@ -248,17 +248,17 @@ public class Assistant : GenericObject
                 SendInputToFSM(_previousState);
                 return;
             }
-            
+
             _dir = Vector3.zero;
             _dir = _actualObjective.position - transform.position;
-            
+
             if (Vector3.Angle(_dir, transform.forward) > 0)
             {
                 var targetRotation = Quaternion.LookRotation(_dir);
                 transform.rotation =
                     Quaternion.Lerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
             }
-            
+
             _dir.Normalize();
             _dir *= _interactSpeed;
 
@@ -365,10 +365,10 @@ public class Assistant : GenericObject
                         }
 
                         LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
-                        
+
                         GameManager.Instance.Player.Health(15);
                         SoundManager.instance.PlaySound(SoundID.ASSISTANT_HEAL);
-                        
+
                         ExtraUpdate = ChangeBlackHoleVars;
                         break;
                     case Interactuables.ELEVATOR:
@@ -398,12 +398,13 @@ public class Assistant : GenericObject
 
         pickup.OnEnter += x =>
         {
-            _actualState = JorgeStates.PICKUP; 
+            _actualState = JorgeStates.PICKUP;
             if (_isFirstWeapon)
             {
                 Debug.Log("EVENTOOOOOOO");
                 EventManager.Trigger("OnFirstWeapon");
             }
+
             _isFirstWeapon = false;
         };
 
@@ -411,7 +412,7 @@ public class Assistant : GenericObject
         {
             _dir = Vector3.zero;
             _dir = _actualObjective.position - transform.position;
-            
+
             if (Vector3.Angle(_dir, transform.forward) > 0)
             {
                 var targetRotation = Quaternion.LookRotation(_dir);
@@ -431,7 +432,7 @@ public class Assistant : GenericObject
                     pickUp.UnPickUp();
                     _holdingItem = null;
                 }
-                
+
                 _holdingItem = _actualObjective.gameObject.GetComponent<IAssistInteract>();
 
                 if (_holdingItem == null)
@@ -439,7 +440,7 @@ public class Assistant : GenericObject
                     SendInputToFSM(JorgeStates.FOLLOW);
                     return;
                 }
-                
+
                 _actualObjective.transform.rotation = _pickUpPoint.rotation;
                 _actualObjective.transform.parent = _pickUpPoint;
                 _actualObjective.transform.localPosition = Vector3.zero;
@@ -478,7 +479,7 @@ public class Assistant : GenericObject
         {
             if (_holdingItem.IsAutoUsable())
                 _actualObjective = _holdingItem.GoesToUsablePoint();
-            
+
             _actualState = JorgeStates.USEIT;
         };
 
@@ -491,12 +492,14 @@ public class Assistant : GenericObject
                     return;
                 case true:
                     _dir = Vector3.zero;
+                    _rb.velocity = Vector3.zero;
+                    _obstacleDir = Vector3.zero;
                     return;
             }
 
             _dir = Vector3.zero;
             _dir = _actualObjective.position - transform.position;
-            
+
             if (Vector3.Angle(_dir, transform.forward) > 0)
             {
                 var targetRotation = Quaternion.LookRotation(_dir);
@@ -521,9 +524,6 @@ public class Assistant : GenericObject
 
                     _isUsingItem = true;
 
-                    _dir = Vector3.zero;
-                    _rb.velocity = Vector3.zero;
-                    
                     //TEMP
                     var tempIngredient = _holdingItem as Ingredient;
                     _holdingItem = null;
@@ -589,10 +589,10 @@ public class Assistant : GenericObject
     public override void OnUpdate()
     {
         if (!_canMove) return;
-        
+
         fsm.Update();
         ExtraUpdate();
-                
+
         _actualDir = Vector3.zero;
         _actualDir += _dir + _obstacleDir;
 
@@ -612,13 +612,15 @@ public class Assistant : GenericObject
             _holdingItem.GetTransform().parent = null;
             if (_holdingItem is IPickUp pickUp)
             {
-               pickUp.UnPickUp();
+                pickUp.UnPickUp();
             }
         }
 
         _holdingItem = null;
 
         _isInteracting = false;
+
+        Debug.Log("a");
 
         transform.position = _player.transform.position;
         SendInputToFSM(JorgeStates.FOLLOW);
@@ -636,12 +638,12 @@ public class Assistant : GenericObject
         _interactuable.Interact();
         FinishAction();
     }
-
-    public void OnAssistantStart(params object[] parameter)
-    {
-        _player = (Transform)parameter[0];
-        _actualObjective = _player;
-    }
+    //
+    // public void OnAssistantStart(params object[] parameter)
+    // {
+    //     _player = (Transform)parameter[0];
+    //     _actualObjective = _player;
+    // }
 
     public void SetObjective(Transform interactuable, JorgeStates goToState)
     {
@@ -657,7 +659,7 @@ public class Assistant : GenericObject
         SoundManager.instance.PlaySound(SoundID.ASSISTANT_PING);
         _actualObjective = interactuable;
         _previousObjective = interactuable;
-        
+
 
         SendInputToFSM(goToState);
     }
@@ -684,19 +686,17 @@ public class Assistant : GenericObject
     private void CheckObstacles()
     {
         _obstacleDir = Vector3.zero;
-        RaycastHit hit;
 
         foreach (var dir in _dirs)
         {
-            if (Physics.Raycast(transform.position, dir, out hit, _obstacleDistance, LayerManager.LM_ALLOBSTACLE))
-            {
-                var negativeDir = (dir * -1) * (Vector3.Distance(transform.position, hit.point) / _obstacleDistance);
-                _obstacleDir += negativeDir;
-            }
+            if (!Physics.Raycast(transform.position, dir, out var hit, _obstacleDistance,
+                    LayerManager.LM_ALLOBSTACLE)) continue;
+            
+            var negativeDir = dir * (-1 * Vector3.Distance(transform.position, hit.point));
+            _obstacleDir += negativeDir;
         }
 
-        if (_obstacleDir.magnitude > 1) _obstacleDir.Normalize();
-        _obstacleDir *= _obstacleSpeed;
+        if (_obstacleDir.magnitude > _obstacleDistance) _obstacleDir = _obstacleDir.normalized * _obstacleDistance;
     }
 
     void ChangeBlackHoleVars()
@@ -712,14 +712,6 @@ public class Assistant : GenericObject
                 render.materials[i].SetFloat("_Effect", _loadingAmmount);
             }
         }
-    }
-
-    void Respawn()
-    {
-        transform.position = NodeManager.instance.GetNode(NodeManager.instance.GetClosestNode(_player, true), true)
-            .transform.position;
-        _interactuable = null;
-        SendInputToFSM(JorgeStates.FOLLOW);
     }
 
     //Temp
