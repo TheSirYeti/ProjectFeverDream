@@ -78,6 +78,7 @@ public class CutsceneToggler : GenericObject
     public void AllowPlayerMovement(bool status)
     {
         EventManager.Trigger("ChangeMovementState", status);
+        EventManager.Trigger("ChangeCameraState", status);
         EventManager.Trigger("ChangePhysicsState", status);
     }
     

@@ -168,9 +168,8 @@ MonoBehaviour:
   _interactPoint: {fileID: 365078004365198975}
   _enemy: {fileID: 9165281234212238849}
   _renderers:
-  - {fileID: 5021550871913374759}
   - {fileID: 6437866315131333719}
-  _outline: {fileID: 4725667488311518328}
+  _outline: {fileID: 2376799108008440925}
   _type: 1
 --- !u!1 &300054137213409333
 GameObject:
@@ -408,6 +407,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7635928965069576171}
   - component: {fileID: 6437866315131333719}
+  - component: {fileID: 2376799108008440925}
   m_Layer: 0
   m_Name: R_Waiter_Cloth
   m_TagString: Untagged
@@ -508,6 +508,24 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.31942508, y: 0.007488318, z: -0.000010430813}
     m_Extent: {x: 0.32141933, y: 0.19892702, z: 0.9528615}
   m_DirtyAABB: 0
+--- !u!114 &2376799108008440925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693745252519086031}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &714602664856769116
 GameObject:
   m_ObjectHideFlags: 0
@@ -2729,7 +2747,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7343456579840150758}
   - component: {fileID: 5021550871913374759}
-  - component: {fileID: 4725667488311518328}
   m_Layer: 0
   m_Name: Robot_Enemie_MODEL
   m_TagString: Untagged
@@ -2852,24 +2869,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.1920866, y: 0.12465138, z: -0.000023066998}
     m_Extent: {x: 1.1590993, y: 0.3017233, z: 1.2482092}
   m_DirtyAABB: 0
---- !u!114 &4725667488311518328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5662542125973179974}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 1
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 10
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &6129390399423119463
 GameObject:
   m_ObjectHideFlags: 0

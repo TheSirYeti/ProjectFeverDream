@@ -97,7 +97,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0.01240542, y: -0.00012447685, z: -0.19127917}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -229,7 +229,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0.52351266, y: -0.0000055960286, z: -0.00000016391277}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -20273,7 +20273,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.2644504, y: 0.000009398681, z: 0.000005632639}
+  m_ConnectedAnchor: {x: -0.26445028, y: 0.000009398677, z: 0.000005632639}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -25542,6 +25542,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5607860346072099153}
   - component: {fileID: 2854572644003047916}
+  - component: {fileID: 3160339339950521858}
   m_Layer: 0
   m_Name: R_Chef_Cloth
   m_TagString: Untagged
@@ -25629,6 +25630,24 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.42730787, y: -0.010346822, z: 0.000000022351742}
     m_Extent: {x: 0.6755556, y: 0.21369413, z: 0.20549381}
   m_DirtyAABB: 0
+--- !u!114 &3160339339950521858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3476295295702293446}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 1
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &3610253317441350345
 GameObject:
   m_ObjectHideFlags: 0
@@ -25791,7 +25810,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0.01240542, y: -0.00012447685, z: 0.19127917}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: -1, z: 0}
   m_TwistLimitSpring:
@@ -30809,7 +30828,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.35280585, y: -0.013785773, z: 0.18257093}
+  m_ConnectedAnchor: {x: -0.35280585, y: -0.013785773, z: 0.18257117}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -31003,7 +31022,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 0, z: -1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: -0.52351266, y: 0.0000054854027, z: 0.00000040233135}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: -1, z: 0}
   m_TwistLimitSpring:
@@ -36645,7 +36664,6 @@ GameObject:
   m_Component:
   - component: {fileID: 721357681884336026}
   - component: {fileID: 779359284844591953}
-  - component: {fileID: 8158689847908394834}
   m_Layer: 0
   m_Name: Robot_Enemie_MODEL
   m_TagString: Untagged
@@ -36768,24 +36786,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.1920866, y: 0.12465138, z: -0.000023066998}
     m_Extent: {x: 1.1590993, y: 0.3017233, z: 1.2482092}
   m_DirtyAABB: 0
---- !u!114 &8158689847908394834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6432945074739747362}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 1
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 10
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []
 --- !u!1 &6495728285591893633
 GameObject:
   m_ObjectHideFlags: 0
@@ -42263,13 +42263,13 @@ MonoBehaviour:
   myWall: {fileID: 0}
   target: {fileID: 0}
   wasDetected: 0
-  minChaseDistance: 1.5
+  minChaseDistance: 2
   attackCollider: {fileID: 9168980124466038961}
-  attackCooldown: 4
+  attackCooldown: 1
   currentAttackCooldown: 0
   isAttacking: 0
   speed: 9
-  accelerationValue: 6
+  accelerationValue: 3
   minDistanceToNode: 0.2
   isPathfinding: 0
   pathfindingCooldown: 0
@@ -43461,7 +43461,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.26445046, y: -0.000009373387, z: -0.0000056922436}
+  m_ConnectedAnchor: {x: 0.26445034, y: -0.000009373383, z: -0.0000056922436}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -43708,8 +43708,7 @@ MonoBehaviour:
   _enemy: {fileID: 6435271698600844825}
   _renderers:
   - {fileID: 2854572644003047916}
-  - {fileID: 779359284844591953}
-  _outline: {fileID: 8158689847908394834}
+  _outline: {fileID: 3160339339950521858}
   _type: 1
 --- !u!65 &6831174317894302430
 BoxCollider:

@@ -49,8 +49,13 @@ public class EnemyInteract : GenericObject, IAssistInteract
     {
         if (_outline == null) return;
 
+        if (state)
+        {
+            _outline.OutlineWidth = 10;
+        }
+        else _outline.OutlineWidth = 0;
+        
         _outline.enabled = state;
-        _outline.OutlineWidth = 10;
     }
 
     public bool CanInteractWith(IAssistInteract assistInteract)

@@ -20,6 +20,9 @@ public class BaseMeleeEnemy : Enemy
     [Header("-== DETECT PROPERTIES ==-")]
     [SerializeField] private GameObject exclamationSign;
     [SerializeField] private float exclamationSignTimer;
+    private bool hasDeathTimer = false;
+    private float deathTimer = 30f;
+    private float currentDeathTimer = 0f;
     
     public enum MeleeEnemyStates
     {
@@ -307,11 +310,25 @@ public class BaseMeleeEnemy : Enemy
             DoFaceTransition(FaceID.DEAD);
         };
 
+        die.OnUpdate += () =>
+        {
+            if (!hasDeathTimer) return;
+
+            currentDeathTimer += Time.deltaTime;
+            if (currentDeathTimer >= deathTimer)
+            {
+                gameObject.SetActive(false);
+            }
+        };
+
         #endregion
 
-        
-        if(wasDetected)
+
+        if (wasDetected)
+        {
+            hasDeathTimer = true;
             fsm = new EventFSM<MeleeEnemyStates>(detect);
+        }
         else
             fsm = new EventFSM<MeleeEnemyStates>(idle);
     }

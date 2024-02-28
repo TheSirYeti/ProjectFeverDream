@@ -78,7 +78,7 @@ public class CameraController : GenericObject
         EventManager.Subscribe("CameraShake", ShakeState);
         EventManager.Subscribe("CameraBobbing", SetBobbing);
         EventManager.Subscribe("SetNewRotation", SetNewRotation);
-        EventManager.Subscribe("ChangeMovementState", SetCameraStatus);
+        EventManager.Subscribe("ChangeCameraState", SetCameraStatus);
 
         _model = GetComponent<Model>();
 

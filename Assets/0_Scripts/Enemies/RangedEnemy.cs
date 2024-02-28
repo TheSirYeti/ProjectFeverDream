@@ -30,6 +30,10 @@ public class RangedEnemy : Enemy
     [SerializeField] private float timeScared;
     private bool canGetScared = true;
     private float currentScare = 0f;
+    
+    private bool hasDeathTimer = false;
+    private float deathTimer = 30f;
+    private float currentDeathTimer = 0f;
 
     public enum RangedEnemyStates
     {
@@ -453,11 +457,25 @@ public class RangedEnemy : Enemy
             DoFaceTransition(FaceID.DEAD);
         };
 
+        die.OnUpdate += () =>
+        {
+            if (!hasDeathTimer) return;
+
+            currentDeathTimer += Time.deltaTime;
+            if (currentDeathTimer >= deathTimer)
+            {
+                gameObject.SetActive(false);
+            }
+        };
+        
         #endregion
 
-        
-        if(wasDetected)
+
+        if (wasDetected)
+        {
+            hasDeathTimer = true;
             fsm = new EventFSM<RangedEnemyStates>(detect);
+        }
         else
             fsm = new EventFSM<RangedEnemyStates>(idle);
     }
