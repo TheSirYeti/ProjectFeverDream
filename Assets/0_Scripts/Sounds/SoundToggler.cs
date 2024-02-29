@@ -6,7 +6,7 @@ using UnityEngine;
 public class SoundToggler : GenericObject
 {
     [SerializeField] private List<GameObject> _allSoundProfiles;
-    private GameObject _currentSoundProfile, _lastSoundProfile;
+    private GameObject _currentSoundProfile;
     private int _currentID = -1;
     
     private void Awake()
@@ -29,12 +29,6 @@ public class SoundToggler : GenericObject
         foreach (var sfxProfile in _allSoundProfiles)
         {
             sfxProfile.SetActive(false);
-        }
-        
-        if (_currentSoundProfile != null)
-        {
-            _lastSoundProfile = _currentSoundProfile;
-            _lastSoundProfile.SetActive(true);
         }
         
         _currentSoundProfile = _allSoundProfiles[id];

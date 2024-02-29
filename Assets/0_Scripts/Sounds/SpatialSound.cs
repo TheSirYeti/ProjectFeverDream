@@ -14,6 +14,8 @@ public class SpatialSound : GenericObject
     [SerializeField] private bool playOnStart;
     [SerializeField] private bool playOnEnable;
     [SerializeField] private bool loop;
+    [SerializeField] private bool playWithNoMusic = false;
+    private bool isPlaying = false;
     
  
     private void Awake()
@@ -27,6 +29,25 @@ public class SpatialSound : GenericObject
 
         if(playOnStart)
             PlaySound();
+    }
+
+    private void Update()
+    {
+        if (!playWithNoMusic) return;
+        
+        if (SoundManager.instance.volumeMusic <= 0.05f && !UpdateManager.instance.IsPaused())
+        {
+            if (!isPlaying)
+            {
+                isPlaying = true;
+                PlaySound();
+            }
+        }
+        else
+        {
+            isPlaying = false;SoundManager.instance.StopSoundByInt(audioID);
+            audioSource.Stop();
+        }
     }
 
     public void PlaySound()

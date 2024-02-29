@@ -6,6 +6,7 @@ using UnityEngine;
 public class ObjectToggleTrigger : GenericObject
 {
     public GameObject obj;
+    public bool needsTurnOff = false;
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
@@ -16,6 +17,14 @@ public class ObjectToggleTrigger : GenericObject
         if (other.gameObject.tag == "Player")
         {
             obj?.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            obj?.SetActive(false);
         }
     }
 }
