@@ -18,8 +18,10 @@ public class BaseMeleeEnemy : Enemy
     private TrailRenderer trailRenderer;
     [Space(20)]
     [Header("-== DETECT PROPERTIES ==-")]
-    [SerializeField] private GameObject exclamationSign;
+    [SerializeField] private ParticleSystem exclamationSign;
     [SerializeField] private float exclamationSignTimer;
+   
+    
     private bool hasDeathTimer = false;
     private float deathTimer = 30f;
     private float currentDeathTimer = 0f;
@@ -190,7 +192,6 @@ public class BaseMeleeEnemy : Enemy
             if(target != null)
                 animator.SetLookAtPosition(target.transform.position);
             EventManager.Trigger("OnFirstDetection");
-            //PlayRandomDetectGreet();
         };
         
         detect.OnUpdate += () =>
@@ -317,7 +318,10 @@ public class BaseMeleeEnemy : Enemy
             currentDeathTimer += Time.deltaTime;
             if (currentDeathTimer >= deathTimer)
             {
-                gameObject.SetActive(false);
+                UpdateManager.instance.RemoveObject(this);
+                
+                if(gameObject != null)
+                    gameObject.SetActive(false);
             }
         };
 
@@ -341,12 +345,9 @@ public class BaseMeleeEnemy : Enemy
     IEnumerator DoDetectSign()
     {
         if(exclamationSign != null)
-            exclamationSign.SetActive(true);
+            exclamationSign.Play();
         
         yield return new WaitForSeconds(exclamationSignTimer);
-        
-        if(exclamationSign != null)
-            exclamationSign.SetActive(false);
         
         SendInputToFSM(MeleeEnemyStates.CHASING);
         yield return null;

@@ -9,6 +9,8 @@ public class MixerStation : GenericObject, IAssistInteract
     [Header("Mixer Properties")]
     [SerializeField] private List<IngredientType> _requiredIngredients;
     private List<IngredientType> _currentIngredients = new List<IngredientType>();
+    [SerializeField] private List<GameObject> _ingredientsScreens;
+    private Dictionary<IngredientType, GameObject> _ingredientDiccionary;
     
     [Header("Transforms")]
     [SerializeField] private Ingredient mixingOutput;
@@ -34,13 +36,22 @@ public class MixerStation : GenericObject, IAssistInteract
     {
         _sfxID = SoundManager.instance.AddSFXSource(_sfx);
         _doneSfxID = SoundManager.instance.AddSFXSource(_doneSfx);
+
+        _ingredientDiccionary = new Dictionary<IngredientType, GameObject>();
+        for (int i = 0; i < _requiredIngredients.Count; i++)
+        {
+            _ingredientDiccionary.Add(_requiredIngredients[i], _ingredientsScreens[i]);
+        }
         
         Debug.Log(_sfxID);
     }
 
     public void ProcessFood(Ingredient ingredient)
     {
+        
         _currentIngredients.Add(ingredient.GetIngredientType());
+        _ingredientDiccionary[ingredient.GetIngredientType()].SetActive(true);
+        SoundManager.instance.PlaySound(SoundID.ELEVATOR_DING);
         ingredient.gameObject.SetActive(false);
 
         if (_currentIngredients.Count == _requiredIngredients.Count)
@@ -70,6 +81,9 @@ public class MixerStation : GenericObject, IAssistInteract
         var finalOutput = Instantiate(mixingOutput);
 
         finalOutput.transform.position = outputPoint.position;
+        _currentIngredients = new List<IngredientType>();
+        foreach(var obj in _ingredientsScreens) obj.SetActive(false);
+        
         _isOccupied = false;
 
         yield return null;

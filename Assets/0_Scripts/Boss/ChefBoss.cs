@@ -278,6 +278,8 @@ public class ChefBoss : GenericObject
 
         #region ATTACKING
 
+        int attackRand = 0;
+        
         attacking.OnEnter += x =>
         {
             attackDone = true;
@@ -312,11 +314,10 @@ public class ChefBoss : GenericObject
             {
                 _currentTimeBetweenAttacks = 0f;
                 
-                int rand = UnityEngine.Random.Range(0, 2);
-                
-                if (rand == 0)
+                if (attackRand == 0)
                 {
                     DoEnemySpawning();
+                    attackRand = 1;
                 }
                 else
                 {
@@ -330,6 +331,7 @@ public class ChefBoss : GenericObject
                         DoAttack(availableAttacks[_currentAttackAmount]);
                     }
                     attackDone = false;
+                    attackRand = 0;
                 }
             }
         };

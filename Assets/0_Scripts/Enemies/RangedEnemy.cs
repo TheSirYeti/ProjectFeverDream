@@ -22,13 +22,14 @@ public class RangedEnemy : Enemy
     [Space(20)] 
     [Header("-== DETECTION PROPERTIES ==-")]
     [SerializeField] private string animationPrefix;
+    [SerializeField] private ParticleSystem exclamationSign;
     [SerializeField] private float detectTime;
 
     [Space(20)] [Header("-== SCARED PROPERTIES ==-")] 
     [SerializeField] private float searchRange = 30;
     [SerializeField] private float scaredRange;
     [SerializeField] private float timeScared;
-    private bool canGetScared = true;
+    [SerializeField] private bool canGetScared = true;
     private float currentScare = 0f;
     
     private bool hasDeathTimer = false;
@@ -464,6 +465,7 @@ public class RangedEnemy : Enemy
             currentDeathTimer += Time.deltaTime;
             if (currentDeathTimer >= deathTimer)
             {
+                UpdateManager.instance.RemoveObject(this);
                 gameObject.SetActive(false);
             }
         };
@@ -598,6 +600,9 @@ public class RangedEnemy : Enemy
     
     IEnumerator DoDetectSign()
     {
+        if(exclamationSign != null)
+            exclamationSign.Play();
+        
         yield return new WaitForSeconds(detectTime);
 
         SendInputToFSM(RangedEnemyStates.CHASE);
