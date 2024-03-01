@@ -10,12 +10,16 @@ public class EnemyInteract : GenericObject, IAssistInteract
     private bool _isDead => _enemy.isDead;
     [SerializeField] private List<Renderer> _renderers;
     [SerializeField] private Outline _outline;
+    [SerializeField] private Renderer _outlineRenderer;
     [SerializeField] private Interactuables _type;
+
+    private Material[] _initialMats;
 
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
         _outline.enabled = false;
+        _initialMats = _outlineRenderer.materials;
     }
 
     public override void OnLateUpdate()
@@ -58,7 +62,12 @@ public class EnemyInteract : GenericObject, IAssistInteract
         {
             _outline.OutlineWidth = 10;
         }
-        else _outline.OutlineWidth = 0;
+        else
+        {
+            _outline.OutlineWidth = 0;
+
+            _outlineRenderer.materials = _initialMats;
+        }
         
         _outline.enabled = state;
     }
