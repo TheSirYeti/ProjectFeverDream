@@ -22,12 +22,14 @@ public class Model : GenericObject, IPlayerLife
     View _view;
     [HideInInspector] public WeaponManager weaponManager { get; private set; }
     CameraController _cameraController;
-    public IEnumerable<Transform> PovsGetter => _cameraController.CameraPosGetter;
+    public List<Transform> PovsGetter => _cameraController.CameraPosGetter.ToList();
     Assistant _assistant;
 
     //Component Reference
     Rigidbody _rb;
     Camera _camera;
+
+    public Transform _actualCameraPoint;
 
     [Header("-== Life Properties ==-")] [SerializeField]
     int _maxLife;
@@ -108,7 +110,7 @@ public class Model : GenericObject, IPlayerLife
         //_camera = Camera.main;
         _camera = GameManager.Instance.GetCamera();
 
-        weaponManager.SetRef(this, _camera.transform, _view);
+        weaponManager.SetRef(this, _actualCameraPoint, _view);
         _cameraController = GetComponent<CameraController>();
         _controller = new Controller(this, _cameraController, weaponManager);
         _rb = GetComponent<Rigidbody>();
@@ -215,11 +217,13 @@ public class Model : GenericObject, IPlayerLife
         if (parameters.Length > 1 && (bool)parameters[1])
         {
             _cameraController.StartTranslate(1);
+            _actualCameraPoint = PovsGetter[1];
             Crouch(1);
         }
         else
         {
             _cameraController.StartTranslate(0);
+            _actualCameraPoint = PovsGetter[0];
             Crouch(0);
         }
     }
@@ -393,6 +397,7 @@ public class Model : GenericObject, IPlayerLife
                 _actualCollider.SetActive(true);
 
                 _cameraController.StartTranslate(0);
+                _actualCameraPoint = PovsGetter[0];
 
                 if (_isOnFloor && !isRunning)
                     _actualSpeed = _walkingSpeed;

@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Toaster : GenericWeapon
 {
@@ -8,7 +11,7 @@ public class Toaster : GenericWeapon
     [SerializeField] private int numPellets = 10;
     [SerializeField] private float spreadAngle = 20f;
     [SerializeField] private float verticalAngle = 10f;
-                      
+
     [SerializeField] private float _actualLoading = 0.3f;
     [SerializeField] private float _loadSpeed = 0;
     [SerializeField] private Material burnToast, burnPieces;
@@ -46,6 +49,9 @@ public class Toaster : GenericWeapon
     }
 
 
+    private List<Vector3> _dirsBullet = new List<Vector3>();
+    private Vector3 _from;
+    
     /* -------------------------------- SHOOT -------------------------------- */
     public override void Shoot(Transform pointOfShoot, bool isADS)
     {
@@ -54,14 +60,17 @@ public class Toaster : GenericWeapon
         var actualDir = Camera.main.transform.forward;
 
         if (_actualLoading < 0.5f) _actualLoading = 0.5f;
-        
+
         var actualPellets = (int)(numPellets * _actualLoading);
         var actualDmg = (int)(_weaponSO.dmg * _actualLoading);
         var actualSpreadAngle = 1 - _actualLoading;
         if (actualSpreadAngle < 0.3f) actualSpreadAngle = 0.3f;
 
-        List<RaycastHit> toasterHits = new List<RaycastHit>();
-        List<int> ammountPellets = new List<int>();
+        var toasterHits = new Dictionary<Collider, int>();
+        
+        Debug.Log(actualPellets);
+        _dirsBullet = new List<Vector3>();
+        _from = pointOfShoot.position;
 
         for (int i = 0; i < actualPellets; i++)
         {
@@ -69,48 +78,53 @@ public class Toaster : GenericWeapon
             var horizontalRotation = Quaternion.AngleAxis(randomHorizontalAngle, Camera.main.transform.up);
 
             var randomVerticalAngle = Random.Range(-verticalAngle / 2f, verticalAngle / 2f);
-            var verticalRotation = Quaternion.AngleAxis(randomVerticalAngle, Camera.main.transform.right * -1);
+            var verticalRotation = Quaternion.AngleAxis(randomVerticalAngle, Camera.main.transform.right);
 
             var pelletRotation = verticalRotation * horizontalRotation;
 
             var pelletDirection = pelletRotation * actualDir;
+            
+            _dirsBullet.Add(pelletDirection);
+            Debug.Log("huh?");
 
-            RaycastHit hit;
-            if (Physics.Raycast(pointOfShoot.position, pelletDirection, out hit, _maxShootDistance, LayerManager.LM_ENEMY))
-            {
-                if (!toasterHits.Contains(hit))
-                {
-                    toasterHits.Add(hit);
-                    ammountPellets.Add(0);
-                }
+            if (!Physics.Raycast(pointOfShoot.position, pelletDirection, out var hit, _maxShootDistance,
+                    LayerManager.LM_ENEMY)) continue;
 
-                ammountPellets[toasterHits.IndexOf(hit)]++;
+            toasterHits.TryAdd(hit.collider, 0);
+            toasterHits[hit.collider]++;
+            Debug.Log(toasterHits[hit.collider]);
 
-                var dir = hit.point - _nozzlePoint.position;
+            var dir = hit.point - _nozzlePoint.position;
 
-                var bullet = GetBullet(_nozzlePoint.position);
-                bullet.BulletSetter(dir, this, actualDmg);
-                StartCoroutine(DespawnBullet(bullet));
-            }
+            var bullet = GetBullet(_nozzlePoint.position);
+            bullet.BulletSetter(dir, this, actualDmg);
+            StartCoroutine(DespawnBullet(bullet));
         }
 
         for (var i = 0; i < toasterHits.Count; i++)
         {
-            var damagableObject = toasterHits[i].collider.GetComponentInParent<ITakeDamage>();
+            var damageableObject = toasterHits.Select(x => x.Key).ToList();
 
-            if (damagableObject != null)
+            if (damageableObject.Any())
             {
-                var distanceMultiplier = 1 - (Vector3.Distance(transform.position, toasterHits[i].point) / _maxShootDistance);                                             
-                damagableObject.                                                                                                                                          
-                    TakeDamage("Body", actualDmg * ammountPellets[toasterHits.IndexOf(toasterHits[i])] * distanceMultiplier, transform.position,                                                             
-                        Vector3.Distance(toasterHits[i].point, transform.position) > 5 ? OnDeathKnockBacks.LIGHTKNOCKBACK : OnDeathKnockBacks.HIGHKNOCKBACK);              
+                var distanceMultiplier =
+                    1 - Vector3.Distance(transform.position, damageableObject[i].transform.position) /
+                    _maxShootDistance;
+
+                var actualEnemy = damageableObject[i].GetComponent<ITakeDamage>() ?? damageableObject[i].GetComponentInParent<ITakeDamage>();
+
+                actualEnemy.TakeDamage("Body",
+                    actualDmg * toasterHits[damageableObject[i]] * distanceMultiplier, transform.position,
+                    Vector3.Distance(damageableObject[i].transform.position, transform.position) > 5
+                        ? OnDeathKnockBacks.LIGHTKNOCKBACK
+                        : OnDeathKnockBacks.HIGHKNOCKBACK);
             }
             else
             {
-                var decal = _decalPool.GetObject(toasterHits[i].point);
-                decal.transform.up = toasterHits[i].normal;
-                decal.transform.position += decal.transform.up * 0.2f;
-                StartCoroutine(DespawnCoroutine(decal));
+                // var decal = _decalPool.GetObject(toasterHits[i].point);
+                // decal.transform.up = toasterHits[i].normal;
+                // decal.transform.position += decal.transform.up * 0.2f;
+                // StartCoroutine(DespawnCoroutine(decal));
             }
         }
 
@@ -203,12 +217,24 @@ public class Toaster : GenericWeapon
     {
         yield return new WaitForSeconds(2);
         _decalPool.ReturnObject(actualDecal);
-        
     }
-    
+
     private IEnumerator DespawnBullet(GenericBullet actualBullet)
-    {                                                                                    
+    {
         yield return new WaitForSeconds(2);
-        ReturnBullet(actualBullet);                                           
-    }                                                                                    
+        ReturnBullet(actualBullet);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        if (_dirsBullet.Any())
+        {
+            foreach (var dir in _dirsBullet)
+            {
+                Gizmos.DrawLine(_from, _from+(dir * 5));
+            }
+        }
+    }
 }

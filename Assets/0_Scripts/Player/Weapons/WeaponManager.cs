@@ -23,7 +23,7 @@ public class WeaponManager : GenericObject, IAssistInteract
     [SerializeField] GenericWeapon _actualWeapon;
 
     [SerializeField] Transform _nozzlePoint;
-    Transform _pointOfShoot;
+    Transform _pointOfShoot => _model._actualCameraPoint;
     bool _isADS;
 
     private void Awake()
@@ -50,7 +50,6 @@ public class WeaponManager : GenericObject, IAssistInteract
     {
         _model = model;
         _view = view;
-        _pointOfShoot = pointOfShoot;
     }
 
     public void ChangeAttackState(bool state)

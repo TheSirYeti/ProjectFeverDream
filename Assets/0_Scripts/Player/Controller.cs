@@ -122,6 +122,7 @@ public class Controller
             }
 
             _cameraController.StartTranslate(1);
+            _model._actualCameraPoint = _model.PovsGetter[1];
         }
         else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
