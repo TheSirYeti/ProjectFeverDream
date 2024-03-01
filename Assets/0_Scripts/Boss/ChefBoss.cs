@@ -458,7 +458,8 @@ public class ChefBoss : GenericObject
             yield return new WaitForSeconds(_rangedAnimationReleaseTime[rand - 1]);
             
             GameObject bullet = Instantiate(_rangedPatterns[UnityEngine.Random.Range(0, _rangedPatterns.Count)]);
-            bullet.transform.SetParent(InstanceManager.instance.transform);
+            if(InstanceManager.instance != null)
+                bullet.transform.SetParent(InstanceManager.instance.transform);
             bullet.transform.position = _rangedAttackSpawnpoint.position;
             bullet.transform.LookAt(_playerRef.transform.position + new Vector3(0, 0.5f, 0));
             EventManager.Trigger("OnVoicelineSetTriggered", _rangedSubtitleCounts[i]);
@@ -517,7 +518,8 @@ public class ChefBoss : GenericObject
             if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
             
             GameObject spatula = Instantiate(_spatulaPrefab);
-            spatula.transform.SetParent(InstanceManager.instance.transform);
+            if(InstanceManager.instance != null)
+                spatula.transform.SetParent(InstanceManager.instance.transform);
             spatula.transform.position = _playerRef.transform.position + new Vector3(0, -1f, _spatulaAddedDistance);
             
             if (spatula.TryGetComponent<Animator>(out Animator spatulaInstanceAnimator))
@@ -567,7 +569,8 @@ public class ChefBoss : GenericObject
             GameObject item;
 
             item = Instantiate(_shuffleItem);
-            item.transform.SetParent(InstanceManager.instance.transform);
+            if(InstanceManager.instance != null)
+                item.transform.SetParent(InstanceManager.instance.transform);
             if (i == randGoodItem)
             {
                 item.GetComponent<ShuffleSurprise>().SetGoodPlate();
@@ -685,7 +688,8 @@ public class ChefBoss : GenericObject
             EventManager.Trigger("OnVoicelineSetTriggered", _shuffleSubtitleTime);
             yield return new WaitForSeconds((_shuffleSubtitleTime.allVoicelines[0].duration + 0.5f));
             GameObject trap = Instantiate(_shufflePunishItem);
-            trap.transform.SetParent(InstanceManager.instance.transform);
+            if(InstanceManager.instance != null)
+                trap.transform.SetParent(InstanceManager.instance.transform);
             trap.transform.position = GameManager.Instance.Player.transform.position + new Vector3(0, 45f, 0);
             yield return new WaitForSeconds(1.5f);
         }
@@ -756,7 +760,8 @@ public class ChefBoss : GenericObject
         {
             int rand = UnityEngine.Random.Range(0, _allEnemyPrefabs.Count);
             GameObject robot = Instantiate(_allEnemyPrefabs[rand]);
-            robot.transform.SetParent(InstanceManager.instance.transform);
+            if(InstanceManager.instance != null)
+                robot.transform.SetParent(InstanceManager.instance.transform);
             robot.transform.position = _enemySpawnpoints[i].position;
         }
     }
