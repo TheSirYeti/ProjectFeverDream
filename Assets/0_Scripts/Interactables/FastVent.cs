@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class FastVent : GenericObject
 {
-    private bool isEnabled = false;
+    [SerializeField] private bool isEnabled = false;
     [SerializeField] private Transform[] _enterPoint;
     [SerializeField] private Transform[] _wayPoints;
     [SerializeField] private GameObject _playerLight;
@@ -49,7 +49,7 @@ public class FastVent : GenericObject
 
             _playerTransform = playerCol[0].transform.parent.parent;
             ActualUpdate = MovePlayer;
-            _playerLight.SetActive(true);
+//            _playerLight.SetActive(true);
             EventManager.Trigger("ChangeMovementState", false, true);
             EventManager.Trigger("ChangePhysicsState", false);
 
@@ -73,9 +73,9 @@ public class FastVent : GenericObject
         var dir = _wayPoints[_actualWayPoint].position - _playerTransform.position;
         
         var targetRotation = Quaternion.LookRotation(dir);
-        _playerTransform.rotation = Quaternion.Lerp(_playerTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+        EventManager.Trigger("SetNewRotation", Quaternion.Lerp(_playerTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime).eulerAngles);
+        
         _playerTransform.position += dir.normalized * (_speed * Time.deltaTime);
-        _playerLight.transform.position = _playerTransform.position;
 
         if (dir.magnitude < 0.3f)
         {
