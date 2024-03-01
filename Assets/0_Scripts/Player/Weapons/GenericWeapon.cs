@@ -23,7 +23,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract, IPickUp
 
     protected Transform _nozzlePoint;
 
-    [SerializeField] private Outline _outline;
+    [SerializeField] protected Outline _outline;
     public bool _isEquiped = false;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);

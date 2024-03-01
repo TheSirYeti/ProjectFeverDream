@@ -23,6 +23,7 @@ public class Toaster : GenericWeapon
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+        _outline.enabled = false;
     }
 
     /* -------------------------------- START -------------------------------- */

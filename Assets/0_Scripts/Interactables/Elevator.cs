@@ -32,6 +32,7 @@ public class Elevator : GenericObject, IAssistInteract
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+        _outline.enabled = false;
     }
 
     public override void OnStart()

@@ -15,6 +15,7 @@ public class EnemyInteract : GenericObject, IAssistInteract
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+        _outline.enabled = false;
     }
 
     public override void OnLateUpdate()
@@ -22,6 +23,10 @@ public class EnemyInteract : GenericObject, IAssistInteract
         _interactPoint.position = transform.position + Vector3.up * 1.5f;
     }
 
+    private void OnDestroy()
+    {
+        _outline.enabled = false;
+    }
 
     #region INTERACTIONS
 
