@@ -9,6 +9,7 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
     [Space(10)] [SerializeField] private Animator _animator;
     [Space(10)] [SerializeField] private Transform _interactPoint;
     [SerializeField] private GameObject _goodObjectPlate, _badObjectPlate;
+    [SerializeField] private GameObject _goodLight, _badLight;
     [SerializeField] private SubtitleSet _goodSub, _badSub;
     [Space(10)] [SerializeField] private string _animationOpen, _animationClose;
     [SerializeField] private GameObject _badObjectPrefab;
@@ -25,11 +26,21 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
 
     public void Open()
     {
+        if(_isGood)
+            _goodLight.SetActive(true);
+        else
+            _badLight.SetActive(true);
+        
         _animator.Play(_animationOpen);
     }
 
     public void Close()
     {
+        if(_isGood)
+            _goodLight.SetActive(false);
+        else
+            _badLight.SetActive(false);
+        
         _animator.Play(_animationClose);
     }
 
@@ -64,6 +75,7 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
 
         if (_isGood)
         {
+            _goodLight.SetActive(true);
             SoundManager.instance.PlaySound(SoundID.SHUFFLE_CORRECT);
             GameManager.Instance.Player.Health(100);
             SoundManager.instance.PlaySound(SoundID.ASSISTANT_HEAL);
@@ -72,10 +84,10 @@ public class ShuffleSurprise : GenericObject, IAssistInteract
         }
         else
         {
+            _badLight.SetActive(true);
             SoundManager.instance.PlaySound(SoundID.SHUFFLE_INCORRECT);
             EventManager.Trigger("OnVoicelineSetTriggered", _badSub);
             yield return new WaitForSeconds(0.1f);
-            Debug.Log("SPAWNEO MI SARTEN AMIGIGGIGI");
             GameObject trap = Instantiate(_badObjectPrefab);
             trap.transform.position = GameManager.Instance.Player.transform.position + _badObjectOffset;
             yield return new WaitForEndOfFrame();

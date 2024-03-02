@@ -34,6 +34,7 @@ public class RangedEnemy : Enemy
     
     private bool hasDeathTimer = false;
     private float deathTimer = 30f;
+    private bool hasDespawned = false;
     private float currentDeathTimer = 0f;
 
     public enum RangedEnemyStates
@@ -460,11 +461,12 @@ public class RangedEnemy : Enemy
 
         die.OnUpdate += () =>
         {
-            if (!hasDeathTimer) return;
+            if (!hasDeathTimer || hasDespawned) return;
 
             currentDeathTimer += Time.deltaTime;
             if (currentDeathTimer >= deathTimer)
             {
+                hasDespawned = true;
                 UpdateManager.instance.RemoveObject(this);
                 gameObject.SetActive(false);
             }

@@ -25,6 +25,7 @@ public class BaseMeleeEnemy : Enemy
     private bool hasDeathTimer = false;
     private float deathTimer = 30f;
     private float currentDeathTimer = 0f;
+    private bool hasDespawned = false;
     
     public enum MeleeEnemyStates
     {
@@ -313,11 +314,12 @@ public class BaseMeleeEnemy : Enemy
 
         die.OnUpdate += () =>
         {
-            if (!hasDeathTimer) return;
+            if (!hasDeathTimer || hasDespawned) return;
 
             currentDeathTimer += Time.deltaTime;
             if (currentDeathTimer >= deathTimer)
             {
+                hasDespawned = true;
                 UpdateManager.instance.RemoveObject(this);
                 
                 if(gameObject != null)

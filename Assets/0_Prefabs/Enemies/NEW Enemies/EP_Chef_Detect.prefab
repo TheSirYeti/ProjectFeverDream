@@ -36665,6 +36665,7 @@ GameObject:
   m_Component:
   - component: {fileID: 721357681884336026}
   - component: {fileID: 779359284844591953}
+  - component: {fileID: 4932240665744613286}
   m_Layer: 0
   m_Name: Robot_Enemie_MODEL
   m_TagString: Untagged
@@ -36787,6 +36788,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.1920866, y: 0.12465138, z: -0.000023066998}
     m_Extent: {x: 1.1590993, y: 0.3017233, z: 1.2482092}
   m_DirtyAABB: 0
+--- !u!114 &4932240665744613286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432945074739747362}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 1
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6495728285591893633
 GameObject:
   m_ObjectHideFlags: 0
@@ -43711,7 +43730,9 @@ MonoBehaviour:
   _enemy: {fileID: 6435271698600844825}
   _renderers:
   - {fileID: 2854572644003047916}
-  _outline: {fileID: 3160339339950521858}
+  - {fileID: 779359284844591953}
+  _outline: {fileID: 4932240665744613286}
+  _outlineRenderer: {fileID: 779359284844591953}
   _type: 1
 --- !u!65 &6831174317894302430
 BoxCollider:

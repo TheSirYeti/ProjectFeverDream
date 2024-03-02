@@ -49,7 +49,7 @@ public class FastVent : GenericObject
 
             _playerTransform = playerCol[0].transform.parent.parent;
             ActualUpdate = MovePlayer;
-//            _playerLight.SetActive(true);
+            _playerLight.SetActive(true);
             EventManager.Trigger("ChangeMovementState", false, true);
             EventManager.Trigger("ChangePhysicsState", false);
 
