@@ -314,7 +314,7 @@ public class BaseMeleeEnemy : Enemy
 
         die.OnUpdate += () =>
         {
-            if (!hasDeathTimer || hasDespawned) return;
+            if (gameObject == null || !hasDeathTimer || hasDespawned) return;
 
             currentDeathTimer += Time.deltaTime;
             if (currentDeathTimer >= deathTimer)
@@ -432,7 +432,8 @@ public class BaseMeleeEnemy : Enemy
     {
         if (!_canMove) return;
         
-        fsm.Update();
+        if(!hasDespawned)
+            fsm.Update();
         
         if (isDead) return;
         

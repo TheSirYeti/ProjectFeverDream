@@ -597,7 +597,8 @@ public enum MusicID
     OUTRO_LOGO,
     ELEVATOR,
     PREFIGHT,
-    GAMESHOW
+    GAMESHOW,
+    GAMESHOW_WIN
 }
 
 public enum VoiceLineID

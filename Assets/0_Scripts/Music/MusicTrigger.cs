@@ -8,6 +8,7 @@ public class MusicTrigger : GenericObject
     private bool hasBeenTriggered = false;
     [SerializeField] private MusicID musicID;
     [SerializeField] private bool loop;
+    [SerializeField] private bool doOnEnable;
     
     private void Awake()
     {
@@ -23,5 +24,15 @@ public class MusicTrigger : GenericObject
             SoundManager.instance.PlayMusic(musicID, loop);
         }
         
+    }
+
+    private void OnEnable()
+    {
+        if (doOnEnable)
+        {
+            hasBeenTriggered = true;
+            SoundManager.instance.StopAllMusic();
+            SoundManager.instance.PlayMusic(musicID, loop);
+        }
     }
 }

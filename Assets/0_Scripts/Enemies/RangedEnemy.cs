@@ -461,7 +461,7 @@ public class RangedEnemy : Enemy
 
         die.OnUpdate += () =>
         {
-            if (!hasDeathTimer || hasDespawned) return;
+            if (gameObject == null || !hasDeathTimer || hasDespawned) return;
 
             currentDeathTimer += Time.deltaTime;
             if (currentDeathTimer >= deathTimer)

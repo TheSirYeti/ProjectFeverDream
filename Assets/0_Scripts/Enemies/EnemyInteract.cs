@@ -102,6 +102,7 @@ public class EnemyInteract : GenericObject, IAssistInteract
         UpdateManager.instance.RemoveObject(this);
         _outline.enabled = false;
         Destroy(_outline);
+        UpdateManager.instance.RemoveObject(_enemy.GetComponent<GenericObject>());
         Destroy(_enemy.gameObject);
     }
 
