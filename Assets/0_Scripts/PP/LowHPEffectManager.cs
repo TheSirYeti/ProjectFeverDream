@@ -34,6 +34,8 @@ public class LowHPEffectManager : PostProccesingAbstract
             _lowHPEffect.active = true;
             _lowHPEffect._AmountCorners.value = 1.57f;
             _lowHPEffect._Grayscale.value = 0.4f;
+            
+            //LeanTween.value(_lowHPEffect._AmountCorners.value, 1.57f, .3f);
         }
         else
             _lowHPEffect.active = false;

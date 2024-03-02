@@ -70,7 +70,7 @@ public class CameraAim
         {
             if (_actualInteract == null) return;
 
-            _actualInteract.ChangeOutlineState(false);
+            _actualInteract?.ChangeOutlineState(false);
             _actualInteract = null;
             EventManager.Trigger("InteractUI", false);
 

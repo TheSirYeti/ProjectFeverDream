@@ -44,6 +44,7 @@ public class DamageScreenEffectManager : PostProccesingAbstract
     private Coroutine resetCoroutine;
     public override void EffectEnabled(bool on)
     {
+        LeanTween.cancel(gameObject);
         if (on)
         {
             if (resetCoroutine != null)
@@ -51,17 +52,26 @@ public class DamageScreenEffectManager : PostProccesingAbstract
                 StopCoroutine(resetCoroutine);
             }
             resetCoroutine = StartCoroutine(ResetFlash());
-
+            
             _damageScreenEffect.active = true;
-            _damageScreenEffect._ControlScreenUP.value = 1;
-            _damageScreenEffect._ControlScreenDown.value = 1;
-            _damageScreenEffect._ControlScreenLeft.value = 1;
-            _damageScreenEffect._ControlScreenRight.value = 1;
             _damageScreenEffect._ColorEmission.value = Emission;
             _damageScreenEffect._ColorShadow.value = ShadowColor;
+            
+            LeanTween.value(_damageScreenEffect._ControlScreenUP.value, 1, .3f)
+                .setOnUpdate(value =>
+                {
+                    _damageScreenEffect._ControlScreenUP.value = value;
+                    _damageScreenEffect._ControlScreenDown.value = value;
+                    _damageScreenEffect._ControlScreenLeft.value = value;
+                    _damageScreenEffect._ControlScreenRight.value = value;
+                });
         }
         else
-            _damageScreenEffect.active = false;
+        {
+            LeanTween.value(_damageScreenEffect._ControlScreenUP.value, 0, .3f)
+                .setOnUpdate(value => _damageScreenEffect._ControlScreenUP.value = value)
+                .setOnComplete(o => _damageScreenEffect.active = false);
+        }
     }
 
     IEnumerator ResetFlash()

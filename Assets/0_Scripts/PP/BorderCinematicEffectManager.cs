@@ -29,9 +29,21 @@ public class BorderCinematicEffectManager : PostProccesingAbstract
         if (on)
         {
             _borderCinematicEffect.active = true;
-            _borderCinematicEffect._SliderBorder.value = 1;
+            
+            LeanTween.value(_borderCinematicEffect._SliderBorder.value, 1, .3f)
+                .setOnUpdate(value =>
+                {
+                    _borderCinematicEffect._SliderBorder.value = value;
+                });
         }
         else
-            _borderCinematicEffect.active = false;
+        {
+            LeanTween.value(_borderCinematicEffect._SliderBorder.value, 0, .3f)
+                .setOnUpdate(value =>
+                {
+                    _borderCinematicEffect._SliderBorder.value = value;
+                })
+                .setOnComplete(o => _borderCinematicEffect.active = false);
+        }
     }
 }

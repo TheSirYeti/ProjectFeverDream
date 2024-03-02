@@ -25,9 +25,24 @@ public class SpeedEffectManager : PostProccesingAbstract
 
     public override void EffectEnabled(bool on)
     {
+        LeanTween.cancel(gameObject);
         if (on)
+        {
             _speedEffect.active = true;
+            LeanTween.value(_speedEffect._Alpha.value, 1, .3f)
+                .setOnUpdate(value =>
+                {
+                    _speedEffect._Alpha.value = value;
+                });
+        }
         else
-            _speedEffect.active = false;
+        {
+            LeanTween.value(_speedEffect._Alpha.value, 0, .3f)
+                .setOnUpdate(value =>
+                {
+                    _speedEffect._Alpha.value = value;
+                })
+                .setOnComplete(o => _speedEffect.active = false);
+        }
     }
 }
