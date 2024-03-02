@@ -80,6 +80,7 @@ public class CutsceneToggler : GenericObject
         EventManager.Trigger("ChangeMovementState", status);
         EventManager.Trigger("ChangeCameraState", status);
         EventManager.Trigger("ChangePhysicsState", status);
+        EventManager.Trigger("OnPPCalled", PPNames.BORDERCINEMATIC, !status);
     }
     
     public void SetCutsceneMode(int mode)
