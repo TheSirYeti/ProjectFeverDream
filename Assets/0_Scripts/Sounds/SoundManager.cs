@@ -112,6 +112,17 @@ public class SoundManager : MonoBehaviour
         
         return sfxChannel[idToCheck].isPlaying;
     }
+    
+    public bool isSoundPlaying(string id)
+    {
+        var actualName = id;
+        
+        if(!_actualSfxNames.Contains(actualName)) return false;
+        
+        var idToCheck = _actualSfxNames.IndexOf(actualName);
+        
+        return sfxChannel[idToCheck].isPlaying;
+    }
 
     public void PlaySound(SoundID id, bool loop = false, float pitch = 1)
     {
@@ -190,6 +201,7 @@ public class SoundManager : MonoBehaviour
 
     public void StopSound(SoundID id)
     {
+        Debug.Log("STOP " + id.ToString() + " | " + sfxChannel[(int)id].name);
         sfxChannel[(int)id].Stop();
     }
 

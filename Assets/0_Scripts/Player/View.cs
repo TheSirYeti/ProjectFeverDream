@@ -210,24 +210,24 @@ public class View : GenericObject
         switch (currentFloorTag)
         {
             default:
-                if (!SoundManager.instance.isSoundPlaying(SoundID.WALK_REGULAR))
+                if (!SoundManager.instance.isSoundPlaying("WALK_REGULAR"))
                 {
                     StopAllSteps();
-                    SoundManager.instance.PlaySound(SoundID.WALK_REGULAR);
+                    SoundManager.instance.PlaySoundByID("WALK_REGULAR");
                 }
                 break;
             case "Metal":
-                if (!SoundManager.instance.isSoundPlaying(SoundID.WALK_METAL))
+                if (!SoundManager.instance.isSoundPlaying("WALK_METAL"))
                 {
                     StopAllSteps();
-                    SoundManager.instance.PlaySound(SoundID.WALK_METAL);
+                    SoundManager.instance.PlaySoundByID("WALK_METAL");
                 }
                 break;
             case "Carpet":
-                if (!SoundManager.instance.isSoundPlaying(SoundID.WALK_CARPET))
+                if (!SoundManager.instance.isSoundPlaying("WALK_CARPET"))
                 {
                     StopAllSteps();
-                    SoundManager.instance.PlaySound(SoundID.WALK_CARPET);
+                    SoundManager.instance.PlaySoundByID("WALK_CARPET");
                 }
                 break;
         }
@@ -240,24 +240,24 @@ public class View : GenericObject
         switch (currentFloorTag)
         {
             default:
-                if (!SoundManager.instance.isSoundPlaying(SoundID.RUN_REGULAR))
+                if (!SoundManager.instance.isSoundPlaying("RUN_REGULAR"))
                 {
                     StopAllSteps();
-                    SoundManager.instance.PlaySound(SoundID.RUN_REGULAR);
+                    SoundManager.instance.PlaySoundByID("RUN_REGULAR");
                 }
                 break;
             case "Metal":
-                if (!SoundManager.instance.isSoundPlaying(SoundID.RUN_METAL))
+                if (!SoundManager.instance.isSoundPlaying("RUN_METAL"))
                 {
                     StopAllSteps();
-                    SoundManager.instance.PlaySound(SoundID.RUN_METAL);
+                    SoundManager.instance.PlaySoundByID("RUN_METAL");
                 }
                 break;
             case "Carpet":
-                if (!SoundManager.instance.isSoundPlaying(SoundID.RUN_CARPET))
+                if (!SoundManager.instance.isSoundPlaying("RUN_CARPET"))
                 {
                     StopAllSteps();
-                    SoundManager.instance.PlaySound(SoundID.RUN_CARPET);
+                    SoundManager.instance.PlaySoundByID("RUN_CARPET");
                 }
                 break;
         }
@@ -283,12 +283,12 @@ public class View : GenericObject
 
     public void StopAllSteps()
     {
-        SoundManager.instance.StopSound(SoundID.WALK_REGULAR);
-        SoundManager.instance.StopSound(SoundID.WALK_METAL);
-        SoundManager.instance.StopSound(SoundID.WALK_CARPET);
-        SoundManager.instance.StopSound(SoundID.RUN_REGULAR);
-        SoundManager.instance.StopSound(SoundID.RUN_CARPET);
-        SoundManager.instance.StopSound(SoundID.RUN_METAL);
+        SoundManager.instance.StopSoundByID("WALK_REGULAR");
+        SoundManager.instance.StopSoundByID("WALK_METAL");
+        SoundManager.instance.StopSoundByID("WALK_CARPET");
+        SoundManager.instance.StopSoundByID("WALK_REGULAR");
+        SoundManager.instance.StopSoundByID("WALK_METAL");
+        SoundManager.instance.StopSoundByID("WALK_CARPET");
     }
 
     public void AEvent_ChangeRenderer()
