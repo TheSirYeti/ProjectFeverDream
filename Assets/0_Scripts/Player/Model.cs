@@ -204,8 +204,7 @@ public class Model : GenericObject, IPlayerLife
         if (_physics.HasGravity())
             _physics.RemoveAcceleration("gravity");
 
-        SoundManager.instance.StopSoundByID("RUN");
-        SoundManager.instance.StopSoundByID("WALK");
+        _view.StopAllSteps();
         
         if(!(bool)parameters[0])
         {
@@ -238,26 +237,22 @@ public class Model : GenericObject, IPlayerLife
             {
                 if (isRunning)
                 {
-                    _view.PlayLoopingSound(SoundID.RUN);
-                    SoundManager.instance.StopSoundByID("WALK");
+                    _view.PlayLoopingRun();
                 }
                 else
                 {
-                    _view.PlayLoopingSound(SoundID.WALK);
-                    SoundManager.instance.StopSoundByID("RUN");
+                    _view.PlayLoopingWalk();
                 }
             }
             else
             {
-                SoundManager.instance.StopSoundByID("RUN");
-                SoundManager.instance.StopSoundByID("WALK");
+                _view.StopAllSteps();
             }
         }
         else
         {
             EventManager.Trigger("CameraBobbing", false);
-            SoundManager.instance.StopSoundByID("RUN");
-            SoundManager.instance.StopSoundByID("WALK");
+            _view.StopAllSteps();
         }
 
         _dir = (transform.right * hAxie + transform.forward * vAxie);
@@ -620,6 +615,11 @@ public class Model : GenericObject, IPlayerLife
         {
             Death();
         }
+    }
+
+    public bool InFloor()
+    {
+        return _isOnFloor;
     }
 
     void Death()

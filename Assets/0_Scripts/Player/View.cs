@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,8 @@ public class View : GenericObject
     [SerializeField] private PostProccesingAbstract _damageScreenPP;
     [SerializeField] private PostProccesingAbstract _LowHPPP;
     [SerializeField] private PostProccesingAbstract _SpeedEffectPP;
+
+    private string currentFloorTag = "Untagged";
     
     private void Awake()
     {
@@ -198,6 +201,94 @@ public class View : GenericObject
         {
             SoundManager.instance.PlaySound(soundID, true);
         }
+    }
+
+    public void PlayLoopingWalk()
+    {
+        GetCurrentFloorType();
+        
+        switch (currentFloorTag)
+        {
+            default:
+                if (!SoundManager.instance.isSoundPlaying(SoundID.WALK_REGULAR))
+                {
+                    StopAllSteps();
+                    SoundManager.instance.PlaySound(SoundID.WALK_REGULAR);
+                }
+                break;
+            case "Metal":
+                if (!SoundManager.instance.isSoundPlaying(SoundID.WALK_METAL))
+                {
+                    StopAllSteps();
+                    SoundManager.instance.PlaySound(SoundID.WALK_METAL);
+                }
+                break;
+            case "Carpet":
+                if (!SoundManager.instance.isSoundPlaying(SoundID.WALK_CARPET))
+                {
+                    StopAllSteps();
+                    SoundManager.instance.PlaySound(SoundID.WALK_CARPET);
+                }
+                break;
+        }
+    }
+    
+    public void PlayLoopingRun()
+    {
+        GetCurrentFloorType();
+        
+        switch (currentFloorTag)
+        {
+            default:
+                if (!SoundManager.instance.isSoundPlaying(SoundID.RUN_REGULAR))
+                {
+                    StopAllSteps();
+                    SoundManager.instance.PlaySound(SoundID.RUN_REGULAR);
+                }
+                break;
+            case "Metal":
+                if (!SoundManager.instance.isSoundPlaying(SoundID.RUN_METAL))
+                {
+                    StopAllSteps();
+                    SoundManager.instance.PlaySound(SoundID.RUN_METAL);
+                }
+                break;
+            case "Carpet":
+                if (!SoundManager.instance.isSoundPlaying(SoundID.RUN_CARPET))
+                {
+                    StopAllSteps();
+                    SoundManager.instance.PlaySound(SoundID.RUN_CARPET);
+                }
+                break;
+        }
+    }
+
+    public void GetCurrentFloorType()
+    {
+        if (Physics.Raycast(transform.position,
+                Vector3.down,
+                out RaycastHit hit,
+                Mathf.Infinity,
+                LayerManager.LM_FLOOR))
+        {
+            currentFloorTag = hit.collider.gameObject.tag;
+            if (String.IsNullOrEmpty(currentFloorTag))
+                currentFloorTag = "Untagged";
+        }
+        else
+        {
+            currentFloorTag = "Untagged";
+        }
+    }
+
+    public void StopAllSteps()
+    {
+        SoundManager.instance.StopSound(SoundID.WALK_REGULAR);
+        SoundManager.instance.StopSound(SoundID.WALK_METAL);
+        SoundManager.instance.StopSound(SoundID.WALK_CARPET);
+        SoundManager.instance.StopSound(SoundID.RUN_REGULAR);
+        SoundManager.instance.StopSound(SoundID.RUN_CARPET);
+        SoundManager.instance.StopSound(SoundID.RUN_METAL);
     }
 
     public void AEvent_ChangeRenderer()
