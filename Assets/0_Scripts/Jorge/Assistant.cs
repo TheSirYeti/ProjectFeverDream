@@ -595,6 +595,8 @@ public class Assistant : GenericObject
 
         _actualDir = Vector3.zero;
         _actualDir += _dir + _obstacleDir;
+        
+        _animator.SetFloat("velocity", _dir.magnitude);
 
         _rb.velocity = _actualDir;
 
