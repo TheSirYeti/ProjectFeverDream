@@ -16,6 +16,7 @@ public class WorkStationManager : GenericObject
         UpdateManager.instance.AddObject(this);
         
         EventManager.Subscribe("OnNextRecipe", SetupWorkstations);
+        EventManager.Subscribe("OnResetIngredients", ResetIngredients);
     }
 
     void SetupWorkstations(object[] parameters)
@@ -28,10 +29,16 @@ public class WorkStationManager : GenericObject
         currentWorkstation++;
         _workstationSetups[currentWorkstation].SetActive(true);
 
+        ResetIngredients(null);
+    }
+
+    void ResetIngredients(object[] parameters)
+    {
         if (_currentIngredients != null)
             _currentIngredients.SetActive(false);
 
         _currentIngredients = Instantiate(_ingredientPrefab);
+        
         if(InstanceManager.instance != null)
             _currentIngredients.transform.SetParent(InstanceManager.instance.transform);
     }

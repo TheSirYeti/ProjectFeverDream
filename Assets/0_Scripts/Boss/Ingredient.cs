@@ -14,12 +14,13 @@ public class Ingredient : GenericObject, IAssistInteract, IPickUp
     [SerializeField] private GameObject _output;
     [SerializeField] private Outline _outline;
     [SerializeField] private string _ingredientName;
-
+    private Rigidbody _rb;
     private bool _isInteractable = true;
 
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
+        _rb = GetComponent<Rigidbody>();
     }
 
     public float GetDuration()
@@ -121,12 +122,22 @@ public class Ingredient : GenericObject, IAssistInteract, IPickUp
     public void Pickup()
     {
         _isInteractable = false;
+        if (_rb != null)
+        {
+            _rb.isKinematic = true;
+            _rb.useGravity = false;
+        }
     }
 
     public void UnPickUp()
     {
         transform.parent = null;
         _isInteractable = true;
+        if (_rb != null)
+        {
+            _rb.isKinematic = false;
+            _rb.useGravity = true;
+        }
     }
 }
 

@@ -401,7 +401,6 @@ public class Assistant : GenericObject
             _actualState = JorgeStates.PICKUP;
             if (_isFirstWeapon)
             {
-                Debug.Log("EVENTOOOOOOO");
                 EventManager.Trigger("OnFirstWeapon");
             }
 
