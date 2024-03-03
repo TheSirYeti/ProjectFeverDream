@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-//using UnityFx.Outline;
-
 public abstract class GenericWeapon : GenericObject, IAssistInteract, IPickUp
 {
     [SerializeField] protected SO_Weapon _weaponSO;
@@ -25,6 +23,8 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract, IPickUp
 
     [SerializeField] protected Outline _outline;
     public bool _isEquiped = false;
+
+    public bool _isHandWeapon = false;
 
     public abstract void Shoot(Transform pointOfShoot, bool isADS);
     public abstract void Reload();
@@ -99,13 +99,17 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract, IPickUp
     {
         //animator.SetTrigger("changeWeapon");
         OnDelegateUpdate = delegate { };
-        transform.parent = null;
-        transform.position = _player.transform.position + (_player.transform.forward * 1);
 
-        ChangeCollisions(true);
+        if (!_isHandWeapon)
+        {
+            transform.parent = null;
+            transform.position = _player.transform.position + (_player.transform.forward * 1);
 
-        _rigidbody.AddForce((_player.transform.forward * 100) + (Vector3.up * 5));
+            ChangeCollisions(true);
 
+            _rigidbody.AddForce((_player.transform.forward * 100) + (Vector3.up * 5));
+        }
+        
         _isEquiped = false;
 
         EventManager.Trigger("OnADSDisable");
@@ -113,6 +117,8 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract, IPickUp
 
     public void ChangeCollisions(bool state)
     {
+        if (_isHandWeapon) return;
+        
         if (state)
         {
             _collider.enabled = true;

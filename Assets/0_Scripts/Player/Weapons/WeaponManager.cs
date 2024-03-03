@@ -21,6 +21,7 @@ public class WeaponManager : GenericObject, IAssistInteract
 
 
     [SerializeField] GenericWeapon _actualWeapon;
+    [SerializeField] GenericWeapon _handWeapon;
 
     [SerializeField] Transform _nozzlePoint;
     Transform _pointOfShoot => _model._actualCameraPoint;
@@ -35,9 +36,12 @@ public class WeaponManager : GenericObject, IAssistInteract
     {
         if (_actualWeapon)
         {
-            foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+            if (!_actualWeapon._isHandWeapon)
             {
-                item.enabled = true;
+                foreach (Renderer item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
+                {
+                    item.enabled = true;
+                }
             }
 
             _actualWeapon.OnWeaponEquip(transform, this, _nozzlePoint);
@@ -140,10 +144,17 @@ public class WeaponManager : GenericObject, IAssistInteract
             item.enabled = false;
         }
 
+        Destroy(_actualWeapon.gameObject);
+
+        _actualWeapon = _handWeapon;
+        
+        _actualWeapon.OnWeaponEquip(transform, this, _nozzlePoint);
+        
         _view.SetAnimatorController(_noWeaponAnimator);
+        _view.SetAnimatorController(_actualWeapon.GetAnimatorController());
+        
         EventManager.Trigger("ChangeEquipedWeapontUI", -1);
         EventManager.Trigger("ChangeBulletUI", 0, 0);
-        Destroy(_actualWeapon.gameObject);
     }
 
     public void ChangeRenderer()

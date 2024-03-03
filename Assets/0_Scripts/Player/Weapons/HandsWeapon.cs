@@ -1,20 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using Random = UnityEngine.Random;
+using UnityEngine;
 
-public class MeleeWeapon : GenericWeapon
+public class HandsWeapon : GenericWeapon
 {
     [SerializeField] Collider _meleeCollider;
     [SerializeField] float _colliderDuration;
-
-
-    [SerializeField] bool _isBroken = false;
-
-    [SerializeField] GameObject brokenBagguete;
-
+    
     [SerializeField] int _maxCombo;
     [SerializeField] float _comboDuration;
     int _actualAttack = 0;
@@ -29,7 +22,6 @@ public class MeleeWeapon : GenericWeapon
     private void Awake()
     {
         UpdateManager.instance.AddObject(this);
-        _outline.enabled = false;
     }
 
     public override void OnStart()
@@ -78,41 +70,7 @@ public class MeleeWeapon : GenericWeapon
     {
         EventManager.Trigger("ChangeBulletUI", usageAmmount, _maxUsageAmmount);
 
-        if (SoundManager.instance != null)
-        {
-            int rand = Random.Range(1, 4);
-
-            if (rand == 1)
-                SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_1);
-            else if (rand == 2)
-                SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_2);
-            else SoundManager.instance.PlaySound(SoundID.BAGUETTE_IMPACT_3);
-        }
-
-        if (_isBroken)
-        {
-            if (usageAmmount <= 0)
-            {
-                _weaponManager.DestroyWeapon();
-            }
-        }
-        else
-        {
-            float actualPercent = usageAmmount * 100 / 10;
-
-            if (actualPercent > 75) EventManager.Trigger("OnBaguetteChangeState", 0);
-            else if (actualPercent > 50) EventManager.Trigger("OnBaguetteChangeState", 1);
-            else if (actualPercent > 25) EventManager.Trigger("OnBaguetteChangeState", 2);
-            else if (actualPercent > 0) EventManager.Trigger("OnBaguetteChangeState", 3);
-            else if (actualPercent <= 0)
-            {
-                EventManager.Trigger("OnBaguetteChangeState", 4);
-                var broken = Instantiate(brokenBagguete, transform.parent);
-
-                _weaponManager.EquipWeapon(broken.GetComponent<GenericWeapon>(), false, false, false);
-                Destroy(gameObject);
-            }
-        }
+        //Hands sound
     }
 
     public override void FeedBack(Vector3 hitPoint, RaycastHit hit)
@@ -140,28 +98,22 @@ public class MeleeWeapon : GenericWeapon
 
     private void OnTriggerEnter(Collider other)
     {
-        ITakeDamage damagableInterface = other.GetComponentInParent<ITakeDamage>();
+        var damagableInterface = other.GetComponentInParent<ITakeDamage>();
 
-        if (damagableInterface != null && !_actualEnemiesHit.Contains(damagableInterface))
-        {
-            if (!damagableInterface.IsAlive())
-                return;
+        if (damagableInterface == null || _actualEnemiesHit.Contains(damagableInterface)) return;
+        
+        if (!damagableInterface.IsAlive())
+            return;
 
-            EventManager.Trigger("CameraShake", true);
+        EventManager.Trigger("CameraShake", true);
 
-            EventManager.Trigger("VFX_BaggueteHit");
+        damagableInterface.TakeDamage("Body", _weaponSO.dmg, transform.position, OnDeathKnockBacks.LIGHTKNOCKBACK, _weaponSO.hasKnockback);
 
-            damagableInterface.TakeDamage("Body", _weaponSO.dmg, transform.position, _isBroken ? OnDeathKnockBacks.LIGHTKNOCKBACK : OnDeathKnockBacks.MIDKNOCKBACK ,_weaponSO.hasKnockback);
+        if (_actualEnemiesHit.Any()) return;
 
-            if (_actualEnemiesHit.Any()) return;
+        _actualEnemiesHit.Add(damagableInterface);
 
-            _actualEnemiesHit.Add(damagableInterface);
-            
-            usageAmmount--;
-            usageAmmount = Mathf.Clamp(usageAmmount, 0, _maxUsageAmmount);
-
-            CheckUsage();
-        }
+        CheckUsage();
     }
 
     public override void OnClick()
