@@ -26,6 +26,7 @@ public class UIController : GenericObject
     int _actualWeapon = 0;
     [Space(20)]
     [SerializeField] private Animator redScreenAnimator;
+    [SerializeField] private Animator _crosshairAnimator;
 
     [Header("Objetives")]
     [SerializeField] TextMeshProUGUI _titleObjetive;
@@ -196,31 +197,32 @@ public class UIController : GenericObject
     
     void TriggerHitmarker(params object[] parameters)
     {
-        int value = (int)parameters[0];
-
-        switch (value)
-        {
-            case 0:
-                StopCoroutine(DoHitmarker(hitmarker));
-                StartCoroutine(DoHitmarker(hitmarker));
-                break;
-            case 1:
-                StopCoroutine(DoHitmarker(hitmarkerHeadshot));
-                StartCoroutine(DoHitmarker(hitmarkerHeadshot));
-                break;
-            case 2:
-                StopCoroutine(DoHitmarker(hitmarkerWeak));
-                StartCoroutine(DoHitmarker(hitmarkerWeak));
-                break;
-            case 3:
-                StopCoroutine(DoHitmarker(hitmarkerDead));
-                StartCoroutine(DoHitmarker(hitmarkerDead));
-                break;
-            default:
-                StopCoroutine(DoHitmarker(hitmarker));
-                StartCoroutine(DoHitmarker(hitmarker));
-                break;
-        }
+        _crosshairAnimator.SetTrigger("onHit");
+        // int value = (int)parameters[0];
+        //
+        // switch (value)
+        // {
+        //     case 0:
+        //         StopCoroutine(DoHitmarker(hitmarker));
+        //         StartCoroutine(DoHitmarker(hitmarker));
+        //         break;
+        //     case 1:
+        //         StopCoroutine(DoHitmarker(hitmarkerHeadshot));
+        //         StartCoroutine(DoHitmarker(hitmarkerHeadshot));
+        //         break;
+        //     case 2:
+        //         StopCoroutine(DoHitmarker(hitmarkerWeak));
+        //         StartCoroutine(DoHitmarker(hitmarkerWeak));
+        //         break;
+        //     case 3:
+        //         StopCoroutine(DoHitmarker(hitmarkerDead));
+        //         StartCoroutine(DoHitmarker(hitmarkerDead));
+        //         break;
+        //     default:
+        //         StopCoroutine(DoHitmarker(hitmarker));
+        //         StartCoroutine(DoHitmarker(hitmarker));
+        //         break;
+        // }
     }
 
     void TriggerPlayerDamage(params object[] parameters)
@@ -263,7 +265,6 @@ public class UIController : GenericObject
     {
         crosshair.SetActive(false);
     }
-
     #endregion
 
     #region OBJECTIVES
