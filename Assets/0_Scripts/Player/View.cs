@@ -120,7 +120,11 @@ public class View : GenericObject
     {
         _animator.SetInteger(intName, value);
     }
-    
+
+    public void SetFloat(string floatName, float value)
+    {
+        _animator.SetFloat(floatName, value);
+    }
     #endregion
 
 

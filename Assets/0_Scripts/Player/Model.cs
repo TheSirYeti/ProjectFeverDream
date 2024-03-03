@@ -29,8 +29,8 @@ public class Model : GenericObject, IPlayerLife
     float dmgCooldown = 0.5f;
     float currentDmgCooldown = -1f;
 
-    [Space(20)] [Header("-== Physics Properties ==-")] 
-    [SerializeField] float _gravity = -10f;
+    [Space(20)] [Header("-== Physics Properties ==-")] [SerializeField]
+    float _gravity = -10f;
 
     private bool _physicsActive = true;
 
@@ -82,7 +82,7 @@ public class Model : GenericObject, IPlayerLife
     // Colliders
     List<GameObject> _posibleColliders = new List<GameObject>();
     GameObject _actualCollider;
-    
+
 
     private void Awake()
     {
@@ -164,14 +164,14 @@ public class Model : GenericObject, IPlayerLife
             _physics.RemoveAcceleration("gravity");
 
         _view.StopAllSteps();
-        
-        if(!(bool)parameters[0])
+
+        if (!(bool)parameters[0])
         {
             _dir = Vector3.zero;
             _rb.velocity = Vector3.zero;
             _physics.RemoveAllPhysics();
         }
-    
+
         if (parameters.Length > 1 && (bool)parameters[1])
         {
             _cameraController.StartTranslate(1);
@@ -188,28 +188,32 @@ public class Model : GenericObject, IPlayerLife
 
     public void Move(float hAxie, float vAxie)
     {
+        _view.SetFloat("velocity", Mathf.Abs(hAxie) + Mathf.Abs(vAxie));
         if (_isOnFloor && (hAxie != 0 || vAxie != 0))
         {
             EventManager.Trigger("CameraBobbing", true);
-
             if (!isCrouch)
             {
                 if (isRunning)
                 {
                     _view.PlayLoopingRun();
+                    _view.SetBool("isRunning", true);
                 }
                 else
                 {
                     _view.PlayLoopingWalk();
+                    _view.SetBool("isRunning", false);
                 }
             }
             else
             {
+                _view.SetBool("isRunning", false);
                 _view.StopAllSteps();
             }
         }
         else
         {
+            _view.SetBool("isRunning", false);
             EventManager.Trigger("CameraBobbing", false);
             _view.StopAllSteps();
         }
@@ -262,43 +266,12 @@ public class Model : GenericObject, IPlayerLife
             _physics.RemoveAcceleration("gravity");
 
             _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
+            
+            _view.SetTrigger("jump");
 
             _canJump = false;
             _jumpCounter++;
         }
-        // else
-        // {
-        //     var collisions = Physics.OverlapSphere(transform.position, 1, _wallMask);
-        //
-        //     if (!collisions.Any()) return;
-        //
-        //     if (_jumpCoroutine != null)
-        //     {
-        //         StopCoroutine(_jumpCoroutine);
-        //         _jumpCoroutine = null;
-        //     }
-        //
-        //     if (_walljumpCoroutine != null)
-        //         StopCoroutine(_walljumpCoroutine);
-        //
-        //     _jumpCoroutine = StartCoroutine(JumpDuration());
-        //     _walljumpCoroutine = StartCoroutine(WallJumpDuration());
-        //
-        //     var orderCollisions =
-        //         collisions.OrderBy(x => Vector3.Distance(transform.position, x.transform.position)).ToArray();
-        //     var closeCollider = orderCollisions.First();
-        //
-        //
-        //     _physics.RemoveAcceleration("gravity");
-        //
-        //     _physics.ApplyImpulse("walljump",
-        //         (closeCollider.ClosestPoint(transform.position) - transform.position).normalized * -1, _walljumpForce,
-        //         _wallJumpDesacceleration);
-        //     _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
-        //
-        //     _canJump = false;
-        //     _jumpCounter++;
-        // }
     }
 
     public void Slide()
@@ -405,6 +378,7 @@ public class Model : GenericObject, IPlayerLife
             SoundManager.instance.PlaySound(SoundID.SLIDE);
             _slideSoundChecker = true;
         }
+
         EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, true);
 
         yield return new WaitForSeconds(_slideDuration / 2);
@@ -432,6 +406,7 @@ public class Model : GenericObject, IPlayerLife
             _actualSpeed = _walkingSpeed;
         }
         else _actualSpeed = _runningSpeed;
+
         EventManager.Trigger("OnPPCalled", PPNames.SPEEDEFFECT, false);
     }
 
@@ -447,14 +422,6 @@ public class Model : GenericObject, IPlayerLife
 
         _physics.RemoveImpulse("jump");
         _jumpCoroutine = null;
-    }
-
-    IEnumerator WallJumpDuration()
-    {
-        yield return new WaitForSeconds(_walljumpDuration);
-
-        _physics.RemoveImpulse("walljump");
-        _walljumpCoroutine = null;
     }
 
     void OnFloor_Checker()
@@ -487,6 +454,7 @@ public class Model : GenericObject, IPlayerLife
             _physics.ApplyAcceleration("gravity", Vector3.down, _gravity, Mathf.Infinity);
 
             floorChecker = OnAir_Checker;
+            _view.SetBool("onFloor", false);
         }
     }
 
@@ -522,6 +490,7 @@ public class Model : GenericObject, IPlayerLife
             _physics.RemoveAcceleration("gravity");
 
             floorChecker = OnFloor_Checker;
+            _view.SetBool("onFloor", true);
         }
     }
 
@@ -541,8 +510,8 @@ public class Model : GenericObject, IPlayerLife
         _life = Mathf.Clamp(_life, 0, _maxLife);
 
         EventManager.Trigger("ChangeHealthUI", _life);
-        
-        if(_life >= _maxLife * 0.25f)
+
+        if (_life >= _maxLife * 0.25f)
             EventManager.Trigger("OnPPCalled", PPNames.LOWHP, false);
     }
 

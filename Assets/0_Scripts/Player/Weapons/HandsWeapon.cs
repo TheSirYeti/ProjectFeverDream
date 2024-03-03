@@ -48,22 +48,22 @@ public class HandsWeapon : GenericWeapon
 
     public override void Shoot(Transform pointOfShoot, bool isADS)
     {
-        _actualAttack++;
-
-        if (_actualAttack > _maxCombo - 1)
-            _actualAttack = 0;
-
-        _meleeCollider.enabled = true;
-
-        if (_colliderCoroutine != null)
-            StopCoroutine(_colliderCoroutine);
-
-        _colliderCoroutine = StartCoroutine(HitCoroutine());
-
-        if (_comboCoroutine != null)
-            StopCoroutine(_comboCoroutine);
-
-        _comboCoroutine = StartCoroutine(ComboCoroutine());
+        // _actualAttack++;
+        //
+        // if (_actualAttack > _maxCombo - 1)
+        //     _actualAttack = 0;
+        //
+        // _meleeCollider.enabled = true;
+        //
+        // if (_colliderCoroutine != null)
+        //     StopCoroutine(_colliderCoroutine);
+        //
+        // _colliderCoroutine = StartCoroutine(HitCoroutine());
+        //
+        // if (_comboCoroutine != null)
+        //     StopCoroutine(_comboCoroutine);
+        //
+        // _comboCoroutine = StartCoroutine(ComboCoroutine());
     }
 
     public override void CheckUsage()
@@ -118,28 +118,28 @@ public class HandsWeapon : GenericWeapon
 
     public override void OnClick()
     {
-        _weaponManager._view.SetInt("actualAttack", _actualAttack);
-        _weaponManager._view.SetTrigger(GetOnClickName());
-        _holdTimer = 0;
-        OnDelegateUpdate = OnHold;
+        // _weaponManager._view.SetInt("actualAttack", _actualAttack);
+        // _weaponManager._view.SetTrigger(GetOnClickName());
+        // _holdTimer = 0;
+        // OnDelegateUpdate = OnHold;
     }
 
     void OnHold()
     {
-        _holdTimer += Time.deltaTime * _holdSpeed;
-
-        if (_holdTimer > 1)
-        {
-            _weaponManager._view.SetTrigger(GetOnClickName());
-        }
+        // _holdTimer += Time.deltaTime * _holdSpeed;
+        //
+        // if (_holdTimer > 1)
+        // {
+        //     _weaponManager._view.SetTrigger(GetOnClickName());
+        // }
     }
 
     public override void OnRelease()
     {
-        if (_holdTimer > 1)
-            _weaponManager._view.ResetTrigger(GetOnClickName());
-
-        _holdTimer = 0;
-        OnDelegateUpdate = delegate { };
+        // if (_holdTimer > 1)
+        //     _weaponManager._view.ResetTrigger(GetOnClickName());
+        //
+        // _holdTimer = 0;
+        // OnDelegateUpdate = delegate { };
     }
 }
