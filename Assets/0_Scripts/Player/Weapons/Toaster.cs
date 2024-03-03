@@ -139,6 +139,8 @@ public class Toaster : GenericWeapon
         if (_actualMagazineBullets <= 0 && _actualReserveBullets > 0) _weaponManager.AnimReload();
 
         EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
+
+        if (_actualMagazineBullets<=0 && _actualReserveBullets <= 0)_weaponManager.DestroyWeapon();
     }
 
 

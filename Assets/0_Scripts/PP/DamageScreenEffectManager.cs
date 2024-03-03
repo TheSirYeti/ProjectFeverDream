@@ -69,7 +69,13 @@ public class DamageScreenEffectManager : PostProccesingAbstract
         else
         {
             LeanTween.value(_damageScreenEffect._ControlScreenUP.value, 0, .3f)
-                .setOnUpdate(value => _damageScreenEffect._ControlScreenUP.value = value)
+                .setOnUpdate(value =>
+                {
+                    _damageScreenEffect._ControlScreenUP.value = value;
+                    _damageScreenEffect._ControlScreenDown.value = value;
+                    _damageScreenEffect._ControlScreenLeft.value = value;
+                    _damageScreenEffect._ControlScreenRight.value = value;
+                })
                 .setOnComplete(o => _damageScreenEffect.active = false);
         }
     }
