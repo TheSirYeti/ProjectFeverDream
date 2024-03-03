@@ -76,6 +76,7 @@ public class FastVent : GenericObject
         EventManager.Trigger("SetNewRotation", Quaternion.Lerp(_playerTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime).eulerAngles);
         
         _playerTransform.position += dir.normalized * (_speed * Time.deltaTime);
+        _playerLight.transform.position = _playerTransform.position;
 
         if (dir.magnitude < 0.3f)
         {
