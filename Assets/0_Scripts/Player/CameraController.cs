@@ -44,6 +44,7 @@ public class CameraController : GenericObject
     [SerializeField] float _bobbingAmount = 0.2f;
     private float _timer = 0.0f;
     [SerializeField] private float _handsRotationSpeed;
+    [SerializeField] private float _minAngleRotation;
 
     [FormerlySerializedAs("_maxYRot")]
     [Space(20)]
@@ -136,7 +137,7 @@ public class CameraController : GenericObject
     {
         _mainCameraParent.transform.position = _actualCameraPos.position;
         
-        if (Vector3.Angle(_mainCameraParent.transform.forward, _actualCameraPos.forward) > 0)
+        if (Vector3.Angle(_mainCameraParent.transform.forward, _actualCameraPos.forward) > _minAngleRotation)
         {
             var targetRotation = Quaternion.LookRotation(_actualCameraPos.forward);
             _mainCameraParent.transform.rotation =
@@ -156,15 +157,16 @@ public class CameraController : GenericObject
         
         actualHorizontalRot += xAxie * _cameraSens * Time.deltaTime;
         actualVerticalRot += yAxie * -1 * _cameraSens * Time.deltaTime;
+        Debug.Log(actualVerticalRot);
 
-        if (actualVerticalRot is < 270 and > 210)
+        if (actualVerticalRot is < 275 and > 210)
         {
-            actualVerticalRot = 270;
+            actualVerticalRot = 275;
         }
 
-        if (actualVerticalRot is > 90 and < 190)
+        if (actualVerticalRot is > 85 and < 185)
         {
-            actualVerticalRot = 90;
+            actualVerticalRot = 85;
         }
 
         // actualVerticalRot = Mathf.Clamp(actualVerticalRot, _minXRot, _maxXRot);
