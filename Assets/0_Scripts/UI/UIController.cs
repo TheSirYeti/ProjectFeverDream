@@ -52,6 +52,9 @@ public class UIController : GenericObject
     public Renderer buttonRenderer;
     private float fadeInValue = 0.5f;
     private float yBias = 35f;
+
+    [Header("Chef Attack")] 
+    [SerializeField] private GameObject chefAttackWarn;
     
     
     private Camera cam => GameManager.Instance.GetCamera();
@@ -122,6 +125,7 @@ public class UIController : GenericObject
         EventManager.Subscribe("OnAssistantPing", DoPingStart);
         EventManager.Subscribe("OnPlayerTakeDamage", DoRedScreen);
         EventManager.Subscribe("OnCutsceneEvent", ToggleUIEvent);
+        EventManager.Subscribe("OnChefAttack", SetChefAttack);
     }
 
     void ToggleUIEvent(object[] parameters)
@@ -460,4 +464,9 @@ public class UIController : GenericObject
     }
 
     #endregion
+
+    public void SetChefAttack(object[] parameters)
+    {
+        chefAttackWarn.SetActive((bool)parameters[0]);
+    }
 }

@@ -443,6 +443,11 @@ public class ChefBoss : GenericObject
     
     IEnumerator DoRangedPatternAttack()
     {
+        EventManager.Trigger("OnChefAttack", true);
+        SoundManager.instance.PlaySoundByID("BOSS_WARNING");
+        yield return new WaitForSeconds(2.5f);
+        EventManager.Trigger("OnChefAttack", false);
+        
         EventManager.Trigger("OnVoicelineSetTriggered", _rangedSubtitleIntro);
         yield return new WaitForSeconds((_rangedSubtitleIntro.allVoicelines[0].duration + 1f));
 
@@ -467,6 +472,7 @@ public class ChefBoss : GenericObject
             yield return new WaitForSeconds(_rangedAttackRate);
         }
 
+        EventManager.Trigger("OnChefAttack", false);
         attackDone = true;
         _animator.Play("Boss_Dance_0" + UnityEngine.Random.Range(1, 5));
         yield return null;
@@ -502,13 +508,18 @@ public class ChefBoss : GenericObject
         }
         
         _spotlight.SetActive(false);
-
+        
         attackDone = true;
         yield return null;
     }
 
     IEnumerator DoGiantSpatulaSplat()
     {
+        EventManager.Trigger("OnChefAttack", true);
+        SoundManager.instance.PlaySoundByID("BOSS_WARNING");
+        yield return new WaitForSeconds(2.5f);
+        EventManager.Trigger("OnChefAttack", false);
+        
         EventManager.Trigger("OnVoicelineSetTriggered", _spatulaSubtitle);
         if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         
@@ -548,12 +559,17 @@ public class ChefBoss : GenericObject
             yield return null;
         }
 
+        EventManager.Trigger("OnChefAttack", false);
         attackDone = true;
         yield return null;
     }
 
     IEnumerator DoShuffleAttack()
     {
+        EventManager.Trigger("OnChefAttack", true);
+        SoundManager.instance.PlaySoundByID("BOSS_WARNING");
+        yield return new WaitForSeconds(2.5f);
+        EventManager.Trigger("OnChefAttack", false);
         
         Debug.Log("Shuffle");
         List<ShuffleSurprise> allShuffles = new List<ShuffleSurprise>();
@@ -699,12 +715,18 @@ public class ChefBoss : GenericObject
             item.DestroyPlate();
         }
         
+        EventManager.Trigger("OnChefAttack", false);
         attackDone = true;
         yield return null;
     }
 
     IEnumerator DoRainPattern()
     {
+        EventManager.Trigger("OnChefAttack", true);
+        SoundManager.instance.PlaySoundByID("BOSS_WARNING");
+        yield return new WaitForSeconds(2.5f);
+        EventManager.Trigger("OnChefAttack", false);
+        
         EventManager.Trigger("OnVoicelineSetTriggered", _rainSubtitle);
         yield return new WaitForSeconds((_rainSubtitle.allVoicelines[0].duration));
         if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
@@ -725,6 +747,7 @@ public class ChefBoss : GenericObject
             yield return new WaitForSeconds(_rainTimeBetweenAttacks);
         }
         
+        EventManager.Trigger("OnChefAttack", false);
         attackDone = true;
         yield return null;
     }
@@ -792,6 +815,7 @@ public class ChefBoss : GenericObject
 
     void EndCurrentRecipe(object[] parameters)
     {
+        EventManager.Trigger("OnChefAttack", false);
         SendInputToFSM(ChefStates.TAKE_DAMAGE);
     }
 }
