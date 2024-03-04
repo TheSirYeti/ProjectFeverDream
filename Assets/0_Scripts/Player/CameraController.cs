@@ -43,6 +43,7 @@ public class CameraController : GenericObject
     [SerializeField] float _bobbingSpeed = 0.18f;
     [SerializeField] float _bobbingAmount = 0.2f;
     private float _timer = 0.0f;
+    [SerializeField] private float _handsRotationSpeed;
 
     [FormerlySerializedAs("_maxYRot")]
     [Space(20)]
@@ -101,7 +102,7 @@ public class CameraController : GenericObject
         _mainCameraParent.transform.position = _actualCameraPos.position;
         _mainCameraParent.transform.rotation = _actualCameraPos.rotation;
 
-        _mainCameraParent.transform.parent = _actualCameraPos;
+        _mainCameraParent.transform.parent = null;
 
         _actualFOV = _walkingFOV;
 
@@ -133,6 +134,15 @@ public class CameraController : GenericObject
 
     public override void OnLateUpdate()
     {
+        _mainCameraParent.transform.position = _actualCameraPos.position;
+        
+        if (Vector3.Angle(_mainCameraParent.transform.forward, _actualCameraPos.forward) > 0)
+        {
+            var targetRotation = Quaternion.LookRotation(_actualCameraPos.forward);
+            _mainCameraParent.transform.rotation =
+                Quaternion.Lerp(_mainCameraParent.transform.rotation, targetRotation, _handsRotationSpeed * Time.deltaTime);
+        }
+        
         _cameraGetter.transform.position = _mainCameraParent.transform.position;
         _cameraGetter.transform.rotation = transform.rotation * _actualCameraPos.localRotation;
     }
@@ -182,7 +192,6 @@ public class CameraController : GenericObject
     {
         _cameraPositions[state].rotation = _actualCameraPos.rotation;
         _actualCameraPos = _cameraPositions[state];
-        _mainCameraParent.transform.parent = _actualCameraPos;
 
         cameraMovement = TranslateCamera;
     }
