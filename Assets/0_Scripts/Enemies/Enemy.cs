@@ -151,7 +151,7 @@ public abstract class Enemy : GenericObject, ITakeDamage
         {
             if (rigidbody != rb)
             {
-                rigidbody.gameObject.layer = LayerManager.L_PROP;
+                rigidbody.gameObject.layer = LayerManager.L_ENEMYRAGDOLL;
                 rigidbody.isKinematic = false;
                 rigidbody.detectCollisions = true;
             }
