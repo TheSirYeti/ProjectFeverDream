@@ -57,7 +57,7 @@ public class Assistant : GenericObject
     [SerializeField] Material _blackholeMat;
     [SerializeField] float _loadingAmmount;
     [SerializeField] float _loadingSpeed;
-    List<Renderer> _actualRenders;
+    List<Renderer> _actualRenders = new List<Renderer>();
 
     private Transform _actualObjective;
     private Vector3 _dir;
@@ -93,6 +93,8 @@ public class Assistant : GenericObject
 
     [SerializeField] private float interactDialogueCount, eatDialogueCount;
     [SerializeField] [Range(0, 100)] private float dialogueChance;
+
+    private Coroutine InteractCoroutine;
 
 
     public enum JorgeStates
@@ -346,11 +348,11 @@ public class Assistant : GenericObject
                 {
                     case Interactuables.DOOR:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
-                        StartCoroutine(WaitAction(1, false));
+                        InteractCoroutine=StartCoroutine(WaitAction(1, false));
                         break;
                     case Interactuables.ENEMY:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
-                        StartCoroutine(WaitAction(3, false));
+                        InteractCoroutine=StartCoroutine(WaitAction(3, false));
 
 
                         var rand = Random.Range(0f, 100f);
@@ -382,7 +384,7 @@ public class Assistant : GenericObject
                         break;
                     case Interactuables.ELEVATOR:
                         _animator.SetBool(_interactuable.AnimationToExecute(), true);
-                        StartCoroutine(WaitAction(1, false));
+                        InteractCoroutine=StartCoroutine(WaitAction(1, false));
                         break;
                     default:
                         break;
@@ -547,7 +549,7 @@ public class Assistant : GenericObject
 
                             if (tempPlateStation && tempPlateStation.isLastIngredient())
                             {
-                                StartCoroutine(WaitUseItemTime(tempIngredient.GetDuration()));
+                                InteractCoroutine=StartCoroutine(WaitUseItemTime(tempIngredient.GetDuration()));
                             }
                             else
                             {
@@ -558,7 +560,7 @@ public class Assistant : GenericObject
                         }
                         else
                         {
-                            StartCoroutine(WaitUseItemTime(tempIngredient.GetDuration()));
+                            InteractCoroutine=StartCoroutine(WaitUseItemTime(tempIngredient.GetDuration()));
                         }
                     }
                     else
@@ -630,8 +632,32 @@ public class Assistant : GenericObject
         }
 
         _holdingItem = null;
+        
+        _loadingAmmount = 0;
+        ExtraUpdate = delegate { };
+
+        if (_actualRenders.Any())
+        {
+            foreach (var t in _actualRenders.SelectMany(render => render.materials))
+            {
+                t.SetFloat("_Effect", 0);
+            }
+        }
+
+        if (_vacuumVFX._opacity > 0)
+        {
+            LeanTween.value(0.81f, 0, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
+        }
 
         _isInteracting = false;
+        
+        _animator.Rebind();
+        _animator.Update(0f);
+
+        if (InteractCoroutine!=null)
+        {
+            StopCoroutine(InteractCoroutine);
+        }
 
         transform.position = _player.transform.position;
         SendInputToFSM(JorgeStates.FOLLOW);
