@@ -55,6 +55,7 @@ MonoBehaviour:
   isPausable: 1
   _animator: {fileID: 135281850236933768}
   _rb: {fileID: 3051743638370247909}
+  _acceleration: 6
   _followSpeed: 5
   _interactSpeed: 10
   _followingDistance: 4
@@ -64,15 +65,13 @@ MonoBehaviour:
   _pickUpPoint: {fileID: 3396601736346250239}
   _previousObjective: {fileID: 0}
   _rotationSpeed: 4
-  _enemiesDetectionDistance: 15
-  _hidingSpotsDetectionDistance: 30
-  _interactDetectionDistance: 0
   _vacuumPoint: {fileID: 7514033917911201139}
   _vacuumVFX: {fileID: 4904768746111781691}
   _blackholeMat: {fileID: 2100000, guid: 4f52e4c12922b5e45b353e1a7eeaf501, type: 2}
   _loadingAmmount: 0
   _loadingSpeed: 2
-  _obstacleSpeed: 2
+  _maxObstacleSpeed: 2
+  _obstacleAcceleration: 1
   _player: {fileID: 0}
   interactDialogueCount: 8
   eatDialogueCount: 9
