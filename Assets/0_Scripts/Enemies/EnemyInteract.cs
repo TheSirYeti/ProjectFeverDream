@@ -29,7 +29,10 @@ public class EnemyInteract : GenericObject, IAssistInteract
 
     private void OnDestroy()
     {
-        _outline.enabled = false;
+        if (_outline)
+        {
+            _outline.enabled = false;
+        }
     }
 
     #region INTERACTIONS

@@ -359,6 +359,7 @@ public class Assistant : GenericObject
                             EventManager.Trigger("OnAssistantEatDialogueTriggered");
                         }
 
+                        StartAction();
                         _actualRenders = _interactuable.GetRenderer();
                         foreach (Renderer render in _actualRenders)
                         {
@@ -715,6 +716,8 @@ public class Assistant : GenericObject
     void ChangeBlackHoleVars()
     {
         _loadingAmmount += _loadingSpeed * Time.deltaTime;
+        _vacuumVFX.transform.position = _vacuumPoint.position;
+        _vacuumVFX.transform.up = _vacuumPoint.position - _interactuable.GetTransform().position;
 
         foreach (Renderer render in _actualRenders)
         {
