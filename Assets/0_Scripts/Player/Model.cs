@@ -144,7 +144,7 @@ public class Model : GenericObject, IPlayerLife
         crouchChecker();
 
         CheckDmg();
-
+        
         currentDmgCooldown -= Time.deltaTime;
 
         if (_physicsActive)
@@ -266,8 +266,11 @@ public class Model : GenericObject, IPlayerLife
             _physics.RemoveAcceleration("gravity");
 
             _physics.ApplyImpulse("jump", Vector3.up, _jumpForce, _jumpDesacceleration);
-            
-            _view.SetTrigger("jump");
+
+            if (_view.CheckName("Idle") || _view.CheckName("Walk") || _view.CheckName("Run") || _view.CheckName("Reset"))
+            {
+                _view.SetTrigger("jump");
+            }
 
             _canJump = false;
             _jumpCounter++;
@@ -432,11 +435,6 @@ public class Model : GenericObject, IPlayerLife
             _canJump = true;
             _jumpCounter = 0;
         }
-        //Debug.Log("Estoy chequeando si salgo del piso");
-
-        // if (_jumpCoroutine == null) Debug.Log("Hay corutina");
-        // if (!Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
-        //         transform.rotation, _floorMask)) Debug.Log("No hay piso");
 
         if (!Physics.CheckBox(transform.position - Vector3.up, new Vector3(0.7f, 0.2f, 0.7f),
                 transform.rotation, _floorMask))

@@ -125,6 +125,11 @@ public class View : GenericObject
     {
         _animator.SetFloat(floatName, value);
     }
+
+    public bool CheckName(string checkName)
+    {
+        return _animator.GetCurrentAnimatorStateInfo(0).IsName("checkName");
+    }
     #endregion
 
 

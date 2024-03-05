@@ -21,7 +21,6 @@ public class Controller
         OnUpdate += GetShootInput;
         OnUpdate += GetReloadInput;
         OnUpdate += GetADSInput;
-        //onUpdate += GetNumsInput;
         OnUpdate += GetMovementInput;
         OnUpdate += GetJumpInput;
         OnUpdate += GetCrunchInput;

@@ -63,7 +63,7 @@ public class Assistant : GenericObject
     private Vector3 _dir;
 
     private Vector3 _obstacleDir = Vector3.zero;
-    private float _obstacleDistance =2;
+    private float _obstacleDistance = 2;
     [SerializeField] private float _maxObstacleSpeed = 2;
     [SerializeField] private float _obstacleAcceleration = 2;
     private float _obstacleSpeed;
@@ -700,7 +700,7 @@ public class Assistant : GenericObject
             _obstacleDir += negativeDir;
         }
 
-        if (_obstacleDir.magnitude!=0)
+        if (_obstacleDir.magnitude != 0)
         {
             _obstacleSpeed += _obstacleAcceleration * Time.deltaTime;
             _obstacleSpeed = Mathf.Clamp(_obstacleSpeed, 0, _maxObstacleSpeed);
