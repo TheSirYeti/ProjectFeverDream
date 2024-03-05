@@ -157,7 +157,6 @@ public class CameraController : GenericObject
         
         actualHorizontalRot += xAxie * _cameraSens * Time.deltaTime;
         actualVerticalRot += yAxie * -1 * _cameraSens * Time.deltaTime;
-        Debug.Log(actualVerticalRot);
 
         if (actualVerticalRot is < 275 and > 210)
         {

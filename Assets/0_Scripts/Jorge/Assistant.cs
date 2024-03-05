@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEngine.Serialization;
 //using UnityFx.Outline;
 using Random = UnityEngine.Random;
 
@@ -26,6 +27,8 @@ public class Assistant : GenericObject
 
     private Vector3 _actualDir;
 
+    private float _actualSpeed;
+    [SerializeField] private float _acceleration;
     [SerializeField] private float _followSpeed;
     [SerializeField] private float _interactSpeed;
 
@@ -45,11 +48,6 @@ public class Assistant : GenericObject
 
     [SerializeField] float _rotationSpeed;
 
-    [SerializeField] float _enemiesDetectionDistance;
-
-    [SerializeField] float _hidingSpotsDetectionDistance;
-
-    [SerializeField] private float _interactDetectionDistance;
     private IAssistInteract _interactuable;
 
     bool _isInteracting = false;
@@ -65,8 +63,10 @@ public class Assistant : GenericObject
     private Vector3 _dir;
 
     private Vector3 _obstacleDir = Vector3.zero;
-    private float _obstacleDistance = 2;
-    [SerializeField] private float _obstacleSpeed = 2;
+    private float _obstacleDistance =2;
+    [SerializeField] private float _maxObstacleSpeed = 2;
+    [SerializeField] private float _obstacleAcceleration = 2;
+    private float _obstacleSpeed;
 
     private bool _canMove = true;
 
@@ -214,9 +214,15 @@ public class Assistant : GenericObject
             if (_dir.magnitude > _followingDistance)
             {
                 _dir.Normalize();
-                _dir *= _followSpeed;
+
+                _actualSpeed += _acceleration * Time.deltaTime;
+                _actualSpeed = Mathf.Clamp(_actualSpeed, 0, _followSpeed);
             }
-            else _dir = Vector3.zero;
+            else
+            {
+                _dir = Vector3.zero;
+                _actualSpeed = 0;
+            }
 
             CheckObstacles();
         };
@@ -260,7 +266,8 @@ public class Assistant : GenericObject
             }
 
             _dir.Normalize();
-            _dir *= _interactSpeed;
+            _actualSpeed += _acceleration * Time.deltaTime;
+            _actualSpeed = Mathf.Clamp(_actualSpeed, 0, _interactSpeed);
 
             if (Vector3.Distance(transform.position, _actualObjective.position) < _nodeDistance)
             {
@@ -331,6 +338,7 @@ public class Assistant : GenericObject
             if (Vector3.Distance(transform.position, (_actualObjective.position)) < _interactDistance)
             {
                 _actualDir = Vector3.zero;
+                _actualSpeed = 0;
                 _isInteracting = true;
                 _obstacleDir = Vector3.zero;
 
@@ -381,7 +389,8 @@ public class Assistant : GenericObject
             }
             else
             {
-                _dir *= _interactSpeed;
+                _actualSpeed += _acceleration * Time.deltaTime;
+                _actualSpeed = Mathf.Clamp(_actualSpeed, 0, _interactSpeed);
             }
         };
 
@@ -461,7 +470,8 @@ public class Assistant : GenericObject
             }
 
             _dir.Normalize();
-            _dir *= _interactSpeed;
+            _actualSpeed += _acceleration * Time.deltaTime;
+            _actualSpeed = Mathf.Clamp(_actualSpeed, 0, _interactSpeed);
         };
 
         pickup.OnExit += x =>
@@ -491,6 +501,7 @@ public class Assistant : GenericObject
                     return;
                 case true:
                     _dir = Vector3.zero;
+                    _actualSpeed = 0;
                     _rb.velocity = Vector3.zero;
                     _obstacleDir = Vector3.zero;
                     return;
@@ -566,7 +577,8 @@ public class Assistant : GenericObject
             }
 
             _dir.Normalize();
-            _dir *= _interactSpeed;
+            _actualSpeed += _acceleration * Time.deltaTime;
+            _actualSpeed = Mathf.Clamp(_actualSpeed, 0, _interactSpeed);
         };
 
         useit.OnExit += x =>
@@ -592,9 +604,8 @@ public class Assistant : GenericObject
         fsm.Update();
         ExtraUpdate();
 
-        _actualDir = Vector3.zero;
-        _actualDir += _dir + _obstacleDir;
-        
+        _actualDir = (_dir * _actualSpeed + _obstacleDir * _obstacleSpeed);
+
         _animator.SetFloat("velocity", _dir.magnitude);
 
         _rb.velocity = _actualDir;
@@ -621,8 +632,6 @@ public class Assistant : GenericObject
 
         _isInteracting = false;
 
-        Debug.Log("a");
-
         transform.position = _player.transform.position;
         SendInputToFSM(JorgeStates.FOLLOW);
     }
@@ -639,12 +648,6 @@ public class Assistant : GenericObject
         _interactuable.Interact();
         FinishAction();
     }
-    //
-    // public void OnAssistantStart(params object[] parameter)
-    // {
-    //     _player = (Transform)parameter[0];
-    //     _actualObjective = _player;
-    // }
 
     public void SetObjective(Transform interactuable, JorgeStates goToState)
     {
@@ -692,12 +695,21 @@ public class Assistant : GenericObject
         {
             if (!Physics.Raycast(transform.position, dir, out var hit, _obstacleDistance,
                     LayerManager.LM_ALLOBSTACLE)) continue;
-            
+
             var negativeDir = dir * (-1 * Vector3.Distance(transform.position, hit.point));
             _obstacleDir += negativeDir;
         }
 
-        if (_obstacleDir.magnitude > _obstacleDistance) _obstacleDir = _obstacleDir.normalized * _obstacleDistance;
+        if (_obstacleDir.magnitude!=0)
+        {
+            _obstacleSpeed += _obstacleAcceleration * Time.deltaTime;
+            _obstacleSpeed = Mathf.Clamp(_obstacleSpeed, 0, _maxObstacleSpeed);
+            _obstacleDir.Normalize();
+        }
+        else
+        {
+            _obstacleSpeed = 0;
+        }
     }
 
     void ChangeBlackHoleVars()
