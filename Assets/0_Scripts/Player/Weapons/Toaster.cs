@@ -32,8 +32,8 @@ public class Toaster : GenericWeapon
         _actualReserveBullets = _weaponSO.initialBulletsInInventory;
         _actualMagazineBullets = _weaponSO.maxBulletsInMagazine;
 
-        _bulletPool = new ObjectPool(_weaponSO._bulletsPrefabs, numPellets * 3);
-        _decalPool = new ObjectPool(_decalPrefab, numPellets * 2);
+        _bulletPool = new ObjectPool(_weaponSO._bulletsPrefabs, numPellets);
+        // _decalPool = new ObjectPool(_decalPrefab, numPellets * 2);
 
         //EventManager.Trigger("ChangeBulletUI", _actualMagazineBullets, _weaponSO.maxBulletsInMagazine);
         //EventManager.Trigger("ChangeReserveBulletUI", _actualReserveBullets);
