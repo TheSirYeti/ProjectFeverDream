@@ -77,12 +77,12 @@ public class UIController : GenericObject
 
     public override void OnUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             ShowControlsUI(true);
         }
         
-        if (Input.GetKeyUp(KeyCode.LeftAlt))
+        if (Input.GetKeyUp(KeyCode.Tab))
         {
             ShowControlsUI(false);
         }

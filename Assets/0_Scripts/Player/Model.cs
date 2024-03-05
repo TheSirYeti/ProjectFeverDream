@@ -170,6 +170,7 @@ public class Model : GenericObject, IPlayerLife
             _dir = Vector3.zero;
             _rb.velocity = Vector3.zero;
             _physics.RemoveAllPhysics();
+            _view._animator.SetBool("isRunning", false);
         }
 
         if (parameters.Length > 1 && (bool)parameters[1])

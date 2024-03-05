@@ -506,7 +506,8 @@ public abstract class Enemy : GenericObject, ITakeDamage
         IDLE,
         COMBAT,
         DETECT,
-        DEAD
+        DEAD,
+        SCARED
     }
     
     public void DoFaceTransition(FaceID faceID)

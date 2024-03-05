@@ -411,6 +411,7 @@ public class RangedEnemy : Enemy
             //     return;
             // }
             
+            DoFaceTransition(FaceID.SCARED);
             isPathfinding = true;
             currentScare = timeScared;
             animator.Play("ScaredMovement");
@@ -441,6 +442,7 @@ public class RangedEnemy : Enemy
 
         scared.OnExit += x =>
         {
+            DoFaceTransition(FaceID.COMBAT);
             isPathfinding = false;
             animator.Play("Movement");
         };

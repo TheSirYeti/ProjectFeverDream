@@ -31,7 +31,8 @@ public class CutsceneInteract : GenericObject, IAssistInteract
 
     private void OnDestroy()
     {
-        _outline.enabled = false;
+        if(_outline != null)
+            _outline.enabled = false;
     }
 
     private void OnEnable()
