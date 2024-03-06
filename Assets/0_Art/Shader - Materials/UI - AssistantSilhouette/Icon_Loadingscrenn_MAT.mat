@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ElectronicSign 1
-  m_Shader: {fileID: 4800000, guid: 073548b482fadc543aebc8895c2b5b93, type: 3}
+  m_Name: Icon_Loadingscrenn_MAT
+  m_Shader: {fileID: 4800000, guid: 3cbc1e6aca2363a45ae4b70423c5ed94, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -23,20 +23,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Poster:
-        m_Texture: {fileID: 2800000, guid: 0f719c12899d3c3498c406d272f1d023, type: 3}
+    - _MainTex:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _pixels:
-        m_Texture: {fileID: 2800000, guid: 5d3e98ec0de0645409f933416f87f295, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _pixels1:
-        m_Texture: {fileID: 2800000, guid: 5d3e98ec0de0645409f933416f87f295, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _poster_01:
-        m_Texture: {fileID: 2800000, guid: 9a292b5dd3af0ed43b44d0bb86428e5e, type: 3}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: eabba395643bb4e388d633c8d9a4f1e8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -45,13 +37,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ControlFace: 0
-    - _ControlFace1: 0
-    - _NoiseValue: 0
-    - _SignStatic: 50
-    - _StaticChangeFace: 0
-    - _StaticChangeFace1: 0
-    - __dirty: 0
+    - _ColorMask: 15
+    - _InvFade: 1
+    - _S: 10
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
     m_Colors:
-    - _PixelsValue: {r: 30, g: 30, b: 0, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
