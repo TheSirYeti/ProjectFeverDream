@@ -10,6 +10,7 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract, IPickUp
     private Model _player => GameManager.Instance.Player;
 
     [SerializeField] protected int _actualMagazineBullets;
+    protected int _maxActualBullets;
     protected int _actualReserveBullets;
     [SerializeField] protected int _maxUsageAmmount;
     [SerializeField] protected int usageAmmount = 0;

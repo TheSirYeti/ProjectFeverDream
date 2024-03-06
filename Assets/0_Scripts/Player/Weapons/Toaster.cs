@@ -33,6 +33,8 @@ public class Toaster : GenericWeapon
         _actualMagazineBullets = _weaponSO.maxBulletsInMagazine;
 
         _bulletPool = new ObjectPool(_weaponSO._bulletsPrefabs, numPellets);
+        
+        _maxActualBullets = _actualMagazineBullets;
     }
 
     public override void OnLateStart()
@@ -43,6 +45,18 @@ public class Toaster : GenericWeapon
     public override void OnUpdate()
     {
         OnDelegateUpdate();
+        
+        if (!_isEquiped) return;
+        
+        Debug.Log(_actualMagazineBullets + " | " + _maxActualBullets / 2);
+        if (_actualMagazineBullets <= _maxActualBullets / 2)
+        {
+            EventManager.Trigger("LowAmmoEffect", true);
+        }
+        else
+        {
+            EventManager.Trigger("LowAmmoEffect", false);
+        }
     }
 
 

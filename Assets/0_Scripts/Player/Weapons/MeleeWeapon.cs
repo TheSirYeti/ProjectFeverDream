@@ -36,6 +36,8 @@ public class MeleeWeapon : GenericWeapon
     {
         _meleeCollider = GetComponent<BoxCollider>();
         _meleeCollider.enabled = false;
+
+        _maxActualBullets = _actualMagazineBullets;
     }
 
     public override void OnLateStart()
@@ -100,13 +102,30 @@ public class MeleeWeapon : GenericWeapon
         {
             float actualPercent = usageAmmount * 100 / 10;
 
-            if (actualPercent > 75) EventManager.Trigger("OnBaguetteChangeState", 0);
-            else if (actualPercent > 50) EventManager.Trigger("OnBaguetteChangeState", 1);
-            else if (actualPercent > 25) EventManager.Trigger("OnBaguetteChangeState", 2);
-            else if (actualPercent > 0) EventManager.Trigger("OnBaguetteChangeState", 3);
+            if (actualPercent > 75)
+            {
+                EventManager.Trigger("OnBaguetteChangeState", 0);
+                EventManager.Trigger("LowAmmoEffect", false);
+            }
+            else if (actualPercent > 50)
+            {
+                EventManager.Trigger("OnBaguetteChangeState", 1);
+                EventManager.Trigger("LowAmmoEffect", false);
+            }
+            else if (actualPercent > 25)
+            {
+                EventManager.Trigger("OnBaguetteChangeState", 2);
+                EventManager.Trigger("LowAmmoEffect", true);
+            }
+            else if (actualPercent > 0)
+            {
+                EventManager.Trigger("OnBaguetteChangeState", 3);
+                EventManager.Trigger("LowAmmoEffect", true);
+            }
             else if (actualPercent <= 0)
             {
                 EventManager.Trigger("OnBaguetteChangeState", 4);
+                EventManager.Trigger("LowAmmoEffect", false);
                 var broken = Instantiate(brokenBagguete, transform.parent);
 
                 _weaponManager.EquipWeapon(broken.GetComponent<GenericWeapon>(), false, false, false);

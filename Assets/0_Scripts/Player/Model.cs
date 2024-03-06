@@ -527,7 +527,14 @@ public class Model : GenericObject, IPlayerLife
 
         if (_life <= _maxLife * 0.25f)
         {
+            EventManager.Trigger("LowHPEffect", true);
             EventManager.Trigger("OnPPCalled", PPNames.LOWHP, true);
+        }
+
+        else
+        {
+            EventManager.Trigger("LowHPEffect", false);
+            EventManager.Trigger("OnPPCalled", PPNames.LOWHP, false);
         }
 
         //TODO: Add SFX and VFX for player dmg

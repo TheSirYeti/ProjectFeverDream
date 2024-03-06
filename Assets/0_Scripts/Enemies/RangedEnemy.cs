@@ -527,6 +527,10 @@ public class RangedEnemy : Enemy
     public void SpawnBullet()
     {
         GameObject bullet = Instantiate(bulletPrefab);
+        
+        if(InstanceManager.instance != null)
+            bullet.transform.SetParent(InstanceManager.instance.transform);
+        
         bullet.transform.position = spawnPoint.position;
         bullet.transform.forward = (target.transform.position + (Vector3.up / 3)) - spawnPoint.position;
         //bullet.GetComponent<RangedBullet>()?.OnBulletSpawn();

@@ -378,7 +378,10 @@ public class Assistant : GenericObject
                         LeanTween.value(0, 0.81f, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
 
                         GameManager.Instance.Player.Health(15);
-                        SoundManager.instance.PlaySound(SoundID.ASSISTANT_HEAL);
+                        if (SoundManager.instance != null)
+                        {
+                            SoundManager.instance.PlaySoundByID("ASSISTANT_SUCK");
+                        }
 
                         ExtraUpdate = ChangeBlackHoleVars;
                         break;
@@ -689,6 +692,7 @@ public class Assistant : GenericObject
 
         EventManager.Trigger("OnAssistantPing", interactuable);
         SoundManager.instance.PlaySound(SoundID.ASSISTANT_PING);
+        
         _actualObjective = interactuable;
         _previousObjective = interactuable;
 
@@ -743,6 +747,12 @@ public class Assistant : GenericObject
 
     void ChangeBlackHoleVars()
     {
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlaySound(SoundID.ASSISTANT_HEAL);
+            GameManager.Instance.Player.Health(15);
+        }
+        
         _loadingAmmount += _loadingSpeed * Time.deltaTime;
         _vacuumVFX.transform.position = _vacuumPoint.position;
         _vacuumVFX.transform.up = _vacuumPoint.position - _interactuable.GetTransform().position;

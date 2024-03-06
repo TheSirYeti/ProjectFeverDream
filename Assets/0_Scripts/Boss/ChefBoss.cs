@@ -683,7 +683,7 @@ public class ChefBoss : GenericObject
                     flag = true;
                 }
             }
-            
+            Debug.Log(currentTimer);
             currentTimer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -691,7 +691,7 @@ public class ChefBoss : GenericObject
         {
             item.SetShufflingStatus(true);
         }
-        GameManager.Instance.Assistant.ResetGeorge();
+        //GameManager.Instance.Assistant.ResetGeorge();
 
         if (UpdateManager.instance.IsPaused()) yield return new WaitUntil(() => !UpdateManager.instance.IsPaused());
         

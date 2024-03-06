@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = System.Random;
 
 public class View : GenericObject
 {
@@ -306,6 +307,11 @@ public class View : GenericObject
     }
 
     #endregion
+
+    public void DoRandomSwing()
+    {
+        SoundManager.instance.PlaySoundByID("BAGUETTE_SWING_" + UnityEngine.Random.Range(1, 6));
+    }
 }
 
 public enum PPNames
