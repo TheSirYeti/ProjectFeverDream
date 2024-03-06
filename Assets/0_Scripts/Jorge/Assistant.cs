@@ -636,6 +636,7 @@ public class Assistant : GenericObject
         _loadingAmmount = 0;
         ExtraUpdate = delegate { };
 
+        //TODO: Fix error on reset
         if (_actualRenders.Any())
         {
             foreach (var t in _actualRenders.SelectMany(render => render.materials))
@@ -710,6 +711,7 @@ public class Assistant : GenericObject
         _actualObjective = _player;
         _loadingAmmount = 0;
         ExtraUpdate = delegate { };
+        _actualRenders = new List<Renderer>();
 
         SendInputToFSM(JorgeStates.FOLLOW);
     }

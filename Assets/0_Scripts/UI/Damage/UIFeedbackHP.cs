@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -17,15 +15,24 @@ public class UIFeedbackHP : UIFeedbackAbstract
 
     public bool _imageActive = false;
 
-    void Start()
+    [SerializeField] private string _eventName;
+
+    private void Awake()
     {
         _colorOne = _text.color;
+        //TODO: Trigger event when is need
+        EventManager.Subscribe(_eventName, ChangeState);
     }
 
     void Update()
     {
         LowHPChangeColor(_enabled);
         ScaleText(_enabled);
+    }
+
+    private void ChangeState(params object[] parameters)
+    {
+        _enabled = (bool)parameters[0];
     }
 
     void LowHPChangeColor(bool on)
