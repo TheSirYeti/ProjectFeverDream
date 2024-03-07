@@ -58,6 +58,7 @@ public class Assistant : GenericObject
     [SerializeField] float _loadingAmmount;
     [SerializeField] float _loadingSpeed;
     List<Renderer> _actualRenders = new List<Renderer>();
+    private List<Material> _materials = new();
 
     private Transform _actualObjective;
     private Vector3 _dir;
@@ -362,12 +363,15 @@ public class Assistant : GenericObject
                         }
 
                         StartAction();
+                        
                         _actualRenders = _interactuable.GetRenderer();
-                        _actualRenders = _actualRenders.Take(_actualRenders.Count - 2).ToList();
-                        foreach (Renderer render in _actualRenders)
+                        
+                        foreach (var render in _actualRenders)
                         {
-                            for (int i = 0; i < render.materials.Length; i++)
+                            for (var i = 0; i < render.materials.Length; i++)
                             {
+                                if (render.materials[i].name is ("OutlineFill" or "OutlineMask")) continue;
+                                
                                 render.materials[i] = _blackholeMat;
                                 render.materials[i].SetVector("_BlackHolePositions",
                                     new Vector4(_vacuumPoint.position.x, _vacuumPoint.position.y,
@@ -647,15 +651,21 @@ public class Assistant : GenericObject
         ExtraUpdate = delegate { };
 
         //TODO: Fix error on reset
+
         if (_actualRenders.Any())
         {
             for (var i = 0; i < _actualRenders.Count; i++)
             {
                 if (_actualRenders[i] == null) continue;
+
+                var render = _actualRenders[i];
                 
-                for (var j = 0; j < _actualRenders[j].materials.Length; j++)
+                for (var j = 0; j < render.materials.Length; j++)
                 {
-                    _actualRenders[i].materials[j].SetFloat("_Effect", 0);
+                    if (render.materials[j] == null) continue;
+                    if (render.materials[j].name is "OutlineFill" or "OutlineMask") continue;
+                                
+                    render.materials[j].SetFloat("_Effect", 0);;
                 }
             }
         }
@@ -671,6 +681,8 @@ public class Assistant : GenericObject
         {
             StopCoroutine(InteractCoroutine);
         }
+
+        _actualRenders = new List<Renderer>();
 
         transform.position = _player.transform.position;
         SendInputToFSM(JorgeStates.FOLLOW);
