@@ -98,9 +98,7 @@ public class Toaster : GenericWeapon
             _dirsBullet.Add(pelletDirection);
 
             if (!Physics.Raycast(pointOfShoot.position, pelletDirection, out var hit, _maxShootDistance,
-                    LayerManager.LM_ENEMY) 
-                || Physics.Raycast(pointOfShoot.position, pelletDirection, _maxShootDistance,
-                    LayerManager.LM_ALLOBSTACLE)) continue;
+                    LayerManager.LM_ENEMY)) continue;
 
             toasterHits.TryAdd(hit.collider, 0);
             toasterHits[hit.collider]++;
