@@ -363,6 +363,7 @@ public class Assistant : GenericObject
 
                         StartAction();
                         _actualRenders = _interactuable.GetRenderer();
+                        _actualRenders = _actualRenders.Take(_actualRenders.Count - 2).ToList();
                         foreach (Renderer render in _actualRenders)
                         {
                             for (int i = 0; i < render.materials.Length; i++)
