@@ -52,7 +52,6 @@ public class CutsceneToggler : GenericObject
             player.transform.position = cameraGO.transform.position;
             
             EventManager.Trigger("SetNewRotation", cameraGO.transform.rotation.eulerAngles);
-            Debug.Log("Set Rot");
         }
         
         EventManager.Trigger("ChangeMovementState", true);

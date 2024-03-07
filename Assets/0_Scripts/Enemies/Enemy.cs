@@ -340,7 +340,6 @@ public abstract class Enemy : GenericObject, ITakeDamage
             Collider[] nodeCollisions = Physics.OverlapSphere(transform.position, 20f, LayerManager.LM_NODE);
 
             if (!nodeCollisions.Any()) return;
-            Debug.Log("TENGO QUE ESCAPAR AAAAAAAAAAA");
 
             int furthestNode = 0;
             float maxDistance = -1f;
@@ -354,10 +353,6 @@ public abstract class Enemy : GenericObject, ITakeDamage
                     maxDistance = distance;
                 }
             }
-            
-            
-            
-            Debug.Log(furthestNode + " - Node to go to");
 
             _waitingPF = true;
             
@@ -372,7 +367,6 @@ public abstract class Enemy : GenericObject, ITakeDamage
             _waitingPF = true;
             MPathfinding.instance.RequestPath(fromPoint, toPoint, _successPFRequest, _failPFRequest);
         }
-        Debug.Log("LLEGO A TERMINAR DE CALCULAR EL PF");
     }
     protected bool InSight(Vector3 start, Vector3 end)
     {
@@ -405,12 +399,10 @@ public abstract class Enemy : GenericObject, ITakeDamage
             {
                 if (InSight(fovTransformPoint.position, item.transform.position))
                 {
-                    Debug.DrawLine(fovTransformPoint.position, item.transform.position, Color.red);
                     isInView = true;
                 }
                 else
                 {
-                    Debug.DrawLine(fovTransformPoint.position, item.transform.position, Color.green);
                     isInView = false;
                 }
             }

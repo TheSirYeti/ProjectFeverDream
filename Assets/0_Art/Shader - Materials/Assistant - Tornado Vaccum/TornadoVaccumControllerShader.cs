@@ -33,9 +33,6 @@ public class TornadoVaccumControllerShader : MonoBehaviour
         }
         else
             _PS_Wind.Stop();
-
-
-        Debug.Log(_PS_Wind.isPlaying);
     }
 
     void VariableInitiation()

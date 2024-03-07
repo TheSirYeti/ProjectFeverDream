@@ -248,7 +248,6 @@ public class BaseMeleeEnemy : Enemy
         {
             if (isDead)
             {
-                Debug.Log("Case 1");
                 SendInputToFSM(MeleeEnemyStates.DIE);
                 return;
             }

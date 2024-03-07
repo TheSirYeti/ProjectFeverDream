@@ -148,7 +148,6 @@ public class View : GenericObject
 
     void BagguetsHitEffect(params object[] parameters)
     {
-        Debug.Log("a");
         _bagguetHit.transform.position = _hitParticlesPoint.position;
         _bagguetHit.transform.rotation = _hitParticlesPoint.rotation;
 
@@ -168,7 +167,10 @@ public class View : GenericObject
 
     void ToasterVFX_OFF(params object[] parameters)
     {
+        _toasterParticles[(int)parameters[0]].Clear();
         _toasterParticles[(int)parameters[0]].Stop();
+        _toasterParticles[(int)parameters[1]].Clear();
+        _toasterParticles[(int)parameters[1]].Stop();
         
         if ((int)parameters[0] == 0)
         {

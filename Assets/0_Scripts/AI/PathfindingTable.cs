@@ -19,12 +19,10 @@ public class PathfindingTable : GenericObject
     {
         if (instance == null)
         {
-            Debug.Log("here");
             instance = this;
         }
         else
         {
-            Debug.Log("There already was an instance of " + this + ". Destroying...");
             Destroy(gameObject);
         }
 

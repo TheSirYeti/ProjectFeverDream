@@ -36,7 +36,6 @@ public class UpdateManager : MonoBehaviour, ISceneChanges
 
     private void Awake()
     {
-        Debug.Log("Update awake");
         if (instance) Destroy(gameObject);
         else instance = this;
     }

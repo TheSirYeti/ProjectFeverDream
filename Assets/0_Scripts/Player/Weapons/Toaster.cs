@@ -48,7 +48,6 @@ public class Toaster : GenericWeapon
         
         if (!_isEquiped) return;
         
-        Debug.Log(_actualMagazineBullets + " | " + _maxActualBullets / 2);
         if (_actualMagazineBullets <= _maxActualBullets / 2)
         {
             EventManager.Trigger("LowAmmoEffect", true);
@@ -79,7 +78,6 @@ public class Toaster : GenericWeapon
 
         var toasterHits = new Dictionary<Collider, int>();
         
-        Debug.Log(actualPellets);
         _dirsBullet = new List<Vector3>();
         _from = pointOfShoot.position;
 
@@ -106,7 +104,6 @@ public class Toaster : GenericWeapon
             
             toasterHits.TryAdd(hit.collider, 0);
             toasterHits[hit.collider]++;
-            Debug.Log(toasterHits[hit.collider]);
 
             var dir = hit.point - _nozzlePoint.position;
 
@@ -132,13 +129,6 @@ public class Toaster : GenericWeapon
                     Vector3.Distance(damageableObject[i].transform.position, transform.position) > 5
                         ? OnDeathKnockBacks.LIGHTKNOCKBACK
                         : OnDeathKnockBacks.HIGHKNOCKBACK);
-            }
-            else
-            {
-                // var decal = _decalPool.GetObject(toasterHits[i].point);
-                // decal.transform.up = toasterHits[i].normal;
-                // decal.transform.position += decal.transform.up * 0.2f;
-                // StartCoroutine(DespawnCoroutine(decal));
             }
         }
 

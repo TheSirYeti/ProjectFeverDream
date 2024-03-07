@@ -28,6 +28,5 @@ public class HumanoidDummy : Enemy
 
     public override void DoKnockback()
     {
-        Debug.Log("a");
     }
 }

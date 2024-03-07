@@ -87,16 +87,6 @@ public class UIController : GenericObject
             ShowControlsUI(false);
         }
         
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            EventManager.Trigger("OnCutsceneUIToggled", 1);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            EventManager.Trigger("OnCutsceneUIToggled", 0);
-        }
-        
         
         if (!isPingEnabled) return;
         
@@ -326,9 +316,7 @@ public class UIController : GenericObject
     
     public void SetUIMode(object[] parameters)
     {
-        Debug.Log("ENTRE A SETUIMODE");
         GameplayMode mode = (GameplayMode)parameters[0];
-        Debug.Log("YO SOY " + mode);
         
         switch (mode)
         {

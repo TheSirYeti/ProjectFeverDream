@@ -85,9 +85,6 @@ public class MPathfinding : GenericObject
             yield break;
         }
 
-        Debug.Log(_origenNode.gameObject.name, _origenNode.gameObject);
-        Debug.Log(_targetNode.gameObject.name, _targetNode.gameObject);
-
         _actualNode = _origenNode;
 
         _doingAStart = true;
@@ -104,7 +101,6 @@ public class MPathfinding : GenericObject
     {
         if (_actualNode == null)
         {
-            Debug.Log("ACA DEBERIA CRASHEAR!");
             _doingAStart = false;
             yield break;
         }
@@ -184,7 +180,6 @@ public class MPathfinding : GenericObject
 
         if (previousNode == null)
         {
-            Debug.Log("no existe");
             _actualPath = null;
             return;
         }
@@ -193,40 +188,25 @@ public class MPathfinding : GenericObject
         while (!OnSight(_actualNode.transform.position, _origenNode.transform.position)
                && watchdog > 0)
         {
-            if (previousNode == null)
-            {
-                Debug.Log("Previous es null");
-            }
-
-            if (previousNode.previousNode == null)
-            {
-                Debug.Log("Previous previous es null");
-            }
-
             if (Mathf.Abs(_actualNode.transform.position.y - previousNode.transform.position.y) > .1f)
             {
                 _actualNode.previousNode = previousNode;
                 _actualNode = previousNode;
                 stack.Push(_actualNode);
-                Debug.Log(_actualNode.gameObject.name, _actualNode.gameObject);
                 continue;
             }
 
-
-            //Debug.Log(1);
             watchdog--;
 
             if (previousNode.previousNode &&
                 OnSight(_actualNode.transform.position, previousNode.previousNode.transform.position))
             {
-                //Debug.Log(2);
                 previousNode = previousNode.previousNode;
             }
             else
             {
                 _actualNode.previousNode = previousNode;
                 _actualNode = previousNode;
-                Debug.Log(_actualNode.gameObject.name, _actualNode.gameObject);
                 stack.Push(_actualNode);
             }
         }
@@ -234,11 +214,8 @@ public class MPathfinding : GenericObject
         while (stack.Count > 0)
         {
             var nextNode = stack.Pop();
-            //Debug.Log(nextNode.gameObject.name, nextNode.gameObject);
             _actualPath.AddNode(nextNode);
         }
-
-        Debug.Log(_actualPath.Count());
     }
 
     private MNode GetClosestNode(Vector3 t, bool isForAssistant = false)

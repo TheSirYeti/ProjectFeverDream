@@ -47,14 +47,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            ChangeScene(2);
-        }
-    }
-
     private Model _player;
 
     public Model Player

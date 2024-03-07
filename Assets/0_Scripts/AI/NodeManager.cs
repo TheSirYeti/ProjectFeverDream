@@ -69,11 +69,6 @@ public class NodeManager : GenericObject
         Collider[] nearbyNodes = Physics.OverlapSphere(t.position, escapeViewRadius, nodeMask);
 
         if (!nearbyNodes.Any()) return 0;
-
-        foreach (var col in nearbyNodes)
-        {
-            Debug.Log(col.gameObject.name);
-        }
         
         var filteredNodes = nearbyNodes
             .Where(x => x.gameObject.GetComponent<Node>().nodesAssistant == isForAssistant)

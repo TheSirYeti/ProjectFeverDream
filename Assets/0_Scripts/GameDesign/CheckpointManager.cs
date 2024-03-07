@@ -20,7 +20,6 @@ public class CheckpointManager : GenericObject
     {
         if (!PlayerPrefs.HasKey("CurrentCheckpoint"))
         {
-            Debug.Log("Huh?");
             PlayerPrefs.SetInt("CurrentCheckpoint", 0);
         }
 

@@ -42,7 +42,6 @@ public class SceneLoader : GenericObject
 
         if (sceneID != SceneManager.GetActiveScene().buildIndex)
         {
-            Debug.Log("New scene?");
             EventManager.Trigger("OnNewSceneLoaded");
         }
         

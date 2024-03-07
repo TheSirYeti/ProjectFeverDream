@@ -306,7 +306,6 @@ public class RangedEnemy : Enemy
 
             if (isPathfinding && !_waitingPF)
             {
-                Debug.Log("PF2");
                 SetSpeedValue(Time.deltaTime);
                 DoPathfinding();
             }

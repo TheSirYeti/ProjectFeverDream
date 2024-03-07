@@ -199,7 +199,6 @@ public class Assistant : GenericObject
         {
             if (!MPathfinding.OnSight(transform.position, _player.position))
             {
-                Debug.Log(2);
                 SendInputToFSM(JorgeStates.PATHFINDING);
                 return;
             }
@@ -626,11 +625,6 @@ public class Assistant : GenericObject
         _animator.SetFloat("velocity", _dir.magnitude);
 
         _rb.velocity = _actualDir;
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            ResetGeorge();
-        }
     }
 
     public void ResetGeorge()
@@ -649,8 +643,6 @@ public class Assistant : GenericObject
         
         _loadingAmmount = 0;
         ExtraUpdate = delegate { };
-
-        //TODO: Fix error on reset
 
         if (_actualRenders.Any())
         {

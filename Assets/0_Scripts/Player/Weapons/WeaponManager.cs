@@ -159,19 +159,16 @@ public class WeaponManager : GenericObject, IAssistInteract
 
     public void ChangeRenderer()
     { 
-        //Debug.Log("cambiando rendererer");
         foreach (var weaponStruct in _weaponsRenderer)
         {
             foreach (var render in weaponStruct._myRenders)
             {
-                //Debug.Log(render.name + " apagado");
                 render.enabled = false;
             }
         }
         
         foreach (var item in _weaponsRenderer[_actualWeapon.GetID()]._myRenders)
         {
-            //Debug.Log(item.name + " prendido?");
             item.enabled = true;
         }
     }

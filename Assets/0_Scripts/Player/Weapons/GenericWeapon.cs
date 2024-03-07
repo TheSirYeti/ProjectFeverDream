@@ -228,7 +228,6 @@ public abstract class GenericWeapon : GenericObject, IAssistInteract, IPickUp
 
     public void Interact(IAssistInteract usableItem = null)
     {
-        Debug.Log("Here?");
     }
 
     public Interactuables GetInteractType()

@@ -565,17 +565,7 @@ public class Model : GenericObject, IPlayerLife
     //TODO: Delete when you add the dmg to the enemies
     void CheckDmg()
     {
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            int dmg = UnityEngine.Random.Range(2, 10);
-            GetDamage(dmg);
-        }
-        else if (Input.GetKeyDown(KeyCode.I))
-        {
-            int health = UnityEngine.Random.Range(2, 10);
-            Health(health);
-        }
-        else if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             _canGetDmg = !_canGetDmg;
         }
