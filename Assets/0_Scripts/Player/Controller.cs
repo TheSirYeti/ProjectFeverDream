@@ -122,5 +122,10 @@ public class Controller
         {
             _cameraController.cameraAim.Interact();
         }
+        
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            GameManager.Instance.Assistant.ResetGeorge();
+        }
     }
 }

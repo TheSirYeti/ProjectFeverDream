@@ -344,6 +344,13 @@ public class Assistant : GenericObject
                 _isInteracting = true;
                 _obstacleDir = Vector3.zero;
 
+                if (_interactuable == null)
+                {
+                    Debug.Log("Null jorge interact");
+                    SendInputToFSM(JorgeStates.FOLLOW);
+                    return;
+                }
+                
                 switch (_interactuable.GetInteractType())
                 {
                     case Interactuables.DOOR:
@@ -615,11 +622,6 @@ public class Assistant : GenericObject
         _animator.SetFloat("velocity", _dir.magnitude);
 
         _rb.velocity = _actualDir;
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            ResetGeorge();
-        }
     }
 
     public void ResetGeorge()
@@ -644,7 +646,7 @@ public class Assistant : GenericObject
         {
             foreach (var t in _actualRenders.SelectMany(render => render.materials))
             {
-                t.SetFloat("_Effect", 0);
+                t?.SetFloat("_Effect", 0);
             }
         }
 
