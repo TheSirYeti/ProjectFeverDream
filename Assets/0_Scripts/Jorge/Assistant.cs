@@ -648,11 +648,13 @@ public class Assistant : GenericObject
         //TODO: Fix error on reset
         if (_actualRenders.Any())
         {
-            foreach (var render in _actualRenders)
+            for (var i = 0; i < _actualRenders.Count; i++)
             {
-                for (var i = 0; i < render.materials.Length; i++)
+                if (_actualRenders[i] == null) continue;
+                
+                for (var j = 0; j < _actualRenders[j].materials.Length; j++)
                 {
-                    render?.materials[i].SetFloat("_Effect", 0);
+                    _actualRenders[i].materials[j].SetFloat("_Effect", 0);
                 }
             }
         }
