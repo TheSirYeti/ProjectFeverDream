@@ -344,13 +344,6 @@ public class Assistant : GenericObject
                 _isInteracting = true;
                 _obstacleDir = Vector3.zero;
 
-                if (_interactuable == null)
-                {
-                    Debug.Log("Null jorge interact");
-                    SendInputToFSM(JorgeStates.FOLLOW);
-                    return;
-                }
-                
                 switch (_interactuable.GetInteractType())
                 {
                     case Interactuables.DOOR:
@@ -542,6 +535,12 @@ public class Assistant : GenericObject
 
                 if (tempItemAction != null)
                 {
+                    if (_holdingItem == null)
+                    {
+                        SendInputToFSM(JorgeStates.FOLLOW);
+                        return;
+                    }
+                    
                     _holdingItem.GetTransform().transform.parent = null;
                     tempItemAction.Interact(_holdingItem);
 
@@ -622,6 +621,11 @@ public class Assistant : GenericObject
         _animator.SetFloat("velocity", _dir.magnitude);
 
         _rb.velocity = _actualDir;
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            ResetGeorge();
+        }
     }
 
     public void ResetGeorge()
@@ -644,16 +648,16 @@ public class Assistant : GenericObject
         //TODO: Fix error on reset
         if (_actualRenders.Any())
         {
-            foreach (var t in _actualRenders.SelectMany(render => render.materials))
+            foreach (var render in _actualRenders)
             {
-                t?.SetFloat("_Effect", 0);
+                for (var i = 0; i < render.materials.Length; i++)
+                {
+                    render?.materials[i].SetFloat("_Effect", 0);
+                }
             }
         }
-
-        if (_vacuumVFX._opacity > 0)
-        {
-            LeanTween.value(0.81f, 0, 0.3f).setOnUpdate((float value) => { _vacuumVFX._opacity = value; });
-        }
+        
+        _vacuumVFX._opacity = 0;
 
         _isInteracting = false;
         
