@@ -83,7 +83,7 @@ public class Toaster : GenericWeapon
         _dirsBullet = new List<Vector3>();
         _from = pointOfShoot.position;
 
-        for (int i = 0; i < actualPellets; i++)
+        for (var i = 0; i < actualPellets; i++)
         {
             var randomHorizontalAngle = Random.Range(-spreadAngle / 2f, spreadAngle / 2f);
             var horizontalRotation = Quaternion.AngleAxis(randomHorizontalAngle, Camera.main.transform.up);
@@ -96,10 +96,11 @@ public class Toaster : GenericWeapon
             var pelletDirection = pelletRotation * actualDir;
             
             _dirsBullet.Add(pelletDirection);
-            Debug.Log("huh?");
 
             if (!Physics.Raycast(pointOfShoot.position, pelletDirection, out var hit, _maxShootDistance,
-                    LayerManager.LM_ENEMY)) continue;
+                    LayerManager.LM_ENEMY) 
+                || Physics.Raycast(pointOfShoot.position, pelletDirection, _maxShootDistance,
+                    LayerManager.LM_ALLOBSTACLE)) continue;
 
             toasterHits.TryAdd(hit.collider, 0);
             toasterHits[hit.collider]++;
