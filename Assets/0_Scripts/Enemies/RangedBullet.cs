@@ -44,9 +44,9 @@ public class RangedBullet : GenericObject
             playerLife.GetDamage((int)bulletDmg);
         }
         
-        if (other.gameObject.layer == LayerMask.NameToLayer("Wall") ||
-            other.gameObject.layer == LayerMask.NameToLayer("Floor") ||
-            other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.layer == LayerManager.L_WALL ||
+            other.gameObject.layer == LayerManager.L_FLOOR ||
+            other.gameObject.layer == LayerManager.L_PLAYER)
         {
             StopCoroutine(DoDeath());
             UpdateManager.instance.RemoveObject(this);
