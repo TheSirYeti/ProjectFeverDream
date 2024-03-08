@@ -666,8 +666,11 @@ public class Assistant : GenericObject
 
         _isInteracting = false;
         
-        _animator.Rebind();
-        _animator.Update(0f);
+        _animator.ResetTrigger("pulling");
+        _animator.SetBool("absorbing", false);
+        _animator.SetBool("pluggingWire", false);
+        _animator.SetFloat("velocity", 0);
+        _animator.Play("ANIM_Assistant_IDLE");
 
         if (InteractCoroutine!=null)
         {
