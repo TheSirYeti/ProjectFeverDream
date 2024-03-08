@@ -661,7 +661,7 @@ public class Assistant : GenericObject
                 }
             }
         }
-        
+        LeanTween.cancel(gameObject);
         _vacuumVFX._opacity = 0;
 
         _isInteracting = false;
